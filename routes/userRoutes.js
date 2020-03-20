@@ -10,9 +10,16 @@ router.post("/login", authController.login);
 
 router
   .route("/")
-  .get(authController.protect, userController.getAllUsers)
+  .get(
+    authController.protect,
+    authController.restrictTo("admin"),
+    userController.getAllUsers
+  )
   .delete(userController.deleteAllUsers);
 
-router.route("/:id").delete(userController.deleteUser);
+router
+  .route("/:id")
+  .delete(userController.deleteUser)
+  .patch(userController.updateUser);
 
 module.exports = router;

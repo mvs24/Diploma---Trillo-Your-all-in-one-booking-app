@@ -2,6 +2,9 @@ const AppError = require("../utils/appError");
 
 const handleDuplicateError = err => new AppError("Duplicate key", 400);
 
+const handleJWTError = () =>
+  new AppError("Token is invalid! Please log in again!", 401);
+
 const handleValidationError = err => {
   const errors = Object.values(err.errors);
   const newErr = errors.map(el => el.message);
@@ -44,6 +47,7 @@ module.exports = (err, req, res, next) => {
     if (error.code === 11000) error = handleDuplicateError(error);
     else if (error.name === "ValidationError")
       error = handleValidationError(error);
+    else if (error.name === "JsonWebTokenError") error = handleJWTError();
 
     sendErrorProd(error, res);
   }

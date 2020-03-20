@@ -26,3 +26,14 @@ exports.deleteUser = asyncWrapper(async (req, res, next) => {
     status: "success"
   });
 });
+
+exports.updateUser = asyncWrapper(async (req, res, next) => {
+  //TODO FILTER THE REQUESTED BODY!!!!
+  const { id } = req.params;
+  const updatedUser = await User.findByIdAndUpdate(id, req.body);
+
+  res.status(200).json({
+    status: "success",
+    data: updatedUser
+  });
+});

@@ -27,6 +27,11 @@ const userSchema = new mongoose.Schema({
     required: [true, "A user must have a password"],
     minlength: [6, "Password must be longer than 5 characters!"]
   },
+  role: {
+    type: String,
+    enum: ["user", "admin", "guide", "lead-guide", "agencyCreator"],
+    default: "user"
+  },
   passwordConfirm: {
     type: String,
     validate: {
@@ -35,7 +40,8 @@ const userSchema = new mongoose.Schema({
       },
       message: "Passwords are not the same!"
     }
-  }
+  },
+  passwordChangedAt: Date
 });
 
 userSchema.methods.correctPassword = async function(
@@ -46,7 +52,12 @@ userSchema.methods.correctPassword = async function(
 };
 
 userSchema.methods.changedPasswordAfter = function(JWTTimestamp) {
-  console.log(JWTTimestamp);
+  if (this.passwordChangedAt) {
+    const passwordTimestamp = this.passwordChangedAt.getTime() / 1000;
+    return JWTTimestamp < passwordTimestamp;
+  }
+
+  return false;
 };
 
 userSchema.pre("save", async function(next) {

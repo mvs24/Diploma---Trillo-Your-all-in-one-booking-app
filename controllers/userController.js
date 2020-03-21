@@ -1,5 +1,6 @@
 const User = require("../models/userModel");
 const asyncWrapper = require("../utils/asyncWrapper");
+const AppError = require('../utils/appError')
 
 exports.getAllUsers = asyncWrapper(async (req, res, next) => {
   const users = await User.find();
@@ -30,7 +31,12 @@ exports.deleteUser = asyncWrapper(async (req, res, next) => {
 exports.updateUser = asyncWrapper(async (req, res, next) => {
   //TODO FILTER THE REQUESTED BODY!!!!
   const { id } = req.params;
-  const updatedUser = await User.findByIdAndUpdate(id, req.body);
+  const updatedUser = await User.findByIdAndUpdate(id, req.body, {
+    new: true,
+    runValidators: true
+  });
+
+  if (!updatedUser) return next(new AppError("User does not exists", 404));
 
   res.status(200).json({
     status: "success",

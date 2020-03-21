@@ -13,8 +13,11 @@ const agencySchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    enum: ["flights", "tours", "hotels"],
-    required: [true, "An agency must be part of a category"]
+    required: [true, "An agency must be part of a category"],
+    enum: {
+      values: ["flights", "tours", "hotels"],
+      message: "Category must be either: flights, tours or hotels"
+    }
   },
   image: String,
   ratingsAverage: {
@@ -29,7 +32,10 @@ const agencySchema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: "User"
   },
-  numOptions: Number,
+  numOptions: {
+    type: Number,
+    default: 0
+  },
   numOptionsBought: {
     type: Number,
     default: 0

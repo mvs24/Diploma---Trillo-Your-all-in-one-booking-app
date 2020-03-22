@@ -1,9 +1,9 @@
-const { promisify } = require("util");
-const jwt = require("jsonwebtoken");
+const { promisify } = require('util');
+const jwt = require('jsonwebtoken');
 
-const AppError = require("../utils/appError");
-const User = require("../models/userModel");
-const asyncWrapper = require("../utils/asyncWrapper");
+const AppError = require('../utils/appError');
+const User = require('../models/userModel');
+const asyncWrapper = require('../utils/asyncWrapper');
 
 const signToken = id => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -12,12 +12,20 @@ const signToken = id => {
 };
 
 exports.signup = asyncWrapper(async (req, res, next) => {
-  const user = await User.create(req.body);
+  const { name, lastname, password, passwordConfirm, email } = req.body;
+
+  const user = await User.create({
+    name,
+    lastname,
+    password,
+    passwordConfirm,
+    email
+  });
 
   const token = signToken(user._id);
 
   res.status(201).json({
-    status: "success",
+    status: 'success',
     token,
     data: user
   });
@@ -27,21 +35,21 @@ exports.login = asyncWrapper(async (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return next(new AppError("Complete all the fields!", 400));
+    return next(new AppError('Complete all the fields!', 400));
   }
 
   const user = await User.findOne({ email });
 
   if (!user || !(await user.correctPassword(password, user.password))) {
     return next(
-      new AppError("No user found with that email and password!", 404)
+      new AppError('No user found with that email and password!', 404)
     );
   }
 
   const token = signToken(user._id);
 
   res.status(200).json({
-    status: "success",
+    status: 'success',
     token
   });
 });
@@ -51,13 +59,13 @@ exports.protect = asyncWrapper(async (req, res, next) => {
 
   if (
     req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer")
+    req.headers.authorization.startsWith('Bearer')
   ) {
-    token = req.headers.authorization.split(" ")[1];
+    token = req.headers.authorization.split(' ')[1];
   }
 
   if (!token) {
-    return next(new AppError("You are not logged in! Please log in", 401));
+    return next(new AppError('You are not logged in! Please log in', 401));
   }
 
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
@@ -66,14 +74,14 @@ exports.protect = asyncWrapper(async (req, res, next) => {
 
   if (!currentUser) {
     return next(
-      new AppError("The user belonging to this token does not exists", 404)
+      new AppError('The user belonging to this token does not exists', 404)
     );
   }
 
   if (currentUser.changedPasswordAfter(decoded.iat)) {
     return next(
       new AppError(
-        "Password changed after the token was released. Please log in again!",
+        'Password changed after the token was released. Please log in again!',
         400
       )
     );
@@ -87,7 +95,7 @@ exports.protect = asyncWrapper(async (req, res, next) => {
 exports.restrictTo = (...roles) => (req, res, next) => {
   if (!roles.includes(req.user.role)) {
     return next(
-      new AppError("You do not have permission to perform this action!", 403)
+      new AppError('You do not have permission to perform this action!', 403)
     );
   }
 

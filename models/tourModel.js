@@ -1,33 +1,34 @@
-const mongoose = require("mongoose");
-const slugify = require("slugify");
+const mongoose = require('mongoose');
+// const slugify = require('slugify');
 
-const Agency = require("./agencyModel");
+const AppError = require('../utils/appError');
+const Agency = require('./agencyModel');
 
 const tourSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, "A tour must have a name"],
+      required: [true, 'A tour must have a name'],
       unique: true,
       trim: true,
-      maxlength: [40, "A tour name must have less or equal then 40 characters"],
-      minlength: [6, "A tour name must have more or equal then 6 characters"]
+      maxlength: [40, 'A tour name must have less or equal then 40 characters'],
+      minlength: [6, 'A tour name must have more or equal then 6 characters']
     },
     slug: String,
     duration: {
       type: Number,
-      required: [true, "A tour must have a duration"]
+      required: [true, 'A tour must have a duration']
     },
     maxGroupSize: {
       type: Number,
-      required: [true, "A tour must have a group size"]
+      required: [true, 'A tour must have a group size']
     },
     difficulty: {
       type: String,
-      required: [true, "A tour must have a difficulty"],
+      required: [true, 'A tour must have a difficulty'],
       enum: {
-        values: ["easy", "medium", "difficult"],
-        message: "Difficulty is either: easy, medium or difficult"
+        values: ['easy', 'medium', 'difficult'],
+        message: 'Difficulty is either: easy, medium or difficult'
       }
     },
     ratingsAverage: {
@@ -41,7 +42,7 @@ const tourSchema = new mongoose.Schema(
     },
     price: {
       type: Number,
-      required: [true, "A tour must have a price"]
+      required: [true, 'A tour must have a price']
     },
     priceDiscount: {
       type: Number,
@@ -49,13 +50,13 @@ const tourSchema = new mongoose.Schema(
         validator: function(val) {
           return val < this.price;
         },
-        message: "Discount price ({VALUE}) should be below regular price"
+        message: 'Discount price ({VALUE}) should be below regular price'
       }
     },
     summary: {
       type: String,
       trim: true,
-      required: [true, "A tour must have a description"]
+      required: [true, 'A tour must have a description']
     },
     description: {
       type: String,
@@ -75,8 +76,8 @@ const tourSchema = new mongoose.Schema(
     startLocation: {
       type: {
         type: String,
-        default: "Point",
-        enum: ["Point"]
+        default: 'Point',
+        enum: ['Point']
       },
       coordinates: [Number],
       address: String,
@@ -86,8 +87,8 @@ const tourSchema = new mongoose.Schema(
       {
         type: {
           type: String,
-          default: "Point",
-          enum: ["Point"]
+          default: 'Point',
+          enum: ['Point']
         },
         coordinates: [Number],
         address: String,
@@ -98,12 +99,16 @@ const tourSchema = new mongoose.Schema(
     guides: [
       {
         type: mongoose.Schema.ObjectId,
-        ref: "User"
+        ref: 'User'
       }
     ],
     agency: {
       type: mongoose.Schema.ObjectId,
-      ref: "Agency"
+      ref: 'Agency'
+    },
+    user: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User'
     }
   },
   {
@@ -116,7 +121,7 @@ const tourSchema = new mongoose.Schema(
 // tourSchema.index({ slug: 1 });
 // tourSchema.index({ startLocation: '2dsphere' });
 
-tourSchema.virtual("durationWeeks").get(function() {
+tourSchema.virtual('durationWeeks').get(function() {
   return this.duration / 7;
 });
 
@@ -128,27 +133,46 @@ tourSchema.virtual("durationWeeks").get(function() {
 // });
 
 tourSchema.pre(/^find/, function(next) {
-  this.populate({ pathname: "guides" }).populate("agency");
+  this.populate({ path: 'guides', select: 'name lastname photo' });
 
   next();
 });
 
-tourSchema.pre("save", async function(next) {
-  // TODO HOW TO PREVENT POST SAVE IF WE HAVE ERRORS ALONG THE REQ RES CYCLE!!!
-  const agency = await Agency.findById(this.agency);
-  const currentNumOptions = agency.numOptions;
+const updateAgencyOnTour = async (Model, agencyId, type, next) => {
+  // NEEDS TO BE CONTROLLED IN PRE SAVE TO CALL NEXT
+  const agency = await Model.findById(agencyId);
 
-  const newNumOptions = currentNumOptions + 1;
+  if (!agency) return next(new AppError('Agency not found', 404));
+
+  const currentNumOptions = agency.numOptions;
+  const newNumOptions =
+    type === 'create' ? currentNumOptions + 1 : currentNumOptions - 1;
 
   await Agency.findByIdAndUpdate(
-    this.agency,
+    agencyId,
     { numOptions: newNumOptions },
     { new: true, runValidators: true }
   );
+};
+
+tourSchema.post('save', async function(doc, next) {
+  await updateAgencyOnTour(Agency, doc.agency, 'create', next);
 
   next();
 });
 
-const Tour = mongoose.model("Tour", tourSchema);
+tourSchema.pre(/^findOneAndDelete/, async function(next) {
+  this.tour = await this.findOne();
+
+  next();
+});
+
+tourSchema.pre(/^findOneAndDelete/, async function(next) {
+  await updateAgencyOnTour(Agency, this.tour.agency, 'delete', next);
+
+  next();
+});
+
+const Tour = mongoose.model('Tour', tourSchema);
 
 module.exports = Tour;

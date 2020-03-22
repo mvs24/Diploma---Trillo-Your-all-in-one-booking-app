@@ -1,4 +1,4 @@
-const filterObj = (body, ...notAllowed) => {
+const filterObj = (body, notAllowed) => {
   let fileredObj = {};
 
   Object.keys(body).forEach(el => {

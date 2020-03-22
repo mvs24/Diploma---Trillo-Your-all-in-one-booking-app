@@ -17,6 +17,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.5",
     "slugify": "^1.4.0",
+    "stripe": "^8.33.0",
     "validator": "^12.2.0"
   }
 }

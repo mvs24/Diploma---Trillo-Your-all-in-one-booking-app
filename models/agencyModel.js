@@ -1,22 +1,22 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const agencySchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, "An agency must have a name"],
-    minlength: [2, "Name must be at least 2 characters"]
+    required: [true, 'An agency must have a name'],
+    minlength: [2, 'Name must be at least 2 characters']
   },
   description: {
     type: String,
-    required: [true, "An agency must have a description"],
-    minlength: [10, "Name must be at least 10 characters"]
+    required: [true, 'An agency must have a description'],
+    minlength: [10, 'Description must be at least 10 characters']
   },
   category: {
     type: String,
-    required: [true, "An agency must be part of a category"],
+    required: [true, 'An agency must be part of a category'],
     enum: {
-      values: ["flights", "tours", "hotels"],
-      message: "Category must be either: flights, tours or hotels"
+      values: ['flights', 'tours', 'hotels'],
+      message: 'Category must be either: flights, tours or hotels'
     }
   },
   image: String,
@@ -30,7 +30,7 @@ const agencySchema = new mongoose.Schema({
   },
   user: {
     type: mongoose.Schema.ObjectId,
-    ref: "User"
+    ref: 'User'
   },
   numOptions: {
     type: Number,
@@ -47,11 +47,11 @@ const agencySchema = new mongoose.Schema({
 });
 
 agencySchema.pre(/^find/, function(next) {
-  this.select("-__v").find({ active: true });
+  this.select('-__v').find({ active: true });
 
   next();
 });
 
-const Agency = mongoose.model("Agency", agencySchema);
+const Agency = mongoose.model('Agency', agencySchema);
 
 module.exports = Agency;

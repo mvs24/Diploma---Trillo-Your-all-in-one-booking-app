@@ -109,6 +109,10 @@ const tourSchema = new mongoose.Schema(
     user: {
       type: mongoose.Schema.ObjectId,
       ref: 'User'
+    },
+    numBought: {
+      type: Number,
+      default: 0
     }
   },
   {

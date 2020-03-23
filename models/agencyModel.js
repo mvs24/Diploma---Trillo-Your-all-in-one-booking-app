@@ -4,7 +4,8 @@ const agencySchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, 'An agency must have a name'],
-    minlength: [2, 'Name must be at least 2 characters']
+    minlength: [2, 'Name must be at least 2 characters'],
+    unique: true
   },
   description: {
     type: String,

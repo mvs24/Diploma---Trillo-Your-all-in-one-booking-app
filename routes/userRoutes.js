@@ -1,25 +1,33 @@
-const express = require("express");
+const express = require('express');
 
-const authController = require("../controllers/authController");
-const userController = require("../controllers/userController");
+const authController = require('../controllers/authController');
+const userController = require('../controllers/userController');
+const bookingTourController = require('../controllers/bookingTourController');
 
 const router = express.Router();
 
-router.post("/signup", authController.signup);
-router.post("/login", authController.login);
+router.post('/signup', authController.signup);
+router.post('/login', authController.login);
 
 router
-  .route("/")
+  .route('/')
   .get(
     authController.protect,
-    authController.restrictTo("admin"),
+    // authController.restrictTo('admin'),
     userController.getAllUsers
   )
   .delete(userController.deleteAllUsers);
 
 router
-  .route("/:id")
+  .route('/:id')
   .delete(userController.deleteUser)
   .patch(userController.updateUser);
+
+router.get(
+  '/my-bookings',
+  authController.protect,
+  authController.restrictTo('user'),
+  bookingTourController.getMyBookings
+);
 
 module.exports = router;

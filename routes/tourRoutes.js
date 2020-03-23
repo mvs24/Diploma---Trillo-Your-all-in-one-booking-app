@@ -3,12 +3,14 @@ const express = require('express');
 const Tour = require('../models/tourModel');
 const tourController = require('../controllers/tourController');
 const authController = require('../controllers/authController');
+const reviewTourRouter = require('../routes/reviewTourRoutes');
 const setAgencyUserId = require('../globalMiddlewares/setAgencyUserId');
 const controlTourCreator = require('../globalMiddlewares/controlTourCreator');
 const filterBody = require('../globalMiddlewares/filterBody');
 
 const router = express.Router({ mergeParams: true });
 
+router.use('/:tourId/reviews', reviewTourRouter);
 router.route('/finishedTours').get(tourController.getFinishedTours);
 
 router

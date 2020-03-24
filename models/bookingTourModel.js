@@ -19,7 +19,7 @@ const bookingTourSchema = new mongoose.Schema({
   }
 });
 
-// bookingTourSchema.index({ user: 1, tour: 1 }, { unique: true });
+bookingTourSchema.index({ user: 1, tour: 1 }, { unique: true });
 
 bookingTourSchema.post('save', async function(doc, next) {
   const tour = await Tour.findById(doc.tour);

@@ -16,7 +16,6 @@ router
   .route('/:tourId')
   .post(
     authController.protect,
-    authController.restrictTo('user'),
     setTourUserId,
     bookingTourController.createBooking
   )

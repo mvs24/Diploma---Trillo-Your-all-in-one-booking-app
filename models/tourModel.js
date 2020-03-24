@@ -33,8 +33,8 @@ const tourSchema = new mongoose.Schema(
     },
     ratingsAverage: {
       type: Number,
-      default: 0.0,
-      set: val => Math.round(val * 10) / 10
+      default: 0.0
+      // set: val => Math.round(val * 10) / 10
     },
     ratingsQuantity: {
       type: Number,
@@ -62,10 +62,9 @@ const tourSchema = new mongoose.Schema(
       type: String,
       trim: true
     },
-    // imageCover: {
-    //   type: String,
-    //   required: [true, "A tour must have a cover image"]
-    // },
+    imageCover: {
+      type: String
+    },
     images: [String],
     createdAt: {
       type: Date,

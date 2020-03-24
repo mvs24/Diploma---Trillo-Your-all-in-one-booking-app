@@ -40,4 +40,6 @@ router
     tourController.updateTour
   );
 
+router.get('/tour-stats', tourController.getTourStatistics);
+
 module.exports = router;

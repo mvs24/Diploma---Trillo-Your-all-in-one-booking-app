@@ -10,6 +10,9 @@ const filterBody = require('../globalMiddlewares/filterBody');
 
 const router = express.Router();
 
+router.get('/category-stats', agencyController.getAgencyStatistics);
+router.get('/most-popular', agencyController.getMostPopularAgencies);
+
 router.use('/:agencyId/tours', tourRouter);
 
 router

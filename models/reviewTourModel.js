@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const Tour = require('./tourModel');
+const Agency = require('./agencyModel');
 
 const reviewTourSchema = new mongoose.Schema(
   {
@@ -32,6 +33,39 @@ const reviewTourSchema = new mongoose.Schema(
 
 reviewTourSchema.index({ tour: 1, user: 1 }, { unique: true });
 
+const updateAgency = async document => {
+  const tour = await Tour.findById(document.tour);
+
+  const toursOnAgency = await Tour.aggregate([
+    {
+      $match: { agency: tour.agency }
+    },
+    {
+      $match: { ratingsQuantity: { $ne: 0 } }
+    },
+    {
+      $group: {
+        _id: '$agency',
+        avgRating: { $avg: '$ratingsAverage' },
+        nRating: { $sum: 1 }
+      }
+    }
+  ]);
+
+  let ratingsQuantity = 0;
+  let ratingsAverage = 0.0;
+
+  if (toursOnAgency.length > 0) {
+    ratingsAverage = toursOnAgency[0].avgRating;
+    ratingsQuantity = toursOnAgency[0].nRating;
+  }
+
+  await Agency.findByIdAndUpdate(toursOnAgency[0]._id, {
+    ratingsAverage,
+    ratingsQuantity
+  });
+};
+
 reviewTourSchema.statics.calcRatingsOnTour = async function(tourId) {
   const stats = await this.aggregate([
     {
@@ -46,35 +80,32 @@ reviewTourSchema.statics.calcRatingsOnTour = async function(tourId) {
     }
   ]);
 
+  let ratingsAverage = 0.0;
+  let ratingsQuantity = 0;
+
+  if (stats.length > 0) {
+    ratingsQuantity = stats[0].nRating;
+    ratingsAverage = stats[0].avgRating;
+  }
+
   await Tour.findByIdAndUpdate(tourId, {
-    ratingsQuantity: stats[0].nRating,
-    ratingsAverage: stats[0].avgRating
+    ratingsQuantity,
+    ratingsAverage
   });
 };
 
 reviewTourSchema.post('save', async function(doc, next) {
   await doc.constructor.calcRatingsOnTour(doc.tour);
 
-  const tour = await Tour.findById(doc.tour);
+  await updateAgency(doc);
 
-  // const toursOnAgency = await Tour.find({ agency: tour.agency });
+  next();
+});
 
-  const toursOnAgency = await Tour.aggregate([
-    {
-      $match: { agency: tour.agency }
-    },
-    {
-      $group: {
-        _id: '$agency',
-        avgRating: { $avg: '$ratingsAverage' },
-        nRating: { $sum: 1 }
-      }
-    }
-  ]);
-  
-  // TODO CONTROLLING SOME VALUES AND UPDATE AGENCY!!!!
+reviewTourSchema.post(/^findOneAnd/, async function(doc, next) {
+  await doc.constructor.calcRatingsOnTour(doc.tour);
 
-  console.log(toursOnAgency, toursOnAgency.length);
+  await updateAgency(doc);
 
   next();
 });

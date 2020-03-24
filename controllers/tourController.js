@@ -58,3 +58,24 @@ exports.updateTour = factory.updateOne(Tour);
 exports.deleteTour = factory.deleteOne(Tour);
 exports.getFinishedTours = getTours('finished');
 exports.getAllTours = getTours('future');
+
+exports.getTourStatistics = asyncWrapper(async (req, res, next) => {
+  const stats = await Tour.aggregate([
+    {
+      $match: { ratingsQuantity: { $ne: 0 } }
+    },
+    {
+      $group: {
+        _id: '$agency',
+        avg: { $avg: '$ratingsAverage' }
+      }
+    }
+  ]);
+
+  console.log(stats);
+
+  res.status(200).json({
+    status: 'success',
+    data: stats
+  });
+});

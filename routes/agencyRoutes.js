@@ -4,16 +4,18 @@ const Agency = require('../models/agencyModel');
 const agencyController = require('../controllers/agencyController');
 const authController = require('../controllers/authController');
 const tourRouter = require('./tourRoutes');
+const flightRouter = require('./flightRoutes');
 const controlCreator = require('../globalMiddlewares/controlCreator');
 const setUser = require('../globalMiddlewares/setUser');
 const filterBody = require('../globalMiddlewares/filterBody');
 
 const router = express.Router();
 
+router.use('/:agencyId/tours', tourRouter);
+router.use('/:agencyId/flights', flightRouter);
+
 router.get('/category-stats', agencyController.getAgencyStatistics);
 router.get('/most-popular', agencyController.getMostPopularAgencies);
-
-router.use('/:agencyId/tours', tourRouter);
 
 router
   .route('/')

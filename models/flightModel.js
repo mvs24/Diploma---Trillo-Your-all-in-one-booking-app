@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const AppError = require('../utils/appError');
+const Agency = require('./agencyModel');
 
 const flightSchema = new mongoose.Schema({
   from: {
@@ -84,6 +85,31 @@ const flightSchema = new mongoose.Schema({
   }
 });
 
+const updateAgencyOnTour = async (Model, agencyId, type, next) => {
+  // NEEDS TO BE CONTROLLED IN PRE SAVE TO CALL NEXT
+  const agency = await Model.findById(agencyId);
+
+  if (!agency) return next(new AppError('Agency not found', 404));
+
+  const currentNumOptions = agency.numOptions;
+  const newNumOptions =
+    type === 'create' ? currentNumOptions + 1 : currentNumOptions - 1;
+
+  await Agency.findByIdAndUpdate(agencyId, { numOptions: newNumOptions });
+};
+
+flightSchema.post('save', async function(doc, next) {
+  await updateAgencyOnTour(Agency, doc.agency, 'create', next);
+
+  next();
+});
+
+flightSchema.post(/^findOneAndDelete/, async function(doc, next) {
+  await updateAgencyOnTour(Agency, doc.agency, 'delete', next);
+
+  next();
+});
+
 flightSchema.pre('save', function(next) {
   if (this.variety !== 'Round-Trip') {
     this.returnDate = undefined;
@@ -100,22 +126,6 @@ flightSchema.pre('save', function(next) {
 
   next();
 });
-
-// TODO IN BOOKING SECTION!!!!!!!!
-// flightSchema.pre('save', function(next) {
-//   if (this.numPersons > this.maxGroupSize) {
-//     return next(
-//       new AppError(
-//         'Number of persons must be smaller or equal than maximum group size',
-//         400
-//       )
-//     );
-//   }
-
-//   this.totalPrice = this.numPersons * this.pricePerPerson;
-
-//   next();
-// });
 
 const Flight = mongoose.model('Flight', flightSchema);
 

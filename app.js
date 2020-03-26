@@ -6,8 +6,11 @@ const agencyRouter = require('./routes/agencyRoutes');
 const tourRouter = require('./routes/tourRoutes');
 const bookingTourRouter = require('./routes/bookingTourRoutes');
 const reviewTourRouter = require('./routes/reviewTourRoutes');
+const reviewFlightRouter = require('./routes/reviewFlightRoutes');
 const wishlistTourRouter = require('./routes/wishlistTourRoutes');
+const wishlistFlightRouter = require('./routes/wishlistFlightRoutes');
 const flightRouter = require('./routes/flightRoutes');
+const bookingFlightRouter = require('./routes/bookingFlightRoutes');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -22,8 +25,11 @@ app.use('/api/v1/users', userRouter);
 app.use('/api/v1/agencies', agencyRouter);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/bookings/tours', bookingTourRouter);
+app.use('/api/v1/bookings/flights', bookingFlightRouter);
 app.use('/api/v1/reviews/tours', reviewTourRouter);
-app.use('/api/v1/wishlists/tours', wishlistTourRouter);
+app.use('/api/v1/reviews/flights', reviewFlightRouter);
+app.use('/api/v1/wishlist/tours', wishlistTourRouter);
+app.use('/api/v1/wishlist/flights', wishlistFlightRouter);
 app.use('/api/v1/flights', flightRouter);
 
 app.all('*', (req, res, next) =>

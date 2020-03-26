@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const Agency = require('./agencyModel');
 const Tour = require('./tourModel');
+const AppError = require('../utils/appError');
 
 const bookingTourSchema = new mongoose.Schema({
   tour: {

@@ -4,6 +4,7 @@ const BookingTour = require('../models/bookingTourModel');
 const Tour = require('../models/tourModel');
 const factory = require('./factoryHandler');
 const asyncWrapper = require('../utils/asyncWrapper');
+const AppError = require('../utils/appError')
 
 const getBookings = asyncWrapper(async (filter, res, next) => {
   const bookings = await BookingTour.find(filter);

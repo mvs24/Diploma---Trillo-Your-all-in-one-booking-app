@@ -1,5 +1,7 @@
 const express = require('express');
 
+const wishlistFlightRouter = require('../routes/wishlistFlightRoutes');
+const reviewFlightRouter = require('../routes/reviewFlightRoutes');
 const authController = require('../controllers/authController');
 const flightController = require('../controllers/flightController');
 const setAgencyId = require('../globalMiddlewares/setAgencyId');
@@ -8,6 +10,9 @@ const controlFlightAgencyCreator = require('../globalMiddlewares/controlFlightAg
 const filterObj = require('../utils/filterObj');
 
 const router = express.Router({ mergeParams: true });
+
+router.use('/:flightId/reviews', reviewFlightRouter);
+router.use('/:flightId/wishlistFlight', wishlistFlightRouter);
 
 router.route('/finishedFlights').get(flightController.getFinishedFlights);
 

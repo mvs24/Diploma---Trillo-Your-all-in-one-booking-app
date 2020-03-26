@@ -170,7 +170,7 @@ tourSchema.pre(/^findOneAndDelete/, async function(next) {
   next();
 });
 
-tourSchema.pre(/^findOneAndDelete/, async function(next) {
+tourSchema.post(/^findOneAndDelete/, async function(next) {
   await updateAgencyOnTour(Agency, this.tour.agency, 'delete', next);
 
   next();

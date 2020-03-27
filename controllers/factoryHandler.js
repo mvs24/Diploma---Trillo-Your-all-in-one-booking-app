@@ -47,6 +47,8 @@ exports.deleteOne = Model =>
 // TODO PASS BODY AS ARGUMENT INSTEAD OF USING req.body IN CREATE!!! FILTER BODY!!!!!
 exports.createOne = Model =>
   asyncWrapper(async (req, res, next) => {
+    if (req.filter) req.body = req.filter;
+
     const doc = await Model.create(req.body);
 
     res.status(201).json({

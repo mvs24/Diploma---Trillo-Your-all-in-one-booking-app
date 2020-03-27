@@ -7,6 +7,7 @@ const reviewTourRouter = require('../routes/reviewTourRoutes');
 const setAgencyUserId = require('../globalMiddlewares/setAgencyUserId');
 const controlTourCreator = require('../globalMiddlewares/controlTourCreator');
 const filterBody = require('../globalMiddlewares/filterBody');
+const controlCategory = require('../globalMiddlewares/controlCategory');
 
 const router = express.Router({ mergeParams: true });
 
@@ -19,6 +20,7 @@ router
     authController.protect,
     authController.restrictTo('agencyCreator'),
     setAgencyUserId,
+    controlCategory('tours'),
     tourController.createTour
   )
   .get(tourController.getAllTours); //get all future tour / get all future tours for specific agency

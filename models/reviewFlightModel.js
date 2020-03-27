@@ -31,40 +31,40 @@ const reviewFlightSchema = new mongoose.Schema(
   }
 );
 
-// reviewTourSchema.index({ tour: 1, user: 1 }, { unique: true });
+reviewFlightSchema.index({ flight: 1, user: 1 }, { unique: true });
 
-// const updateAgency = async document => {
-//   const tour = await Tour.findById(document.tour);
+const updateAgency = async document => {
+  const flight = await Flight.findById(document.flight);
 
-//   const toursOnAgency = await Tour.aggregate([
-//     {
-//       $match: { agency: tour.agency }
-//     },
-//     {
-//       $match: { ratingsQuantity: { $ne: 0 } }
-//     },
-//     {
-//       $group: {
-//         _id: '$agency',
-//         avgRating: { $avg: '$ratingsAverage' },
-//         nRating: { $sum: 1 }
-//       }
-//     }
-//   ]);
+  const flightsOnAgency = await Flight.aggregate([
+    {
+      $match: { agency: flight.agency }
+    },
+    {
+      $match: { ratingsQuantity: { $ne: 0 } }
+    },
+    {
+      $group: {
+        _id: '$agency',
+        avgRating: { $avg: '$ratingsAverage' },
+        nRating: { $sum: 1 }
+      }
+    }
+  ]);
 
-//   let ratingsQuantity = 0;
-//   let ratingsAverage = 0.0;
+  let ratingsQuantity = 0;
+  let ratingsAverage = 0.0;
 
-//   if (toursOnAgency.length > 0) {
-//     ratingsAverage = toursOnAgency[0].avgRating;
-//     ratingsQuantity = toursOnAgency[0].nRating;
-//   }
+  if (flightsOnAgency.length > 0) {
+    ratingsAverage = flightsOnAgency[0].avgRating;
+    ratingsQuantity = flightsOnAgency[0].nRating;
+  }
 
-//   await Agency.findByIdAndUpdate(toursOnAgency[0]._id, {
-//     ratingsAverage,
-//     ratingsQuantity
-//   });
-// };
+  await Agency.findByIdAndUpdate(flightsOnAgency[0]._id, {
+    ratingsAverage,
+    ratingsQuantity
+  });
+};
 
 reviewFlightSchema.statics.calcRatingsOnFlight = async function(flightId) {
   const stats = await this.aggregate([
@@ -97,7 +97,7 @@ reviewFlightSchema.statics.calcRatingsOnFlight = async function(flightId) {
 reviewFlightSchema.post('save', async function(doc, next) {
   await doc.constructor.calcRatingsOnFlight(doc.flight);
 
-  // await updateAgency(doc);
+  await updateAgency(doc);
 
   next();
 });
@@ -105,7 +105,7 @@ reviewFlightSchema.post('save', async function(doc, next) {
 reviewFlightSchema.post(/^findOneAnd/, async function(doc, next) {
   await doc.constructor.calcRatingsOnFlight(doc.flight);
 
-  // await updateAgency(doc);
+  await updateAgency(doc);
 
   next();
 });

@@ -129,11 +129,31 @@ tourSchema.virtual('durationWeeks').get(function() {
 });
 
 // // Virtual populate
-// tourSchema.virtual('reviews', {
-//   ref: 'Review',
-//   foreignField: 'tour',
-//   localField: '_id'
-// });
+tourSchema.virtual('reviews', {
+  ref: 'ReviewTour',
+  foreignField: 'tour',
+  localField: '_id'
+});
+
+tourSchema.virtual('bookings', {
+  ref: 'BookingTour',
+  foreignField: 'tour',
+  localField: '_id'
+});
+
+tourSchema.virtual('wishlists', {
+  ref: 'WishlistTour',
+  foreignField: 'tour',
+  localField: '_id'
+});
+
+tourSchema.pre(/^find/, function(next) {
+  this.populate('reviews')
+    .populate({ path: 'bookings', select: 'user createdAt' })
+    .populate({ path: 'wishlists', select: 'user' });
+
+  next();
+});
 
 tourSchema.pre(/^find/, function(next) {
   this.populate({ path: 'guides', select: 'name lastname photo' });

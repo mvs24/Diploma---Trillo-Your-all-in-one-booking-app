@@ -85,8 +85,40 @@ const flightSchema = new mongoose.Schema({
   }
 });
 
+// // Virtual populate
+flightSchema.virtual('reviews', {
+  ref: 'ReviewFlight',
+  foreignField: 'flight',
+  localField: '_id'
+});
+
+// flightSchema.virtual('bookings', {
+//   ref: 'BookingFlight',
+//   foreignField: 'flight',
+//   localField: '_id'
+// });
+
+// flightSchema.virtual('wishlists', {
+//   ref: 'WishlistFlight',
+//   foreignField: 'flight',
+//   localField: '_id'
+// });
+
+flightSchema.pre(/^find/, function(next) {
+  this.populate('reviews');
+  // .populate({ path: 'bookings', select: 'user createdAt' })
+  // .populate({ path: 'wishlists', select: 'user' });
+
+  next();
+});
+
+flightSchema.pre(/^find/, function(next) {
+  this.populate({ path: 'guides', select: 'name lastname photo' });
+
+  next();
+});
+
 const updateAgencyOnTour = async (Model, agencyId, type, next) => {
-  // NEEDS TO BE CONTROLLED IN PRE SAVE TO CALL NEXT
   const agency = await Model.findById(agencyId);
 
   if (!agency) return next(new AppError('Agency not found', 404));

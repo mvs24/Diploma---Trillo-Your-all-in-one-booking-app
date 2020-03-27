@@ -1,12 +1,12 @@
-const User = require("../models/userModel");
-const asyncWrapper = require("../utils/asyncWrapper");
-const AppError = require('../utils/appError')
+const User = require('../models/userModel');
+const asyncWrapper = require('../utils/asyncWrapper');
+const AppError = require('../utils/appError');
 
 exports.getAllUsers = asyncWrapper(async (req, res, next) => {
   const users = await User.find();
 
   res.status(200).json({
-    status: "success",
+    status: 'success',
     results: users.length,
     data: users
   });
@@ -16,7 +16,7 @@ exports.deleteAllUsers = asyncWrapper(async (req, res, next) => {
   await User.deleteMany();
 
   res.status(204).json({
-    status: "success"
+    status: 'success'
   });
 });
 
@@ -24,7 +24,7 @@ exports.deleteUser = asyncWrapper(async (req, res, next) => {
   await User.findByIdAndDelete(req.params.id);
 
   res.status(204).json({
-    status: "success"
+    status: 'success'
   });
 });
 
@@ -36,10 +36,10 @@ exports.updateUser = asyncWrapper(async (req, res, next) => {
     runValidators: true
   });
 
-  if (!updatedUser) return next(new AppError("User does not exists", 404));
+  if (!updatedUser) return next(new AppError('User does not exists', 404));
 
   res.status(200).json({
-    status: "success",
+    status: 'success',
     data: updatedUser
   });
 });

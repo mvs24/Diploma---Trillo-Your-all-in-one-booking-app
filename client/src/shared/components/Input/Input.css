@@ -1,0 +1,21 @@
+.input {
+  background: #faf9f9;
+  padding: 0.9rem;
+  width: 80%;
+  outline: none;
+  border-radius: 80px;
+  transition: all 0.5s ease;
+  font-weight: 400;
+  margin: 1rem;
+}
+
+.input:focus {
+  outline: none;
+  width: 85%;
+  box-shadow: 0 0.7rem 0.7rem rgba(0, 0, 0, 0.3);
+}
+
+.input::-webkit-input-placeholder {
+  color: #777;
+  padding: 0.3rem;
+}

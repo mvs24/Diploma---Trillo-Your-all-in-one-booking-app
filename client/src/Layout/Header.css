@@ -1,0 +1,115 @@
+.header {
+  display: flex;
+  padding: 1rem;
+  align-items: center;
+  border-bottom: 2px solid #ccc;
+  max-height: 6rem;
+}
+
+.logo {
+  width: 4rem;
+  height: 4rem;
+}
+
+.heading-2 {
+  font-size: 1.9rem;
+  margin: 0 2.2rem 0 0.7rem;
+}
+
+.all {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  min-height: 10rem;
+}
+
+.hidden__elements {
+  display: flex;
+  flex-direction: column;
+  visibility: hidden;
+  opacity: 0;
+  z-index: 1;
+  background: #faf9f9;
+  transition: all 0.4s ease;
+}
+
+.all:hover .hidden__elements {
+  opacity: 1;
+  visibility: visible;
+}
+
+.hidden__element {
+  display: flex;
+  align-items: center;
+  margin: 1rem 0.2rem;
+  cursor: pointer;
+  color: #faf9f9;
+  text-decoration: none;
+}
+
+.show {
+  opacity: 1;
+  margin-top: 125%;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.icon {
+  font-size: 2rem;
+  color: #333;
+}
+
+.hotels,
+.flights,
+.tours {
+  font-size: 1.7rem;
+  margin: 0 0 0 0.7rem;
+}
+
+.categories {
+  font-size: 1.7rem;
+  margin: 0 1rem 0 0.2rem;
+}
+
+.searchForm {
+  margin-left: 4rem;
+  padding: 0.3rem;
+  flex: 0 0 35%;
+  display: flex;
+  align-items: center;
+}
+
+.search {
+  background: #faf9f9;
+  padding: 1rem;
+  width: 95%;
+  outline: none;
+  border-radius: 70px;
+  transition: all 0.5s ease;
+  font-weight: 400;
+}
+
+.search:focus {
+  outline: none;
+  width: 100%;
+  box-shadow: 0 0.7rem 0.7rem rgba(0, 0, 0, 0.3);
+}
+
+.search::-webkit-input-placeholder {
+  color: #777;
+  padding: 0.3rem;
+}
+
+.search__icon {
+  margin-left: -3.5rem;
+  cursor: pointer;
+  color: #333;
+  font-size: 2.1rem;
+}
+
+.impact {
+  font-size: 1.4rem;
+  border-bottom: 1px solid #ccc;
+  margin-right: auto;
+}

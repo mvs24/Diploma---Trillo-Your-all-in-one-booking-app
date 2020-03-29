@@ -1,0 +1,35 @@
+.btn {
+  border: none;
+  border-radius: 300px;
+  padding: 1.4rem 3.1rem;
+  color: white;
+  text-transform: capitalize;
+  font-weight: 400;
+  outline: none;
+  transition: all 0.17s;
+  font-size: 1.6rem;
+  cursor: pointer;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0.7rem 0.6rem rgba(0, 0, 0, 0.4);
+}
+
+.btn:focus {
+  transform: translateY(-1px);
+  box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.1);
+}
+
+.success {
+  background: linear-gradient(to right, #55c57a, #28b485);
+}
+
+.danger {
+  background: linear-gradient(to right, #ff7730, #ffb900);
+}
+
+.neutral {
+  background: #f7f7f7;
+  color: #ccc;
+}

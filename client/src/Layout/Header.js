@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 import Logo from '../assets/logo.PNG';
 import './Header.css';
 import { IconContext } from 'react-icons';
@@ -9,11 +10,113 @@ import { FaMapMarkedAlt } from 'react-icons/fa';
 import Button from '../shared/components/Button/Button';
 import Modal from '../shared/components/UI/Modal';
 import Input from '../shared/components/Input/Input';
-// import LoadingSpinner from '../shared/components/UI/LoadingSpinner';
+import {
+  signupUser,
+  deleteError,
+  loginUser
+} from '../store/actions/userActions';
+import LoadingSpinner from '../shared/components/UI/LoadingSpinner';
 
-const Header = () => {
+const Header = props => {
   const [openLogin, setOpenLogin] = useState(false);
   const [openSignup, setOpenSignup] = useState(false);
+  const [signupData, setSignupData] = useState({
+    name: {
+      configOptions: {
+        type: 'text',
+        placeholder: 'Your Name'
+      },
+      value: '',
+      valid: false,
+      touched: false,
+      validRequirements: {
+        required: true,
+        minlength: 2
+      }
+    },
+    lastname: {
+      configOptions: {
+        type: 'text',
+        placeholder: 'Your Lastname'
+      },
+      value: '',
+      valid: false,
+      touched: false,
+      validRequirements: {
+        required: true,
+        minlength: 2
+      }
+    },
+    email: {
+      configOptions: {
+        type: 'email',
+        placeholder: 'Your E-mail'
+      },
+      value: '',
+      valid: false,
+      touched: false,
+      validRequirements: {
+        required: true,
+        isEmail: true
+      }
+    },
+    password: {
+      configOptions: {
+        type: 'password',
+        placeholder: 'Your Password'
+      },
+      value: '',
+      valid: false,
+      touched: false,
+      validRequirements: {
+        required: true,
+        minlength: 6
+      }
+    },
+    passwordConfirm: {
+      configOptions: {
+        type: 'password',
+        placeholder: 'Confirm your password'
+      },
+      value: '',
+      valid: false,
+      touched: false,
+      validRequirements: {
+        required: true,
+        minlength: 6
+      }
+    }
+  });
+  const [loginData, setLoginData] = useState({
+    email: {
+      configOptions: {
+        type: 'email',
+        placeholder: 'Your E-mail'
+      },
+      value: '',
+      valid: false,
+      touched: false,
+      validRequirements: {
+        required: true,
+        isEmail: true
+      }
+    },
+    password: {
+      configOptions: {
+        type: 'password',
+        placeholder: 'Your Password'
+      },
+      value: '',
+      valid: false,
+      touched: false,
+      validRequirements: {
+        required: true,
+        minlength: 6
+      }
+    }
+  });
+  const [signupValid, setSignupValid] = useState(false);
+  const [loginValid, setLoginValid] = useState(false);
 
   const openLoginModal = () => {
     setOpenLogin(true);
@@ -21,6 +124,113 @@ const Header = () => {
 
   const openSignupModal = () => {
     setOpenSignup(true);
+  };
+
+  const checkValidity = (value, requirements) => {
+    let isValid = true;
+
+    if (requirements.required) {
+      isValid = isValid && value.trim().length !== 0;
+    }
+    if (requirements.minlength) {
+      isValid = isValid && value.trim().length >= requirements.minlength;
+    }
+    if (requirements.isEmail) {
+      isValid = isValid && /\S+@\S+\.\S+/.test(value);
+    }
+
+    return isValid;
+  };
+
+  const inputHandler = (e, inputIdentifier, method) => {
+    if (method === 'signup') {
+      const updatedSignupData = { ...signupData };
+      const updatedIdentifier = { ...updatedSignupData[inputIdentifier] };
+
+      updatedIdentifier.value = e.target.value;
+      updatedIdentifier.touched = true;
+      updatedIdentifier.valid = checkValidity(
+        updatedIdentifier.value,
+        updatedIdentifier.validRequirements
+      );
+      updatedSignupData[inputIdentifier] = updatedIdentifier;
+
+      setSignupData(updatedSignupData);
+
+      let isFormValid = true;
+      for (let key in updatedSignupData) {
+        isFormValid = isFormValid && updatedSignupData[key].valid;
+      }
+
+      setSignupValid(isFormValid);
+    } else if (method === 'login') {
+      const updatedLoginData = { ...loginData };
+      const updatedIdentifier = { ...updatedLoginData[inputIdentifier] };
+
+      updatedIdentifier.value = e.target.value;
+      updatedIdentifier.touched = true;
+      updatedIdentifier.valid = checkValidity(
+        updatedIdentifier.value,
+        updatedIdentifier.validRequirements
+      );
+      updatedLoginData[inputIdentifier] = updatedIdentifier;
+
+      setLoginData(updatedLoginData);
+
+      let isFormValid = true;
+      for (let key in updatedLoginData) {
+        isFormValid = isFormValid && updatedLoginData[key].valid;
+      }
+      setLoginValid(isFormValid);
+    }
+  };
+
+  const populateData = type => {
+    let data = {};
+
+    for (let key in type) {
+      data[key] = type[key].value;
+    }
+
+    return data;
+  };
+
+  const signupHandler = async () => {
+    const data = populateData(signupData);
+    const success = await props.signupUser(data);
+
+    if (success) setOpenSignup(false);
+  };
+
+  const loginHandler = async () => {
+    const data = populateData(loginData);
+    const success = await props.loginUser(data);
+
+    if (success) setOpenLogin(false);
+  };
+
+  const loginModalCloseHandler = () => {
+    let updatedLoginData = { ...loginData };
+
+    for (let key in updatedLoginData) {
+      updatedLoginData[key].value = '';
+    }
+
+    setLoginData(updatedLoginData);
+    props.deleteError();
+    setOpenLogin(false);
+  };
+
+  const signupModalCloseHandler = () => {
+    let updatedSignupData = { ...signupData };
+
+    for (let key in updatedSignupData) {
+      updatedSignupData[key].value = '';
+    }
+
+    setSignupData(updatedSignupData);
+    props.deleteError();
+    setOpenSignup(false);
   };
 
   const categories = [
@@ -44,19 +254,96 @@ const Header = () => {
 
   return (
     <React.Fragment>
+      {props.loading && <LoadingSpinner asOverlay />}
+
       {openLogin && (
         <Modal
-          onCancel={() => setOpenLogin(false)}
+          onCancel={loginModalCloseHandler}
           header={'Log In'}
-          footer={<Button type="success">Log In</Button>}
+          footer={
+            <Button
+              clicked={loginHandler}
+              disabled={!loginValid}
+              type="success"
+            >
+              Log In
+            </Button>
+          }
           show
-          headerClass="red"
+          headerClass="green"
         >
-          <Input type="text" placeholder="Email" onChange={() => {}} />
-          <Input type="password" placeholder="Password" onChange={() => {}} />
+          <Input
+            value={loginData.email.value}
+            valid={loginData.email.valid}
+            touched={loginData.email.touched}
+            configOptions={loginData.email.configOptions}
+            onChange={e => inputHandler(e, 'email', 'login')}
+          />
+          <Input
+            value={loginData.password.value}
+            valid={loginData.password.valid}
+            touched={loginData.password.touched}
+            configOptions={loginData.password.configOptions}
+            onChange={e => inputHandler(e, 'password', 'login')}
+          />
+          {props.error && <h2 className="errorText">{props.error}</h2>}
         </Modal>
       )}
-      {openSignup && <Modal show></Modal>}
+
+      {openSignup && !openLogin && (
+        <Modal
+          onCancel={signupModalCloseHandler}
+          header={'Sign Up'}
+          footer={
+            <Button
+              clicked={signupHandler}
+              disabled={!signupValid}
+              type="success"
+            >
+              Sign Up
+            </Button>
+          }
+          show
+          headerClass="green"
+        >
+          <Input
+            value={signupData.name.value}
+            valid={signupData.name.valid}
+            touched={signupData.name.touched}
+            configOptions={signupData.name.configOptions}
+            onChange={e => inputHandler(e, 'name', 'signup')}
+          />
+          <Input
+            value={signupData.lastname.value}
+            valid={signupData.lastname.valid}
+            touched={signupData.lastname.touched}
+            configOptions={signupData.lastname.configOptions}
+            onChange={e => inputHandler(e, 'lastname', 'signup')}
+          />
+          <Input
+            value={signupData.email.value}
+            valid={signupData.email.valid}
+            touched={signupData.email.touched}
+            configOptions={signupData.email.configOptions}
+            onChange={e => inputHandler(e, 'email', 'signup')}
+          />
+          <Input
+            value={signupData.password.value}
+            valid={signupData.password.valid}
+            touched={signupData.password.touched}
+            configOptions={signupData.password.configOptions}
+            onChange={e => inputHandler(e, 'password', 'signup')}
+          />
+          <Input
+            value={signupData.passwordConfirm.value}
+            valid={signupData.passwordConfirm.valid}
+            touched={signupData.passwordConfirm.touched}
+            configOptions={signupData.passwordConfirm.configOptions}
+            onChange={e => inputHandler(e, 'passwordConfirm', 'signup')}
+          />
+          {props.error && <h2 className="errorText">{props.error}</h2>}
+        </Modal>
+      )}
       <header className="header">
         <img className="logo" src={Logo} alt="Logo" />
         <h2 className="heading-2">Trillo</h2>
@@ -89,4 +376,13 @@ const Header = () => {
   );
 };
 
-export default Header;
+const mapStateToProps = state => ({
+  userData: state.user.userData,
+  error: state.user.error,
+  loading: state.user.loading,
+  isAuthenticated: state.user.isAuthenticated
+});
+
+export default connect(mapStateToProps, { signupUser, deleteError, loginUser })(
+  withRouter(Header)
+);

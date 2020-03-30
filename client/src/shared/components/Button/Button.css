@@ -31,5 +31,13 @@
 
 .neutral {
   background: #f7f7f7;
+  color: rgb(189, 188, 188);
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  transform: translateY(0);
+  box-shadow: none;
+  background: #f7f7f7;
   color: #ccc;
 }

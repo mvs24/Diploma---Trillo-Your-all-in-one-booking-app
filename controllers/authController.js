@@ -29,7 +29,7 @@ exports.signup = asyncWrapper(async (req, res, next) => {
   res.status(201).json({
     status: 'success',
     token,
-    data: user
+    data: { name, lastname, email }
   });
 });
 
@@ -37,22 +37,29 @@ exports.login = asyncWrapper(async (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return next(new AppError('Complete all the fields!', 400));
+    return res.status(400).json({
+      status: 'fail',
+      message: 'Complete all the fields'
+    });
+
+    // return next(new AppError('Complete all the fields!', 400));
   }
 
   const user = await User.findOne({ email });
 
   if (!user || !(await user.correctPassword(password, user.password))) {
-    return next(
-      new AppError('No user found with that email and password!', 404)
-    );
+    return res.status(404).json({
+      status: 'fail',
+      message: 'No user found with that email and password!'
+    });
   }
 
   const token = signToken(user._id);
 
   res.status(200).json({
     status: 'success',
-    token
+    token,
+    data: { name: user.name, lastname: user.lastname, email: user.email }
   });
 });
 

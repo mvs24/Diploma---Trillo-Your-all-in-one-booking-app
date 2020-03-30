@@ -1,5 +1,5 @@
 .input {
-  background: #faf9f9;
+  background: #f4f2f2;
   padding: 0.9rem;
   width: 80%;
   outline: none;
@@ -7,6 +7,11 @@
   transition: all 0.5s ease;
   font-weight: 400;
   margin: 1rem;
+  border: 1px solid transparent;
+}
+
+.input:hover {
+  background: #f0eeee;
 }
 
 .input:focus {
@@ -18,4 +23,8 @@
 .input::-webkit-input-placeholder {
   color: #777;
   padding: 0.3rem;
+}
+
+.invalid {
+  border: 1px solid #ff7730;
 }

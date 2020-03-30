@@ -29,7 +29,7 @@
   visibility: hidden;
   opacity: 0;
   z-index: 1;
-  background: #faf9f9;
+  color: #777;
   transition: all 0.4s ease;
 }
 
@@ -43,7 +43,7 @@
   align-items: center;
   margin: 1rem 0.2rem;
   cursor: pointer;
-  color: #faf9f9;
+  color: #777;
   text-decoration: none;
 }
 
@@ -88,9 +88,11 @@
   border-radius: 70px;
   transition: all 0.5s ease;
   font-weight: 400;
+  border: none;
 }
 
 .search:focus {
+  border: none;
   outline: none;
   width: 100%;
   box-shadow: 0 0.7rem 0.7rem rgba(0, 0, 0, 0.3);
@@ -112,4 +114,12 @@
   font-size: 1.4rem;
   border-bottom: 1px solid #ccc;
   margin-right: auto;
+}
+
+.errorText {
+  font-weight: 300;
+  font-size: 1.8rem;
+  text-align: center;
+  margin: 0.4rem auto;
+  color: #ff7730;
 }

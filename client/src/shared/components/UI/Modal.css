@@ -69,3 +69,7 @@
   opacity: 0;
   transition: all 200ms;
 }
+
+.over {
+  z-index: 8000;
+}

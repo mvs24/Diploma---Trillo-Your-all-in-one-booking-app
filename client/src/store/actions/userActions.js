@@ -9,7 +9,10 @@ import {
   LOGIN_LOADING,
   SET_CURRENT_USER_LOADING,
   SET_CURRENT_USER,
-  SET_CURRENT_USER_ERROR
+  SET_CURRENT_USER_ERROR,
+  SET_WISHLIST,
+  SET_WISHLIST_LOADING,
+  SET_WISHLIST_ERROR
 } from '../types/userTypes';
 
 export const setHeaders = token => {
@@ -26,15 +29,13 @@ export const signupUser = userData => async dispatch => {
   try {
     dispatch({ type: SIGNUP_LOADING });
     const response = await axios.post('/api/v1/users/signup', userData);
-    const resData = response.data;
+    setHeaders(response.data.token);
+    localStorage.setItem('jwt', response.data.token);
 
     dispatch({
       type: SIGNUP_SUCCESS,
-      payload: resData.data
+      payload: response.data.data
     });
-
-    localStorage.setItem('jwt', resData.token);
-    setHeaders(resData.token);
 
     return true;
   } catch (err) {
@@ -50,15 +51,14 @@ export const loginUser = userData => async dispatch => {
   try {
     dispatch({ type: LOGIN_LOADING });
     const response = await axios.post('/api/v1/users/login', userData);
-    const resData = response.data;
+    // THE ORDER VERY VERY IMPORTANT !!!!!!!!!!!
+    setHeaders(response.data.token);
+    localStorage.setItem('jwt', response.data.token);
 
     dispatch({
       type: LOGIN_SUCCESS,
-      payload: resData.data
+      payload: response.data.data
     });
-
-    localStorage.setItem('jwt', resData.token);
-    setHeaders(resData.token);
 
     return true;
   } catch (err) {
@@ -76,8 +76,13 @@ export const setCurrentUser = () => async dispatch => {
     const response = await axios.get('/api/v1/users/loggedInUser');
 
     dispatch({ type: SET_CURRENT_USER, payload: response.data.data });
+    return true;
   } catch (err) {
-    dispatch({ type: SET_CURRENT_USER_ERROR, errormsg: err.message });
+    dispatch({
+      type: SET_CURRENT_USER_ERROR,
+      errormsg: err.response.data.message
+    });
+    return false;
   }
 };
 
@@ -85,6 +90,20 @@ export const deleteError = () => dispatch => {
   dispatch({ type: DELETE_ERROR });
 };
 
-export const getMyBookings = () => async dispatch => {
-  // axios.post('/')
+export const getMyWishlist = () => async dispatch => {
+  try {
+    dispatch({ type: SET_WISHLIST_LOADING });
+
+    const res = await axios.get('/api/v1/wishlist/tours');
+
+    let result = {
+      results: res.data.results,
+      totalPrice: res.data.totalPrice,
+      data: res.data.data
+    };
+
+    dispatch({ type: SET_WISHLIST, payload: result });
+  } catch (err) {
+    dispatch({ SET_WISHLIST_ERROR, errormsg: err.response.data.message });
+  }
 };

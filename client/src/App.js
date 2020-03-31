@@ -7,9 +7,13 @@ import Tours from './pages/Tours/Tours';
 import Home from './pages/Home/Home';
 
 function App(props) {
-  if (localStorage.getItem('jwt')) {
+  const setUserData = async () => {
     setHeaders(localStorage.getItem('jwt'));
-    props.setCurrentUser();
+    await props.setCurrentUser();
+  };
+
+  if (localStorage.getItem('jwt')) {
+    setUserData();
   }
 
   return (

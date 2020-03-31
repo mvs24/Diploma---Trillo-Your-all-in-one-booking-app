@@ -3,6 +3,26 @@ const factory = require('./factoryHandler');
 const ApiFeatures = require('../utils/apiFeatures');
 const asyncWrapper = require('../utils/asyncWrapper');
 
+const getToursBy = sortBy =>
+  asyncWrapper(async (req, res, next) => {
+    let tours = await Tour.find().sort(sortBy);
+
+    tours = tours.filter(
+      el => el.startDates[el.startDates.length - 1].getTime() > Date.now()
+    );
+
+    let wantedTours = [];
+    if (tours.length > 5) {
+      wantedTours = tours.splice(0, 5);
+    }
+
+    res.status(200).json({
+      status: 'success',
+      results: wantedTours.length,
+      data: wantedTours
+    });
+  });
+
 const getTours = type =>
   asyncWrapper(async (req, res, next) => {
     let filter = {};
@@ -24,8 +44,8 @@ const getTours = type =>
 
     tours.forEach(tour => {
       if (tour.startDates.length > 0) {
-        const firstDate = tour.startDates[0];
-        if (firstDate.getTime() > Date.now()) {
+        const lastDate = tour.startDates[tour.startDates.length - 1];
+        if (lastDate.getTime() > Date.now()) {
           futureTours.push(tour);
         } else {
           finishedTours.push(tour);
@@ -58,6 +78,9 @@ exports.updateTour = factory.updateOne(Tour);
 exports.deleteTour = factory.deleteOne(Tour);
 exports.getFinishedTours = getTours('finished');
 exports.getAllTours = getTours('future');
+
+exports.getTopFiveTours = getToursBy('-ratingsAverage');
+exports.getMostPopularTours = getToursBy('-bought');
 
 exports.getTourStatistics = asyncWrapper(async (req, res, next) => {
   const stats = await Tour.aggregate([

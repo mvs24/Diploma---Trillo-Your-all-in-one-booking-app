@@ -18,7 +18,7 @@ import {
 import LoadingSpinner from '../shared/components/UI/LoadingSpinner';
 import UserContent from '../UserContent/UserContent';
 
-const Header = props => {
+const Header = React.memo(props => {
   const [openLogin, setOpenLogin] = useState(false);
   const [openSignup, setOpenSignup] = useState(false);
   const [signupData, setSignupData] = useState({
@@ -366,7 +366,7 @@ const Header = props => {
       </header>
     </React.Fragment>
   );
-};
+});
 
 const mapStateToProps = state => ({
   userData: state.user.userData,

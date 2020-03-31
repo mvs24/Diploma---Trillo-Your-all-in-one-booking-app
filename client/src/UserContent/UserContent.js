@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { IconContext } from 'react-icons';
 import { IoIosArrowDown } from 'react-icons/io';
 import { FiHeart, FiShoppingCart } from 'react-icons/fi';
-import { getMyBookings } from '../store/actions/userActions';
+// import { getMyBookings } from '../store/actions/userActions';
 
 import './UserContent.css';
 
@@ -176,4 +176,4 @@ const mapStateToProps = state => ({
   userData: state.user.userData
 });
 
-export default connect(mapStateToProps, { getMyBookings })(UserContent);
+export default connect(mapStateToProps)(UserContent);

@@ -1,0 +1,36 @@
+.home {
+  width: 100%;
+  height: 85vh;
+  position: relative;
+}
+.bcg {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.bcg img {
+  width: 100%;
+  height: 100%;
+}
+
+.bcg__container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.bcg__container h1 {
+  background: linear-gradient(to right, #ffb900, #ff7730);
+  color: transparent;
+  margin: 1rem 0;
+  text-transform: uppercase;
+  -webkit-background-clip: text;
+  display: block;
+  font-style: italic;
+  font-weight: 700;
+  line-height: 1.6;
+  font-size: 3rem;
+}

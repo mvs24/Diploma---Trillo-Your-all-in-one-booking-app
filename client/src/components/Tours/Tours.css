@@ -1,0 +1,24 @@
+.types {
+  display: flex;
+  padding: 2rem;
+  margin: 0 auto;
+}
+.type:active {
+  border-bottom: 1px solid #ccc;
+}
+
+.type {
+  margin: 0 1rem;
+  cursor: pointer;
+}
+.active {
+  border-bottom: 1px solid #ccc;
+}
+
+.topToursContent {
+  margin: 0 2vw;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+  grid-column-gap: 1.5rem;
+  row-gap: 4rem;
+}

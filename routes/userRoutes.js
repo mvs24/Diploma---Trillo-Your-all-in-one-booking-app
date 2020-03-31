@@ -6,6 +6,11 @@ const bookingTourController = require('../controllers/bookingTourController');
 
 const router = express.Router();
 
+router.get(
+  '/loggedInUser',
+  authController.protect,
+  authController.getLoggedInUser
+);
 router.post('/signup', authController.signup);
 router.post('/login', authController.login);
 

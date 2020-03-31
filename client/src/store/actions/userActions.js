@@ -6,10 +6,13 @@ import {
   DELETE_ERROR,
   LOGIN_ERROR,
   LOGIN_SUCCESS,
-  LOGIN_LOADING
+  LOGIN_LOADING,
+  SET_CURRENT_USER_LOADING,
+  SET_CURRENT_USER,
+  SET_CURRENT_USER_ERROR
 } from '../types/userTypes';
 
-const setHeaders = token => {
+export const setHeaders = token => {
   if (token) {
     // apply to every request
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
@@ -67,6 +70,21 @@ export const loginUser = userData => async dispatch => {
   }
 };
 
+export const setCurrentUser = () => async dispatch => {
+  try {
+    dispatch({ type: SET_CURRENT_USER_LOADING });
+    const response = await axios.get('/api/v1/users/loggedInUser');
+
+    dispatch({ type: SET_CURRENT_USER, payload: response.data.data });
+  } catch (err) {
+    dispatch({ type: SET_CURRENT_USER_ERROR, errormsg: err.message });
+  }
+};
+
 export const deleteError = () => dispatch => {
   dispatch({ type: DELETE_ERROR });
+};
+
+export const getMyBookings = () => async dispatch => {
+  // axios.post('/')
 };

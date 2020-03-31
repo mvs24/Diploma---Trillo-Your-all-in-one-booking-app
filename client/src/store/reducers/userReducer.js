@@ -5,7 +5,10 @@ import {
   DELETE_ERROR,
   LOGIN_LOADING,
   LOGIN_SUCCESS,
-  LOGIN_ERROR
+  LOGIN_ERROR,
+  SET_CURRENT_USER,
+  SET_CURRENT_USER_ERROR,
+  SET_CURRENT_USER_LOADING
 } from '../types/userTypes';
 
 const initialState = {
@@ -61,6 +64,26 @@ export default (state = initialState, action) => {
         ...state,
         error: null,
         loading: true
+      };
+    case SET_CURRENT_USER:
+      return {
+        ...state,
+        userData: action.payload,
+        error: null,
+        loading: false,
+        isAuthenticated: true
+      };
+    case SET_CURRENT_USER_ERROR:
+      return {
+        ...state,
+        error: action.errormsg,
+        loading: false
+      };
+    case SET_CURRENT_USER_LOADING:
+      return {
+        ...state,
+        loading: true,
+        error: null
       };
     default:
       return state;

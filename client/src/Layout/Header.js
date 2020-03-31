@@ -16,6 +16,7 @@ import {
   loginUser
 } from '../store/actions/userActions';
 import LoadingSpinner from '../shared/components/UI/LoadingSpinner';
+import UserContent from '../UserContent/UserContent';
 
 const Header = props => {
   const [openLogin, setOpenLogin] = useState(false);
@@ -252,6 +253,47 @@ const Header = props => {
     </Link>
   ));
 
+  const loginForm = [];
+  for (let key in loginData) {
+    loginForm.push(
+      <Input
+        value={loginData[key].value}
+        valid={loginData[key].valid}
+        touched={loginData[key].touched}
+        configOptions={loginData[key].configOptions}
+        onChange={e => inputHandler(e, key, 'login')}
+      />
+    );
+  }
+
+  const signupForm = [];
+  for (let key in signupData) {
+    signupForm.push(
+      <Input
+        value={signupData[key].value}
+        valid={signupData[key].valid}
+        touched={signupData[key].touched}
+        configOptions={signupData[key].configOptions}
+        onChange={e => inputHandler(e, key, 'signup')}
+      />
+    );
+  }
+
+  let userContent = (
+    <>
+      <Button type="success" clicked={openLoginModal}>
+        Log In
+      </Button>
+      <Button type="neutral" clicked={openSignupModal}>
+        Sign Up
+      </Button>
+    </>
+  );
+
+  if (props.isAuthenticated) {
+    userContent = <UserContent />;
+  }
+
   return (
     <React.Fragment>
       {props.loading && <LoadingSpinner asOverlay />}
@@ -272,20 +314,8 @@ const Header = props => {
           show
           headerClass="green"
         >
-          <Input
-            value={loginData.email.value}
-            valid={loginData.email.valid}
-            touched={loginData.email.touched}
-            configOptions={loginData.email.configOptions}
-            onChange={e => inputHandler(e, 'email', 'login')}
-          />
-          <Input
-            value={loginData.password.value}
-            valid={loginData.password.valid}
-            touched={loginData.password.touched}
-            configOptions={loginData.password.configOptions}
-            onChange={e => inputHandler(e, 'password', 'login')}
-          />
+          {loginForm.map(el => el)}
+
           {props.error && <h2 className="errorText">{props.error}</h2>}
         </Modal>
       )}
@@ -306,41 +336,8 @@ const Header = props => {
           show
           headerClass="green"
         >
-          <Input
-            value={signupData.name.value}
-            valid={signupData.name.valid}
-            touched={signupData.name.touched}
-            configOptions={signupData.name.configOptions}
-            onChange={e => inputHandler(e, 'name', 'signup')}
-          />
-          <Input
-            value={signupData.lastname.value}
-            valid={signupData.lastname.valid}
-            touched={signupData.lastname.touched}
-            configOptions={signupData.lastname.configOptions}
-            onChange={e => inputHandler(e, 'lastname', 'signup')}
-          />
-          <Input
-            value={signupData.email.value}
-            valid={signupData.email.valid}
-            touched={signupData.email.touched}
-            configOptions={signupData.email.configOptions}
-            onChange={e => inputHandler(e, 'email', 'signup')}
-          />
-          <Input
-            value={signupData.password.value}
-            valid={signupData.password.valid}
-            touched={signupData.password.touched}
-            configOptions={signupData.password.configOptions}
-            onChange={e => inputHandler(e, 'password', 'signup')}
-          />
-          <Input
-            value={signupData.passwordConfirm.value}
-            valid={signupData.passwordConfirm.valid}
-            touched={signupData.passwordConfirm.touched}
-            configOptions={signupData.passwordConfirm.configOptions}
-            onChange={e => inputHandler(e, 'passwordConfirm', 'signup')}
-          />
+          {signupForm.map(el => el)}
+
           {props.error && <h2 className="errorText">{props.error}</h2>}
         </Modal>
       )}
@@ -365,12 +362,7 @@ const Header = props => {
           </IconContext.Provider>
         </form>
         <span className="impact">Make an impact</span>
-        <Button type="success" clicked={openLoginModal}>
-          Log In
-        </Button>
-        <Button type="neutral" clicked={openSignupModal}>
-          Sign Up
-        </Button>
+        {userContent}
       </header>
     </React.Fragment>
   );

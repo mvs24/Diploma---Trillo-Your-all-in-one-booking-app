@@ -179,3 +179,18 @@ exports.resetPassword = asyncWrapper(async (req, res, next) => {
     token
   });
 });
+
+exports.getLoggedInUser = (req, res, next) => {
+  const user = req.user;
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      name: user.name,
+      lastname: user.lastname,
+      email: user.email,
+      id: user.id,
+      photo: user.photo
+    }
+  });
+};

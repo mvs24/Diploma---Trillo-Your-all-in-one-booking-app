@@ -1,0 +1,143 @@
+.bookings__hover {
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  color: #777;
+  text-align: center;
+  transition: all 0.02s ease;
+  margin-right: 0.3rem;
+}
+
+.bookings__container {
+  display: flex;
+  flex-direction: column;
+  margin-right: auto;
+  /* margin-left: -10%; */
+  align-self: flex-start;
+  justify-self: center;
+}
+
+.my__booking__items {
+  display: none;
+  margin: 0.5rem 0rem;
+  max-height: 20rem;
+  overflow-y: scroll;
+  background: #faf9f9;
+}
+
+.bookings__container:hover .my__booking__items {
+  display: block;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.4);
+}
+.bookings__container:hover .bookings__hover {
+  border-bottom: 2px solid #ccc;
+  align-self: center;
+}
+.my__booking_item {
+  flex: 1;
+  display: flex;
+}
+.my__booking_item {
+  object-fit: cover;
+  margin: 2rem 0;
+  padding: 0.5rem 1rem;
+}
+.my__booking_item img {
+  height: 4rem;
+  width: 4rem;
+  border-radius: 50%;
+  margin-left: 2rem;
+}
+
+.heart {
+  text-align: left;
+  color: red;
+}
+
+.wish__length {
+  padding: 0.3rem;
+  font-size: 1.2rem;
+  color: white;
+  background: red;
+  border-radius: 50%;
+}
+
+.wishlist_item img {
+  height: 4rem;
+  width: 4rem;
+  border-radius: 50%;
+  margin-left: 2rem;
+}
+
+.wishlist__container {
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+  justify-self: center;
+}
+.wishlist__items {
+  display: none;
+  margin: 0.5rem 0rem;
+  max-height: 20rem;
+  overflow-y: scroll;
+  background: #faf9f9;
+}
+.wishlist__container:hover .wishlist__items {
+  display: block;
+}
+
+.shopping_item img {
+  height: 4rem;
+  width: 4rem;
+  border-radius: 50%;
+  margin-left: 2rem;
+}
+
+.shopping__container {
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+  justify-self: center;
+}
+
+.shopping__items {
+  display: none;
+  margin: 0.5rem 0rem;
+  max-height: 20rem;
+  overflow-y: scroll;
+  background: #faf9f9;
+}
+
+.shopping__container:hover .shopping__items {
+  display: block;
+}
+
+.hidden {
+  text-align: center;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.shopping__cart {
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  color: #777;
+  text-align: center;
+  transition: all 0.02s ease;
+  margin-right: 0.3rem;
+  display: inline-block;
+}
+
+.cart {
+  text-align: left;
+  color: #777;
+}
+
+
+.user__profile img {
+  height: 4rem;
+  width: 4rem;
+  border-radius: 50%;
+  margin-left: 2rem;
+}

@@ -12,7 +12,8 @@ router
     authController.protect,
     setTourUserId,
     wishlistTourController.addToWishlist
-  );
+  )
+  .delete(authController.protect, wishlistTourController.removeFromWishlist);
 
 router
   .route('/')

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Logo from '../assets/logo.PNG';
@@ -13,10 +13,12 @@ import Input from '../shared/components/Input/Input';
 import {
   signupUser,
   deleteError,
-  loginUser
+  loginUser,
+  getMyWishlist
 } from '../store/actions/userActions';
 import LoadingSpinner from '../shared/components/UI/LoadingSpinner';
 import UserContent from '../UserContent/UserContent';
+import ErrorModal from '../shared/components/UI/ErrorModal';
 
 const Header = React.memo(props => {
   const [openLogin, setOpenLogin] = useState(false);
@@ -118,6 +120,13 @@ const Header = React.memo(props => {
   });
   const [signupValid, setSignupValid] = useState(false);
   const [loginValid, setLoginValid] = useState(false);
+  const { isAuthenticated, getMyWishlist } = props;
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      getMyWishlist();
+    }
+  }, [isAuthenticated]);
 
   const openLoginModal = () => {
     setOpenLogin(true);
@@ -291,7 +300,7 @@ const Header = React.memo(props => {
   );
 
   if (props.isAuthenticated) {
-    userContent = <UserContent />;
+    userContent = <UserContent wishlist={props.wishlist} />;
   }
 
   return (
@@ -342,6 +351,7 @@ const Header = React.memo(props => {
         </Modal>
       )}
       <header className="header">
+        {props.error && <ErrorModal>{props.error}</ErrorModal>}
         <img className="logo" src={Logo} alt="Logo" />
         <h2 className="heading-2">Trillo</h2>
         <div className="all">
@@ -372,9 +382,13 @@ const mapStateToProps = state => ({
   userData: state.user.userData,
   error: state.user.error,
   loading: state.user.loading,
-  isAuthenticated: state.user.isAuthenticated
+  isAuthenticated: state.user.isAuthenticated,
+  wishlist: state.user.wishlist
 });
 
-export default connect(mapStateToProps, { signupUser, deleteError, loginUser })(
-  withRouter(Header)
-);
+export default connect(mapStateToProps, {
+  signupUser,
+  deleteError,
+  loginUser,
+  getMyWishlist
+})(withRouter(Header));

@@ -3,6 +3,7 @@
 # dependencies
 /node_modules
 /src/assets
+/src/config.js
 /.pnp
 .pnp.js
 

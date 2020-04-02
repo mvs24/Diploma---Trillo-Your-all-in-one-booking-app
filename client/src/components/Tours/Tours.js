@@ -5,7 +5,6 @@ import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
 import './Tours.css';
 import TourItem from '../TourItem/TourItem';
 import ErrorModal from '../../shared/components/UI/ErrorModal';
-import { getMyWishlist } from '../../store/actions/userActions';
 
 const Tours = React.memo(props => {
   const [mostPopularTours, setMostPopularTours] = useState([]);
@@ -17,14 +16,6 @@ const Tours = React.memo(props => {
   const [topToursLoaded, setTopToursLoaded] = useState(false);
   const topToursRef = useRef(null);
   const mostPopularToursRef = useRef();
-  const { isAuthenticated } = props;
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      console.log(axios.defaults.headers.common['Authorization']);
-      props.getMyWishlist();
-    }
-  }, [isAuthenticated]);
 
   const changeUIForTopTours = () => {
     setActiveLink('top');
@@ -114,4 +105,4 @@ const mapStateToProps = state => ({
   isAuthenticated: state.user.isAuthenticated
 });
 
-export default connect(mapStateToProps, { getMyWishlist })(Tours);
+export default connect(mapStateToProps)(Tours);

@@ -1,0 +1,183 @@
+.tour__container {
+  width: 100vw;
+}
+.tour__bcg {
+  width: 100%;
+  height: calc(100vh - 10rem);
+  clip-path: polygon(0 0, 100% 0, 100% 80%, 0 100%);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-blend-mode: screen;
+  position: relative;
+}
+
+.heading {
+  font-size: 3.8rem;
+  font-weight: 300;
+  text-transform: uppercase;
+  text-align: center;
+  color: #fff;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 25%;
+  z-index: 2;
+}
+
+.heading-span {
+  padding: 1rem 1.5rem;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  position: relative;
+  background-image: linear-gradient(
+    to right bottom,
+    rgb(85, 197, 122, 0.9),
+    rgb(126, 213, 111)
+  );
+}
+.tour__detail {
+  display: flex;
+  padding: 0.1rem;
+  position: absolute;
+  top: 50%;
+  left: 42%;
+  color: white;
+  font-size: 3rem;
+  font-weight: 700;
+}
+.tour__location p {
+  margin: 0 0.4rem;
+}
+.tour__detail--icon {
+  font-size: 3rem;
+}
+
+.tour__info {
+  /* padding: 10rem; */
+  /* margin-top: 10rem; */
+  clip-path: polygon(0, 100% 0, 100% 90%, 0 100%);
+  display: grid;
+  grid-template-columns: minmax(40%, min-content) 1fr;
+}
+.tour__info--icon {
+  font-size: 1.8rem;
+}
+.quick__facts {
+  background: #f0eeee;
+  margin-top: -15rem;
+  padding: 30rem 11rem;
+}
+
+.quick__facts h1 {
+  font-size: 3rem;
+  text-transform: uppercase;
+  background-image: linear-gradient(
+    to right bottom,
+    rgb(85, 197, 122, 0.9),
+    rgb(126, 213, 111)
+  );
+  color: transparent;
+  background-clip: text;
+  display: block;
+  width: 100%;
+}
+
+.quick__facts li {
+  list-style: none;
+
+  display: flex;
+  align-items: center;
+  margin: 2.5rem 0.4rem;
+  padding: 0 2rem;
+  font-size: 1.6rem;
+}
+
+.second {
+  color: rgba(0, 0, 0, 0.5);
+  margin: 0 0.4rem;
+}
+
+.data {
+  text-transform: uppercase;
+  margin-left: 3rem;
+}
+
+.tour__about {
+  padding: 30rem 7rem 5rem 15rem;
+  background: #faf9f9;
+  margin-top: -15rem;
+}
+
+.tour__about h1 {
+  font-size: 3rem;
+  text-transform: uppercase;
+  background-image: linear-gradient(
+    to right bottom,
+    rgb(85, 197, 122, 0.9),
+    rgb(126, 213, 111)
+  );
+  color: transparent;
+  background-clip: text;
+  display: block;
+  width: 100%;
+  margin: -3rem.5rem 0 2rem 0;
+}
+
+.tour__about p {
+  font-size: 1.4rem;
+  line-height: 1.7;
+  letter-spacing: 1.2px;
+  width: 80%;
+}
+
+.images__container {
+  width: 100%;
+  object-fit: cover;
+  margin-top: -10vh;
+  transform: skewY(-5deg);
+}
+.image__container {
+  object-fit: cover;
+}
+.images {
+  display: flex;
+  width: 100%;
+}
+
+.images img {
+  width: 100%;
+  height: 100%;
+}
+
+.map__container {
+  transform: skewY(-5deg);
+}
+
+/* 
+Grey light 1: #faf9f9
+Grey light 2: #f4f2f2
+Grey light 3: #f0eeee
+Grey light 4: #ccc
+
+Grey dark 1: #333
+Grey dark 2: #777
+Grey dark 3: #999 */
+
+/* $color-primary: #55c57a;
+$color-primary-light: #7ed56f;
+$color-primary-dark: #28b485;
+
+$color-secondary-light: #ffb900;
+$color-secondary-dark: #ff7730;
+
+$color-tertiary-light: #2998ff;
+$color-tertiary-dark: #5643fa;
+
+$color-grey-light-1: #f7f7f7;
+$color-grey-light-2: #eee;
+
+$color-grey-dark: #777;
+$color-grey-dark-2: #999;
+$color-grey-dark-3: #333; */

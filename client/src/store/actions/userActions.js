@@ -12,7 +12,13 @@ import {
   SET_CURRENT_USER_ERROR,
   SET_WISHLIST,
   SET_WISHLIST_LOADING,
-  SET_WISHLIST_ERROR
+  SET_WISHLIST_ERROR,
+  ADD_TO_WISHLIST,
+  ADD_TO_WISHLIST_LOADING,
+  ADD_TO_WISHLIST_ERROR,
+  REMOVE_FROM_WISHLIST,
+  REMOVE_FROM_WISHLIST_LOADING,
+  REMOVE_FROM_WISHLIST_ERROR
 } from '../types/userTypes';
 
 export const setHeaders = token => {
@@ -104,6 +110,32 @@ export const getMyWishlist = () => async dispatch => {
 
     dispatch({ type: SET_WISHLIST, payload: result });
   } catch (err) {
-    dispatch({ SET_WISHLIST_ERROR, errormsg: err.response.data.message });
+    dispatch({ type: SET_WISHLIST_ERROR, errormsg: err.response.data.message });
+  }
+};
+
+export const addToWishlist = tourId => async dispatch => {
+  try {
+    dispatch({ type: ADD_TO_WISHLIST_LOADING });
+    const res = await axios.post(`/api/v1/wishlist/tours/${tourId}`);
+    dispatch({ type: ADD_TO_WISHLIST, payload: res.data.data });
+  } catch (err) {
+    dispatch({
+      type: ADD_TO_WISHLIST_ERROR,
+      errormsg: err.response.data.message
+    });
+  }
+};
+
+export const removeFromWishlist = tourId => async dispatch => {
+  try {
+    dispatch({ type: REMOVE_FROM_WISHLIST_LOADING });
+    await axios.delete(`/api/v1/wishlist/tours/${tourId}`);
+    dispatch({ type: REMOVE_FROM_WISHLIST, tourId });
+  } catch (err) {
+    dispatch({
+      type: REMOVE_FROM_WISHLIST_ERROR,
+      errormsg: err.response.data.message
+    });
   }
 };

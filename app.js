@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 
@@ -20,6 +21,14 @@ const app = express();
 // gzip & security
 
 app.use(bodyParser.json());
+app.use(
+  '/public/img/tours',
+  express.static(path.join('public', 'img', 'tours'))
+);
+app.use(
+  '/public/img/users',
+  express.static(path.join('public', 'img', 'users'))
+);
 
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/agencies', agencyRouter);

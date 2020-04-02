@@ -3,14 +3,23 @@ import { connect } from 'react-redux';
 import { IconContext } from 'react-icons';
 import { IoIosArrowDown } from 'react-icons/io';
 import { FiHeart, FiShoppingCart } from 'react-icons/fi';
-// import { getMyBookings } from '../store/actions/userActions';
+import LoadingSpinner from '../shared/components/UI/LoadingSpinner';
 
 import './UserContent.css';
 
 const UserContent = props => {
-  // useEffect(() => {
-  //   props.getMyBookings();
-  // }, []);
+  const { wishlist } = props;
+  let wishlistContent = <LoadingSpinner />;
+  if (wishlist)
+    wishlistContent = (
+      <div className="shopping__cart">
+        <span className="hidden">Shopping_cart</span>
+        <IconContext.Provider value={{ className: 'icon heart' }}>
+          <FiHeart />
+          <span className="wish__length">{wishlist.results}</span>
+        </IconContext.Provider>
+      </div>
+    );
 
   return (
     <>
@@ -67,14 +76,7 @@ const UserContent = props => {
       </div>
 
       <div className="wishlist__container">
-        <div className="shopping__cart">
-          <span className="hidden">Shopping_cart</span>
-          <IconContext.Provider value={{ className: 'icon heart' }}>
-            <FiHeart />
-            <span className="wish__length">9+</span>
-          </IconContext.Provider>
-        </div>
-
+        {wishlistContent}
         <div className="wishlist__items">
           <div className="wishlist_item">
             <img

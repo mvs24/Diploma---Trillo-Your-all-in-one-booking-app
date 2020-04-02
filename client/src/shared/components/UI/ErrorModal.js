@@ -12,7 +12,11 @@ const ErrorModal = props => {
       header="An Error Occurred!"
       show={props.show}
       headerClass="red"
-      footer={<Button onClick={props.onClear}>Okay</Button>}
+      footer={
+        <Button type="danger" clicked={props.onClear}>
+          Okay
+        </Button>
+      }
     >
       <h3 className="errorText">{props.children}</h3>
     </Modal>

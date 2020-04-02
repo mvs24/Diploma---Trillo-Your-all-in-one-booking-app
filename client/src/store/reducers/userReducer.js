@@ -11,7 +11,13 @@ import {
   SET_CURRENT_USER_LOADING,
   SET_WISHLIST,
   SET_WISHLIST_ERROR,
-  SET_WISHLIST_LOADING
+  SET_WISHLIST_LOADING,
+  ADD_TO_WISHLIST,
+  ADD_TO_WISHLIST_LOADING,
+  ADD_TO_WISHLIST_ERROR,
+  REMOVE_FROM_WISHLIST,
+  REMOVE_FROM_WISHLIST_LOADING,
+  REMOVE_FROM_WISHLIST_ERROR
 } from '../types/userTypes';
 
 const initialState = {
@@ -92,6 +98,52 @@ export default (state = initialState, action) => {
       };
     case SET_WISHLIST_ERROR:
       return { ...state, loading: false, error: action.errormsg };
+    case ADD_TO_WISHLIST:
+      return {
+        ...state,
+        wishlist: {
+          results: state.wishlist.results + 1,
+          data: [...state.wishlist.data, { ...action.payload }]
+        },
+        error: null,
+        loading: false
+      };
+    case ADD_TO_WISHLIST_LOADING:
+      return {
+        ...state,
+        loading: true,
+        error: null
+      };
+    case ADD_TO_WISHLIST_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: action.errormsg
+      };
+    case REMOVE_FROM_WISHLIST_LOADING:
+      return {
+        ...state,
+        loading: true,
+        error: null
+      };
+    case REMOVE_FROM_WISHLIST_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: action.errormsg
+      };
+    case REMOVE_FROM_WISHLIST:
+      return {
+        ...state,
+        wishlist: {
+          results: state.wishlist.results - 1,
+          data: state.wishlist.data.filter(
+            wishlist => wishlist.tour !== action.tourId
+          )
+        },
+        loading: false,
+        error: null
+      };
     default:
       return state;
   }

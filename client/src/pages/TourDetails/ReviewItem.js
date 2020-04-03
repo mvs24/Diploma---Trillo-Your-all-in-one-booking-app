@@ -6,12 +6,12 @@ import {
   IoIosArrowBack,
   IoIosArrowForward,
   IoMdStar,
-  IoIosStarOutline
+  IoIosStarOutline,
 } from 'react-icons/io';
 
 import './ReviewItem.css';
 
-const ReviewItem = props => {
+const ReviewItem = (props) => {
   const [user, setUser] = useState();
   const [error, setError] = useState();
 
@@ -71,7 +71,7 @@ const ReviewItem = props => {
           </h3>
         </div>
         <div className="review__details">
-          {stars.map(star => star)}
+          {stars.map((star) => star)}
           <p className="review__paragraph">{props.review.review}</p>
         </div>
       </div>
@@ -99,7 +99,7 @@ const ReviewItem = props => {
               </h3>
             </div>
             <div className="review__details">
-              {stars.map(star => star)}
+              {stars.map((star) => star)}
               <p className="review__paragraph">{props.review.review}</p>
             </div>
           </div>
@@ -138,7 +138,7 @@ const ReviewItem = props => {
               </h3>
             </div>
             <div className="review__details">
-              {stars.map(star => star)}
+              {stars.map((star) => star)}
               <p className="review__paragraph">{props.review.review}</p>
             </div>
           </div>

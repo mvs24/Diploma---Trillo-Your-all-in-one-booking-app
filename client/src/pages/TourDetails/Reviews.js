@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ReviewItem from './ReviewItem';
 import axios from 'axios';
 
-const Reviews = props => {
+const Reviews = (props) => {
   const [reviews, setReviews] = useState();
   const { page, limit } = props;
 

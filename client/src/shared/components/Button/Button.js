@@ -2,7 +2,7 @@ import React from 'react';
 
 import './Button.css';
 
-const Button = props => {
+const Button = (props) => {
   const classNames = ['btn', props.type, props.className];
 
   return (
@@ -10,7 +10,6 @@ const Button = props => {
       disabled={props.disabled}
       className={classNames.join(' ')}
       onClick={props.clicked}
-      
     >
       {props.children}
     </button>

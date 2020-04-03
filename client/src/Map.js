@@ -68,34 +68,34 @@ import ReactMapGL, { Marker } from 'react-map-gl';
 import Pin from './assets/pin.png';
 import './Map.css';
 
-const Map = props => {
+const Map = (props) => {
   const [viewport, setViewport] = useState({
     width: '100%',
     height: 500,
     latitude: 37.7577,
     longitude: -122.4376,
-    zoom: 8
+    zoom: 8,
   });
   const locIds = [];
 
-  props.tour.locations.forEach(loc => {
+  props.tour.locations.forEach((loc) => {
     locIds.push({ id: loc._id, showPopup: true });
   });
 
   const [popup, setPopup] = useState(locIds);
 
   useEffect(() => {
-    setViewport(prevState => {
+    setViewport((prevState) => {
       return {
         ...prevState,
         latitude: props.tour.startLocation.coordinates[1],
-        longitude: props.tour.startLocation.coordinates[0]
+        longitude: props.tour.startLocation.coordinates[0],
       };
     });
   }, []);
 
   const loadDayMarkers = () => {
-    return props.tour.locations.map(loc => {
+    return props.tour.locations.map((loc) => {
       return (
         <Marker
           key={loc.coordinates}
@@ -104,13 +104,13 @@ const Map = props => {
         >
           <img
             onClick={() => {
-              setPopup(prevPopup => {
+              setPopup((prevPopup) => {
                 let updatedPopup = [...prevPopup];
-                const index = updatedPopup.findIndex(el => el.id === loc._id);
+                const index = updatedPopup.findIndex((el) => el.id === loc._id);
 
                 updatedPopup[index] = {
                   id: loc._id,
-                  showPopup: !updatedPopup[index].showPopup
+                  showPopup: !updatedPopup[index].showPopup,
                 };
 
                 return updatedPopup;
@@ -119,7 +119,7 @@ const Map = props => {
             className="marker"
             src={Pin}
           />
-          {popup.find(el => el.id === loc._id).showPopup && (
+          {popup.find((el) => el.id === loc._id).showPopup && (
             <div className="popup">
               <span className="description">
                 Day: {loc.day}: {loc.description}

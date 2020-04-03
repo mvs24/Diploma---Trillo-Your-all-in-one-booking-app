@@ -14,109 +14,110 @@ import {
   signupUser,
   deleteError,
   loginUser,
-  getMyWishlist
+  getMyWishlist,
+  getToursInCart,
 } from '../store/actions/userActions';
 import LoadingSpinner from '../shared/components/UI/LoadingSpinner';
 import UserContent from '../UserContent/UserContent';
 import ErrorModal from '../shared/components/UI/ErrorModal';
 
-const Header = React.memo(props => {
+const Header = React.memo((props) => {
   const [openLogin, setOpenLogin] = useState(false);
   const [openSignup, setOpenSignup] = useState(false);
   const [signupData, setSignupData] = useState({
     name: {
       configOptions: {
         type: 'text',
-        placeholder: 'Your Name'
+        placeholder: 'Your Name',
       },
       value: '',
       valid: false,
       touched: false,
       validRequirements: {
         required: true,
-        minlength: 2
-      }
+        minlength: 2,
+      },
     },
     lastname: {
       configOptions: {
         type: 'text',
-        placeholder: 'Your Lastname'
+        placeholder: 'Your Lastname',
       },
       value: '',
       valid: false,
       touched: false,
       validRequirements: {
         required: true,
-        minlength: 2
-      }
+        minlength: 2,
+      },
     },
     email: {
       configOptions: {
         type: 'email',
-        placeholder: 'Your E-mail'
+        placeholder: 'Your E-mail',
       },
       value: '',
       valid: false,
       touched: false,
       validRequirements: {
         required: true,
-        isEmail: true
-      }
+        isEmail: true,
+      },
     },
     password: {
       configOptions: {
         type: 'password',
-        placeholder: 'Your Password'
+        placeholder: 'Your Password',
       },
       value: '',
       valid: false,
       touched: false,
       validRequirements: {
         required: true,
-        minlength: 6
-      }
+        minlength: 6,
+      },
     },
     passwordConfirm: {
       configOptions: {
         type: 'password',
-        placeholder: 'Confirm your password'
+        placeholder: 'Confirm your password',
       },
       value: '',
       valid: false,
       touched: false,
       validRequirements: {
         required: true,
-        minlength: 6
-      }
-    }
+        minlength: 6,
+      },
+    },
   });
   const [loginData, setLoginData] = useState({
     email: {
       configOptions: {
         type: 'email',
-        placeholder: 'Your E-mail'
+        placeholder: 'Your E-mail',
       },
       value: '',
       valid: false,
       touched: false,
       validRequirements: {
         required: true,
-        isEmail: true
-      }
+        isEmail: true,
+      },
     },
     password: {
       configOptions: {
         type: 'password',
-        placeholder: 'Your Password'
+        placeholder: 'Your Password',
       },
       value: '',
       valid: false,
       touched: false,
       validRequirements: {
         required: true,
-        minlength: 6
-      }
-    }
+        minlength: 6,
+      },
+    },
   });
   const [signupValid, setSignupValid] = useState(false);
   const [loginValid, setLoginValid] = useState(false);
@@ -125,6 +126,12 @@ const Header = React.memo(props => {
   useEffect(() => {
     if (isAuthenticated) {
       getMyWishlist();
+    }
+  }, [isAuthenticated]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      props.getToursInCart();
     }
   }, [isAuthenticated]);
 
@@ -195,7 +202,7 @@ const Header = React.memo(props => {
     }
   };
 
-  const populateData = type => {
+  const populateData = (type) => {
     let data = {};
 
     for (let key in type) {
@@ -247,13 +254,13 @@ const Header = React.memo(props => {
     {
       cmp: <IoIosAirplane />,
       category: 'Flights',
-      link: '/categories/flights'
+      link: '/categories/flights',
     },
     { cmp: <FaMapMarkedAlt />, category: 'Tours', link: '/categories/tours' },
-    { cmp: <MdHotel />, category: 'Hotels', link: '/categories/hotels' }
+    { cmp: <MdHotel />, category: 'Hotels', link: '/categories/hotels' },
   ];
 
-  const categoriesToRender = categories.map(el => (
+  const categoriesToRender = categories.map((el) => (
     <Link key={el.link} to={el.link} className="hidden__element">
       <IconContext.Provider value={{ className: 'icon' }}>
         {el.cmp}
@@ -270,7 +277,7 @@ const Header = React.memo(props => {
         valid={loginData[key].valid}
         touched={loginData[key].touched}
         configOptions={loginData[key].configOptions}
-        onChange={e => inputHandler(e, key, 'login')}
+        onChange={(e) => inputHandler(e, key, 'login')}
       />
     );
   }
@@ -283,7 +290,7 @@ const Header = React.memo(props => {
         valid={signupData[key].valid}
         touched={signupData[key].touched}
         configOptions={signupData[key].configOptions}
-        onChange={e => inputHandler(e, key, 'signup')}
+        onChange={(e) => inputHandler(e, key, 'signup')}
       />
     );
   }
@@ -300,7 +307,9 @@ const Header = React.memo(props => {
   );
 
   if (props.isAuthenticated) {
-    userContent = <UserContent wishlist={props.wishlist} />;
+    userContent = (
+      <UserContent wishlist={props.wishlist} cartTour={props.cartTour} />
+    );
   }
 
   return (
@@ -323,7 +332,7 @@ const Header = React.memo(props => {
           show
           headerClass="green"
         >
-          {loginForm.map(el => el)}
+          {loginForm.map((el) => el)}
 
           {props.error && <h2 className="errorText">{props.error}</h2>}
         </Modal>
@@ -345,7 +354,7 @@ const Header = React.memo(props => {
           show
           headerClass="green"
         >
-          {signupForm.map(el => el)}
+          {signupForm.map((el) => el)}
 
           {props.error && <h2 className="errorText">{props.error}</h2>}
         </Modal>
@@ -378,17 +387,19 @@ const Header = React.memo(props => {
   );
 });
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   userData: state.user.userData,
   error: state.user.error,
   loading: state.user.loading,
   isAuthenticated: state.user.isAuthenticated,
-  wishlist: state.user.wishlist
+  wishlist: state.user.wishlist,
+  cartTour: state.user.cartTour,
 });
 
 export default connect(mapStateToProps, {
   signupUser,
   deleteError,
   loginUser,
-  getMyWishlist
+  getMyWishlist,
+  getToursInCart,
 })(withRouter(Header));

@@ -4,7 +4,7 @@ import Modal from './Modal';
 import Button from '../Button/Button';
 import './ErrorModal.css';
 
-const ErrorModal = props => {
+const ErrorModal = (props) => {
   return (
     <Modal
       className="over"

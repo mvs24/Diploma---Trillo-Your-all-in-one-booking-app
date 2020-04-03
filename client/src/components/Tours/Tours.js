@@ -6,7 +6,7 @@ import './Tours.css';
 import TourItem from '../TourItem/TourItem';
 import ErrorModal from '../../shared/components/UI/ErrorModal';
 
-const Tours = React.memo(props => {
+const Tours = React.memo((props) => {
   const [mostPopularTours, setMostPopularTours] = useState([]);
   const [topTours, setTopTours] = useState([]);
   const [error, setError] = useState(false);
@@ -71,8 +71,8 @@ const Tours = React.memo(props => {
 
   let topToursContent =
     activeLink === 'top'
-      ? topTours.map(tour => <TourItem key={tour._id} tour={tour} />)
-      : mostPopularTours.map(tour => <TourItem key={tour._id} tour={tour} />);
+      ? topTours.map((tour) => <TourItem key={tour._id} tour={tour} />)
+      : mostPopularTours.map((tour) => <TourItem key={tour._id} tour={tour} />);
 
   let toursContent = (
     <div className="tours">
@@ -101,8 +101,8 @@ const Tours = React.memo(props => {
   return toursContent;
 });
 
-const mapStateToProps = state => ({
-  isAuthenticated: state.user.isAuthenticated
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.user.isAuthenticated,
 });
 
 export default connect(mapStateToProps)(Tours);

@@ -23,8 +23,10 @@ exports.getCheckoutSession = asyncWrapper(async (req, res, next) => {
 
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
-    success_url: `${req.protocol}://${req.get('host')}/my-tours/`, //succes url for the frontend!!!!
-    cancel_url: `${req.protocol}://${req.get('host')}/tour/${tour.slug}`, // control for the frontend!!!!
+    success_url: `http://localhost:3000/success/tours/${tour._id}/users/${req.user.id}/price/${tour.price}`, //succes url for the frontend!!!!
+  cancel_url: `http://localhost:3000/tours/${tour._id}`,
+    // success_url: `${req.protocol}://${req.get('host')}/`, //succes url for the frontend!!!!
+    // cancel_url: `${req.protocol}://${req.get('host')}/tours/${tour.slug}`, // control for the frontend!!!!
     customer_email: req.user.email,
     client_reference_id: req.params.tourId,
     line_items: [
@@ -32,9 +34,9 @@ exports.getCheckoutSession = asyncWrapper(async (req, res, next) => {
         name: `${tour.name} Tour`,
         description: tour.summary,
         images: [
-          `${req.protocol}://${req.get('host')}/img/tours/${tour.imageCover}` //images single one
+          `${req.protocol}://${req.get('host')}/public/img/tours/${tour.imageCover}`
         ],
-        amount: tour.price,
+        amount: tour.price * 100,
         currency: 'usd',
         quantity: 1
       }

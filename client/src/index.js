@@ -9,7 +9,7 @@ import userReducer from './store/reducers/userReducer';
 // import * as serviceWorker from './serviceWorker';
 
 const rootReducer = combineReducers({
-  user: userReducer
+  user: userReducer,
 });
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(

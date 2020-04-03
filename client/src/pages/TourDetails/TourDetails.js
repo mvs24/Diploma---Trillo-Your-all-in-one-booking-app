@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import './TourDetails.css';
 import axios from 'axios';
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
@@ -14,14 +15,19 @@ import Reviews from './Reviews';
 import AgencyInfo from './AgencyInfo';
 import Logo from '../../assets/logo.PNG';
 import Button from '../../shared/components/Button/Button';
+import { addToCart } from '../../store/actions/userActions';
+import { loadStripe } from '@stripe/stripe-js';
 
-const TourDetails = React.memo(props => {
+const TourDetails = React.memo((props) => {
   const [tour, setTour] = useState(null);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [added, setAdded] = useState(false);
+  const [adding, setAdding] = useState(false);
   const [page, setPage] = useState(1);
   const [resPerPage, setResPerPage] = useState(3);
   const tourId = props.match.params.tourId;
+  const { cartTour } = props;
 
   useEffect(() => {
     const getTour = async () => {
@@ -29,6 +35,7 @@ const TourDetails = React.memo(props => {
         setLoading(true);
         const res = await axios.get(`/api/v1/tours/${tourId}`);
         setLoading(false);
+
         setTour(res.data.data);
       } catch (err) {
         setError(err.response.data.message);
@@ -39,20 +46,52 @@ const TourDetails = React.memo(props => {
     getTour();
   }, []);
 
+  useEffect(() => {
+    if (tour) {
+      const toursInCart = cartTour.map((el) => el.tour);
+      if (toursInCart.includes(tour._id)) {
+        setAdded(true);
+      }
+    }
+  });
+
   const showMoreHandler = () => {
-    setPage(prevPage => prevPage + 1);
+    setPage((prevPage) => prevPage + 1);
   };
 
   const showLessHandler = () => {
-    setPage(prevPage => prevPage - 1);
+    setPage((prevPage) => prevPage - 1);
   };
 
   const addToCartHandler = async () => {
     try {
-      const res = await axios.post(`/api/v1/cart/tours/${tour._id}`);
-      console.log(res.data);
+      setAdding(true);
+      await props.addToCart(tour._id);
+      setAdding(false);
+      setAdded(true);
     } catch (err) {
       setError(err.response.data.message);
+    }
+  };
+
+  const stripePromise = loadStripe(
+    'pk_test_zUIsJ0pP0ioBysHoQcStX9cC00X97vuB7d'
+  );
+
+  const bookTour = async () => {
+    try {
+      const stripe = await stripePromise;
+      // 1) Get checkout session from API
+      const session = await axios(
+        `/api/v1/bookings/tours/checkout-session/${tour._id}`
+      );
+
+      // 2) Create checkout form + chanre credit card
+      await stripe.redirectToCheckout({
+        sessionId: session.data.session.id,
+      });
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -60,17 +99,28 @@ const TourDetails = React.memo(props => {
     return <LoadingSpinner asOverlay />;
   }
 
+  let addContent = <span>ADD TO CART</span>;
+  if (adding) {
+    addContent = <span>ADDING...</span>;
+  } else {
+    if (added) {
+      addContent = <span>ADDED</span>;
+    } else {
+      addContent = <span> ADD TO CART</span>;
+    }
+  }
+
   return (
     <div className="tour__container">
       {error && (
         <ErrorModal show onClear={() => setError(false)}>
-          {error} 
+          {error}
         </ErrorModal>
       )}
       <div
         className="tour__bcg"
         style={{
-          backgroundImage: `url(http://localhost:5000/public/img/tours/${tour.imageCover})`
+          backgroundImage: `url(http://localhost:5000/public/img/tours/${tour.imageCover})`,
         }}
       >
         &nbsp;
@@ -149,7 +199,7 @@ const TourDetails = React.memo(props => {
 
       <div className="images__container">
         <div className="images">
-          {tour.images.map(img => (
+          {tour.images.map((img) => (
             <div key={img} className="image__container">
               <img src={`http://localhost:5000/public/img/tours/${img}`} />
             </div>
@@ -183,7 +233,7 @@ const TourDetails = React.memo(props => {
         <div className="bookTour__info">
           <div className="bookTour__images">
             <img className="bookTour__image" src={Logo} />
-            {tour.images.map(img => (
+            {tour.images.map((img) => (
               <img
                 className="bookTour__image"
                 src={`http://localhost:5000/public/img/tours/${img}`}
@@ -199,13 +249,14 @@ const TourDetails = React.memo(props => {
           </div>
           <div className="bookTour__buttons">
             <Button
+              disabled={added}
               className="addToCart"
               type="success"
               clicked={addToCartHandler}
             >
-              ADD TO CART
+              {addContent}
             </Button>
-            <Button className="bookNow" type="success">
+            <Button className="bookNow" clicked={bookTour} type="success">
               BOOK NOW! ONLY ${tour.price}
             </Button>
           </div>
@@ -215,4 +266,8 @@ const TourDetails = React.memo(props => {
   );
 });
 
-export default TourDetails;
+const mapStateToProps = (state) => ({
+  cartTour: state.user.cartTour,
+});
+
+export default connect(mapStateToProps, { addToCart })(TourDetails);

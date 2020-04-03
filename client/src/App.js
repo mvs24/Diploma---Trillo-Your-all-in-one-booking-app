@@ -6,6 +6,7 @@ import Layout from './Layout/Layout';
 import Tours from './pages/Tours/Tours';
 import Home from './pages/Home/Home';
 import TourDetails from './pages/TourDetails/TourDetails';
+import SuccessBooking from './components/SuccessBooking/SuccessBooking';
 
 function App(props) {
   const setUserData = async () => {
@@ -26,6 +27,11 @@ function App(props) {
           <Route path="/" exact component={Home} />
         </Switch>
       </Layout>
+      <Route
+        path="/success/tours/:tourId/users/:userId/price/:price"
+        exact
+        component={SuccessBooking}
+      />
     </BrowserRouter>
   );
 }

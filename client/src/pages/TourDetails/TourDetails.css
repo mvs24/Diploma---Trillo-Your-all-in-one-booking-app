@@ -207,6 +207,7 @@
   justify-content: space-evenly;
   align-items: space-evenly;
 }
+
 .bookTour__buttons:first-child {
   margin: 2rem 0;
 }

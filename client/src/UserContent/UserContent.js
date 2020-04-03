@@ -7,19 +7,30 @@ import LoadingSpinner from '../shared/components/UI/LoadingSpinner';
 
 import './UserContent.css';
 
-const UserContent = props => {
-  const { wishlist } = props;
+const UserContent = (props) => {
+  const { wishlist, cartTour } = props;
+  let cartTourLength = 0;
+
   let wishlistContent = <LoadingSpinner />;
+
   if (wishlist)
     wishlistContent = (
       <div className="shopping__cart">
         <span className="hidden">Shopping_cart</span>
         <IconContext.Provider value={{ className: 'icon heart' }}>
           <FiHeart />
-          <span className="wish__length">{wishlist.results}</span>
+          <span className="wish__length">
+            {wishlist.results > 9 ? <span>9+</span> : wishlist.results}
+          </span>
         </IconContext.Provider>
       </div>
     );
+
+  let cartContent = <LoadingSpinner />;
+
+  if (cartTour.length !== 0) {
+    cartTourLength = cartTour.length;
+  }
 
   return (
     <>
@@ -126,7 +137,9 @@ const UserContent = props => {
           <span className="hidden">Shopping_cart</span>
           <IconContext.Provider value={{ className: 'icon cart' }}>
             <FiShoppingCart />
-            <span className="cart__length">9+</span>
+            <span className="cart__length">
+              {cartTourLength > 9 ? <span>9+</span> : cartTourLength}
+            </span>
           </IconContext.Provider>
         </div>
 
@@ -174,8 +187,8 @@ const UserContent = props => {
   );
 };
 
-const mapStateToProps = state => ({
-  userData: state.user.userData
+const mapStateToProps = (state) => ({
+  userData: state.user.userData,
 });
 
 export default connect(mapStateToProps)(UserContent);

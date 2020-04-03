@@ -9,7 +9,7 @@ import { MdPeopleOutline, MdAccessTime } from 'react-icons/md';
 import { FaSortNumericUp } from 'react-icons/fa';
 import Button from '../../shared/components/Button/Button';
 
-const AgencyInfo = props => {
+const AgencyInfo = (props) => {
   const [agency, setAgency] = useState();
   const [error, setError] = useState();
   const history = useHistory();

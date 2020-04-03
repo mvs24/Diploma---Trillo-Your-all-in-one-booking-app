@@ -12,11 +12,11 @@ import './TourItem.css';
 import {
   addToWishlist,
   deleteError,
-  removeFromWishlist
+  removeFromWishlist,
 } from '../../store/actions/userActions';
 import ErrorModal from '../../shared/components/UI/ErrorModal';
 
-const TourItem = React.memo(props => {
+const TourItem = React.memo((props) => {
   const [isLiked, setIsLiked] = useState(false);
   const [updated, setUpdated] = useState(false);
   const history = useHistory();
@@ -27,7 +27,7 @@ const TourItem = React.memo(props => {
     let wishlistTours = []; //[ids]
 
     if (wishlist && isAuthenticated) {
-      wishlist.data.forEach(el => {
+      wishlist.data.forEach((el) => {
         wishlistTours.push(el.tour);
       });
     }
@@ -38,14 +38,14 @@ const TourItem = React.memo(props => {
     }
   }
 
-  const addTourToWishlist = tourId => {
+  const addTourToWishlist = (tourId) => {
     props.addToWishlist(tourId);
     if (isAuthenticated) {
       setIsLiked(true);
     }
   };
 
-  const removeTourFromWishlist = tourId => {
+  const removeTourFromWishlist = (tourId) => {
     props.removeFromWishlist(tourId);
     if (isAuthenticated) {
       setIsLiked(false);
@@ -118,14 +118,14 @@ const TourItem = React.memo(props => {
   );
 });
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   isAuthenticated: state.user.isAuthenticated,
   wishlist: state.user.wishlist,
-  error: state.user.error
+  error: state.user.error,
 });
 
 export default connect(mapStateToProps, {
   addToWishlist,
   deleteError,
-  removeFromWishlist
+  removeFromWishlist,
 })(TourItem);

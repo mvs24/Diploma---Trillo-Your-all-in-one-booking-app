@@ -18,10 +18,16 @@ import {
   ADD_TO_WISHLIST_ERROR,
   REMOVE_FROM_WISHLIST,
   REMOVE_FROM_WISHLIST_LOADING,
-  REMOVE_FROM_WISHLIST_ERROR
+  REMOVE_FROM_WISHLIST_ERROR,
+  ADD_TO_CART,
+  ADD_TO_CART_ERROR,
+  ADD_TO_CART_LOADING,
+  LOADING,
+  GET_TOURS_IN_CART_ERROR,
+  GET_TOURS_IN_CART,
 } from '../types/userTypes';
 
-export const setHeaders = token => {
+export const setHeaders = (token) => {
   if (token) {
     // apply to every request
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
@@ -31,7 +37,7 @@ export const setHeaders = token => {
   }
 };
 
-export const signupUser = userData => async dispatch => {
+export const signupUser = (userData) => async (dispatch) => {
   try {
     dispatch({ type: SIGNUP_LOADING });
     const response = await axios.post('/api/v1/users/signup', userData);
@@ -40,20 +46,20 @@ export const signupUser = userData => async dispatch => {
 
     dispatch({
       type: SIGNUP_SUCCESS,
-      payload: response.data.data
+      payload: response.data.data,
     });
 
     return true;
   } catch (err) {
     dispatch({
       type: SIGNUP_ERROR,
-      errormsg: err.response.data.message
+      errormsg: err.response.data.message,
     });
     return false;
   }
 };
 
-export const loginUser = userData => async dispatch => {
+export const loginUser = (userData) => async (dispatch) => {
   try {
     dispatch({ type: LOGIN_LOADING });
     const response = await axios.post('/api/v1/users/login', userData);
@@ -63,20 +69,20 @@ export const loginUser = userData => async dispatch => {
 
     dispatch({
       type: LOGIN_SUCCESS,
-      payload: response.data.data
+      payload: response.data.data,
     });
 
     return true;
   } catch (err) {
     dispatch({
       type: LOGIN_ERROR,
-      errormsg: err.response.data.message
+      errormsg: err.response.data.message,
     });
     return false;
   }
 };
 
-export const setCurrentUser = () => async dispatch => {
+export const setCurrentUser = () => async (dispatch) => {
   try {
     dispatch({ type: SET_CURRENT_USER_LOADING });
     const response = await axios.get('/api/v1/users/loggedInUser');
@@ -86,17 +92,17 @@ export const setCurrentUser = () => async dispatch => {
   } catch (err) {
     dispatch({
       type: SET_CURRENT_USER_ERROR,
-      errormsg: err.response.data.message
+      errormsg: err.response.data.message,
     });
     return false;
   }
 };
 
-export const deleteError = () => dispatch => {
+export const deleteError = () => (dispatch) => {
   dispatch({ type: DELETE_ERROR });
 };
 
-export const getMyWishlist = () => async dispatch => {
+export const getMyWishlist = () => async (dispatch) => {
   try {
     dispatch({ type: SET_WISHLIST_LOADING });
 
@@ -105,7 +111,7 @@ export const getMyWishlist = () => async dispatch => {
     let result = {
       results: res.data.results,
       totalPrice: res.data.totalPrice,
-      data: res.data.data
+      data: res.data.data,
     };
 
     dispatch({ type: SET_WISHLIST, payload: result });
@@ -114,7 +120,7 @@ export const getMyWishlist = () => async dispatch => {
   }
 };
 
-export const addToWishlist = tourId => async dispatch => {
+export const addToWishlist = (tourId) => async (dispatch) => {
   try {
     dispatch({ type: ADD_TO_WISHLIST_LOADING });
     const res = await axios.post(`/api/v1/wishlist/tours/${tourId}`);
@@ -122,12 +128,12 @@ export const addToWishlist = tourId => async dispatch => {
   } catch (err) {
     dispatch({
       type: ADD_TO_WISHLIST_ERROR,
-      errormsg: err.response.data.message
+      errormsg: err.response.data.message,
     });
   }
 };
 
-export const removeFromWishlist = tourId => async dispatch => {
+export const removeFromWishlist = (tourId) => async (dispatch) => {
   try {
     dispatch({ type: REMOVE_FROM_WISHLIST_LOADING });
     await axios.delete(`/api/v1/wishlist/tours/${tourId}`);
@@ -135,7 +141,30 @@ export const removeFromWishlist = tourId => async dispatch => {
   } catch (err) {
     dispatch({
       type: REMOVE_FROM_WISHLIST_ERROR,
-      errormsg: err.response.data.message
+      errormsg: err.response.data.message,
+    });
+  }
+};
+
+export const addToCart = (tourId) => async (dispatch) => {
+  try {
+    dispatch({ type: ADD_TO_CART_LOADING });
+    const res = await axios.post(`/api/v1/cart/tours/${tourId}`);
+    dispatch({ type: ADD_TO_CART, payload: res.data.data });
+  } catch (err) {
+    dispatch({ type: ADD_TO_CART_ERROR, errormsg: err.response.data.message });
+  }
+};
+
+export const getToursInCart = () => async (dispatch) => {
+  try {
+    dispatch({ type: LOADING });
+    const res = await axios.get(`/api/v1/cart/tours/`);
+    dispatch({ type: GET_TOURS_IN_CART, payload: res.data.data });
+  } catch (err) {
+    dispatch({
+      type: GET_TOURS_IN_CART_ERROR,
+      errormsg: err.response.data.message,
     });
   }
 };

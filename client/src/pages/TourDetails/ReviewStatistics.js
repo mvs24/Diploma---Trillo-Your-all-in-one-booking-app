@@ -2,10 +2,15 @@ import React, { useState, useEffect } from 'react';
 import './ReviewStatistics.css';
 import axios from 'axios';
 import { IconContext } from 'react-icons';
-import { IoIosStarHalf, IoMdStar, IoIosStarOutline } from 'react-icons/io';
+import {
+  IoIosStarHalf,
+  IoMdStar,
+  IoMdStarOutline,
+  IoIosStarOutline,
+} from 'react-icons/io';
 import ErrorModal from '../../shared/components/UI/ErrorModal';
 
-const ReviewStatistics = props => {
+const ReviewStatistics = (props) => {
   const [reviewStats, setReviewStats] = useState();
   const [totalReviews, setTotalReviews] = useState();
   const [avgRating, setAvgRating] = useState();
@@ -30,8 +35,36 @@ const ReviewStatistics = props => {
 
   if (!avgRating) return null;
 
-  const dec = avgRating.toString().substring(0, 1);
-  const fr = avgRating.toString().substring(2, 3);
+  const dec = avgRating.toFixed(2).toString().substring(0, 1);
+  const fr = avgRating.toFixed(2).toString().substring(2, 3);
+  let nrFr = +fr;
+
+  let halfStar = (
+    <IconContext.Provider
+      value={{ className: 'icon__green tour__info--icon full star' }}
+    >
+      <IoIosStarHalf />
+    </IconContext.Provider>
+  );
+  if (nrFr === 0) {
+    halfStar = null;
+  } else if (nrFr.toFixed(1) > 7) {
+    halfStar = (
+      <IconContext.Provider
+        value={{ className: 'icon__green tour__info--icon full star' }}
+      >
+        <IoMdStar />
+      </IconContext.Provider>
+    );
+  } else if (nrFr.toFixed(1) < 2.5) {
+    halfStar = (
+      <IconContext.Provider
+        value={{ className: 'icon__green tour__info--icon full star' }}
+      >
+        <IoMdStarOutline />
+      </IconContext.Provider>
+    );
+  }
 
   let stars = [];
   for (let i = 0; i < dec; i++) {
@@ -51,20 +84,8 @@ const ReviewStatistics = props => {
       <div className="review__info">
         <div className="review__info--left">
           <p className="avgRating">RATING: {avgRating}</p>
-          {stars.map(star => star)}
-          {fr >= 5 ? (
-            <IconContext.Provider
-              value={{ className: 'icon__green tour__info--icon full star' }}
-            >
-              <IoMdStar />
-            </IconContext.Provider>
-          ) : (
-            <IconContext.Provider
-              value={{ className: 'icon__green tour__info--icon full star' }}
-            >
-              <IoIosStarHalf />
-            </IconContext.Provider>
-          )}
+          {stars.map((star) => star)}
+          {halfStar}
           <p className="totalReviews">TOTAL REVIEWS: {totalReviews}</p>
         </div>
         <div className="review__info--right">
@@ -74,7 +95,7 @@ const ReviewStatistics = props => {
               stars.push(
                 <IconContext.Provider
                   value={{
-                    className: 'icon__green tour__info--icon full star'
+                    className: 'icon__green tour__info--icon full star',
                   }}
                 >
                   <IoMdStar />
@@ -85,7 +106,7 @@ const ReviewStatistics = props => {
               stars.push(
                 <IconContext.Provider
                   value={{
-                    className: 'icon__green tour__info--icon full star'
+                    className: 'icon__green tour__info--icon full star',
                   }}
                 >
                   <IoIosStarOutline />
@@ -98,7 +119,7 @@ const ReviewStatistics = props => {
                 <div
                   className="bck"
                   style={{
-                    background: `linear-gradient(to right, #777 0% ${review.percentage}%, #f4f2f2  ${review.percentage}% 100%)`
+                    background: `linear-gradient(to right, #777 0% ${review.percentage}%, #f4f2f2  ${review.percentage}% 100%)`,
                   }}
                 >
                   &nbsp;

@@ -17,7 +17,13 @@ import {
   ADD_TO_WISHLIST_ERROR,
   REMOVE_FROM_WISHLIST,
   REMOVE_FROM_WISHLIST_LOADING,
-  REMOVE_FROM_WISHLIST_ERROR
+  REMOVE_FROM_WISHLIST_ERROR,
+  ADD_TO_CART,
+  ADD_TO_CART_LOADING,
+  ADD_TO_CART_ERROR,
+  LOADING,
+  GET_TOURS_IN_CART_ERROR,
+  GET_TOURS_IN_CART,
 } from '../types/userTypes';
 
 const initialState = {
@@ -25,7 +31,8 @@ const initialState = {
   userData: null,
   error: null,
   loading: false,
-  wishlist: null
+  wishlist: null,
+  cartTour: [],
 };
 
 export default (state = initialState, action) => {
@@ -38,18 +45,18 @@ export default (state = initialState, action) => {
         error: null,
         loading: false,
         userData: action.payload,
-        isAuthenticated: true
+        isAuthenticated: true,
       };
     case SIGNUP_LOADING:
       return {
         ...state,
         loading: true,
-        error: null
+        error: null,
       };
     case DELETE_ERROR:
       return {
         ...state,
-        error: null
+        error: null,
       };
     case LOGIN_SUCCESS:
       return {
@@ -57,7 +64,7 @@ export default (state = initialState, action) => {
         error: null,
         loading: false,
         isAuthenticated: true,
-        userData: action.payload
+        userData: action.payload,
       };
     case LOGIN_ERROR:
       return { ...state, loading: false, error: action.errormsg };
@@ -65,7 +72,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         loading: true,
-        error: null
+        error: null,
       };
     case SET_CURRENT_USER:
       return {
@@ -73,7 +80,7 @@ export default (state = initialState, action) => {
         userData: action.payload,
         error: null,
         loading: false,
-        isAuthenticated: true
+        isAuthenticated: true,
       };
     case SET_CURRENT_USER_ERROR:
       return { ...state, loading: false, error: action.errormsg };
@@ -81,20 +88,20 @@ export default (state = initialState, action) => {
       return {
         ...state,
         loading: true,
-        error: null
+        error: null,
       };
     case SET_WISHLIST:
       return {
         ...state,
         wishlist: action.payload,
         error: null,
-        loading: false
+        loading: false,
       };
     case SET_WISHLIST_LOADING:
       return {
         ...state,
         loading: true,
-        error: null
+        error: null,
       };
     case SET_WISHLIST_ERROR:
       return { ...state, loading: false, error: action.errormsg };
@@ -103,34 +110,34 @@ export default (state = initialState, action) => {
         ...state,
         wishlist: {
           results: state.wishlist.results + 1,
-          data: [...state.wishlist.data, { ...action.payload }]
+          data: [...state.wishlist.data, { ...action.payload }],
         },
         error: null,
-        loading: false
+        loading: false,
       };
     case ADD_TO_WISHLIST_LOADING:
       return {
         ...state,
         loading: true,
-        error: null
+        error: null,
       };
     case ADD_TO_WISHLIST_ERROR:
       return {
         ...state,
         loading: false,
-        error: action.errormsg
+        error: action.errormsg,
       };
     case REMOVE_FROM_WISHLIST_LOADING:
       return {
         ...state,
         loading: true,
-        error: null
+        error: null,
       };
     case REMOVE_FROM_WISHLIST_ERROR:
       return {
         ...state,
         loading: false,
-        error: action.errormsg
+        error: action.errormsg,
       };
     case REMOVE_FROM_WISHLIST:
       return {
@@ -138,11 +145,49 @@ export default (state = initialState, action) => {
         wishlist: {
           results: state.wishlist.results - 1,
           data: state.wishlist.data.filter(
-            wishlist => wishlist.tour !== action.tourId
-          )
+            (wishlist) => wishlist.tour !== action.tourId
+          ),
         },
         loading: false,
-        error: null
+        error: null,
+      };
+    case ADD_TO_CART_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: action.errormsg,
+      };
+    case ADD_TO_CART_LOADING:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+    case ADD_TO_CART:
+      return {
+        ...state,
+        cartTour: [...state.cartTour, action.payload],
+        error: null,
+        loading: false,
+      };
+    case LOADING:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+    case GET_TOURS_IN_CART_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: action.errormsg,
+      };
+    case GET_TOURS_IN_CART:
+      return {
+        ...state,
+        cartTour: action.payload,
+        error: null,
+        loading: false,
       };
     default:
       return state;

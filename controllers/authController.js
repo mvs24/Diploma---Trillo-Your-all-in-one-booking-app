@@ -14,14 +14,16 @@ const signToken = id => {
 };
 
 exports.signup = asyncWrapper(async (req, res, next) => {
-  const { name, lastname, password, passwordConfirm, email } = req.body;
+  const { name, lastname, password, passwordConfirm, email, photo } = req.body;
 
+  if (!photo) req.body.photo = 'default.jpg'
   const user = await User.create({
     name,
     lastname,
     password,
     passwordConfirm,
-    email
+    email,
+    photo
   });
 
   const token = signToken(user._id);

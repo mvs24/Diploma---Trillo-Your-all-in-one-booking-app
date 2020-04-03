@@ -110,7 +110,7 @@
   margin-top: -15rem;
 }
 
-.tour__about h1 {
+.tour__about h1, .reviews h1 {
   font-size: 3rem;
   text-transform: uppercase;
   background-image: linear-gradient(
@@ -153,6 +153,11 @@
 
 .map__container {
   transform: skewY(-5deg);
+}
+
+.reviews {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(50rem, 1fr));
 }
 
 /* 

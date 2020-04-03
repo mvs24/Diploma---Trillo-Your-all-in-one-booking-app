@@ -68,7 +68,7 @@ import ReactMapGL, { Marker } from 'react-map-gl';
 import Pin from './assets/pin.png';
 import './Map.css';
 
-function Map(props) {
+const Map = props => {
   const [viewport, setViewport] = useState({
     width: '100%',
     height: 500,
@@ -77,12 +77,12 @@ function Map(props) {
     zoom: 5
   });
   const locIds = [];
+
   props.tour.locations.forEach(loc => {
     locIds.push({ id: loc._id, showPopup: true });
-  }); //[{id: 1, show: true}, {id: 2, show: true}, {id: 3, show: false}]
-  const [popup, setPopup] = useState(locIds);
+  });
 
-  console.log(popup);
+  const [popup, setPopup] = useState(locIds);
 
   useEffect(() => {
     setViewport(prevState => {
@@ -96,7 +96,6 @@ function Map(props) {
 
   const loadDayMarkers = () => {
     return props.tour.locations.map(loc => {
-      //console.log(loc);
       return (
         <Marker
           key={loc.coordinates}
@@ -107,32 +106,26 @@ function Map(props) {
             onClick={() => {
               setPopup(prevPopup => {
                 let updatedPopup = [...prevPopup];
-                const index = updatedPopup.find(el => el.id === loc._id);
+                const index = updatedPopup.findIndex(el => el.id === loc._id);
+
                 updatedPopup[index] = {
                   id: loc._id,
-                  show: !updatedPopup[index].show
+                  showPopup: !updatedPopup[index].showPopup
                 };
-                console.log('updatedPopup', updatedPopup);
+
                 return updatedPopup;
               });
             }}
             className="marker"
             src={Pin}
           />
-          {popup.forEach(el => {
-            if (el.show) {
-              return (
-                <div className="popup">
-                  <span className="description">
-                    Day: {loc.day}: {loc.description}
-                  </span>{' '}
-                  {/* <span className="close" onClick={() => setShowPopup(false)}>
-                    X
-                  </span> */}
-                </div>
-              );
-            }
-          })}
+          {popup.find(el => el.id === loc._id).showPopup && (
+            <div className="popup">
+              <span className="description">
+                Day: {loc.day}: {loc.description}
+              </span>
+            </div>
+          )}
         </Marker>
       );
     });
@@ -149,5 +142,5 @@ function Map(props) {
       {loadDayMarkers()}
     </ReactMapGL>
   );
-}
+};
 export default Map;

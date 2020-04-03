@@ -15,6 +15,7 @@ router.use('/:tourId/reviews', reviewTourRouter);
 router.route('/finishedTours').get(tourController.getFinishedTours);
 router.route('/mostPopular').get(tourController.getMostPopularTours);
 router.route('/top-five').get(tourController.getTopFiveTours);
+router.route('/:tourId/review-stats').get(tourController.getReviewStats);
 
 router
   .route('/')

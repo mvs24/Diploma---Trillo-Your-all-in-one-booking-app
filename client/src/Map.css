@@ -18,5 +18,6 @@
 }
 .popup {
   background: white;
-  color: #777;
+  color: black;
+  padding: 0.2rem;
 }

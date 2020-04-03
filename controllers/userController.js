@@ -1,4 +1,5 @@
 const User = require('../models/userModel');
+const factory = require('./factoryHandler');
 const asyncWrapper = require('../utils/asyncWrapper');
 const AppError = require('../utils/appError');
 
@@ -11,6 +12,8 @@ exports.getAllUsers = asyncWrapper(async (req, res, next) => {
     data: users
   });
 });
+
+exports.getUser = factory.getOne(User);
 
 exports.deleteAllUsers = asyncWrapper(async (req, res, next) => {
   await User.deleteMany();

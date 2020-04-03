@@ -1,0 +1,63 @@
+.review__container {
+  padding: 10rem;
+  background: rgba(255, 255, 255);
+}
+
+.review__container h1 {
+  font-size: 3rem;
+  text-transform: uppercase;
+  background-image: linear-gradient(
+    to right bottom,
+    rgb(85, 197, 122, 0.9),
+    rgb(126, 213, 111)
+  );
+  color: transparent;
+  background-clip: text;
+  display: block;
+
+  text-align: center;
+}
+.totalReviews {
+  font-size: 2.2rem;
+}
+.avgRating {
+  font-size: 2.6rem;
+  padding: 1rem;
+}
+.star {
+  font-size: 2.5rem;
+}
+.review__info {
+  display: flex;
+  align-items: center;
+}
+.review__info--left {
+  margin: 2rem;
+  margin-left: 20%;
+}
+
+.bck {
+  width: 15rem;
+  height: 1rem;
+  margin-right: 1rem;
+}
+
+.review__info {
+  display: flex;
+}
+
+.review__info--right {
+  margin: 2rem;
+  padding: 2rem;
+  margin-left: 5rem;
+}
+.single__review {
+  display: flex;
+  align-items: center;
+  padding: 0.4rem;
+}
+
+.review__span {
+  font-size: 1.4rem;
+  margin: 0 0.5rem;
+}

@@ -10,6 +10,8 @@ import { MdDateRange } from 'react-icons/md';
 import { MdPeopleOutline, MdAccessTime } from 'react-icons/md';
 import { FaRegFlag, FaLevelUpAlt } from 'react-icons/fa';
 import Map from '../../Map';
+import ReviewStatistics from './ReviewStatistics';
+import Reviews from './Reviews';
 
 const TourDetails = React.memo(props => {
   const [tour, setTour] = useState(null);
@@ -132,6 +134,14 @@ const TourDetails = React.memo(props => {
       </div>
       <div className="map__container">
         <Map tour={tour} />
+      </div>
+
+      <section className="reviews__container">
+        <ReviewStatistics tourId={tour._id} />
+      </section>
+      <div className="reviews">
+        <h1>REVIEWS</h1>
+        <Reviews reviews={tour.reviews} />
       </div>
     </div>
   );

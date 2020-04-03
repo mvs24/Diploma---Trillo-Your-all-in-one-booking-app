@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Tour = require('../models/tourModel');
 const factory = require('./factoryHandler');
 const ApiFeatures = require('../utils/apiFeatures');
@@ -100,5 +101,61 @@ exports.getTourStatistics = asyncWrapper(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     data: stats
+  });
+});
+
+exports.getReviewStats = asyncWrapper(async (req, res, next) => {
+  const tour = await Tour.findById(req.params.tourId);
+  const totalReviews = tour.ratingsQuantity;
+  const avgRating = tour.ratingsAverage;
+  const tourId = mongoose.Types.ObjectId(req.params.tourId);
+
+  const stats = await Tour.aggregate([
+    {
+      $match: {
+        _id: { $in: [mongoose.Types.ObjectId(req.params.tourId.toString())] }
+      }
+    },
+    {
+      $lookup: {
+        from: 'reviewtours',
+        foreignField: 'tour',
+        localField: '_id',
+        as: 'reviews'
+      }
+    },
+    {
+      $unwind: '$reviews'
+    },
+
+    {
+      $group: {
+        _id: '$reviews.rating',
+        nReviews: { $sum: 1 }
+      }
+    },
+    {
+      $addFields: { rating: '$_id' }
+    },
+    {
+      $project: { _id: 0 }
+    },
+    {
+      $addFields: {
+        percentage: {
+          $multiply: [{ $divide: ['$nReviews', totalReviews] }, 100]
+        }
+      }
+    },
+    {
+      $sort: {rating: 1}
+    }
+  ]);
+
+  res.status(200).json({
+    status: 'success',
+    data: stats,
+    totalReviews,
+    avgRating
   });
 });

@@ -27,6 +27,8 @@ exports.getOne = Model =>
       return new AppError('This document does not exists', 404);
     }
 
+    if (doc.password) doc.password = undefined;
+
     res.status(200).json({
       status: 'success',
       data: doc

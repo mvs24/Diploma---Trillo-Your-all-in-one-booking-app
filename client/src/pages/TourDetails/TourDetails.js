@@ -4,19 +4,23 @@ import axios from 'axios';
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
 import ErrorModal from '../../shared/components/UI/ErrorModal';
 import { IconContext } from 'react-icons';
-import { IoIosHeart, IoIosHeartEmpty } from 'react-icons/io';
 import { GoLocation } from 'react-icons/go';
 import { MdDateRange } from 'react-icons/md';
 import { MdPeopleOutline, MdAccessTime } from 'react-icons/md';
-import { FaRegFlag, FaLevelUpAlt } from 'react-icons/fa';
+import { FaLevelUpAlt } from 'react-icons/fa';
 import Map from '../../Map';
 import ReviewStatistics from './ReviewStatistics';
 import Reviews from './Reviews';
+import AgencyInfo from './AgencyInfo';
+import Logo from '../../assets/logo.PNG';
+import Button from '../../shared/components/Button/Button';
 
 const TourDetails = React.memo(props => {
   const [tour, setTour] = useState(null);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [resPerPage, setResPerPage] = useState(3);
   const tourId = props.match.params.tourId;
 
   useEffect(() => {
@@ -35,24 +39,34 @@ const TourDetails = React.memo(props => {
     getTour();
   }, []);
 
+  const showMoreHandler = () => {
+    setPage(prevPage => prevPage + 1);
+  };
+
+  const showLessHandler = () => {
+    setPage(prevPage => prevPage - 1);
+  };
+
+  const addToCartHandler = async () => {
+    try {
+      const res = await axios.post(`/api/v1/cart/tours/${tour._id}`);
+      console.log(res.data);
+    } catch (err) {
+      setError(err.response.data.message);
+    }
+  };
+
   if (!tour) {
     return <LoadingSpinner asOverlay />;
   }
 
-  if (error)
-    return (
-      <ErrorModal
-        show
-        onClear={() => {
-          setError(false);
-        }}
-      >
-        {error}
-      </ErrorModal>
-    );
-
   return (
     <div className="tour__container">
+      {error && (
+        <ErrorModal show onClear={() => setError(false)}>
+          {error} 
+        </ErrorModal>
+      )}
       <div
         className="tour__bcg"
         style={{
@@ -95,7 +109,17 @@ const TourDetails = React.memo(props => {
                 <MdDateRange />
               </IconContext.Provider>
               <p className="second">Next Date</p>
-              <p className="data">April 2021</p>
+              <p className="data">{tour.startDates[0].split('T')[0]}</p>
+            </li>
+
+            <li>
+              <IconContext.Provider
+                value={{ className: 'icon__green tour__info--icon' }}
+              >
+                <MdDateRange />
+              </IconContext.Provider>
+              <p className="second">BOOKED BY</p>
+              <p className="data">{tour.numBought}</p>
             </li>
             <li>
               <IconContext.Provider
@@ -139,9 +163,53 @@ const TourDetails = React.memo(props => {
       <section className="reviews__container">
         <ReviewStatistics tourId={tour._id} />
       </section>
+
       <div className="reviews">
-        <h1>REVIEWS</h1>
-        <Reviews reviews={tour.reviews} />
+        <Reviews
+          showMore={showMoreHandler}
+          showLess={showLessHandler}
+          reviewLength={tour.reviews.length}
+          tourId={tour._id}
+          page={page}
+          limit={resPerPage}
+        />
+      </div>
+
+      <section className="agency__container">
+        <AgencyInfo tour={tour} />
+      </section>
+
+      <div className="bookTour__container">
+        <div className="bookTour__info">
+          <div className="bookTour__images">
+            <img className="bookTour__image" src={Logo} />
+            {tour.images.map(img => (
+              <img
+                className="bookTour__image"
+                src={`http://localhost:5000/public/img/tours/${img}`}
+              />
+            ))}
+          </div>
+          <div className="bookTour__info--1">
+            <h1>WHAT ARE YOU WAITING FOR?</h1>
+            <p>
+              {tour.locations[tour.locations.length - 1].day} days. 1 Adventure.
+              Infinite Memories. Make it yours today
+            </p>
+          </div>
+          <div className="bookTour__buttons">
+            <Button
+              className="addToCart"
+              type="success"
+              clicked={addToCartHandler}
+            >
+              ADD TO CART
+            </Button>
+            <Button className="bookNow" type="success">
+              BOOK NOW! ONLY ${tour.price}
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );

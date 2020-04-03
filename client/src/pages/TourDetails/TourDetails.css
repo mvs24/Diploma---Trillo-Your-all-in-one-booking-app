@@ -59,7 +59,7 @@
   /* margin-top: 10rem; */
   clip-path: polygon(0, 100% 0, 100% 90%, 0 100%);
   display: grid;
-  grid-template-columns: minmax(40%, min-content) 1fr;
+  grid-template-columns: minmax(50%, min-content) 1fr;
 }
 .tour__info--icon {
   font-size: 1.8rem;
@@ -105,12 +105,13 @@
 }
 
 .tour__about {
-  padding: 30rem 7rem 5rem 15rem;
+  padding: 30% 7rem 5rem 15rem;
   background: #faf9f9;
   margin-top: -15rem;
 }
 
-.tour__about h1, .reviews h1 {
+.tour__about h1,
+.reviews h1 {
   font-size: 3rem;
   text-transform: uppercase;
   background-image: linear-gradient(
@@ -157,9 +158,90 @@
 
 .reviews {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(50rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(30rem, max-content));
+  grid-template-rows: minmax(20rem, max-content);
+  padding: 10rem;
+  align-items: center;
+
+  justify-content: center;
+  background: linear-gradient(
+    to right bottom,
+    rgb(85, 197, 122, 0.9),
+    rgb(126, 213, 111)
+  );
+  transform: skewY(-4deg);
 }
 
+.bookTour__image {
+  width: 9.5rem;
+  height: 9.5rem;
+  border-radius: 100px;
+  border-radius: 1px solid #ccc;
+}
+.bookTour__image:not(:last-child) {
+  margin-right: -5rem;
+}
+
+.bookTour__container {
+  padding: 10rem;
+  background: #ccc;
+}
+.bookTour__info {
+  display: flex;
+  padding: 10rem 0;
+  background: red;
+  align-items: center;
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 2rem 4rem rgba(0, 0, 0, 0.3);
+}
+
+.bookTour__images {
+  display: flex;
+}
+.bookTour__buttons {
+  display: flex;
+  flex-direction: column;
+  margin-left: auto;
+  padding: 1rem;
+  justify-content: space-evenly;
+  align-items: space-evenly;
+}
+.bookTour__buttons:first-child {
+  margin: 2rem 0;
+}
+
+.bookTour__info--1 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 4rem;
+}
+.bookTour__info--1 h1 {
+  font-size: 3rem;
+  text-transform: uppercase;
+  background-image: linear-gradient(
+    to right bottom,
+    rgb(85, 197, 122, 0.9),
+    rgb(126, 213, 111)
+  );
+  color: transparent;
+  background-clip: text;
+  display: block;
+  width: 100%;
+}
+
+.bookTour__info--1 p {
+  font-size: 1.7rem;
+}
+
+.addToCart {
+  margin-top: 1rem;
+}
+
+.bookNow {
+  margin-top: 2rem;
+}
 /* 
 Grey light 1: #faf9f9
 Grey light 2: #f4f2f2

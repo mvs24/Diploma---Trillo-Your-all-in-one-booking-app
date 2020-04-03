@@ -73,6 +73,7 @@ const getTours = type =>
   });
 
 // /agencies/:agencyId/tours
+
 exports.getTour = factory.getOne(Tour);
 exports.createTour = factory.createOne(Tour);
 exports.updateTour = factory.updateOne(Tour);

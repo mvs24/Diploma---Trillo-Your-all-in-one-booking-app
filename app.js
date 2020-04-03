@@ -10,6 +10,7 @@ const reviewTourRouter = require('./routes/reviewTourRoutes');
 const reviewFlightRouter = require('./routes/reviewFlightRoutes');
 const wishlistTourRouter = require('./routes/wishlistTourRoutes');
 const wishlistFlightRouter = require('./routes/wishlistFlightRoutes');
+const cartTourRouter = require('./routes/cartTourRoutes')
 const flightRouter = require('./routes/flightRoutes');
 const bookingFlightRouter = require('./routes/bookingFlightRoutes');
 
@@ -29,6 +30,11 @@ app.use(
   '/public/img/users',
   express.static(path.join('public', 'img', 'users'))
 );
+app.use(
+  '/public/img/agencies',
+  express.static(path.join('public', 'img', 'agencies'))
+);
+
 
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/agencies', agencyRouter);
@@ -39,6 +45,7 @@ app.use('/api/v1/reviews/tours', reviewTourRouter);
 app.use('/api/v1/reviews/flights', reviewFlightRouter);
 app.use('/api/v1/wishlist/tours', wishlistTourRouter);
 app.use('/api/v1/wishlist/flights', wishlistFlightRouter);
+app.use('/api/v1/cart/tours', cartTourRouter)
 app.use('/api/v1/flights', flightRouter);
 
 app.all('*', (req, res, next) =>

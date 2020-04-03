@@ -4,6 +4,9 @@ const asyncWrapper = require('../utils/asyncWrapper');
 
 exports.getAll = (Model, filter = {}) =>
   asyncWrapper(async (req, res, next) => {
+
+    if (req.tourReviews) filter = {tour: req.tourReviews}
+
     const features = new ApiFeatures(Model.find(filter), req.query)
       .filter()
       .sort()

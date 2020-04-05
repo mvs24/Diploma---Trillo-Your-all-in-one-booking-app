@@ -5,7 +5,7 @@ import ErrorModal from '../../shared/components/UI/ErrorModal';
 import './AgencyInfo.css';
 import { IconContext } from 'react-icons';
 import { IoIosStarOutline } from 'react-icons/io';
-import { MdPeopleOutline, MdAccessTime } from 'react-icons/md';
+import { MdPeopleOutline } from 'react-icons/md';
 import { FaSortNumericUp } from 'react-icons/fa';
 import Button from '../../shared/components/Button/Button';
 

@@ -25,6 +25,9 @@ import {
   LOADING,
   GET_TOURS_IN_CART_ERROR,
   GET_TOURS_IN_CART,
+  UPDATE_USER_DATA,
+  ERROR,
+  GET_MY_REVIEWS,
 } from '../types/userTypes';
 
 export const setHeaders = (token) => {
@@ -166,5 +169,31 @@ export const getToursInCart = () => async (dispatch) => {
       type: GET_TOURS_IN_CART_ERROR,
       errormsg: err.response.data.message,
     });
+  }
+};
+
+export const updateUserData = (formData) => async (dispatch) => {
+  try {
+    dispatch({ type: LOADING });
+    const res = await axios({
+      method: 'patch',
+      url: `/api/v1/users/updateMe`,
+      data: formData,
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    dispatch({ type: UPDATE_USER_DATA, payload: res.data.data });
+  } catch (err) {
+    dispatch({ type: ERROR, errormsg: err.response.data.message });
+  }
+};
+
+export const getMyReviews = () => async (dispatch) => {
+  try {
+    dispatch({ type: LOADING });
+    const res = await axios.get('/api/v1/users/my/reviews');
+    console.log(res);
+    dispatch({ type: GET_MY_REVIEWS, payload: res.data.data });
+  } catch (err) {
+    dispatch({ type: ERROR, errormsg: err.response.data.message });
   }
 };

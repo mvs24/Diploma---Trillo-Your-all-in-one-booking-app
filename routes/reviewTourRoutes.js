@@ -20,11 +20,9 @@ router
     reviewTourController.createReview
   )
   .get((req, res, next) => {
-     if(req.params.tourId) req.tourReviews = req.params.tourId
-      next()
-  }
-  
-    ,reviewTourController.getAllReviewOnTour);
+    if (req.params.tourId) req.tourReviews = req.params.tourId;
+    next();
+  }, reviewTourController.getAllReviewOnTour);
 
 router.use(
   authController.protect,

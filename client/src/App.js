@@ -7,6 +7,8 @@ import Tours from './pages/Tours/Tours';
 import Home from './pages/Home/Home';
 import TourDetails from './pages/TourDetails/TourDetails';
 import SuccessBooking from './components/SuccessBooking/SuccessBooking';
+import AccountSettings from './AccountSettings/AccountSettings';
+import MyBookings from './AccountSettings/MyBookings/MyBookings'
 
 function App(props) {
   const setUserData = async () => {
@@ -25,6 +27,8 @@ function App(props) {
           <Route path="/tours/:tourId" exact component={TourDetails} />
           <Route path="/categories/tours" exact component={Tours} />
           <Route path="/" exact component={Home} />
+          <Route path="/me" exact component={AccountSettings} />
+          <Route path='/my-bookings' exact component={MyBookings}/>
         </Switch>
       </Layout>
       <Route

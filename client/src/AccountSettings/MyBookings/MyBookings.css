@@ -1,0 +1,6 @@
+.my__bookings {
+	padding: 5rem;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(28rem, 1fr));
+	grid-gap: 3rem;
+}

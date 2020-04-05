@@ -3,14 +3,14 @@ import React from 'react';
 import './Input.css';
 
 export default (props) => {
-  let classNames = ['input', props.className];
+  let classNames = ['textarea', props.className];
 
   if (props.touched && !props.valid) {
     classNames.push('invalid');
   }
 
   return (
-    <input
+    <textarea
       {...props.configOptions}
       className={classNames.join(' ')}
       onChange={props.onChange}

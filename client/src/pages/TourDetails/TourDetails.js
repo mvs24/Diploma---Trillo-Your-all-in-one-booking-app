@@ -27,7 +27,25 @@ const TourDetails = React.memo((props) => {
   const [page, setPage] = useState(1);
   const [resPerPage, setResPerPage] = useState(3);
   const tourId = props.match.params.tourId;
+  const [myBookings, setMyBookings] = useState();
+  const [isBooked, setIsBooked] = useState();
+  const [controlled, setControlled] = useState();
   const { cartTour } = props;
+
+  useEffect(() => {
+    const getMyBookings = async () => {
+      try {
+        setLoading(true);
+        const res = await axios.get('/api/v1/users/my/bookings');
+        setLoading(false);
+        setMyBookings(res.data.data);
+      } catch (err) {
+        setError(err.response.data.message);
+      }
+    };
+
+    getMyBookings();
+  }, [tour]);
 
   useEffect(() => {
     const getTour = async () => {
@@ -81,17 +99,15 @@ const TourDetails = React.memo((props) => {
   const bookTour = async () => {
     try {
       const stripe = await stripePromise;
-      // 1) Get checkout session from API
       const session = await axios(
         `/api/v1/bookings/tours/checkout-session/${tour._id}`
       );
 
-      // 2) Create checkout form + chanre credit card
       await stripe.redirectToCheckout({
         sessionId: session.data.session.id,
       });
     } catch (err) {
-      console.log(err);
+      setError(err.response.data.message);
     }
   };
 
@@ -107,6 +123,19 @@ const TourDetails = React.memo((props) => {
       addContent = <span>ADDED</span>;
     } else {
       addContent = <span> ADD TO CART</span>;
+    }
+  }
+
+  if (!controlled) {
+    if (myBookings && tour) {
+      const myBookingTours = myBookings.map((booking) => {
+        return booking.tour._id;
+      });
+      if (myBookingTours.includes(tour._id)) {
+        setIsBooked(true);
+      }
+
+      setControlled(true);
     }
   }
 
@@ -256,9 +285,15 @@ const TourDetails = React.memo((props) => {
             >
               {addContent}
             </Button>
-            <Button className="bookNow" clicked={bookTour} type="success">
-              BOOK NOW! ONLY ${tour.price}
-            </Button>
+            {isBooked ? (
+              <Button disabled className="bookNow">
+                BOOKED
+              </Button>
+            ) : (
+              <Button className="bookNow" clicked={bookTour} type="success">
+                BOOK NOW! ONLY ${tour.price}
+              </Button>
+            )}
           </div>
         </div>
       </div>

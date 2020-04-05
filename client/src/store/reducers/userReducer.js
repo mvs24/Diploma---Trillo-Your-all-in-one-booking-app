@@ -24,6 +24,9 @@ import {
   LOADING,
   GET_TOURS_IN_CART_ERROR,
   GET_TOURS_IN_CART,
+  ERROR,
+  UPDATE_USER_DATA,
+  GET_MY_REVIEWS,
 } from '../types/userTypes';
 
 const initialState = {
@@ -33,6 +36,7 @@ const initialState = {
   loading: false,
   wishlist: null,
   cartTour: [],
+  reviews: null,
 };
 
 export default (state = initialState, action) => {
@@ -188,6 +192,26 @@ export default (state = initialState, action) => {
         cartTour: action.payload,
         error: null,
         loading: false,
+      };
+    case ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: action.errormsg,
+      };
+    case UPDATE_USER_DATA:
+      return {
+        ...state,
+        userData: action.payload,
+        loading: false,
+        error: null,
+      };
+    case GET_MY_REVIEWS:
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        reviews: action.payload,
       };
     default:
       return state;

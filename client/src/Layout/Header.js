@@ -16,6 +16,7 @@ import {
   loginUser,
   getMyWishlist,
   getToursInCart,
+  getMyReviews,
 } from '../store/actions/userActions';
 import LoadingSpinner from '../shared/components/UI/LoadingSpinner';
 import UserContent from '../UserContent/UserContent';
@@ -121,12 +122,16 @@ const Header = React.memo((props) => {
   });
   const [signupValid, setSignupValid] = useState(false);
   const [loginValid, setLoginValid] = useState(false);
-  const { isAuthenticated, getMyWishlist } = props;
+  const { isAuthenticated, getMyWishlist, getMyReviews } = props;
 
   useEffect(() => {
     if (isAuthenticated) {
       getMyWishlist();
     }
+  }, [isAuthenticated]);
+
+  useEffect(() => {
+    if (isAuthenticated) getMyReviews();
   }, [isAuthenticated]);
 
   useEffect(() => {
@@ -402,4 +407,5 @@ export default connect(mapStateToProps, {
   loginUser,
   getMyWishlist,
   getToursInCart,
+  getMyReviews,
 })(withRouter(Header));

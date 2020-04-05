@@ -60,12 +60,9 @@ const ReviewItem = (props) => {
           {error}
         </ErrorModal>
       )}
-      <div className="review__info--1">
-        <div className="user__info">
-          <img
-            src={`http://localhost:5000/public/img/users/${user.photo}`}
-            alt="user photo"
-          />
+      <div className="review__info--2">
+        <div className="user__info--2">
+          <img src={`http://localhost:5000/${user.photo}`} alt="user photo" />
           <h3 className="username">
             {user.name} {user.lastname}
           </h3>
@@ -88,10 +85,10 @@ const ReviewItem = (props) => {
             </ErrorModal>
           )}
 
-          <div className="review__info--1">
-            <div className="user__info">
+          <div className="review__info--2">
+            <div className="user__info--2">
               <img
-                src={`http://localhost:5000/public/img/users/${user.photo}`}
+                src={`http://localhost:5000/${user.photo}`}
                 alt="user photo"
               />
               <h3 className="username">
@@ -127,10 +124,10 @@ const ReviewItem = (props) => {
             </ErrorModal>
           )}
 
-          <div className="review__info--1">
-            <div className="user__info">
+          <div className="review__info--2">
+            <div className="user__info--2">
               <img
-                src={`http://localhost:5000/public/img/users/${user.photo}`}
+                src={`http://localhost:5000/${user.photo}`}
                 alt="user photo"
               />
               <h3 className="username">

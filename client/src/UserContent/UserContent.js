@@ -26,8 +26,6 @@ const UserContent = (props) => {
       </div>
     );
 
-  let cartContent = <LoadingSpinner />;
-
   if (cartTour.length !== 0) {
     cartTourLength = cartTour.length;
   }
@@ -177,11 +175,10 @@ const UserContent = (props) => {
         </div>
       </div>
       <div className="user__profile">
-        <img
-          src="https://images.pexels.com/photos/9754/mountains-clouds-forest-fog.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-          alt=""
-        />
-        <h4>Marius Vasili</h4>
+        <img src={`http://localhost:5000/${props.userData.photo}`} alt="user" />
+        <h4>
+          {props.userData.name} {props.userData.lastname}
+        </h4>
       </div>
     </>
   );

@@ -4,17 +4,17 @@ const BookingTour = require('../models/bookingTourModel');
 const Tour = require('../models/tourModel');
 const factory = require('./factoryHandler');
 const asyncWrapper = require('../utils/asyncWrapper');
-const AppError = require('../utils/appError')
+const AppError = require('../utils/appError');
 
 const getBookings = asyncWrapper(async (filter, res, next) => {
-  const bookings = await BookingTour.find(filter);
+  const bookings = await BookingTour.find(filter).populate('tour');
 
   if (!bookings) return next(new AppError('No bookings found', 404));
 
   res.status(200).json({
     status: 'success',
     results: bookings.length,
-    data: bookings
+    data: bookings,
   });
 });
 
@@ -24,7 +24,7 @@ exports.getCheckoutSession = asyncWrapper(async (req, res, next) => {
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
     success_url: `http://localhost:3000/success/tours/${tour._id}/users/${req.user.id}/price/${tour.price}`, //succes url for the frontend!!!!
-  cancel_url: `http://localhost:3000/tours/${tour._id}`,
+    cancel_url: `http://localhost:3000/tours/${tour._id}`,
     // success_url: `${req.protocol}://${req.get('host')}/`, //succes url for the frontend!!!!
     // cancel_url: `${req.protocol}://${req.get('host')}/tours/${tour.slug}`, // control for the frontend!!!!
     customer_email: req.user.email,
@@ -34,18 +34,20 @@ exports.getCheckoutSession = asyncWrapper(async (req, res, next) => {
         name: `${tour.name} Tour`,
         description: tour.summary,
         images: [
-          `${req.protocol}://${req.get('host')}/public/img/tours/${tour.imageCover}`
+          `${req.protocol}://${req.get('host')}/public/img/tours/${
+            tour.imageCover
+          }`,
         ],
         amount: tour.price * 100,
         currency: 'usd',
-        quantity: 1
-      }
-    ]
+        quantity: 1,
+      },
+    ],
   });
 
   res.status(200).json({
     status: 'success',
-    session
+    session,
   });
 });
 

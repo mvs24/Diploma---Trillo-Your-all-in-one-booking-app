@@ -1,4 +1,4 @@
-.review__info--1 {
+.review__info--2 {
   display: flex;
   margin: 0.5rem;
   flex-direction: column;
@@ -6,15 +6,16 @@
   align-items: center;
 }
 
-.user__info {
+.user__info--2 {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: center;
   padding: 1rem;
+  background: transparent;
 }
 
-.user__info img {
+.user__info--2 img {
   width: 4rem;
   height: 4rem;
   border-radius: 70px;

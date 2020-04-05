@@ -7,23 +7,23 @@ const User = require('../models/userModel');
 const asyncWrapper = require('../utils/asyncWrapper');
 const sendEmail = require('../utils/email');
 
-const signToken = id => {
+const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES
+    expiresIn: process.env.JWT_EXPIRES,
   });
 };
 
 exports.signup = asyncWrapper(async (req, res, next) => {
   const { name, lastname, password, passwordConfirm, email, photo } = req.body;
 
-  if (!photo) req.body.photo = 'default.jpg'
+  if (!photo) req.body.photo = 'default.jpg';
   const user = await User.create({
     name,
     lastname,
     password,
     passwordConfirm,
     email,
-    photo
+    photo,
   });
 
   const token = signToken(user._id);
@@ -31,7 +31,7 @@ exports.signup = asyncWrapper(async (req, res, next) => {
   res.status(201).json({
     status: 'success',
     token,
-    data: { name, lastname, email }
+    data: { name, lastname, email },
   });
 });
 
@@ -41,7 +41,7 @@ exports.login = asyncWrapper(async (req, res, next) => {
   if (!email || !password) {
     return res.status(400).json({
       status: 'fail',
-      message: 'Complete all the fields'
+      message: 'Complete all the fields',
     });
 
     // return next(new AppError('Complete all the fields!', 400));
@@ -52,7 +52,7 @@ exports.login = asyncWrapper(async (req, res, next) => {
   if (!user || !(await user.correctPassword(password, user.password))) {
     return res.status(404).json({
       status: 'fail',
-      message: 'No user found with that email and password!'
+      message: 'No user found with that email and password!',
     });
   }
 
@@ -61,7 +61,7 @@ exports.login = asyncWrapper(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     token,
-    data: { name: user.name, lastname: user.lastname, email: user.email }
+    data: { name: user.name, lastname: user.lastname, email: user.email },
   });
 });
 
@@ -135,12 +135,12 @@ exports.forgotPassword = asyncWrapper(async (req, res, next) => {
     await sendEmail({
       email: user.email,
       subject: 'Your password reset token (valid for 10 min)',
-      message
+      message,
     });
 
     res.status(200).json({
       status: 'success',
-      message: 'Token sent to email!'
+      message: 'Token sent to email!',
     });
   } catch (err) {
     user.passwordResetToken = undefined;
@@ -162,7 +162,7 @@ exports.resetPassword = asyncWrapper(async (req, res, next) => {
 
   const user = await User.findOne({
     passwordResetToken: hashedToken,
-    passwordResetExpires: { $gt: Date.now() }
+    passwordResetExpires: { $gt: Date.now() },
   });
 
   if (!user) {
@@ -178,7 +178,7 @@ exports.resetPassword = asyncWrapper(async (req, res, next) => {
 
   res.status(200).json({
     status: 'success',
-    token
+    token,
   });
 });
 
@@ -192,7 +192,27 @@ exports.getLoggedInUser = (req, res, next) => {
       lastname: user.lastname,
       email: user.email,
       id: user.id,
-      photo: user.photo
-    }
+      photo: user.photo,
+    },
   });
 };
+
+exports.updatePassword = asyncWrapper(async (req, res, next) => {
+  const user = await User.findById(req.user.id);
+
+  if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
+    return next(new AppError('Your current password is wrong.', 401));
+  }
+
+  user.password = req.body.password;
+  user.passwordConfirm = req.body.passwordConfirm;
+  await user.save();
+
+  const token = signToken(user._id);
+  // 4) Log user in, send JWT
+  user.password = undefined;
+  res.status(200).json({
+    status: 'success',
+    user,
+  });
+});

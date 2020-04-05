@@ -64,3 +64,44 @@
   cursor: pointer;
   color: red;
 }
+
+.leave__review--heading {
+   font-size: 1.6rem;
+  text-transform: uppercase;
+  background-image: linear-gradient(
+    to right bottom,
+    rgb(85, 197, 122, 0.9),
+    rgb(126, 213, 111)
+  );
+  color: transparent;
+  background-clip: text;
+  display: inline-block;
+margin-left: .3rem;
+}
+
+.leave__review--container {
+  width: 100%;
+  grid-column:  1 /-1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.review--icon {
+  cursor: pointer;
+}
+
+.review__center {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+
+}
+.my__review--stars {
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.user__info {
+  background: #ccc;
+}

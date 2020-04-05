@@ -23,3 +23,6 @@ export const ADD_TO_CART_LOADING = 'ADD_TO_CART_LOADING';
 export const LOADING = 'LOADING';
 export const GET_TOURS_IN_CART_ERROR = 'ERROR';
 export const GET_TOURS_IN_CART = 'GET_TOURS_IN_CART';
+export const UPDATE_USER_DATA = 'UPDATE_USER_DATA';
+export const ERROR = 'ERROR';
+export const GET_MY_REVIEWS = 'GET_MY_REVIEWS';

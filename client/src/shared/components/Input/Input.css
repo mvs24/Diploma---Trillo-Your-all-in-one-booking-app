@@ -13,6 +13,11 @@
 .input:hover {
   background: #f0eeee;
 }
+.textarea:hover {
+  background: #f0eeee;
+
+}
+
 
 .input:focus {
   outline: none;
@@ -24,7 +29,31 @@
   color: #777;
   padding: 0.3rem;
 }
+.textarea::-webkit-input-placeholder {
+  color: #777;
+  padding: 0.3rem;
+}
 
 .invalid {
   border: 1px solid #ff7730;
+}
+
+.textarea{
+  background: #f4f2f2;
+  outline: none;
+  transition: all 0.5s ease;
+  font-weight: 400;
+  margin: 1rem;
+  width: 80%;
+  margin: 1.5rem;
+  height: 6rem;
+  border: 1px solid transparent;
+
+}
+
+.review__form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }

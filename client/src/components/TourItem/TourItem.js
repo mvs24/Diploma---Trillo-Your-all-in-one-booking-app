@@ -1,9 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import Button from '../../shared/components/Button/Button';
 import { IconContext } from 'react-icons';
-import { IoIosHeart, IoIosHeartEmpty } from 'react-icons/io';
+import {
+  IoIosHeart,
+  IoIosHeartEmpty,
+  IoIosStarHalf,
+  IoMdStar,
+  IoMdStarOutline,
+  IoIosStarOutline,
+} from 'react-icons/io';
 import { GoLocation } from 'react-icons/go';
 import { MdDateRange } from 'react-icons/md';
 import { MdPersonOutline } from 'react-icons/md';
@@ -15,12 +22,47 @@ import {
   removeFromWishlist,
 } from '../../store/actions/userActions';
 import ErrorModal from '../../shared/components/UI/ErrorModal';
+import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
+import Modal from '../../shared/components/UI/Modal';
+import Textarea from '../../shared/components/Input/Textarea';
+import axios from 'axios';
+
+const StarCmp = (props) => (
+  <IconContext.Provider
+    value={{
+      className: `icon__green tour__info--icon full star review--icon ${props.starName}`,
+    }}
+  >
+    {props.children}
+  </IconContext.Provider>
+);
 
 const TourItem = React.memo((props) => {
   const [isLiked, setIsLiked] = useState(false);
   const [updated, setUpdated] = useState(false);
+  const [outline, setOutline] = useState();
+  const [stars, setStars] = useState();
+  const [tricky, setTricky] = useState(0);
+  const [openReviewModal, setOpenReviewModal] = useState();
+  const [loading, setLoading] = useState();
+  const [error, setError] = useState();
+  const [reviewed, setReviewed] = useState(false);
+  const [myRating, setMyRating] = useState();
+  const [myReview, setMyReview] = useState({
+    configOptions: {
+      type: 'text',
+      placeholder: 'Your Review',
+    },
+    value: '',
+    valid: true,
+    touched: false,
+    validRequirements: {},
+  });
+  const [myReviewValid, setMyReviewValid] = useState(true);
+  const [myReviews, setMyReviews] = useState();
+  const [reviewControlled, setReviewControlled] = useState(false);
   const history = useHistory();
-  const { tour, wishlist, isAuthenticated } = props;
+  const { tour, wishlist, isAuthenticated, reviews } = props;
 
   if (!updated) {
     ///THIS WAS CRAZY!!!!!!!!!!!!!!!
@@ -55,8 +97,241 @@ const TourItem = React.memo((props) => {
   const detailsHandler = () => {
     history.push(`/tours/${tour.id}`);
   };
+
+  const fullStars = (allStars) => {
+    let full = 0;
+
+    allStars.forEach((st) => {
+      if (st.props.children.type.displayName === 'IoMdStar') full++;
+    });
+
+    return full;
+  };
+
+  const emptyStars = (allStars) => {
+    let empties = 0;
+
+    allStars.forEach((st) => {
+      if (st.props.children.type.displayName === 'IoIosStarOutline') empties++;
+    });
+
+    return empties;
+  };
+
+  const reviewHandler = (e) => {
+    let trickyReview;
+    if (e.target.matches('path')) {
+      trickyReview =
+        e.target.parentElement.classList['value'][
+          e.target.parentElement.classList['value'].length - 1
+        ];
+      setTricky(trickyReview);
+    }
+
+    if (!e.target.classList.contains('review--icon')) {
+      e.target.classList.add('review--icon');
+    }
+
+    if (e.target.classList[e.target.classList.length - 1].startsWith('star-')) {
+      e.target.classList.add(e.target.classList[e.target.classList.length - 1]);
+    }
+
+    if (e.target.classList[e.target.classList.length - 1].startsWith('star-')) {
+      const review =
+        e.target.classList[e.target.classList.length - 1].split('-')[1] * 1 + 1;
+
+      let updatedSts = [...stars];
+
+      if (emptyStars(stars) === 5) {
+        setStars((prevState) => {
+          for (let i = 0; i < 5; i++) {
+            if (i < review) {
+              prevState[i] = (
+                <StarCmp starName={`star-${i}`}>
+                  <IoMdStar onClick={reviewHandler} />
+                </StarCmp>
+              );
+            }
+          }
+          let upd = [...prevState];
+          return upd;
+        });
+        setOpenReviewModal(true);
+      }
+      if (review >= 5 - emptyStars(stars)) {
+        setStars((prevState) => {
+          for (let i = 5 - emptyStars(stars); i < review; i++) {
+            prevState[i] = (
+              <StarCmp starName={`star-${i}`}>
+                <IoMdStar onClick={reviewHandler} />
+              </StarCmp>
+            );
+          }
+          let upd = [...prevState];
+          return upd;
+        });
+        setOpenReviewModal(true);
+      }
+    }
+  };
+
+  const checkValidity = (value, requirements) => {
+    let isValid = true;
+
+    if (requirements.required) {
+      isValid = isValid && value.trim().length !== 0;
+    }
+    if (requirements.minlength) {
+      isValid = isValid && value.trim().length >= requirements.minlength;
+    }
+    if (requirements.isEmail) {
+      isValid = isValid && /\S+@\S+\.\S+/.test(value);
+    }
+
+    return isValid;
+  };
+
+  const textInputHandler = (e) => {
+    const updatedReview = { ...myReview };
+    updatedReview.value = e.target.value;
+    updatedReview.touched = true;
+    updatedReview.valid = checkValidity(
+      updatedReview.value,
+      updatedReview.validRequirements
+    );
+
+    setMyReview(updatedReview);
+    setMyReviewValid(updatedReview.valid);
+  };
+
+  const submitReview = async (e) => {
+    e.preventDefault();
+    const reviewData = { review: myReview.value, rating: starContent.length };
+    setLoading(true);
+    await axios.post(`/api/v1/tours/${tour._id}/reviews`, reviewData);
+    setLoading(false);
+  };
+
+  if (!outline) {
+    let updatedStars = [];
+    for (let i = 0; i < 5; i++) {
+      updatedStars.push(
+        <StarCmp starName={`star-${i}`}>
+          <IoIosStarOutline />
+        </StarCmp>
+      );
+    }
+    setStars(updatedStars);
+    setOutline(true);
+  }
+
+  if (!outline) return null;
+
+  let starContent = [];
+  if (openReviewModal) {
+    const starsLength = 5 - emptyStars(stars);
+    for (let i = 0; i < starsLength; i++) {
+      starContent.push(
+        <IconContext.Provider
+          value={{
+            className: `icon__green tour__info--icon full star`,
+          }}
+        >
+          <IoMdStar />
+        </IconContext.Provider>
+      );
+    }
+  }
+
+  if (!reviews) return null;
+
+  if (!reviewControlled) {
+    const reviewTourIds = reviews.map((el) => el.tour);
+    if (reviewTourIds.includes(tour._id)) {
+      setReviewed(true);
+
+      const reviewForTour = reviews.find((review) => review.tour === tour._id);
+      setMyRating(reviewForTour.rating);
+      setReviewControlled(true);
+    }
+  }
+
+  let reviewContent = null;
+  if (props.booked && reviewed) {
+ let myRatingContent = [];
+    for (let i = 0; i < myRating; i++) {
+      myRatingContent.push(
+        <IconContext.Provider
+          value={{
+            className: `icon__green tour__info--icon full star`,
+          }}
+        >
+          <IoMdStar />
+        </IconContext.Provider>
+      );
+  }
+
+    reviewContent = (
+      <div className="leave__review--container">
+        {' '}
+        <h1 className="leave__review--heading">Your Rating</h1>
+        <span> {myRatingContent}</span>
+      </div>
+    );
+  } else if (props.booked && !reviewed) {
+    reviewContent = (
+      <div className="leave__review--container">
+        {' '}
+        <h1 className="leave__review--heading">Leave a review</h1>
+        <span onClick={reviewHandler}> {stars.map((star) => star)} </span>
+      </div>
+    );
+  }
+
   return (
     <>
+      {loading && <LoadingSpinner asOverlay />}
+      {error && (
+        <ErrorModal show onCancel={() => setError(false)}>
+          {error}
+        </ErrorModal>
+      )}
+      {openReviewModal && (
+        <Modal
+          onCancel={() => {
+            setOpenReviewModal(false);
+            setOutline(false);
+          }}
+          header={'FEEDBACK'}
+          show
+        >
+          <div className="review__center">
+            {' '}
+            <h1 className="leave__review--heading your__review--heading">
+              {' '}
+              Your Rating:{' '}
+            </h1>{' '}
+            <p className="my__review--stars">
+              {starContent.map((star) => star)} ({starContent.length})
+            </p>
+          </div>
+          <div className="review__form" onSubmit={submitReview}>
+            <Textarea
+              touched={myReview.touched}
+              valid={myReview.valid}
+              configOptions={myReview.configOptions}
+              onChange={textInputHandler}
+            />
+            <Button
+              clicked={submitReview}
+              disabled={!myReviewValid}
+              type="success"
+            >
+              Leave your review!
+            </Button>
+          </div>
+        </Modal>
+      )}
       {props.error && (
         <ErrorModal show onClear={props.deleteError}>
           {props.error}
@@ -113,6 +388,7 @@ const TourItem = React.memo((props) => {
         <Button clicked={detailsHandler} type="success">
           Details
         </Button>
+        {reviewContent}
       </div>
     </>
   );
@@ -122,6 +398,7 @@ const mapStateToProps = (state) => ({
   isAuthenticated: state.user.isAuthenticated,
   wishlist: state.user.wishlist,
   error: state.user.error,
+  reviews: state.user.reviews,
 });
 
 export default connect(mapStateToProps, {

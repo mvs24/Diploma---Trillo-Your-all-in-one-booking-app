@@ -44,6 +44,7 @@ export const signupUser = (userData) => async (dispatch) => {
   try {
     dispatch({ type: SIGNUP_LOADING });
     const response = await axios.post('/api/v1/users/signup', userData);
+    console.log(response.data.data)
     setHeaders(response.data.token);
     localStorage.setItem('jwt', response.data.token);
 
@@ -187,11 +188,12 @@ export const updateUserData = (formData) => async (dispatch) => {
   }
 };
 
+
+
 export const getMyReviews = () => async (dispatch) => {
   try {
     dispatch({ type: LOADING });
     const res = await axios.get('/api/v1/users/my/reviews');
-    console.log(res);
     dispatch({ type: GET_MY_REVIEWS, payload: res.data.data });
   } catch (err) {
     dispatch({ type: ERROR, errormsg: err.response.data.message });

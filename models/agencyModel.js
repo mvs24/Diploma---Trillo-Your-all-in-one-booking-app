@@ -45,7 +45,23 @@ const agencySchema = new mongoose.Schema({
     type: Boolean,
     default: true
   }
+},
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
+  });
+
+agencySchema.virtual('tours', {
+  ref: 'Tour',
+  foreignField: 'agency',
+  localField: '_id'
 });
+
+agencySchema.pre(/^findOne/, function(next) {
+  this.populate('tours');
+
+  next()
+})
 
 agencySchema.pre(/^find/, function(next) {
   this.select('-__v').find({ active: true });

@@ -30,7 +30,7 @@ const AgencyInfo = (props) => {
   if (!agency) return null;
 
   const visitAgency = () => {
-    history.push('/agencies/' + agency._id);
+    history.push('/agencies/' + agency._id + '?page=1');
   };
 
   return (

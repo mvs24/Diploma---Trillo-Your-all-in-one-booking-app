@@ -16,22 +16,25 @@ const signToken = (id) => {
 exports.signup = asyncWrapper(async (req, res, next) => {
   const { name, lastname, password, passwordConfirm, email, photo } = req.body;
 
-  if (!photo) req.body.photo = 'default.jpg';
+  if (!photo) req.body.photo = 'public/img/users/default.jpg';
   const user = await User.create({
     name,
     lastname,
     password,
     passwordConfirm,
     email,
-    photo,
+    photo: req.body.photo,
   });
 
   const token = signToken(user._id);
 
+  const userPhoto = user.photo
+  console.log(userPhoto)
+
   res.status(201).json({
     status: 'success',
     token,
-    data: { name, lastname, email },
+    data: { name, lastname, email, photo: userPhoto },
   });
 });
 
@@ -61,7 +64,7 @@ exports.login = asyncWrapper(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     token,
-    data: { name: user.name, lastname: user.lastname, email: user.email },
+    data: { name: user.name, lastname: user.lastname, email: user.email, photo: user.photo },
   });
 });
 

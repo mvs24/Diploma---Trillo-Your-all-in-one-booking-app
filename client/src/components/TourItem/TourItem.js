@@ -210,6 +210,9 @@ const TourItem = React.memo((props) => {
     setLoading(true);
     await axios.post(`/api/v1/tours/${tour._id}/reviews`, reviewData);
     setLoading(false);
+    setMyRating(reviewData.rating)
+    setReviewed(true);
+      setOpenReviewModal(false)
   };
 
   if (!outline) {
@@ -253,6 +256,7 @@ const TourItem = React.memo((props) => {
       const reviewForTour = reviews.find((review) => review.tour === tour._id);
       setMyRating(reviewForTour.rating);
       setReviewControlled(true);
+
     }
   }
 

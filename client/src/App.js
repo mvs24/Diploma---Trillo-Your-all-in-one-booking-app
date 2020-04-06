@@ -8,7 +8,8 @@ import Home from './pages/Home/Home';
 import TourDetails from './pages/TourDetails/TourDetails';
 import SuccessBooking from './components/SuccessBooking/SuccessBooking';
 import AccountSettings from './AccountSettings/AccountSettings';
-import MyBookings from './AccountSettings/MyBookings/MyBookings'
+import MyBookings from './AccountSettings/MyBookings/MyBookings';
+import AgencyDetails from './pages/AgencyDetails/AgencyDetails';
 
 function App(props) {
   const setUserData = async () => {
@@ -28,7 +29,8 @@ function App(props) {
           <Route path="/categories/tours" exact component={Tours} />
           <Route path="/" exact component={Home} />
           <Route path="/me" exact component={AccountSettings} />
-          <Route path='/my-bookings' exact component={MyBookings}/>
+          <Route path="/my-bookings" exact component={MyBookings} />
+          <Route path="/agencies/:agencyId" exact component={AgencyDetails} />
         </Switch>
       </Layout>
       <Route

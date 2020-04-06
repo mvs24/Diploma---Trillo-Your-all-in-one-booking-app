@@ -30,6 +30,7 @@ const UserContent = (props) => {
     cartTourLength = cartTour.length;
   }
 
+
   return (
     <>
       <div className="bookings__container">

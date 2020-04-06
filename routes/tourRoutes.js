@@ -45,6 +45,13 @@ router
     tourController.updateTour
   );
 
-router.get('/tour-stats', tourController.getTourStatistics);
+router.get('/tour-stats', tourController.getTourStatistics); //konflikt me :id //////////
+
+router.post(
+  '/price/discount',
+  authController.protect,
+  controlTourCreator,
+  tourController.discountTour
+);
 
 module.exports = router;

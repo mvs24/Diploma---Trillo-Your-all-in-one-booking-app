@@ -4,12 +4,12 @@ const factory = require('./factoryHandler');
 const ApiFeatures = require('../utils/apiFeatures');
 const asyncWrapper = require('../utils/asyncWrapper');
 
-const getToursBy = sortBy =>
+const getToursBy = (sortBy) =>
   asyncWrapper(async (req, res, next) => {
     let tours = await Tour.find().sort(sortBy);
 
     tours = tours.filter(
-      el => el.startDates[el.startDates.length - 1].getTime() > Date.now()
+      (el) => el.startDates[el.startDates.length - 1].getTime() > Date.now()
     );
 
     let wantedTours = [];
@@ -20,11 +20,11 @@ const getToursBy = sortBy =>
     res.status(200).json({
       status: 'success',
       results: wantedTours.length,
-      data: wantedTours
+      data: wantedTours,
     });
   });
 
-const getTours = type =>
+const getTours = (type) =>
   asyncWrapper(async (req, res, next) => {
     let filter = {};
 
@@ -43,7 +43,7 @@ const getTours = type =>
     let futureTours = [];
     let finishedTours = [];
 
-    tours.forEach(tour => {
+    tours.forEach((tour) => {
       if (tour.startDates.length > 0) {
         const lastDate = tour.startDates[tour.startDates.length - 1];
         if (lastDate.getTime() > Date.now()) {
@@ -68,7 +68,7 @@ const getTours = type =>
     res.status(200).json({
       status: 'success',
       results,
-      data
+      data,
     });
   });
 
@@ -87,21 +87,21 @@ exports.getMostPopularTours = getToursBy('-bought');
 exports.getTourStatistics = asyncWrapper(async (req, res, next) => {
   const stats = await Tour.aggregate([
     {
-      $match: { ratingsQuantity: { $ne: 0 } }
+      $match: { ratingsQuantity: { $ne: 0 } },
     },
     {
       $group: {
         _id: '$agency',
-        avg: { $avg: '$ratingsAverage' }
-      }
-    }
+        avg: { $avg: '$ratingsAverage' },
+      },
+    },
   ]);
 
   console.log(stats);
 
   res.status(200).json({
     status: 'success',
-    data: stats
+    data: stats,
   });
 });
 
@@ -114,49 +114,65 @@ exports.getReviewStats = asyncWrapper(async (req, res, next) => {
   const stats = await Tour.aggregate([
     {
       $match: {
-        _id: { $in: [mongoose.Types.ObjectId(req.params.tourId.toString())] }
-      }
+        _id: { $in: [mongoose.Types.ObjectId(req.params.tourId.toString())] },
+      },
     },
     {
       $lookup: {
         from: 'reviewtours',
         foreignField: 'tour',
         localField: '_id',
-        as: 'reviews'
-      }
+        as: 'reviews',
+      },
     },
     {
-      $unwind: '$reviews'
+      $unwind: '$reviews',
     },
 
     {
       $group: {
         _id: '$reviews.rating',
-        nReviews: { $sum: 1 }
-      }
+        nReviews: { $sum: 1 },
+      },
     },
     {
-      $addFields: { rating: '$_id' }
+      $addFields: { rating: '$_id' },
     },
     {
-      $project: { _id: 0 }
+      $project: { _id: 0 },
     },
     {
       $addFields: {
         percentage: {
-          $multiply: [{ $divide: ['$nReviews', totalReviews] }, 100]
-        }
-      }
+          $multiply: [{ $divide: ['$nReviews', totalReviews] }, 100],
+        },
+      },
     },
     {
-      $sort: {rating: 1}
-    }
+      $sort: { rating: 1 },
+    },
   ]);
 
   res.status(200).json({
     status: 'success',
     data: stats,
     totalReviews,
-    avgRating
+    avgRating,
   });
+});
+
+exports.discountTour = asyncWrapper(async (req, res, next) => {
+  const tour = await Tour.findById(req.params.tourId);
+  const agency = await Agency.findById(tour.agency.toString());
+
+  if (!req.body.priceDiscount)
+    return next(new AppError('Please specify a price discount', 400));
+
+  console.log(agency);
+
+  // const allTours = agency.tours;
+
+  // const priceDiscount = req.body.priceDiscount;
+  // tour.price = tour.price - priceDiscount;
+  // await tour.save();
 });

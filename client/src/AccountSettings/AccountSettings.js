@@ -235,7 +235,6 @@ const AccountSettings = (props) => {
   };
 
   const goToBookings = () => {
-    console.log('kk');
     history.push('/my-bookings');
   };
 

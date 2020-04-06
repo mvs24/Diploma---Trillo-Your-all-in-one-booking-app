@@ -3,6 +3,9 @@ const Tour = require('../models/tourModel');
 const factory = require('./factoryHandler');
 const ApiFeatures = require('../utils/apiFeatures');
 const asyncWrapper = require('../utils/asyncWrapper');
+const Agency = require('../models/agencyModel');
+const AppError = require('../utils/appError');
+const User = require('../models/userModel');
 
 const getToursBy = (sortBy) =>
   asyncWrapper(async (req, res, next) => {
@@ -162,17 +165,55 @@ exports.getReviewStats = asyncWrapper(async (req, res, next) => {
 });
 
 exports.discountTour = asyncWrapper(async (req, res, next) => {
-  const tour = await Tour.findById(req.params.tourId);
+  const tour = await Tour.findById(req.params.id);
   const agency = await Agency.findById(tour.agency.toString());
 
   if (!req.body.priceDiscount)
     return next(new AppError('Please specify a price discount', 400));
 
-  console.log(agency);
+  const userToNotify = [];
+  agency.tours.forEach((tour) => {
+    tour.bookings.forEach((booking) => {
+      userToNotify.push(booking.user);
+    });
+  });
 
-  // const allTours = agency.tours;
+  const notification = {
+    message: req.body.message,
+    agency: agency._id,
+    tour: tour._id,
+  };
 
-  // const priceDiscount = req.body.priceDiscount;
-  // tour.price = tour.price - priceDiscount;
-  // await tour.save();
+  for (let i = 0; i < userToNotify.length - 1; i++) {
+    for (let j = i + 1; j < userToNotify.length; j++) {
+      if (userToNotify[i].toString() == userToNotify[j].toString()) {
+        userToNotify.splice(i, 1);
+      }
+    }
+  }
+  for (let i = 0; i < userToNotify.length - 1; i++) {
+    for (let j = i + 1; j < userToNotify.length; j++) {
+      if (userToNotify[i].toString() == userToNotify[j].toString()) {
+        userToNotify.splice(i, 1);
+      }
+    }
+  }
+
+  const priceDiscount = req.body.priceDiscount;
+  tour.priceDiscount = priceDiscount;
+  tour.price = tour.price - priceDiscount;
+  await tour.save();
+
+  userToNotify.forEach(async (userId) => {
+    const user = await User.findById(userId);
+    if (user) {
+      user.notifications.push(notification);
+      await user.save();
+    }
+  });
+
+  res.status(200).json({
+    status: 'success',
+    tour,
+  });
 });

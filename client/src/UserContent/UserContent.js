@@ -1,22 +1,28 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { IconContext } from 'react-icons';
-import { IoIosArrowDown } from 'react-icons/io';
+import { IoIosArrowDown, IoMdNotificationsOutline } from 'react-icons/io';
 import { FiHeart, FiShoppingCart } from 'react-icons/fi';
 import LoadingSpinner from '../shared/components/UI/LoadingSpinner';
+import Button from '../shared/components/Button/Button';
 
 import './UserContent.css';
 
 const UserContent = (props) => {
-  const { wishlist, cartTour } = props;
+  const history = useHistory();
+  const { wishlist, cartTour, notifications, unReadNotifications } = props;
   let cartTourLength = 0;
 
   let wishlistContent = <LoadingSpinner />;
 
+  if (!notifications) {
+    return <LoadingSpinner />;
+  }
+
   if (wishlist)
     wishlistContent = (
-      <div className="shopping__cart">
-        <span className="hidden">Shopping_cart</span>
+      <div className="wishlist__content">
         <IconContext.Provider value={{ className: 'icon heart' }}>
           <FiHeart />
           <span className="wish__length">
@@ -30,163 +36,66 @@ const UserContent = (props) => {
     cartTourLength = cartTour.length;
   }
 
+  const myProfileHandler = () => {
+    history.push('/me');
+  };
+
+  const notificationHandler = () => {
+    history.push('/my-notifications');
+  };
+
+  const myBookingsHandler = () => {
+    history.push('/my-bookings');
+  };
+
+  let unReadLength = 0;
+  notifications.forEach((el) => {
+    if (el.read === false) {
+      unReadLength++;
+    }
+  });
 
   return (
     <>
-      <div className="bookings__container">
-        <div className="bookings__hover">
-          <span>My Bookings</span>
-          <IconContext.Provider value={{ className: 'icon' }}>
-            <IoIosArrowDown />
-          </IconContext.Provider>
-        </div>
+      <section className="user__content">
+        <div className="seperator">&nbsp;</div>
 
-        <div className=" my__booking__items">
-          <div className="my__booking_item">
-            <img
-              src="https://images.pexels.com/photos/9754/mountains-clouds-forest-fog.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-              alt="Booking Item"
-            />
-            <div>
-              <h3>The Forest Hiker</h3>
-              <h4>Agency: Marius SHPK</h4>
-            </div>
-          </div>{' '}
-          <div className="my__booking_item">
-            <img
-              src="https://images.pexels.com/photos/9754/mountains-clouds-forest-fog.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-              alt="Booking Item"
-            />
-            <div>
-              <h3>The Forest Hiker</h3>
-              <h4>Agency: Marius SHPK</h4>
-            </div>
-          </div>{' '}
-          <div className="my__booking_item">
-            <img
-              src="https://images.pexels.com/photos/9754/mountains-clouds-forest-fog.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-              alt="Booking Item"
-            />
-            <div>
-              <h3>The Forest Hiker</h3>
-              <h4>Agency: Marius SHPK</h4>
-            </div>
-          </div>{' '}
-          <div className="my__booking_item">
-            <img
-              src="https://images.pexels.com/photos/9754/mountains-clouds-forest-fog.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-              alt="Booking Item"
-            />
-            <div>
-              <h3>The Forest Hiker</h3>
-              <h4>Agency: Marius SHPK</h4>
-            </div>
-          </div>
+        <div onClick={myBookingsHandler} className="my__bookings__container">
+          <h1>My Bookings</h1>
         </div>
-      </div>
-
-      <div className="wishlist__container">
         {wishlistContent}
-        <div className="wishlist__items">
-          <div className="wishlist_item">
-            <img
-              src="https://images.pexels.com/photos/9754/mountains-clouds-forest-fog.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-              alt="Booking Item"
-            />
-            <div>
-              <h3>The Wine Taster</h3>
-              <h4>Agency: Marius SHPK</h4>
-            </div>
-          </div>
-          <div className="wishlist_item">
-            <img
-              src="https://images.pexels.com/photos/9754/mountains-clouds-forest-fog.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-              alt="Booking Item"
-            />
-            <div>
-              <h3>The Wine Taster</h3>
-              <h4>Agency: Marius SHPK</h4>
-            </div>
-          </div>{' '}
-          <div className="wishlist_item">
-            <img
-              src="https://images.pexels.com/photos/9754/mountains-clouds-forest-fog.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-              alt="Booking Item"
-            />
-            <div>
-              <h3>The Wine Taster</h3>
-              <h4>Agency: Marius SHPK</h4>
-            </div>
-          </div>{' '}
-          <div className="wishlist_item">
-            <img
-              src="https://images.pexels.com/photos/9754/mountains-clouds-forest-fog.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-              alt="Booking Item"
-            />
-            <div>
-              <h3>The Wine Taster</h3>
-              <h4>Agency: Marius SHPK</h4>
-            </div>
-          </div>{' '}
-        </div>
-      </div>
 
-      <div className="shopping__container">
-        <div className="shopping__cart">
-          <span className="hidden">Shopping_cart</span>
-          <IconContext.Provider value={{ className: 'icon cart' }}>
+        <div className="shopping__container">
+          <IconContext.Provider value={{ className: 'icon cart shop' }}>
             <FiShoppingCart />
-            <span className="cart__length">
-              {cartTourLength > 9 ? <span>9+</span> : cartTourLength}
-            </span>
+            <span className="cart__length">{cartTourLength}</span>
           </IconContext.Provider>
         </div>
 
-        <div className="shopping__items">
-          <div className="shopping_item">
-            <img
-              src="https://images.pexels.com/photos/9754/mountains-clouds-forest-fog.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-              alt="Booking Item"
-            />
-            <div>
-              <h3>The Wine Taster</h3>
-              <h4>Agency: Marius SHPK</h4>
-            </div>
-          </div>
-          <div className="shopping_item">
-            <img
-              src="https://images.pexels.com/photos/9754/mountains-clouds-forest-fog.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-              alt="Booking Item"
-            />
-            <div>
-              <h3>The Wine Taster</h3>
-              <h4>Agency: Marius SHPK</h4>
-            </div>
-          </div>
-          <div className="shopping_item">
-            <img
-              src="https://images.pexels.com/photos/9754/mountains-clouds-forest-fog.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-              alt="Booking Item"
-            />
-            <div>
-              <h3>The Wine Taster</h3>
-              <h4>Agency: Marius SHPK</h4>
-            </div>
-          </div>
+        <div onClick={notificationHandler} className="notifications__container">
+          <IconContext.Provider value={{ className: 'icon cart notify' }}>
+            <IoMdNotificationsOutline />
+            <span className="notify__length">{unReadLength}</span>
+          </IconContext.Provider>
         </div>
-      </div>
-      <div className="user__profile">
-        <img src={`http://localhost:5000/${props.userData.photo}`} alt="user" />
-        <h4>
-          {props.userData.name} {props.userData.lastname}
-        </h4>
-      </div>
+
+        <div onClick={myProfileHandler} className="user__profile">
+          <img
+            src={`http://localhost:5000/${props.userData.photo}`}
+            alt="user"
+          />
+          <h4>
+            {props.userData.name} {props.userData.lastname}
+          </h4>
+        </div>
+      </section>
     </>
   );
 };
 
 const mapStateToProps = (state) => ({
   userData: state.user.userData,
+  isAuthenticated: state.user.isAuthenticated
 });
 
 export default connect(mapStateToProps)(UserContent);

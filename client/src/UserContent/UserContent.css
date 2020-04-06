@@ -1,4 +1,4 @@
-.bookings__hover {
+/*.bookings__hover {
   display: flex;
   align-items: center;
   font-size: 1.5rem;
@@ -7,12 +7,16 @@
   transition: all 0.02s ease;
   margin-right: 0.3rem;
 }
+.user__content__entire {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 .bookings__container {
   display: flex;
-  flex-direction: column;
   margin-right: auto;
-  /* margin-left: -10%; */
+   margin-left: -10%; 
   align-self: flex-start;
   justify-self: center;
 }
@@ -25,10 +29,7 @@
   background: #faf9f9;
 }
 
-.bookings__container:hover .my__booking__items {
-  display: block;
-  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.4);
-}
+
 .bookings__container:hover .bookings__hover {
   border-bottom: 2px solid #ccc;
   align-self: center;
@@ -127,6 +128,7 @@
   transition: all 0.02s ease;
   margin-right: 0.3rem;
   display: inline-block;
+  background: red;
 }
 
 .cart {
@@ -135,9 +137,127 @@
 }
 
 
+*/
+
+.wishlist__content {
+  margin: 0 2rem;
+}
+.user__content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.my__bookings__container {
+  display: flex;
+  align-items: center;
+
+}
+.user__profile {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin: 0rem;
+}
+
 .user__profile img {
   height: 4rem;
   width: 4rem;
   border-radius: 50%;
-  margin-left: 2rem;
+  margin: 0;
+}
+.heart {
+  color: red;
+  cursor: pointer;
+}
+
+.my__bookings__container {
+  display: flex;align-items: center;
+    margin-right: 2rem;
+    cursor: pointer;
+    transition: all .3s ease;
+}
+.my__bookings__container:hover {
+  transform: translateY(-2px);
+}
+
+.my__bookings__container h1 {
+  font-size: 1.4rem;
+  font-weight: 400;
+  border-bottom: 1px solid #ccc;
+
+}
+.wishlist__content{
+  position: relative;
+   margin: 0 4rem;
+   transition: all .4s ease-in-out;
+}
+.wishlist__content:hover {
+ transform: translateY(-2px);
+}
+
+.wish__length {
+  padding: 0.3rem;
+  font-size: 1.2rem;
+  color: white;
+  background: red;
+  border-radius: 50%;
+  position: absolute;
+  top: -30%;
+  right: -60%;
+
+}
+
+.shopping__container {
+  transition: all .4s ease-in-out;
+  display: flex;
+  align-items: center;
+  margin: 0 2rem;
+
+}
+.shop{
+  color: #333;
+  cursor: pointer;
+}
+
+.shopping__container:hover {
+  transform: translateY(-2px);
+}
+.cart__length, .notify__length {
+  font-size: 1.4rem;
+  border-radius: 100px;
+  color: #ccc;
+}
+
+.user__profile{
+  transition: all .2s ease;
+  cursor: pointer;
+}
+
+.user__profile:hover {
+  transform: translateY(-1px);
+}
+
+.seperator {
+  width: 4rem;
+  height: .05rem;
+  background: #ccc;
+  transform: rotate(-90deg);
+  margin: 0 1.2rem;
+}
+
+.notifications__container {
+  display: flex;
+  margin-right: 1.4rem;
+  align-items: center;
+ transition: all .2s ease;
+  cursor: pointer;
+}
+
+.notifications__container:hover {
+   transform: translateY(-1px);
+}
+
+.notify {
+  font-size: 2.3rem;
 }

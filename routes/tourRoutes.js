@@ -48,9 +48,9 @@ router
 router.get('/tour-stats', tourController.getTourStatistics); //konflikt me :id //////////
 
 router.post(
-  '/price/discount',
+  '/:id/price-discount',
   authController.protect,
-  controlTourCreator,
+  controlTourCreator(Tour),
   tourController.discountTour
 );
 

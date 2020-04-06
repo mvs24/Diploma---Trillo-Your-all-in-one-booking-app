@@ -17,10 +17,14 @@ import {
   getMyWishlist,
   getToursInCart,
   getMyReviews,
+  getMyNotifications,
+  getUnReadNotifications,
 } from '../store/actions/userActions';
 import LoadingSpinner from '../shared/components/UI/LoadingSpinner';
 import UserContent from '../UserContent/UserContent';
 import ErrorModal from '../shared/components/UI/ErrorModal';
+import { IoIosArrowDown } from 'react-icons/io';
+import { FiHeart, FiShoppingCart } from 'react-icons/fi';
 
 const Header = React.memo((props) => {
   const [openLogin, setOpenLogin] = useState(false);
@@ -122,11 +126,19 @@ const Header = React.memo((props) => {
   });
   const [signupValid, setSignupValid] = useState(false);
   const [loginValid, setLoginValid] = useState(false);
-  const { isAuthenticated, getMyWishlist, getMyReviews } = props;
+  const {
+    isAuthenticated,
+    getMyWishlist,
+    getMyReviews,
+    getMyNotifications,
+    getUnReadNotifications,
+  } = props;
 
   useEffect(() => {
     if (isAuthenticated) {
       getMyWishlist();
+      getMyNotifications();
+      getUnReadNotifications();
     }
   }, [isAuthenticated]);
 
@@ -313,7 +325,12 @@ const Header = React.memo((props) => {
 
   if (props.isAuthenticated) {
     userContent = (
-      <UserContent wishlist={props.wishlist} cartTour={props.cartTour} />
+      <UserContent
+        unReadNotifications={props.unReadNotifications}
+        notifications={props.notifications}
+        wishlist={props.wishlist}
+        cartTour={props.cartTour}
+      />
     );
   }
 
@@ -399,6 +416,8 @@ const mapStateToProps = (state) => ({
   isAuthenticated: state.user.isAuthenticated,
   wishlist: state.user.wishlist,
   cartTour: state.user.cartTour,
+  notifications: state.user.notifications,
+  unReadNotifications: state.user.unReadNotifications,
 });
 
 export default connect(mapStateToProps, {
@@ -408,4 +427,6 @@ export default connect(mapStateToProps, {
   getMyWishlist,
   getToursInCart,
   getMyReviews,
+  getMyNotifications,
+  getUnReadNotifications,
 })(withRouter(Header));

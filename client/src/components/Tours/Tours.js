@@ -37,8 +37,8 @@ const Tours = React.memo((props) => {
       setTopToursLoaded(true);
       try {
         setLoading(true);
-        const tours = await axios.get('/api/v1/tours/top-five');
-        setTopTours(tours.data.data);
+        const res = await axios.get('/api/v1/tours/top-five');
+        setTopTours(res.data.data);
         setLoading(false);
       } catch (err) {
         setLoading(false);
@@ -69,11 +69,11 @@ const Tours = React.memo((props) => {
     getTopFiveTours();
   }, []);
 
+
   let topToursContent =
     activeLink === 'top'
       ? topTours.map((tour) => <TourItem key={tour._id} tour={tour} />)
       : mostPopularTours.map((tour) => <TourItem key={tour._id} tour={tour} />);
-
   let toursContent = (
     <div className="tours">
       {error && (

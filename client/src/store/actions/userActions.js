@@ -28,6 +28,11 @@ import {
   UPDATE_USER_DATA,
   ERROR,
   GET_MY_REVIEWS,
+  GET_MY_NOTIFICATIONS,
+  GET_UNREAD_NOTIFICATIONS,
+  MARK_NOTIFICATIONS_AS_READ,
+  MARK_NOTIFICATION_AS_READ,
+  LOGOUT_USER,
 } from '../types/userTypes';
 
 export const setHeaders = (token) => {
@@ -44,7 +49,6 @@ export const signupUser = (userData) => async (dispatch) => {
   try {
     dispatch({ type: SIGNUP_LOADING });
     const response = await axios.post('/api/v1/users/signup', userData);
-    console.log(response.data.data)
     setHeaders(response.data.token);
     localStorage.setItem('jwt', response.data.token);
 
@@ -188,8 +192,6 @@ export const updateUserData = (formData) => async (dispatch) => {
   }
 };
 
-
-
 export const getMyReviews = () => async (dispatch) => {
   try {
     dispatch({ type: LOADING });
@@ -198,4 +200,70 @@ export const getMyReviews = () => async (dispatch) => {
   } catch (err) {
     dispatch({ type: ERROR, errormsg: err.response.data.message });
   }
+};
+
+export const getMyNotifications = () => async (dispatch) => {
+  try {
+    dispatch({ type: LOADING });
+    const res = await axios.get('/api/v1/users/my/notifications');
+    dispatch({ type: GET_MY_NOTIFICATIONS, payload: res.data.data });
+  } catch (err) {
+    dispatch({ type: ERROR, errormsg: err.response.data.message });
+  }
+};
+
+export const getUnReadNotifications = () => async (dispatch) => {
+  try {
+    dispatch({ type: LOADING });
+    const res = await axios.get('/api/v1/users/my/unReadNotifications');
+    dispatch({
+      type: GET_UNREAD_NOTIFICATIONS,
+      payload: res.data.unReadNotifications,
+    });
+  } catch (err) {
+    dispatch({ type: ERROR, errormsg: err.response.data.message });
+  }
+};
+
+export const markNotificationsAsRead = () => async (dispatch) => {
+  try {
+    dispatch({ type: LOADING });
+    const res = await axios.get('/api/v1/users/notifications/markAsRead');
+    dispatch({
+      type: MARK_NOTIFICATIONS_AS_READ,
+      payload: res.data.notifications,
+    });
+  } catch (err) {
+    dispatch({ type: ERROR, errormsg: err.response.data.message });
+  }
+};
+
+export const markNotificationAsRead = (
+  notificationId,
+  history,
+  tourId
+) => async (dispatch) => {
+  try {
+    dispatch({ type: LOADING });
+    const res = await axios.patch(
+      `/api/v1/users/notifications/${notificationId}/markAsRead`
+    );
+    console.log(res.data.notifications);
+    dispatch({
+      type: MARK_NOTIFICATION_AS_READ,
+      payload: res.data.notifications,
+    });
+    history.push(`/tours/${tourId}`);
+  } catch (err) {
+    dispatch({ type: ERROR, errormsg: err.response.data.message });
+  }
+};
+
+export const logoutUser = () => (dispatch) => {
+  setHeaders(null);
+  localStorage.removeItem('jwt');
+
+  dispatch({
+    type: LOGOUT_USER,
+  });
 };

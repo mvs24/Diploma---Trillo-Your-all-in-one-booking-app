@@ -10,6 +10,7 @@ const MyBookings = (props) => {
   const [myBookings, setMyBookings] = useState();
   const [loading, setLoading] = useState();
   const [error, setError] = useState();
+  const {isAuthenticated} = props;
 
   useEffect(() => {
     const getMyBookings = async () => {
@@ -22,9 +23,11 @@ const MyBookings = (props) => {
         setError(err.response.data.message);
       }
     };
-
+    if (isAuthenticated) {
     getMyBookings();
-  }, []);
+    }
+
+  }, [isAuthenticated]);
 
   if (loading) return <LoadingSpinner asOverlay />;
 
@@ -40,4 +43,8 @@ const MyBookings = (props) => {
   );
 };
 
-export default MyBookings;
+const mapStateToProps = state => ({
+  isAuthenticated: state.user.isAuthenticated
+})
+
+export default  connect(mapStateToProps)(MyBookings);

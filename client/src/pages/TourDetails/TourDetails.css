@@ -243,6 +243,18 @@
 .bookNow {
   margin-top: 2rem;
 }
+/*
+.bookTour__container {
+  clip-path: polygon(0 0, 100% -110%, 100% 100%, 0 100%);
+  z-index: 2;
+  margin-top: -5rem;
+}
+..bookTour__container > * {
+  transform: skewY(4deg);
+}
+.tour__container {
+  
+}
 /* 
 Grey light 1: #faf9f9
 Grey light 2: #f4f2f2

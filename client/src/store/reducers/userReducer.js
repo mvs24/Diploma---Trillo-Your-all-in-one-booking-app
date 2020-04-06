@@ -27,6 +27,11 @@ import {
   ERROR,
   UPDATE_USER_DATA,
   GET_MY_REVIEWS,
+  GET_MY_NOTIFICATIONS,
+  GET_UNREAD_NOTIFICATIONS,
+  MARK_NOTIFICATIONS_AS_READ,
+  MARK_NOTIFICATION_AS_READ,
+  LOGOUT_USER,
 } from '../types/userTypes';
 
 const initialState = {
@@ -37,6 +42,8 @@ const initialState = {
   wishlist: null,
   cartTour: [],
   reviews: null,
+  notifications: null,
+  unReadNotifications: null,
 };
 
 export default (state = initialState, action) => {
@@ -213,6 +220,38 @@ export default (state = initialState, action) => {
         error: null,
         reviews: action.payload,
       };
+    case GET_MY_NOTIFICATIONS:
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        notifications: action.payload,
+      };
+    case GET_UNREAD_NOTIFICATIONS:
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        unReadNotifications: action.payload,
+      };
+    case MARK_NOTIFICATIONS_AS_READ:
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        unReadNotifications: [],
+        notifications: action.payload,
+      };
+    case MARK_NOTIFICATION_AS_READ:
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        notifications: action.payload,
+      };
+    case LOGOUT_USER: {
+      return initialState;
+    }
     default:
       return state;
   }

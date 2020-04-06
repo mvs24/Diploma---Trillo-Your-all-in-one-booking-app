@@ -79,18 +79,9 @@ const AgencyInfo = (props) => {
             <p className="second">BOOKED BY</p>
             <p className="data">{agency.numOptionsBought}</p>
           </li>
-          <li>
-            <IconContext.Provider
-              value={{ className: 'icon__green tour__info--icon' }}
-            >
-              <FaSortNumericUp />
-            </IconContext.Provider>
-            <p className="second">Tours Without Reviews</p>
-            <p className="data">{agency.numOptions - agency.ratingsQuantity}</p>
-          </li>
         </ul>
       </div>
-      <div className="tour__about agency__about">
+      <div className="tour__about agency__about agency__info--polygon ">
         <h1>ABOUT: {agency.name}</h1>
         <p className="agency__description">{agency.description}</p>
         <Button

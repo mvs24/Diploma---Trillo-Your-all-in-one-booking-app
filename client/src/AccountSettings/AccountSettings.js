@@ -3,13 +3,25 @@ import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { IconContext } from 'react-icons';
 import { MdPeopleOutline } from 'react-icons/md';
+import { GiDetour } from 'react-icons/gi';
+import {
+  IoIosStarOutline,
+  IoMdHeartEmpty,
+  IoMdNotificationsOutline,
+  IoIosLogOut,
+} from 'react-icons/io';
+import { FiShoppingCart } from 'react-icons/fi';
 import Input from '../shared/components/Input/Input';
 import LoadingSpinner from '../shared/components/UI/LoadingSpinner';
 import './AccountSettings.css';
 import ImageUpload from '../shared/components/ImageUpload/ImageUpload';
 import Button from '../shared/components/Button/Button';
 import axios from 'axios';
-import { updateUserData, deleteError } from '../store/actions/userActions';
+import {
+  updateUserData,
+  deleteError,
+  logoutUser,
+} from '../store/actions/userActions';
 import ErrorModal from '../shared/components/UI/ErrorModal';
 
 const AccountSettings = (props) => {
@@ -132,6 +144,10 @@ const AccountSettings = (props) => {
         };
       });
       setUserId(user.id);
+      setImage({
+        value: user.photo,
+        isValid: true,
+      });
     }
   }, [user]);
 
@@ -238,6 +254,11 @@ const AccountSettings = (props) => {
     history.push('/my-bookings');
   };
 
+  const logoutHandler = () => {
+    props.logoutUser();
+    history.push('/');
+  };
+
   if (!user) return <LoadingSpinner asOverlay />;
 
   return (
@@ -267,7 +288,7 @@ const AccountSettings = (props) => {
             <IconContext.Provider
               value={{ className: 'icon__white tour__info--icon' }}
             >
-              <MdPeopleOutline />
+              <GiDetour />
             </IconContext.Provider>
             <p className="">MY BOOKINGS (TOURS)</p>
           </li>{' '}
@@ -275,7 +296,7 @@ const AccountSettings = (props) => {
             <IconContext.Provider
               value={{ className: 'icon__white tour__info--icon' }}
             >
-              <MdPeopleOutline />
+              <IoIosStarOutline />
             </IconContext.Provider>
             <p className="">MY REVIEWS (TOURS)</p>
           </li>{' '}
@@ -283,7 +304,7 @@ const AccountSettings = (props) => {
             <IconContext.Provider
               value={{ className: 'icon__white tour__info--icon' }}
             >
-              <MdPeopleOutline />
+              <IoMdHeartEmpty />
             </IconContext.Provider>
             <p className="">MY WISHLIST (TOURS)</p>
           </li>
@@ -291,7 +312,7 @@ const AccountSettings = (props) => {
             <IconContext.Provider
               value={{ className: 'icon__white tour__info--icon' }}
             >
-              <MdPeopleOutline />
+              <FiShoppingCart />
             </IconContext.Provider>
             <p className="">MY SHOPPING CART (TOURS)</p>
           </li>
@@ -299,9 +320,17 @@ const AccountSettings = (props) => {
             <IconContext.Provider
               value={{ className: 'icon__white tour__info--icon' }}
             >
-              <MdPeopleOutline />
+              <IoMdNotificationsOutline />
             </IconContext.Provider>
             <p className="">MY NOTIFICATIONS</p>
+          </li>
+          <li onClick={logoutHandler} className="list__item">
+            <IconContext.Provider
+              value={{ className: 'icon__white tour__info--icon' }}
+            >
+              <IoIosLogOut />
+            </IconContext.Provider>
+            <p className="">LOG OUT</p>
           </li>
         </div>
         <div className="user__info">
@@ -402,6 +431,8 @@ const mapStateToProps = (state) => ({
   error: state.user.error,
 });
 
-export default connect(mapStateToProps, { updateUserData, deleteError })(
-  AccountSettings
-);
+export default connect(mapStateToProps, {
+  updateUserData,
+  deleteError,
+  logoutUser,
+})(AccountSettings);

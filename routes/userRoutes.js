@@ -48,15 +48,23 @@ router.patch(
 router.get(
   '/my/bookings',
   authController.protect,
-  authController.restrictTo('user'),
   bookingTourController.getMyBookings
 );
 
 router.get(
   '/my/reviews',
   authController.protect,
-  authController.restrictTo('user'),
   reviewTourController.getMyReviews
 );
+
+router.get(
+  '/my/notifications',
+  authController.protect,
+  userController.getMyNotifications
+);
+
+router.get('/my/unReadNotifications', authController.protect, userController.getUnReadNotifications)
+router.patch('/notifications/:notificationId/markAsRead', authController.protect, userController.markNotificationAsRead);
+router.get('/notifications/markAsRead', authController.protect, userController.markNotificationsAsRead)
 
 module.exports = router;

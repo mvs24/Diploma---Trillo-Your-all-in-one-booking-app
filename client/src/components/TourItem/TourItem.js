@@ -210,9 +210,9 @@ const TourItem = React.memo((props) => {
     setLoading(true);
     await axios.post(`/api/v1/tours/${tour._id}/reviews`, reviewData);
     setLoading(false);
-    setMyRating(reviewData.rating)
+    setMyRating(reviewData.rating);
     setReviewed(true);
-      setOpenReviewModal(false)
+    setOpenReviewModal(false);
   };
 
   if (!outline) {
@@ -256,13 +256,12 @@ const TourItem = React.memo((props) => {
       const reviewForTour = reviews.find((review) => review.tour === tour._id);
       setMyRating(reviewForTour.rating);
       setReviewControlled(true);
-
     }
   }
 
   let reviewContent = null;
   if (props.booked && reviewed) {
- let myRatingContent = [];
+    let myRatingContent = [];
     for (let i = 0; i < myRating; i++) {
       myRatingContent.push(
         <IconContext.Provider
@@ -273,7 +272,7 @@ const TourItem = React.memo((props) => {
           <IoMdStar />
         </IconContext.Provider>
       );
-  }
+    }
 
     reviewContent = (
       <div className="leave__review--container">

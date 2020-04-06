@@ -50,3 +50,55 @@ exports.updateMe = asyncWrapper(async (req, res, next) => {
     data: updatedUser,
   });
 });
+
+exports.getUnReadNotifications = asyncWrapper(async (req, res, next) => {
+  const { id } = req.user;
+  const user = await User.findById(id);
+
+  const unReadNotifications = user.notifications.filter(not => not.read === false);
+
+  res.status(200).json({
+    status: 'success',
+    results: unReadNotifications.length,
+    unReadNotifications
+  });
+});
+
+exports.getMyNotifications = asyncWrapper(async (req, res, next) => {
+  const { id } = req.user;
+  const user = await User.findOne({_id: id});
+
+  res.status(200).json({
+    status: 'success',
+    data: user.notifications
+  });
+});
+
+exports.markNotificationsAsRead = asyncWrapper(async (req, res, next) => {
+  const user = await User.findById(req.user._id);
+
+  user.notifications.forEach(notification => {
+    notification.read = true;
+  })
+
+  await user.save();
+
+  res.status(200).json({
+    status: "success",
+    notifications: user.notifications
+  })
+})
+
+exports.markNotificationAsRead = asyncWrapper(async (req, res, next) => {
+  const user = await User.findById(req.user._id);
+
+  const notification = user.notifications.find(notification => notification._id.toString() === req.params.notificationId);
+  notification.read = true;
+
+  await user.save();
+
+  res.status(200).json({
+    status: "success",
+    notifications: user.notifications
+  })
+})

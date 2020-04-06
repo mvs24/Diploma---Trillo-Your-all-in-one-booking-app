@@ -30,7 +30,7 @@ const TourDetails = React.memo((props) => {
   const [myBookings, setMyBookings] = useState();
   const [isBooked, setIsBooked] = useState();
   const [controlled, setControlled] = useState();
-  const { cartTour } = props;
+  const { cartTour, isAuthenticated } = props;
 
   useEffect(() => {
     const getMyBookings = async () => {
@@ -44,8 +44,12 @@ const TourDetails = React.memo((props) => {
       }
     };
 
+    if (isAuthenticated) {
     getMyBookings();
-  }, [tour]);
+
+    }
+
+  }, [tour, isAuthenticated]);
 
   useEffect(() => {
     const getTour = async () => {
@@ -275,6 +279,9 @@ const TourDetails = React.memo((props) => {
               {tour.locations[tour.locations.length - 1].day} days. 1 Adventure.
               Infinite Memories. Make it yours today
             </p>
+            {tour.priceDiscount ? (
+              <h1>Hurry Up! Price Discount: ${tour.priceDiscount}</h1>
+            ) : null}
           </div>
           <div className="bookTour__buttons">
             <Button
@@ -291,7 +298,11 @@ const TourDetails = React.memo((props) => {
               </Button>
             ) : (
               <Button className="bookNow" clicked={bookTour} type="success">
-                BOOK NOW! ONLY ${tour.price}
+                BOOK NOW! ONLY{' '}
+                {tour.priceDiscount ? (
+                  <strike>${tour.price + tour.priceDiscount}</strike>
+                ) : null}{' '}
+                ${tour.price}
               </Button>
             )}
           </div>
@@ -303,6 +314,7 @@ const TourDetails = React.memo((props) => {
 
 const mapStateToProps = (state) => ({
   cartTour: state.user.cartTour,
+  isAuthenticated: state.user.isAuthenticated
 });
 
 export default connect(mapStateToProps, { addToCart })(TourDetails);

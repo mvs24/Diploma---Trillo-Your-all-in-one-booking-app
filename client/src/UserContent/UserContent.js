@@ -20,9 +20,13 @@ const UserContent = (props) => {
     return <LoadingSpinner />;
   }
 
+  const goToWishlistPage = () => {
+    history.push('/my-wishlist')
+  }
+
   if (wishlist)
     wishlistContent = (
-      <div className="wishlist__content">
+      <div onClick={goToWishlistPage} className="wishlist__content">
         <IconContext.Provider value={{ className: 'icon heart' }}>
           <FiHeart />
           <span className="wish__length">
@@ -65,7 +69,7 @@ const UserContent = (props) => {
         </div>
         {wishlistContent}
 
-        <div className="shopping__container">
+        <div onClick={() => history.push('/my-cart')} className="shopping__container">
           <IconContext.Provider value={{ className: 'icon cart shop' }}>
             <FiShoppingCart />
             <span className="cart__length">{cartTourLength}</span>

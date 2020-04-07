@@ -12,6 +12,9 @@ import MyBookings from './AccountSettings/MyBookings/MyBookings';
 import AgencyDetails from './pages/AgencyDetails/AgencyDetails';
 import MyNotifications from './AccountSettings/MyNotifications/MyNotifications';
 import DiscoverDreamTour from './pages/DiscoverDreamTour/DiscoverDreamTour'
+import MyWishlist from './AccountSettings/MyWishlist/MyWishlist'
+import MyCart from './AccountSettings/MyCart/MyCart'
+import MyReviews from './AccountSettings/MyReviews/MyReviews'
 
 function App(props) {
   const setUserData = async () => {
@@ -35,6 +38,9 @@ function App(props) {
           <Route path="/agencies/:agencyId" exact component={AgencyDetails} />
           <Route path="/my-notifications" exact component={MyNotifications} />
           <Route path="/discover-dream-tour" exact component={DiscoverDreamTour} />
+          <Route path='/my-wishlist' exact component={MyWishlist}/>
+          <Route path='/my-cart' exact component={MyCart}/>
+          <Route path='/my-reviews' exact component={MyReviews}/>
         </Switch>
       </Layout>
       <Route

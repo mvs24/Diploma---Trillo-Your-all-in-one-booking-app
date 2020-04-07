@@ -25,6 +25,19 @@ const AgencyDetails = (props) => {
   const [resPerPage, setResPerPage] = useState(3);
   const { agencyId } = props.match.params;
 
+  //*******************************
+  //
+  //KONTROLLO PAGINATION SEPSE 
+  //SHTOHEN 2 NE WISHLIST???
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //*******************************
+
   useEffect(() => {
     const getAgency = async () => {
       try {

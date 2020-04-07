@@ -29,6 +29,11 @@
   background: linear-gradient(to right, #ff7730, #ffb900);
 }
 
+.pink {
+
+   background: linear-gradient(to right, #FF3366, #BA265D);
+}
+
 .neutral {
   background: #faf9f9;
   color: #777;

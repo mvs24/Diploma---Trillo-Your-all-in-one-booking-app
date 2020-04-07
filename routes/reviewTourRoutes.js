@@ -24,17 +24,18 @@ router
     next();
   }, reviewTourController.getAllReviewOnTour);
 
-router.use(
-  authController.protect,
-  authController.restrictTo('user'),
-  controlCreator(ReviewTour),
-  filterBody(['tour', 'user']),
-  controlBookingTour
-);
 
 router
   .route('/:id')
-  .patch(reviewTourController.updateReview)
-  .delete(reviewTourController.deleteReview);
+  .patch(  authController.protect,
+  authController.restrictTo('user'),
+  controlCreator(ReviewTour),
+  filterBody(['tour', 'user']),
+  reviewTourController.updateReview)
+  .delete(authController.protect,
+  authController.restrictTo('user'),
+  controlCreator(ReviewTour),
+  filterBody(['tour', 'user']),
+ reviewTourController.deleteReview);
 
 module.exports = router;

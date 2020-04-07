@@ -55,6 +55,21 @@ const DiscoverDreamTour = React.memo((props) => {
   const [disableBtn, setDisableBtn] = useState(true);
   const [cancelBtn, setCancelBtn] = useState(false);
 
+
+
+   //*******************************
+  //
+  //KONTROLLO  SEPSE 
+  //SHTOHEN 2 NE WISHLIST???
+  //KUR BEHET FILTERING?????
+  //
+  //
+  //
+  //
+  //
+  //
+  //*******************************
+
   useEffect(() => {
     const getAllTours = async () => {
       try {
@@ -353,6 +368,7 @@ const DiscoverDreamTour = React.memo((props) => {
                 options={distanceOptions}
               />
               <Button
+              className='discover__button discover__button--confirm' 
                 disabled={disableBtn}
                 clicked={getToursWithinDistanceHandler}
                 type="success"

@@ -1,0 +1,19 @@
+.wishlist__container {
+	padding: 4rem;
+	display: grid;
+	background: #f4f2f2;
+	grid-template-columns: repeat(auto-fit, minmax(30rem, 35rem));
+}
+.my__wishlist--heading {
+	font-size: 3rem;
+  text-transform: uppercase;
+  background-image: linear-gradient(
+    to right bottom,
+     #eb2f64,
+   #FF3366
+  ); 
+  color: transparent;
+  background-clip: text;
+  text-align: center;
+}
+ 

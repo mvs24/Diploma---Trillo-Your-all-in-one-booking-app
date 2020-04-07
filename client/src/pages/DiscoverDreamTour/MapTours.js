@@ -4,7 +4,7 @@ import Pin from '../../assets/pin.png';
 import './MapTours.css';
 import Button from '../../shared/components/Button/Button';
 
-const Map = (props) => {
+const MapTours = (props) => {
   const [viewport, setViewport] = useState({
     width: '100%',
     height: 500,
@@ -81,6 +81,7 @@ const Map = (props) => {
           {' '}
           <h1>Total Tours found: {props.totalToursLength}</h1>{' '}
           <Button
+          className='discover__button discover__button--within' 
             type="success"
             clicked={() => props.getToursWithinHandler(userLocation)}
           >
@@ -101,7 +102,7 @@ const Map = (props) => {
       {props.cancelBtn ? null : (
         <div>
           {' '}
-          <Button type="success" clicked={showLocationHandler}>
+          <Button className='discover__button' type="success" clicked={showLocationHandler}>
             Show my location
           </Button>
         </div>
@@ -109,4 +110,4 @@ const Map = (props) => {
     </div>
   );
 };
-export default Map;
+export default MapTours;

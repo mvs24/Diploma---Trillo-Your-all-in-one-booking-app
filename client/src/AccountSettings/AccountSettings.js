@@ -8,7 +8,7 @@ import {
   IoIosStarOutline,
   IoMdHeartEmpty,
   IoMdNotificationsOutline,
-  IoIosLogOut,
+  IoIosLogOut, 
 } from 'react-icons/io';
 import { FiShoppingCart } from 'react-icons/fi';
 import Input from '../shared/components/Input/Input';
@@ -292,7 +292,7 @@ const AccountSettings = (props) => {
             </IconContext.Provider>
             <p className="">MY BOOKINGS (TOURS)</p>
           </li>{' '}
-          <li>
+          <li onClick={() => history.push('/my-reviews')}>
             <IconContext.Provider
               value={{ className: 'icon__white tour__info--icon' }}
             >
@@ -300,7 +300,7 @@ const AccountSettings = (props) => {
             </IconContext.Provider>
             <p className="">MY REVIEWS (TOURS)</p>
           </li>{' '}
-          <li>
+          <li onClick={() => history.push('/my-wishlist')}>
             <IconContext.Provider
               value={{ className: 'icon__white tour__info--icon' }}
             >
@@ -308,7 +308,7 @@ const AccountSettings = (props) => {
             </IconContext.Provider>
             <p className="">MY WISHLIST (TOURS)</p>
           </li>
-          <li>
+          <li onClick={() => history.push('/my-cart')}>
             <IconContext.Provider
               value={{ className: 'icon__white tour__info--icon' }}
             >
@@ -316,7 +316,10 @@ const AccountSettings = (props) => {
             </IconContext.Provider>
             <p className="">MY SHOPPING CART (TOURS)</p>
           </li>
-          <li className="list__item">
+          <li
+            onClick={() => history.push('/my-notifications')}
+            className="list__item"
+          >
             <IconContext.Provider
               value={{ className: 'icon__white tour__info--icon' }}
             >

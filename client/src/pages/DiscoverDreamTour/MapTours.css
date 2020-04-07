@@ -22,22 +22,13 @@
   padding: 0.2rem;
 }
 
-button {
-	
-	margin: 3rem;
-	margin: 3rem auto;
-	text-align: center;
-	margin-left: 40%;
-}
+
 .totalToursLength{
 	display: flex;
 	align-items: center;
 	
 }
-.map__tours {
-	background: #faf9f9;
-	width: 100%
-}
+
 .totalToursLength h1 {
 	 text-transform: uppercase;
   background-image: linear-gradient(
@@ -47,4 +38,8 @@ button {
   );
   color: transparent;
   background-clip: text;
+}
+
+.discover__button--within {
+	margin-left: 20%;
 }

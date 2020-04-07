@@ -11,7 +11,7 @@
 .filter__tours__container {
 	display: flex;
 }
-.discoverDreamTour__container, .map__tours {
+.discoverDreamTour__container{
 	padding: 6rem;
 	background: #faf9f9;
 	flex-basis: 15%;
@@ -76,5 +76,16 @@ display: flex;
 }
 
 .distance__container {
-	padding: 3rem;
+
+}
+
+.discover__button {
+
+	margin: 2rem;
+	margin-left: 45%;
+}
+
+.discover__button--confirm {
+
+	margin: 2.5rem 10%;
 }

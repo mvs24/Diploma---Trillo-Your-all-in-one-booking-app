@@ -6,9 +6,7 @@ import { IconContext } from 'react-icons';
 import {
   IoIosHeart,
   IoIosHeartEmpty,
-  IoIosStarHalf,
   IoMdStar,
-  IoMdStarOutline,
   IoIosStarOutline,
 } from 'react-icons/io';
 import { GoLocation } from 'react-icons/go';
@@ -59,8 +57,21 @@ const TourItem = React.memo((props) => {
     validRequirements: {},
   });
   const [myReviewValid, setMyReviewValid] = useState(true);
-  const [myReviews, setMyReviews] = useState();
   const [reviewControlled, setReviewControlled] = useState(false);
+  const [openUpdateReviewModal, setOpenUpdateReviewModal] = useState();
+  const [reviewToUpdate, setReviewToUpdate] = useState(0);
+  const [updateReviewStars, setUpdateReviewStars] = useState([]);
+  const [reviewFilled, setReviewFilled] = useState();
+  const [myReviewUpdate, setMyReviewUpdate] = useState({
+    configOptions: {
+      type: 'text',
+      placeholder: 'Your Review',
+    },
+    value: '',
+    valid: true,
+    touched: false,
+    validRequirements: {},
+  });
   const history = useHistory();
   const { tour, wishlist, isAuthenticated, reviews } = props;
 
@@ -204,6 +215,18 @@ const TourItem = React.memo((props) => {
     setMyReviewValid(updatedReview.valid);
   };
 
+  const myReviewInputHandler = (e) => {
+    const updatedReview = { ...myReviewUpdate };
+    updatedReview.value = e.target.value;
+    updatedReview.touched = true;
+    updatedReview.valid = checkValidity(
+      updatedReview.value,
+      updatedReview.validRequirements
+    );
+
+    setMyReviewUpdate(updatedReview);
+  };
+
   const submitReview = async (e) => {
     e.preventDefault();
     const reviewData = { review: myReview.value, rating: starContent.length };
@@ -213,6 +236,10 @@ const TourItem = React.memo((props) => {
     setMyRating(reviewData.rating);
     setReviewed(true);
     setOpenReviewModal(false);
+  };
+
+  const openUpdateModal = () => {
+    setOpenUpdateReviewModal(true);
   };
 
   if (!outline) {
@@ -246,7 +273,7 @@ const TourItem = React.memo((props) => {
     }
   }
 
-  if (!reviews) return null;
+  // if (!reviews) return null;
 
   if (!reviewControlled) {
     const reviewTourIds = reviews.map((el) => el.tour);
@@ -290,6 +317,84 @@ const TourItem = React.memo((props) => {
       </div>
     );
   }
+
+  if (!reviewFilled) {
+    let updatedRevieww = [];
+    for (let i = 1; i <= 5; i++) {
+      updatedRevieww.push(
+        <StarCmp starName={`star-${i}`}>
+          <IoIosStarOutline />
+        </StarCmp>
+      );
+    }
+
+    setUpdateReviewStars(updatedRevieww);
+    setReviewFilled(true);
+  }
+
+  const getUpdatedReview = (e) => {
+    let rating;
+
+    if (
+      e.target.matches('svg') &&
+      e.target.classList.length &&
+      e.target.classList[e.target.classList.length - 1].startsWith('star-')
+    ) {
+      e.target.classList.add(e.target.classList[e.target.classList.length - 1]);
+    }
+
+    if (
+      e.target.matches('svg') &&
+      e.target.classList &&
+      e.target.classList[e.target.classList.length - 1].startsWith('star-')
+    ) {
+      rating = e.target.classList[e.target.classList.length - 1].split('-')[1];
+
+      setUpdateReviewStars((prevState) => {
+        for (let i = 0; i < rating; i++) {
+          prevState[i] = (
+            <IconContext.Provider
+              value={{
+                className: `icon__green tour__info--icon full star`,
+              }}
+            >
+              <IoMdStar />
+            </IconContext.Provider>
+          );
+        }
+        const upd = [...prevState];
+        return upd;
+      });
+
+      setReviewToUpdate(rating);
+    }
+  };
+
+  const updateReviewHandler = async () => {
+    let updatedRevieww = [];
+    for (let i = 1; i <= 5; i++) {
+      updatedRevieww.push(
+        <StarCmp starName={`star-${i}`}>
+          <IoIosStarOutline />
+        </StarCmp>
+      );
+    }
+    try {
+      setLoading(true);
+      const res = await axios.patch(
+        `/api/v1/tours/${tour._id}/reviews/${props.reviewId}`,
+        { review: myReviewUpdate.value, rating: reviewToUpdate }
+      );
+
+      setLoading(false);
+      setMyRating(reviewToUpdate);
+      setReviewToUpdate(0);
+      setUpdateReviewStars(updatedRevieww);
+      setOpenUpdateReviewModal(false);
+    } catch (err) {
+      setError(err.response.data);
+    }
+  };
 
   return (
     <>
@@ -392,6 +497,36 @@ const TourItem = React.memo((props) => {
           Details
         </Button>
         {reviewContent}
+        {props.updateReview && (
+          <div className="update__review">
+            {' '}
+            <Button clicked={openUpdateModal} type="pink">
+              UPDATE REVIEW
+            </Button>{' '}
+          </div>
+        )}
+        {openUpdateReviewModal && (
+          <Modal
+            show
+            onCancel={() => setOpenUpdateReviewModal(false)}
+            header="UPDATE YOUR REVIEW"
+          >
+            <div className="update__review--container">
+              <span onClick={getUpdatedReview}>
+                {updateReviewStars.map((el) => el)}
+              </span>
+              <Textarea
+                touched={myReviewUpdate.touched}
+                valid={myReviewUpdate.valid}
+                configOptions={myReviewUpdate.configOptions}
+                onChange={myReviewInputHandler}
+              />
+              <Button type="pink" clicked={updateReviewHandler}>
+                UPDATE
+              </Button>
+            </div>
+          </Modal>
+        )}
       </div>
     </>
   );

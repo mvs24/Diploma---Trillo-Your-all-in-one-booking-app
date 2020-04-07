@@ -7,11 +7,10 @@ import Tours from '../../components/Tours/Tours';
 
 const Home = React.memo(props => {
   const history = useHistory()
-  
+
   const discoverDreamTour = () => {
     history.push('/discover-dream-tour')
   }
-
 
   return (
     <div className="home">

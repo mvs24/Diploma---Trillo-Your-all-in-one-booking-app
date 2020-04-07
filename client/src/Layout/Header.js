@@ -383,8 +383,8 @@ const Header = React.memo((props) => {
       )}
       <header className="header">
         {props.error && <ErrorModal>{props.error}</ErrorModal>}
-        <img className="logo" src={Logo} alt="Logo" />
-        <h2 className="heading-2">Trillo</h2>
+        <img style={{cursor: 'pointer'}} onClick={() => props.history.push('/')} className="logo" src={Logo} alt="Logo" />
+        <h2  style={{cursor: 'pointer'}}  onClick={() => props.history.push('/')} className="heading-2">Trillo</h2>
         <div className="all">
           <div className="show">
             <IconContext.Provider value={{ className: 'icon' }}>

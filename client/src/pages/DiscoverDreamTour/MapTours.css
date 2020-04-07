@@ -1,0 +1,50 @@
+.map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+.marker {
+  background-size: cover;
+  width: 32px;
+  height: 40px;
+  cursor: pointer;
+  z-index: 1000;
+}
+.map__container {
+  margin: 0;
+  padding: 0;
+}
+.popup {
+  background: white;
+  color: black;
+  padding: 0.2rem;
+}
+
+button {
+	
+	margin: 3rem;
+	margin: 3rem auto;
+	text-align: center;
+	margin-left: 40%;
+}
+.totalToursLength{
+	display: flex;
+	align-items: center;
+	
+}
+.map__tours {
+	background: #faf9f9;
+	width: 100%
+}
+.totalToursLength h1 {
+	 text-transform: uppercase;
+  background-image: linear-gradient(
+    to right bottom,
+    rgb(85, 197, 122, 0.9),
+    rgb(126, 213, 111)
+  );
+  color: transparent;
+  background-clip: text;
+}

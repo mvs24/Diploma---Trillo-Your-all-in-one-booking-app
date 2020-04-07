@@ -11,6 +11,7 @@ import AccountSettings from './AccountSettings/AccountSettings';
 import MyBookings from './AccountSettings/MyBookings/MyBookings';
 import AgencyDetails from './pages/AgencyDetails/AgencyDetails';
 import MyNotifications from './AccountSettings/MyNotifications/MyNotifications';
+import DiscoverDreamTour from './pages/DiscoverDreamTour/DiscoverDreamTour'
 
 function App(props) {
   const setUserData = async () => {
@@ -33,6 +34,7 @@ function App(props) {
           <Route path="/my-bookings" exact component={MyBookings} />
           <Route path="/agencies/:agencyId" exact component={AgencyDetails} />
           <Route path="/my-notifications" exact component={MyNotifications} />
+          <Route path="/discover-dream-tour" exact component={DiscoverDreamTour} />
         </Switch>
       </Layout>
       <Route

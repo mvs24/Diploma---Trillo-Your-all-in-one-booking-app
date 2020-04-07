@@ -37,6 +37,7 @@ const getTours = (type) =>
 
     const features = new ApiFeatures(Tour.find(filter), req.query)
       .filter()
+      .filterCategory()
       .sort()
       .select()
       .paginate();
@@ -178,8 +179,14 @@ exports.discountTour = asyncWrapper(async (req, res, next) => {
     });
   });
 
+  let msg = 'We have made a price discount! Visit us to learn more!';
+
+  if (req.body.message) {
+    msg = req.body.message;
+  }
+
   const notification = {
-    message: req.body.message,
+    message: msg,
     agency: agency._id,
     tour: tour._id,
   };
@@ -215,5 +222,92 @@ exports.discountTour = asyncWrapper(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     tour,
+  });
+});
+
+exports.getByCategory = asyncWrapper(async (req, res, next) => {
+  const difficulties = req.query.difficulties.split(',');
+  let tours;
+  if (req.query.rating) {
+    tours = await getTours('future', {
+      difficulty: { $in: difficulties },
+      ratingsAverage: { $gte: req.query.rating },
+    });
+  } else tours = await Tour.find({ difficulty: { $in: difficulties } });
+
+  res.status(200).json({
+    status: 'success',
+    results: tours.length,
+    data: tours,
+  });
+});
+
+// /tours-within/:distance/center/:latlng/unit/:unit
+// /tours-within/233/center/34.111745,-118.113491/unit/mi
+exports.getToursWithin = asyncWrapper(async (req, res, next) => {
+  const { distance, latlng, unit } = req.params;
+  const [lat, lng] = latlng.split(',');
+
+  const radius = unit === 'mi' ? distance / 3963.2 : distance / 6378.1;
+
+  if (!lat || !lng) {
+    next(
+      new AppError(
+        'Please provide latitutr and longitude in the format lat,lng.',
+        400
+      )
+    );
+  }
+
+  const tours = await Tour.find({
+    startLocation: { $geoWithin: { $centerSphere: [[lng, lat], radius] } },
+  });
+
+  res.status(200).json({
+    status: 'success',
+    results: tours.length,
+    data: tours,
+  });
+});
+
+exports.getDistances = asyncWrapper(async (req, res, next) => {
+  const { latlng, unit } = req.params;
+  const [lat, lng] = latlng.split(',');
+
+  const multiplier = unit === 'mi' ? 0.000621371 : 0.001;
+
+  if (!lat || !lng) {
+    next(
+      new AppError(
+        'Please provide latitutr and longitude in the format lat,lng.',
+        400
+      )
+    );
+  }
+
+  const distances = await Tour.aggregate([
+    {
+      $geoNear: {
+        near: {
+          type: 'Point',
+          coordinates: [lng * 1, lat * 1],
+        },
+        distanceField: 'distance',
+        distanceMultiplier: multiplier,
+      },
+    },
+    {
+      $project: {
+        distance: 1,
+        name: 1,
+      },
+    },
+  ]);
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      data: distances,
+    },
   });
 });

@@ -1,0 +1,80 @@
+.discover__header {
+	width: 35vw;
+	list-style: none;
+	font-size: 1.5rem;
+	display: flex;
+	align-items: center;
+	padding: 1rem;
+	border-bottom: 1px solid #ccc;
+
+}
+.filter__tours__container {
+	display: flex;
+}
+.discoverDreamTour__container, .map__tours {
+	padding: 6rem;
+	background: #faf9f9;
+	flex-basis: 15%;
+}
+
+.filter {
+	display: flex;
+
+}
+.select{
+	width: 100%;
+	margin-left: 3rem;
+}
+.discover__h1 {
+  text-transform: uppercase;
+  background-image: linear-gradient(
+    to right bottom,
+    rgb(85, 197, 122, 0.9),
+    rgb(126, 213, 111)
+  );
+  color: transparent;
+  background-clip: text;
+ 	margin-bottom: 1rem;
+}
+
+.filter__item--category {
+	font-size: 1.5rem;
+	list-style: none;
+	cursor: pointer;
+	padding: .8rem 2rem;
+	border-bottom: 1px solid #ccc;
+
+
+}
+.filter__item--flex {
+display: flex;
+	align-items: center;
+
+}
+
+.category__hidden {
+	display: flex;
+	flex-direction: column;
+	padding: 1.5rem;
+}
+.filters__container {
+	flex-basis: 30%;
+	align-self: flex-start;
+}
+
+.all__tours__container {
+	padding: 3rem;
+	flex: 1;
+
+}
+.tours__grid{
+
+	display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+  grid-column-gap: 1.5rem;
+  row-gap: 4rem;
+}
+
+.distance__container {
+	padding: 3rem;
+}

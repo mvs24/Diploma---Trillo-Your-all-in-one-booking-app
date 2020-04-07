@@ -20,6 +20,15 @@ class ApiFeatures {
     return this;
   };
 
+  filterCategory = () => {
+      if (this.queryString.difficulty) {
+    const difficulties =  this.queryString.difficulty.split(',');
+    
+      this.query = this.query.find({difficulty: {$in: difficulties}})
+    }
+    return this;
+  }
+
   sort = () => {
     if (this.queryString.sort) {
       const sortBy = this.queryString.sort.split(",").join(" ");

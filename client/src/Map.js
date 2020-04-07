@@ -131,6 +131,8 @@ const Map = (props) => {
     });
   };
 
+  console.log(navigator)
+
   return (
     <ReactMapGL
       mapboxApiAccessToken={

@@ -1,11 +1,12 @@
 const crypto = require('crypto');
 const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
+const Email = require('../utils/email');
 
 const AppError = require('../utils/appError');
 const User = require('../models/userModel');
 const asyncWrapper = require('../utils/asyncWrapper');
-const sendEmail = require('../utils/email');
+// const sendEmail = require('../utils/email');
 
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -25,11 +26,17 @@ exports.signup = asyncWrapper(async (req, res, next) => {
     email,
     photo: req.body.photo,
   });
+  try {
+    const url = `http://localhost:3000/me`; // modify in production
+    await new Email(user, url).sendWelcome();
+  } catch (err) {
+    console.log(err);
+  }
 
   const token = signToken(user._id);
 
-  const userPhoto = user.photo
-  console.log(userPhoto)
+  const userPhoto = user.photo;
+  console.log(userPhoto);
 
   res.status(201).json({
     status: 'success',
@@ -64,7 +71,12 @@ exports.login = asyncWrapper(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     token,
-    data: { name: user.name, lastname: user.lastname, email: user.email, photo: user.photo },
+    data: {
+      name: user.name,
+      lastname: user.lastname,
+      email: user.email,
+      photo: user.photo,
+    },
   });
 });
 
@@ -128,18 +140,15 @@ exports.forgotPassword = asyncWrapper(async (req, res, next) => {
   const resetToken = user.createPasswordResetToken();
   await user.save({ validateBeforeSave: false });
 
-  const resetURL = `${req.protocol}://${req.get(
-    'host'
-  )}/api/v1/users/resetPassword/${resetToken}`;
+  // const resetURL = `${req.protocol}://${req.get(
+  //   'host'
+  // )}/api/v1/users/resetPassword/${resetToken}`;
 
-  const message = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetURL}.\nIf you didn't forget your password, please ignore this email!`;
+  const message = `Forgot your password?\n Copy your code: ${resetToken}`;
+  // console.log(message)
 
   try {
-    await sendEmail({
-      email: user.email,
-      subject: 'Your password reset token (valid for 10 min)',
-      message,
-    });
+    await new Email(user, message).sendPasswordReset();
 
     res.status(200).json({
       status: 'success',
@@ -177,11 +186,15 @@ exports.resetPassword = asyncWrapper(async (req, res, next) => {
   user.passwordResetExpires = undefined;
   await user.save();
 
+  user.password = undefined;
+  user.passwordConfirm = undefined;
+
   const token = signToken(user.id);
 
   res.status(200).json({
     status: 'success',
     token,
+    user,
   });
 });
 

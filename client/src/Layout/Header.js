@@ -19,16 +19,21 @@ import {
   getMyReviews,
   getMyNotifications,
   getUnReadNotifications,
+  setCurrentUser,
+  setHeaders,
 } from '../store/actions/userActions';
 import LoadingSpinner from '../shared/components/UI/LoadingSpinner';
 import UserContent from '../UserContent/UserContent';
 import ErrorModal from '../shared/components/UI/ErrorModal';
 import { IoIosArrowDown } from 'react-icons/io';
 import { FiHeart, FiShoppingCart } from 'react-icons/fi';
+import axios from 'axios';
 
 const Header = React.memo((props) => {
   const [openLogin, setOpenLogin] = useState(false);
   const [openSignup, setOpenSignup] = useState(false);
+  const [loading, setLoading] = useState();
+  const [error, setError] = useState();
   const [signupData, setSignupData] = useState({
     name: {
       configOptions: {
@@ -126,6 +131,68 @@ const Header = React.memo((props) => {
   });
   const [signupValid, setSignupValid] = useState(false);
   const [loginValid, setLoginValid] = useState(false);
+  const [searchInput, setSearchInput] = useState('');
+  const [openForgotPasswordModal, setOpenForgotPasswordModal] = useState();
+  const [forgotPasswordEmailValid, setForgotPasswordEmailValid] = useState();
+  const [openResetModal, setOpenResetModal] = useState();
+  const [forgotPasswordEmail, setForgotPasswordEmail] = useState({
+    configOptions: {
+      type: 'email',
+      placeholder: 'Your E-mail',
+    },
+    value: '',
+    valid: false,
+    touched: false,
+    validRequirements: {
+      required: true,
+      isEmail: true,
+    },
+  });
+  const [resetForm, setResetForm] = useState({
+    resetToken: {
+      configOptions: {
+        type: 'text',
+        placeholder: 'Your Token',
+      },
+      value: '',
+      valid: false,
+      touched: false,
+      validRequirements: {
+        required: true,
+        minlength: 15,
+      },
+    },
+    password: {
+      configOptions: {
+        type: 'password',
+        placeholder: 'Your new password',
+      },
+      value: '',
+      valid: false,
+      touched: false,
+      validRequirements: {
+        required: true,
+        minlength: 6,
+      },
+    },
+    passwordConfirm: {
+      configOptions: {
+        type: 'password',
+        placeholder: 'Confirm your password',
+      },
+      value: '',
+      valid: false,
+      touched: false,
+      validRequirements: {
+        required: true,
+        minlength: 6,
+      },
+    },
+  });
+  const [resetFormValid, setResetFormValid] = useState(false);
+  const [sendingEmail, setSendingEmail] = useState();
+  const [resetError, setResetError] = useState();
+
   const {
     isAuthenticated,
     getMyWishlist,
@@ -133,7 +200,6 @@ const Header = React.memo((props) => {
     getMyNotifications,
     getUnReadNotifications,
   } = props;
-  const [searchInput, setSearchInput] = useState('');
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -175,6 +241,51 @@ const Header = React.memo((props) => {
     }
 
     return isValid;
+  };
+
+  const forgotPasswordEmailInputHandler = (e) => {
+    const updatedData = { ...forgotPasswordEmail };
+
+    updatedData.value = e.target.value;
+    updatedData.touched = true;
+    updatedData.valid = checkValidity(
+      updatedData.value,
+      updatedData.validRequirements
+    );
+
+    setForgotPasswordEmail(updatedData);
+
+    let isFormValid = true;
+    for (let key in updatedData) {
+      isFormValid = isFormValid && updatedData.valid;
+    }
+
+    setForgotPasswordEmailValid(isFormValid);
+  };
+
+  const resetInputHandler = (e, inputIdentifier) => {
+    const updatedData = { ...resetForm };
+    const updatedIdentifier = { ...updatedData[inputIdentifier] };
+
+    updatedIdentifier.value = e.target.value;
+    updatedIdentifier.touched = true;
+    updatedIdentifier.valid = checkValidity(
+      updatedIdentifier.value,
+      updatedIdentifier.validRequirements
+    );
+    updatedData[inputIdentifier] = updatedIdentifier;
+
+    console.log(updatedData);
+
+    setResetForm(updatedData);
+
+    let isFormValid = true;
+    for (let key in updatedData) {
+      isFormValid = isFormValid && updatedData[key].valid;
+    }
+    console.log(isFormValid);
+
+    setResetFormValid(isFormValid);
   };
 
   const inputHandler = (e, inputIdentifier, method) => {
@@ -268,6 +379,11 @@ const Header = React.memo((props) => {
     setOpenSignup(false);
   };
 
+  const forgotHandler = () => {
+    setOpenLogin(false);
+    setOpenForgotPasswordModal(true);
+  };
+
   const searchInputHandler = (e) => {
     setSearchInput(e.target.value);
   };
@@ -277,6 +393,15 @@ const Header = React.memo((props) => {
 
     props.history.push(`/search/${searchInput}`);
     setSearchInput('');
+  };
+
+  const forgotEmailHandler = async () => {
+    const email = forgotPasswordEmail.value;
+    setSendingEmail(true);
+    await axios.post(`/api/v1/users/forgotPassword`, { email });
+    setSendingEmail(false);
+    setOpenResetModal(true);
+    setOpenForgotPasswordModal();
   };
 
   const categories = [
@@ -324,6 +449,43 @@ const Header = React.memo((props) => {
     );
   }
 
+  const resetFormInputs = [];
+  for (let key in resetForm) {
+    resetFormInputs.push(
+      <Input
+        value={resetForm[key].value}
+        valid={resetForm[key].valid}
+        touched={resetForm[key].touched}
+        configOptions={resetForm[key].configOptions}
+        onChange={(e) => resetInputHandler(e, key)}
+      />
+    );
+  }
+
+  const resetConfirmHandler = async () => {
+    try {
+      let data = {
+        password: resetForm.password.value,
+        passwordConfirm: resetForm.passwordConfirm.value,
+      };
+      setLoading(true);
+      const res = await axios.patch(
+        `/api/v1/users/resetPassword/${resetForm.resetToken.value}`,
+        data
+      );
+      setLoading(false);
+
+      setHeaders(res.data.token);
+      await props.setCurrentUser();
+      setOpenResetModal();
+
+      setResetError();
+    } catch (err) {
+      setLoading(false);
+      setResetError(true);
+    }
+  };
+
   let userContent = (
     <>
       <Button type="success" clicked={openLoginModal}>
@@ -348,7 +510,64 @@ const Header = React.memo((props) => {
 
   return (
     <React.Fragment>
+      {loading && <LoadingSpinner asOverlay />}
+      {error && (
+        <ErrorModal show onCancel={() => setError()}>
+          {error}
+        </ErrorModal>
+      )}
       {props.loading && <LoadingSpinner asOverlay />}
+      {openResetModal && (
+        <Modal
+          header="RESET TOKEN. Complete the fields to reset token"
+          show
+          onCancel={() => {
+            setResetError();
+            setOpenResetModal();
+          }}
+        >
+          {resetFormInputs}
+          {resetError && (
+            <p className="reset__error">Your data is not correct...</p>
+          )}
+
+          <Button
+            disabled={!resetFormValid}
+            type="success"
+            clicked={resetConfirmHandler}
+          >
+            Confirm
+          </Button>
+        </Modal>
+      )}
+      {openForgotPasswordModal && (
+        <Modal
+          header="Forgot password"
+          show
+          onCancel={() => setOpenForgotPasswordModal()}
+        >
+          <Input
+            value={forgotPasswordEmail.value}
+            valid={forgotPasswordEmail.valid}
+            touched={forgotPasswordEmail.touched}
+            configOptions={forgotPasswordEmail.configOptions}
+            onChange={(e) => forgotPasswordEmailInputHandler(e)}
+          />
+          {sendingEmail ? (
+            <Button disabled={true} type="success">
+              SENDING EMAIL...
+            </Button>
+          ) : (
+            <Button
+              disabled={!forgotPasswordEmailValid}
+              clicked={forgotEmailHandler}
+              type="success"
+            >
+              Confirm your E-mail
+            </Button>
+          )}
+        </Modal>
+      )}
 
       {openLogin && (
         <Modal
@@ -367,6 +586,9 @@ const Header = React.memo((props) => {
           headerClass="green"
         >
           {loginForm.map((el) => el)}
+          <h1 className="forgot__heading" onClick={forgotHandler}>
+            Forgot your password? Click here to get the code.
+          </h1>
 
           {props.error && <h2 className="errorText">{props.error}</h2>}
         </Modal>
@@ -459,4 +681,5 @@ export default connect(mapStateToProps, {
   getMyReviews,
   getMyNotifications,
   getUnReadNotifications,
+  setCurrentUser,
 })(withRouter(Header));

@@ -207,7 +207,7 @@ const TourDetails = React.memo((props) => {
       setLoading(true);
       setProcessingDiscount(true);
 
-      await axios.post(`/api/v1/tours/${tourId}/price-discount`, {
+      const res = await axios.post(`/api/v1/tours/${tourId}/price-discount`, {
         message: 'We just made a price discount! Enjoy it!! ',
         priceDiscount: priceDiscountInput.value,
       });
@@ -215,10 +215,10 @@ const TourDetails = React.memo((props) => {
       setOpenDiscountModal();
       setProcessingDiscount();
     } catch (err) {
-      setError(err.response.data.data.message);
+      setError(err.response.data.message);
     }
   };
-  console.log(owner, userId);
+
   if (isAuthenticated && (!owner || !userId)) return <LoadingSpinner />;
 
   return (

@@ -26,7 +26,9 @@ router
     controlCategory('tours'),
     tourController.createTour
   )
+
   .get(tourController.getAllTours); //get all future tour / get all future tours for specific agency
+router.get('/search', tourController.searchForTours);
 
 router
   .route('/:id')
@@ -46,8 +48,11 @@ router
   );
 
 router.get('/tour-stats', tourController.getTourStatistics); //konflikt me :id //////////
-router.get('/find/category', tourController.getByCategory)
-router.get('/tours-within/:distance/center/:latlng/unit/:unit', tourController.getToursWithin)
+router.get('/find/category', tourController.getByCategory);
+router.get(
+  '/tours-within/:distance/center/:latlng/unit/:unit',
+  tourController.getToursWithin
+);
 
 router.post(
   '/:id/price-discount',
@@ -55,6 +60,5 @@ router.post(
   controlTourCreator(Tour),
   tourController.discountTour
 );
-
 
 module.exports = router;

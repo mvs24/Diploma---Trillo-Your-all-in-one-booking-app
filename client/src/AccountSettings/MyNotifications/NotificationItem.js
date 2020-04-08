@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { markNotificationsAsRead } from '../../store/actions/userActions';
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
-import NotificationItem from './NotificationItem';
 import { markNotificationAsRead } from '../../store/actions/userActions';
 import axios from 'axios';
 
@@ -35,6 +34,8 @@ const MyNotifications = (props) => {
 
   if (!agency) return <LoadingSpinner asOverlay />;
 
+  const splittedDate = notification.createdAt.split('T');
+
   return (
     <div onClick={notificationHandler} className="notification__item">
       {loading && <LoadingSpinner asOverlay />}
@@ -45,7 +46,9 @@ const MyNotifications = (props) => {
             src={`http://localhost:5000/public/img/agencies/${agency.image}`}
           />
           <p>{notification.message}</p>
-          <p>9:43</p>
+          <p>
+            <strong>{splittedDate[1].split('.')[0]}</strong> {splittedDate[0]}
+          </p>
         </div>
       ) : (
         <div className="center__not__item">
@@ -53,7 +56,9 @@ const MyNotifications = (props) => {
             src={`http://localhost:5000/public/img/agencies/${agency.image}`}
           />
           <p>{notification.message}</p>
-          <p>9:43</p>
+          <p>
+            <strong>{splittedDate[1].split('.')[0]}</strong> {splittedDate[0]}
+          </p>
         </div>
       )}
     </div>

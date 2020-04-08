@@ -66,12 +66,12 @@ const userSchema = new mongoose.Schema({
       tour: { type: mongoose.Schema.ObjectId, ref: 'Tour' },
       read: {
         type: Boolean,
-        default: false
+        default: false,
       },
       createdAt: {
         type: Date,
-        default: Date.now
-      }
+        default: Date.now(),
+      },
     },
   ],
 });

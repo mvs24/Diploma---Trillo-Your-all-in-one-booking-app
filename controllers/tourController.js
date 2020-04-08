@@ -189,6 +189,7 @@ exports.discountTour = asyncWrapper(async (req, res, next) => {
     message: msg,
     agency: agency._id,
     tour: tour._id,
+    createdAt: Date.now(),
   };
 
   for (let i = 0; i < userToNotify.length - 1; i++) {
@@ -309,5 +310,26 @@ exports.getDistances = asyncWrapper(async (req, res, next) => {
     data: {
       data: distances,
     },
+  });
+});
+
+exports.searchForTours = asyncWrapper(async (req, res, next) => {
+  const { searchInput } = req.query;
+
+  const toursFound = await Tour.find({
+    $or: [
+      { name: new RegExp(searchInput, 'i') },
+      { difficulty: new RegExp(searchInput, 'i') },
+      { summary: new RegExp(searchInput, 'i') },
+      { description: new RegExp(searchInput, 'i') },
+      { startLocation: { description: new RegExp(searchInput, 'i') } },
+      { startLocation: { address: new RegExp(searchInput, 'i') } },
+    ],
+  });
+
+  res.status(200).json({
+    status: 'success',
+    results: toursFound.length,
+    data: toursFound,
   });
 });

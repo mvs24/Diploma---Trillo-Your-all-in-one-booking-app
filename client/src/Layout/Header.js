@@ -133,6 +133,7 @@ const Header = React.memo((props) => {
     getMyNotifications,
     getUnReadNotifications,
   } = props;
+  const [searchInput, setSearchInput] = useState('');
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -267,6 +268,17 @@ const Header = React.memo((props) => {
     setOpenSignup(false);
   };
 
+  const searchInputHandler = (e) => {
+    setSearchInput(e.target.value);
+  };
+
+  const searchHandler = (e) => {
+    e.preventDefault();
+
+    props.history.push(`/search/${searchInput}`);
+    setSearchInput('');
+  };
+
   const categories = [
     {
       cmp: <IoIosAirplane />,
@@ -383,8 +395,20 @@ const Header = React.memo((props) => {
       )}
       <header className="header">
         {props.error && <ErrorModal>{props.error}</ErrorModal>}
-        <img style={{cursor: 'pointer'}} onClick={() => props.history.push('/')} className="logo" src={Logo} alt="Logo" />
-        <h2  style={{cursor: 'pointer'}}  onClick={() => props.history.push('/')} className="heading-2">Trillo</h2>
+        <img
+          style={{ cursor: 'pointer' }}
+          onClick={() => props.history.push('/')}
+          className="logo"
+          src={Logo}
+          alt="Logo"
+        />
+        <h2
+          style={{ cursor: 'pointer' }}
+          onClick={() => props.history.push('/')}
+          className="heading-2"
+        >
+          Trillo
+        </h2>
         <div className="all">
           <div className="show">
             <IconContext.Provider value={{ className: 'icon' }}>
@@ -396,10 +420,16 @@ const Header = React.memo((props) => {
           <div className="hidden__elements">{categoriesToRender}</div>
         </div>
 
-        <form className="searchForm">
-          <input type="text" className="search" placeholder="Search anything" />
+        <form onSubmit={searchHandler} className="searchForm">
+          <input
+            value={searchInput}
+            onChange={searchInputHandler}
+            type="text"
+            className="search"
+            placeholder="Search anything"
+          />
           <IconContext.Provider value={{ className: 'icon search__icon' }}>
-            <IoIosSearch />
+            <IoIosSearch onClick={searchHandler} />
           </IconContext.Provider>
         </form>
         <span className="impact">Make an impact</span>

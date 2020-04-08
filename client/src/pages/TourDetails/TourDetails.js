@@ -4,6 +4,7 @@ import './TourDetails.css';
 import axios from 'axios';
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
 import ErrorModal from '../../shared/components/UI/ErrorModal';
+import Modal from '../../shared/components/UI/Modal';
 import { IconContext } from 'react-icons';
 import { GoLocation } from 'react-icons/go';
 import { MdDateRange } from 'react-icons/md';
@@ -17,6 +18,7 @@ import Logo from '../../assets/logo.PNG';
 import Button from '../../shared/components/Button/Button';
 import { addToCart } from '../../store/actions/userActions';
 import { loadStripe } from '@stripe/stripe-js';
+import Input from '../../shared/components/Input/Input';
 
 const TourDetails = React.memo((props) => {
   const [tour, setTour] = useState(null);
@@ -30,6 +32,22 @@ const TourDetails = React.memo((props) => {
   const [myBookings, setMyBookings] = useState();
   const [isBooked, setIsBooked] = useState();
   const [controlled, setControlled] = useState();
+  const [owner, setOwner] = useState();
+  const [openDiscountModal, setOpenDiscountModal] = useState();
+  const [priceDiscountInput, setPriceDiscountInput] = useState({
+    configOptions: {
+      type: 'number',
+      placeholder: '$ (Price Discount)',
+    },
+    value: '',
+    valid: false,
+    touched: false,
+    validRequirements: {},
+  });
+  const [priceDiscountInputValid, setPriceDiscountInputValid] = useState();
+  const [processingDiscount, setProcessingDiscount] = useState();
+  const [reload, setReload] = useState();
+  const [userId, setUserId] = useState();
   const { cartTour, isAuthenticated } = props;
 
   useEffect(() => {
@@ -45,10 +63,8 @@ const TourDetails = React.memo((props) => {
     };
 
     if (isAuthenticated) {
-    getMyBookings();
-
+      getMyBookings();
     }
-
   }, [tour, isAuthenticated]);
 
   useEffect(() => {
@@ -56,9 +72,14 @@ const TourDetails = React.memo((props) => {
       try {
         setLoading(true);
         const res = await axios.get(`/api/v1/tours/${tourId}`);
+        const agencyRes = await axios.get(
+          '/api/v1/agencies/' + res.data.data.agency
+        );
+        const userRes = await axios.get('/api/v1/users/loggedInUser');
+        setUserId(userRes.data.data.id);
         setLoading(false);
-
         setTour(res.data.data);
+        setOwner(agencyRes.data.data.user);
       } catch (err) {
         setError(err.response.data.message);
         setLoading(false);
@@ -118,6 +139,7 @@ const TourDetails = React.memo((props) => {
   if (!tour) {
     return <LoadingSpinner asOverlay />;
   }
+  if (!owner) return null;
 
   let addContent = <span>ADD TO CART</span>;
   if (adding) {
@@ -142,6 +164,62 @@ const TourDetails = React.memo((props) => {
       setControlled(true);
     }
   }
+
+  const isOwner = owner === userId;
+
+  const checkValidity = (value, requirements) => {
+    let isValid = true;
+
+    if (requirements.required) {
+      isValid = isValid && value.trim().length !== 0;
+    }
+    if (requirements.minlength) {
+      isValid = isValid && value.trim().length >= requirements.minlength;
+    }
+    if (requirements.isEmail) {
+      isValid = isValid && /\S+@\S+\.\S+/.test(value);
+    }
+
+    return isValid;
+  };
+
+  const inputHandler = (e) => {
+    const updatedData = { ...priceDiscountInput };
+    updatedData.value = e.target.value;
+    updatedData.touched = true;
+    updatedData.valid = checkValidity(
+      updatedData.value,
+      updatedData.validRequirements
+    );
+
+    setPriceDiscountInput(updatedData);
+
+    let isFormValid = true;
+    for (let key in updatedData) {
+      isFormValid = isFormValid && updatedData.valid;
+    }
+
+    setPriceDiscountInputValid(isFormValid);
+  };
+
+  const submitPriceDiscountHandler = async () => {
+    try {
+      setLoading(true);
+      setProcessingDiscount(true);
+
+      await axios.post(`/api/v1/tours/${tourId}/price-discount`, {
+        message: 'We just made a price discount! Enjoy it!! ',
+        priceDiscount: priceDiscountInput.value,
+      });
+      setLoading(false);
+      setOpenDiscountModal();
+      setProcessingDiscount();
+    } catch (err) {
+      setError(err.response.data.data.message);
+    }
+  };
+  console.log(owner, userId);
+  if (isAuthenticated && (!owner || !userId)) return <LoadingSpinner />;
 
   return (
     <div className="tour__container">
@@ -273,39 +351,80 @@ const TourDetails = React.memo((props) => {
               />
             ))}
           </div>
-          <div className="bookTour__info--1">
-            <h1>WHAT ARE YOU WAITING FOR?</h1>
-            <p>
-              {tour.locations[tour.locations.length - 1].day} days. 1 Adventure.
-              Infinite Memories. Make it yours today
-            </p>
-            {tour.priceDiscount ? (
-              <h1>Hurry Up! Price Discount: ${tour.priceDiscount}</h1>
-            ) : null}
-          </div>
-          <div className="bookTour__buttons">
-            <Button
-              disabled={added}
-              className="addToCart"
-              type="success"
-              clicked={addToCartHandler}
-            >
-              {addContent}
+
+          {isOwner ? (
+            <div className="bookTour__info--1">
+              <h1 style={{ fontSize: '1.6rem' }}>
+                DO YOU WANT TO MAKE A PRICE DISCOUNT AS THE OWNER OF THIS TOUR?
+                A Notification will be sent to different users!!
+              </h1>
+            </div>
+          ) : (
+            <div className="bookTour__info--1">
+              <h1>WHAT ARE YOU WAITING FOR?</h1>
+              <p>
+                {tour.locations[tour.locations.length - 1].day} days. 1
+                Adventure. Infinite Memories. Make it yours today
+              </p>
+              {tour.priceDiscount ? (
+                <h1>Hurry Up! Price Discount: ${tour.priceDiscount}</h1>
+              ) : null}
+            </div>
+          )}
+
+          {!isOwner ? (
+            <div className="bookTour__buttons">
+              <Button
+                disabled={added}
+                className="addToCart"
+                type="success"
+                clicked={addToCartHandler}
+              >
+                {addContent}
+              </Button>
+              {isBooked ? (
+                <Button disabled className="bookNow">
+                  BOOKED
+                </Button>
+              ) : (
+                <Button className="bookNow" clicked={bookTour} type="success">
+                  BOOK NOW! ONLY{' '}
+                  {tour.priceDiscount ? (
+                    <strike>${tour.price + tour.priceDiscount}</strike>
+                  ) : null}{' '}
+                  ${tour.price}
+                </Button>
+              )}
+            </div>
+          ) : (
+            <Button clicked={() => setOpenDiscountModal(true)} type="success">
+              MAKE A PRICE DISCOUNT
             </Button>
-            {isBooked ? (
-              <Button disabled className="bookNow">
-                BOOKED
+          )}
+          {openDiscountModal && (
+            <Modal
+              header={`Make a price discount`}
+              show
+              onCancel={() => setOpenDiscountModal()}
+            >
+              <Input
+                value={priceDiscountInput.value}
+                valid={priceDiscountInput.valid}
+                touched={priceDiscountInput.touched}
+                configOptions={priceDiscountInput.configOptions}
+                onChange={(e) => inputHandler(e)}
+              />
+              <Button
+                clicked={submitPriceDiscountHandler}
+                disabled={!priceDiscountInputValid}
+                type="success"
+              >
+                {processingDiscount
+                  ? 'PROCESSING'
+                  : 'Submit your Price Discount'}
               </Button>
-            ) : (
-              <Button className="bookNow" clicked={bookTour} type="success">
-                BOOK NOW! ONLY{' '}
-                {tour.priceDiscount ? (
-                  <strike>${tour.price + tour.priceDiscount}</strike>
-                ) : null}{' '}
-                ${tour.price}
-              </Button>
-            )}
-          </div>
+            </Modal>
+          )}
         </div>
       </div>
     </div>
@@ -314,7 +433,8 @@ const TourDetails = React.memo((props) => {
 
 const mapStateToProps = (state) => ({
   cartTour: state.user.cartTour,
-  isAuthenticated: state.user.isAuthenticated
+  isAuthenticated: state.user.isAuthenticated,
+  userData: state.user.userData,
 });
 
 export default connect(mapStateToProps, { addToCart })(TourDetails);

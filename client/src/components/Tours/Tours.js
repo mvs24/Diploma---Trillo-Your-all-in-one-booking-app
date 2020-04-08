@@ -69,7 +69,6 @@ const Tours = React.memo((props) => {
     getTopFiveTours();
   }, []);
 
-
   let topToursContent =
     activeLink === 'top'
       ? topTours.map((tour) => <TourItem key={tour._id} tour={tour} />)
@@ -81,7 +80,6 @@ const Tours = React.memo((props) => {
           {error}
         </ErrorModal>
       )}
-
       <div className="types">
         <div ref={topToursRef} onClick={getTopFiveTours} className="type">
           Top Tours

@@ -273,9 +273,9 @@ const TourItem = React.memo((props) => {
     }
   }
 
-  // if (!reviews) return null;
+  if (isAuthenticated && !reviews) return null;
 
-  if (!reviewControlled) {
+  if (isAuthenticated && !reviewControlled) {
     const reviewTourIds = reviews.map((el) => el.tour);
     if (reviewTourIds.includes(tour._id)) {
       setReviewed(true);

@@ -1,0 +1,67 @@
+.myAgency__container {
+  display: flex;
+  background: #f4f2f2;
+  padding: 7rem 3rem;
+  min-height: 100vh;
+}
+
+.myAgency__links {
+  flex: 0 0 18%;
+  padding: 2rem;
+  background: linear-gradient(#f7f0f8, #f1f8f2);
+  color: white;
+  font-size: 1rem;
+  background-image: linear-gradient(
+    to left top,
+    rgb(85, 197, 122, 0.9),
+    rgb(126, 213, 111)
+  );
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.4);
+}
+.myAgency__links h1 {
+  margin: 3rem 1.5rem;
+  transition: all 0.4s ease;
+  cursor: pointer;
+}
+
+.myAgency__links h1:hover {
+  transform: translateX(5px);
+}
+.border {
+  border-bottom: 1px solid purple;
+  text-align: center;
+}
+
+.my__tours {
+  background: white;
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(30rem, 35rem));
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.4);
+}
+.location-search-input {
+  background: #f4f2f2;
+  padding: 0.9rem;
+  width: 100%;
+  outline: none;
+  border-radius: 80px;
+  transition: all 0.5s ease;
+  font-weight: 400;
+  margin: 1rem;
+  border: 1px solid transparent;
+}
+
+.location-search-input:hover {
+  background: #f0eeee;
+}
+
+.location-search-input:focus {
+  outline: none;
+  width: 100%;
+  box-shadow: 0 0.7rem 0.7rem rgba(0, 0, 0, 0.3);
+}
+
+.location-search-input::-webkit-input-placeholder {
+  color: #777;
+  padding: 0.3rem;
+}

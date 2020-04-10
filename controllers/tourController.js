@@ -6,6 +6,9 @@ const asyncWrapper = require('../utils/asyncWrapper');
 const Agency = require('../models/agencyModel');
 const AppError = require('../utils/appError');
 const User = require('../models/userModel');
+const multer = require('multer')
+const sharp = require('sharp')
+
 
 const getToursBy = (sortBy) =>
   asyncWrapper(async (req, res, next) => {
@@ -79,8 +82,81 @@ const getTours = (type) =>
 // /agencies/:agencyId/tours
 
 exports.getTour = factory.getOne(Tour);
-exports.createTour = factory.createOne(Tour);
-exports.updateTour = factory.updateOne(Tour);
+
+
+const multerStorage = multer.memoryStorage();
+
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('image')) {
+    cb(null, true);
+  } else {
+    cb(new AppError('Not an image! Please upload only images.', 400), false);
+  }
+};
+
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter
+});
+
+exports.uploadTourImages = upload.fields([
+  { name: 'imageCover', maxCount: 1 },
+  { name: 'images', maxCount: 3 }
+]);
+
+
+exports.resizeTourImages = asyncWrapper(async (req, res, next) => {
+  if (!req.file.imageCover || !req.files.images) return next();
+
+  // 1) Cover image
+ 
+  await sharp(req.body.imageCover)
+    .resize(2000, 1333)
+    .toFormat('jpeg')
+    .jpeg({ quality: 90 })
+    .toFile(req.body.imageCover);
+
+  // 2) Images
+  req.body.images = [];
+  if (req.body.images) {
+    await req.body.images.forEach(async file => {
+       await sharp(file)
+    .resize(2000, 1333)
+    .toFormat('jpeg')
+    .jpeg({ quality: 90 })
+    .toFile(file);
+
+    })
+
+  }
+
+  next();
+});
+
+
+exports.createTour =  asyncWrapper(async (req, res, next) => {
+    req.body.startDates = JSON.parse(req.body.startDates)
+    req.body.locations = JSON.parse(req.body.locations);
+     req.body.startLocation = {
+      coordinates: JSON.parse(req.body.coordinates),
+      address: req.body.address,
+      description: req.body.description
+    }
+  req.body.coordinates = undefined;
+  req.body.address = undefined;
+  req.body.description = undefined;
+  if (req.file) {
+    req.body.imageCover = req.file.path
+  }
+
+    const doc = await Tour.create(req.body);
+
+    res.status(201).json({
+      status: 'success',
+      data: doc
+    });
+  });
+exports.updateTour = factory.updateOne(Tour)
 exports.deleteTour = factory.deleteOne(Tour);
 exports.getFinishedTours = getTours('finished');
 exports.getAllTours = getTours('future');

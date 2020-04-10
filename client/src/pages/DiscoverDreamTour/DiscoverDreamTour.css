@@ -1,29 +1,27 @@
 .discover__header {
-	width: 35vw;
-	list-style: none;
-	font-size: 1.5rem;
-	display: flex;
-	align-items: center;
-	padding: 1rem;
-	border-bottom: 1px solid #ccc;
-
+  width: 35vw;
+  list-style: none;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid #ccc;
 }
 .filter__tours__container {
-	display: flex;
+  display: flex;
 }
-.discoverDreamTour__container{
-	padding: 6rem;
-	background: #faf9f9;
-	flex-basis: 15%;
+.discoverDreamTour__container {
+  padding: 6rem;
+  background: #faf9f9;
+  flex-basis: 15%;
 }
 
 .filter {
-	display: flex;
-
+  display: flex;
 }
-.select{
-	width: 100%;
-	margin-left: 3rem;
+.select {
+  width: 100%;
+  margin-left: 3rem;
 }
 .discover__h1 {
   text-transform: uppercase;
@@ -34,58 +32,50 @@
   );
   color: transparent;
   background-clip: text;
- 	margin-bottom: 1rem;
+  margin-bottom: 1rem;
 }
 
 .filter__item--category {
-	font-size: 1.5rem;
-	list-style: none;
-	cursor: pointer;
-	padding: .8rem 2rem;
-	border-bottom: 1px solid #ccc;
-
-
+  font-size: 1.5rem;
+  list-style: none;
+  cursor: pointer;
+  padding: 0.8rem 2rem;
+  border-bottom: 1px solid #ccc;
 }
 .filter__item--flex {
-display: flex;
-	align-items: center;
-
+  display: flex;
+  align-items: center;
 }
 
 .category__hidden {
-	display: flex;
-	flex-direction: column;
-	padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
 }
 .filters__container {
-	flex-basis: 30%;
-	align-self: flex-start;
+  flex-basis: 30%;
+  align-self: flex-start;
 }
 
 .all__tours__container {
-	padding: 3rem;
-	flex: 1;
-
+  padding: 3rem;
+  flex: 1;
 }
-.tours__grid{
-
-	display: grid;
+.tours__grid {
+  display: grid;
   grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
   grid-column-gap: 1.5rem;
   row-gap: 4rem;
 }
 
 .distance__container {
-
 }
 
 .discover__button {
-
-	margin: 2rem;
-	margin-left: 45%;
+  margin: 2rem;
+  margin-left: 45%;
 }
 
 .discover__button--confirm {
-
-	margin: 2.5rem 10%;
+  margin: 2.5rem 10%;
 }

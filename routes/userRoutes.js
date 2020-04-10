@@ -63,8 +63,22 @@ router.get(
   userController.getMyNotifications
 );
 
-router.get('/my/unReadNotifications', authController.protect, userController.getUnReadNotifications)
-router.patch('/notifications/:notificationId/markAsRead', authController.protect, userController.markNotificationAsRead);
-router.get('/notifications/markAsRead', authController.protect, userController.markNotificationsAsRead)
+router.get('/my/agency', authController.protect, userController.getMyAgency);
+
+router.get(
+  '/my/unReadNotifications',
+  authController.protect,
+  userController.getUnReadNotifications
+);
+router.patch(
+  '/notifications/:notificationId/markAsRead',
+  authController.protect,
+  userController.markNotificationAsRead
+);
+router.get(
+  '/notifications/markAsRead',
+  authController.protect,
+  userController.markNotificationsAsRead
+);
 
 module.exports = router;

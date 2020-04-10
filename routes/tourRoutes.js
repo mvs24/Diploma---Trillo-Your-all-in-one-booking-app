@@ -7,6 +7,7 @@ const reviewTourRouter = require('../routes/reviewTourRoutes');
 const setAgencyUserId = require('../globalMiddlewares/setAgencyUserId');
 const controlTourCreator = require('../globalMiddlewares/controlTourCreator');
 const filterBody = require('../globalMiddlewares/filterBody');
+const fileUpload = require('../globalMiddlewares/file-upload-tours');
 const controlCategory = require('../globalMiddlewares/controlCategory');
 
 const router = express.Router({ mergeParams: true });
@@ -20,8 +21,9 @@ router.route('/:tourId/review-stats').get(tourController.getReviewStats);
 router
   .route('/')
   .post(
+    fileUpload.single('imageCover'),
     authController.protect,
-    authController.restrictTo('agencyCreator'),
+    authController.restrictTo('agencyCreator', 'user'),
     setAgencyUserId,
     controlCategory('tours'),
     tourController.createTour
@@ -40,11 +42,32 @@ router
     tourController.deleteTour
   )
   .patch(
+    fileUpload.array('image', 3),
     authController.protect,
-    authController.restrictTo('admin', 'agencyCreator'),
-    controlTourCreator(Tour),
+    authController.restrictTo('admin', 'agencyCreator', 'user'),
+    // controlTourCreator(Tour),
     filterBody(['user', 'agency', 'ratingsAverage', 'ratingsQuantity']),
-    tourController.updateTour
+    (req, res, next) => {
+      let images = [];
+      if (req.files) {
+        req.files.forEach((file) => {
+          images.push(file.path);
+        });
+      }
+      req.body.images = images;
+      next();
+    },
+    // tourController.resizeTourImages,
+    async (req, res, next) => {
+      console.log(req.body);
+      const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+      });
+      res.status(200).json({
+        status: 'success',
+        data: tour,
+      });
+    }
   );
 
 router.get('/tour-stats', tourController.getTourStatistics); //konflikt me :id //////////

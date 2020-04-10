@@ -53,22 +53,9 @@ const DiscoverDreamTour = React.memo((props) => {
   const [openToursWithinModal, setOpenToursWithinModal] = useState();
   const [userLocation, setUserLocation] = useState();
   const [disableBtn, setDisableBtn] = useState(true);
+  const [reRender, setRerender] = useState();
   const [cancelBtn, setCancelBtn] = useState(false);
-
-
-
-   //*******************************
-  //
-  //KONTROLLO  SEPSE 
-  //SHTOHEN 2 NE WISHLIST???
-  //KUR BEHET FILTERING?????
-  //
-  //
-  //
-  //
-  //
-  //
-  //*******************************
+  const [shouldUpdate, setShouldUpdate] = useState();
 
   useEffect(() => {
     const getAllTours = async () => {
@@ -132,10 +119,13 @@ const DiscoverDreamTour = React.memo((props) => {
         );
       }
       setAllTours(res.data.data);
+      // setRerender(prev => !prev)
       setLoading(false);
     } catch (err) {
       setError(err.response.data.message);
     }
+
+    setShouldUpdate((prev) => !prev);
   };
 
   const handleChange = (selectedOption) => {
@@ -218,6 +208,7 @@ const DiscoverDreamTour = React.memo((props) => {
     } catch (err) {
       setError(err.response.data.data.message);
     }
+    setShouldUpdate((prev) => !prev);
   };
 
   const radioHandler = async (e) => {
@@ -242,6 +233,7 @@ const DiscoverDreamTour = React.memo((props) => {
         setError(err.response.data.data.message);
       }
     }
+    setShouldUpdate((prev) => !prev);
   };
 
   const getToursWithinHandler = (userLocation) => {
@@ -265,6 +257,7 @@ const DiscoverDreamTour = React.memo((props) => {
     } catch (err) {
       setError(err.response.data.message);
     }
+    setShouldUpdate((prev) => !prev);
   };
 
   const modifyBtn = () => {
@@ -368,7 +361,7 @@ const DiscoverDreamTour = React.memo((props) => {
                 options={distanceOptions}
               />
               <Button
-              className='discover__button discover__button--confirm' 
+                className="discover__button discover__button--confirm"
                 disabled={disableBtn}
                 clicked={getToursWithinDistanceHandler}
                 type="success"
@@ -494,7 +487,7 @@ const DiscoverDreamTour = React.memo((props) => {
           <div className="all__tours__container">
             <div className="tours__grid">
               {allTours.map((tour) => (
-                <TourItem tour={tour} />
+                <TourItem shouldUpdate={shouldUpdate} tour={tour} />
               ))}
             </div>
           </div>

@@ -1,103 +1,106 @@
 .agency__details--container {
-	padding: 8rem;
-	display: flex;
-	flex-direction: column;
-	
+  padding: 8rem;
+  display: flex;
+  flex-direction: column;
 }
-.agency__name {
-	display: flex;
-	align-items: center;
-	justify-content: space-evenly;
 
+.agency__name {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
 }
-.agency__name h1{
-	border-bottom: 1px solid #ccc;
+.agency__name h1 {
+  border-bottom: 1px solid #ccc;
 }
 .agency__details--info {
-	padding: 10rem;
-	width: 100%;
-color: white;
-	 background-image: linear-gradient(
-
+  padding: 10rem;
+  width: 100%;
+  color: white;
+  background-image: linear-gradient(
     to right bottom,
     rgb(126, 213, 111),
-    rgb(85, 197, 122, 0.9)    
+    rgb(85, 197, 122, 0.9)
   );
 }
+.agency__change__bcg {
+  padding: 10rem;
+  width: 100%;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.4);
+
+  color: rgb(126, 213, 111);
+  background: white;
+}
 .inline__info {
-	display: flex;
-	justify-content: space-between;
-	margin-top: 5rem;
-	margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5rem;
+  margin-bottom: 2rem;
 }
 
 .agency__about--info {
-	border-top: 2px solid #ccc;
-	padding-top: 2rem;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-around;
-	align-items: center;
+  border-top: 2px solid #ccc;
+  padding-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
 }
 .agency__name img {
-	border-radius: 100px;
-	width: 5rem;
-	height: 5rem;
+  border-radius: 100px;
+  width: 5rem;
+  height: 5rem;
 }
-.agency__about--info p{
-	font-size: 1.5rem;
-	line-height: 1.3;
-	letter-spacing: 1.4;
+.agency__about--info p {
+  font-size: 1.5rem;
+  line-height: 1.3;
+  letter-spacing: 1.4;
 }
 
 .agency__tours {
-	background: #f4f2f2;
-	text-align: center;
-	padding: 8rem 0;
+  background: #f4f2f2;
+  text-align: center;
+  padding: 8rem 0;
 }
 .agency__tours h1 {
-	color: #ffb900;
+  color: #ffb900;
 }
 .agency__tour--item {
-	display: flex;
-	padding: 2rem;
-	justify-content: space-between;
-	margin-bottom: 8rem;
+  display: flex;
+  padding: 2rem;
+  justify-content: space-between;
+  margin-bottom: 8rem;
 }
 .agency__tour--item > * {
-	margin: 2rem;
+  margin: 2rem;
 }
 
 .page__number {
-	font-size: 1.7rem;
-	text-decoration: none;
-	margin-left: 2rem;
-	margin-right: 2rem;
-	transition: all .1s ease;
-	list-style: none;
-	cursor: pointer;
+  font-size: 1.7rem;
+  text-decoration: none;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  transition: all 0.1s ease;
+  list-style: none;
+  cursor: pointer;
 }
 
 .page__number:focus {
-	border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
 }
 .page__number:active {
-	border-bottom: 1px solid #ccc;
-
+  border-bottom: 1px solid #ccc;
 }
 .active {
-	border-bottom: 1px solid #ccc;
-	
+  border-bottom: 1px solid #ccc;
 }
 
 .pages__content {
-	display: flex;
-	align-items: center;
-	justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .span__center {
-	display: flex;
-	align-items: center;
-
+  display: flex;
+  align-items: center;
 }

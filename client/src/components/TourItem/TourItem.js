@@ -74,9 +74,14 @@ const TourItem = React.memo((props) => {
   });
   const history = useHistory();
   const { tour, wishlist, isAuthenticated, reviews } = props;
+  const [should, setShould] = useState();
+  const { shouldUpdate } = props;
 
-  if (!updated) {
-    ///THIS WAS CRAZY!!!!!!!!!!!!!!!
+  useEffect(() => {
+    setShould(props.shouldUpdate);
+  }, [shouldUpdate]);
+
+  useEffect(() => {
     let wishlistTours = []; //[ids]
 
     if (wishlist && isAuthenticated) {
@@ -88,8 +93,37 @@ const TourItem = React.memo((props) => {
     if (wishlistTours.includes(tour._id)) {
       setIsLiked(true);
       setUpdated(true);
+      setShould(false);
+    } else {
+      setIsLiked();
+      setUpdated(true);
+      setShould(false);
     }
-  }
+  }, [shouldUpdate]);
+
+  // if (!updated || should ) {
+  //   ///THIS WAS CRAZY!!!!!!!!!!!!!!!
+  //   let wishlistTours = []; //[ids]
+
+  //   if (wishlist && isAuthenticated) {
+  //     wishlist.data.forEach((el) => {
+  //       wishlistTours.push(el.tour);
+  //     });
+  //   }
+
+  //   console.log('run')
+
+  //   if (wishlistTours.includes(tour._id)) {
+  //     setIsLiked(true);
+  //     setUpdated(true);
+  //     setShould(false)
+  //   }  else {
+  //      setIsLiked();
+  //     setUpdated(true);
+  //     setShould(false)
+  //   }
+
+  // }
 
   const addTourToWishlist = (tourId) => {
     props.addToWishlist(tourId);
@@ -447,7 +481,7 @@ const TourItem = React.memo((props) => {
       )}
       <div className="tour">
         <img
-          src={`http://localhost:5000/public/img/tours/${tour.imageCover}`}
+          src={`http://localhost:5000/${tour.imageCover}`}
           alt="Tour"
           className="tour__img"
         />

@@ -16,6 +16,9 @@ import MyWishlist from './AccountSettings/MyWishlist/MyWishlist';
 import MyCart from './AccountSettings/MyCart/MyCart';
 import MyReviews from './AccountSettings/MyReviews/MyReviews';
 import Search from './pages/Search/Search';
+import MakeAnImpact from './pages/MakeAnImpact/MakeAnImpact';
+import CreateAgency from './pages/CreateAgency/CreateAgency';
+import MyAgency from './AccountSettings/MyAgency/MyAgency';
 
 function App(props) {
   const setUserData = async () => {
@@ -47,6 +50,9 @@ function App(props) {
           <Route path="/my-cart" exact component={MyCart} />
           <Route path="/my-reviews" exact component={MyReviews} />
           <Route path="/search/:searchInput" exact component={Search} />
+          <Route path="/make-an-impact" exact component={MakeAnImpact} />
+          <Route path="/create-agency" exact component={CreateAgency} />
+          <Route path="/my-agency" exact component={MyAgency} />
         </Switch>
       </Layout>
       <Route

@@ -8,6 +8,7 @@ const flightRouter = require('./flightRoutes');
 const controlCreator = require('../globalMiddlewares/controlCreator');
 const setUser = require('../globalMiddlewares/setUser');
 const filterBody = require('../globalMiddlewares/filterBody');
+const fileUpload = require('../globalMiddlewares/file-upload-agencies');
 
 const router = express.Router();
 
@@ -21,9 +22,15 @@ router
   .route('/')
   .get(agencyController.getAllAgencies)
   .post(
+    fileUpload.single('image'),
     authController.protect,
-    authController.restrictTo('agencyCreator'),
     setUser,
+    (req, res, next) => {
+      if (req.file) {
+        req.body.image = req.file.path;
+      }
+      next();
+    },
     agencyController.createAgency
   );
 
@@ -31,16 +38,23 @@ router
   .route('/:id')
   .get(agencyController.getAgency)
   .patch(
+    fileUpload.single('image'),
     authController.protect,
-    authController.restrictTo('agencyCreator'),
+    authController.restrictTo('agencyCreator', 'user'),
     controlCreator(Agency),
+    (req, res, next) => {
+      if (req.file) {
+        req.body.image = req.file.path;
+      }
+      next();
+    },
     filterBody([
       'category',
       'ratingsAverage',
       'ratingsQuantity',
       'numOptions',
       'numOptionsBought',
-      'user'
+      'user',
     ]),
     agencyController.updateAgency
   )

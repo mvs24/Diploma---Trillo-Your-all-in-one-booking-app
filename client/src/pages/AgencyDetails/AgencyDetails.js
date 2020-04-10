@@ -16,6 +16,7 @@ import { FaLevelUpAlt, FaSortNumericUp } from 'react-icons/fa';
 import Button from '../../shared/components/Button/Button';
 import './AgencyDetails.css';
 import TourItem from '../../components/TourItem/TourItem';
+import Agency from '../../components/Agency/Agency';
 
 const AgencyDetails = (props) => {
   const [agency, setAgency] = useState();
@@ -23,20 +24,9 @@ const AgencyDetails = (props) => {
   const [error, setError] = useState(false);
   const [page, setPage] = useState(1);
   const [resPerPage, setResPerPage] = useState(3);
-  const { agencyId } = props.match.params;
+  const [shouldUpdate, setShouldUpdate] = useState();
 
-  //*******************************
-  //
-  //KONTROLLO PAGINATION SEPSE 
-  //SHTOHEN 2 NE WISHLIST???
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //*******************************
+  const { agencyId } = props.agencyId || props.match.params;
 
   useEffect(() => {
     const getAgency = async () => {
@@ -58,6 +48,7 @@ const AgencyDetails = (props) => {
 
   useEffect(() => {
     setPage(props.location.search.split('=')[1]);
+    setShouldUpdate((prev) => !prev);
   }, [location]);
 
   if (!agency) return <LoadingSpinner asOverlay />;
@@ -125,41 +116,12 @@ const AgencyDetails = (props) => {
         </ErrorModal>
       )}
       <div className="agency__details--container">
-        <div className="agency__details--info">
-          <div className="agency__name">
-            <h1>AGENCY: {agency.name.toUpperCase()}</h1>
-            <span>
-              <img
-                src={`http://localhost:5000/public/img/agencies/${agency.image}`}
-              />
-            </span>
-            <h1>CATEGORY: {agency.category.toUpperCase()}</h1>
-          </div>
-          <div className="inline__info">
-            <h1 className="total__tours">
-              <p>Total Tours</p>
-              <p>{agency.tours.length}</p>
-            </h1>
-            <h1 className="total__tours">
-              <p>BOOKED BY</p>
-              <p>{agency.numOptionsBought}</p>
-            </h1>
-            <h1 className="total__tours">
-              <p>RATING: </p>
-              <p>{agency.ratingsAverage.toFixed(2)}</p>
-            </h1>
-          </div>
-
-          <div className="agency__about--info">
-            <h1>ABOUT US</h1>
-            <p>{agency.description}</p>
-          </div>
-        </div>
+        <Agency agency={agency} />
         <div className="agency__tours">
           <h1>TOURS</h1>
           <div className="agency__tour--item">
             {agency.tours.slice(start, end).map((tour) => (
-              <TourItem tour={tour} />
+              <TourItem shouldUpdate={shouldUpdate} tour={tour} />
             ))}
           </div>
           <div className="pages__content">{pageContent.map((p) => p)}</div>

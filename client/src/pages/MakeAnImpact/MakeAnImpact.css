@@ -1,0 +1,69 @@
+.makeAnImpact__container {
+  padding: 5rem;
+  background: #faf9f9;
+}
+.create__icon {
+  font-size: 4rem;
+  color: #2998ff;
+}
+.create__container {
+  display: flex;
+  padding: 4rem;
+  background: white;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #ccc;
+  box-shadow: 0 2rem 2rem rgba(0, 0, 0, 0.4);
+}
+.icon__heading {
+  display: flex;
+  align-items: center;
+}
+.icon__heading h1 {
+  margin-left: 1rem;
+}
+
+.boxes {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.box--1 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 8rem;
+  padding: 2rem;
+  background: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 2rem 2rem rgba(0, 0, 0, 0.4);
+  flex-basis: 45%;
+}
+.box--1 p {
+  width: 95%;
+  font-size: 1.4rem;
+}
+.box--1 div {
+  margin-left: 2rem;
+}
+.box--1__icon {
+  align-self: flex-start;
+  color: #ff7730;
+  font-size: 8rem;
+}
+
+.box--2__icon {
+  color: #28b485;
+  font-size: 3rem;
+  align-self: flex-start;
+}
+
+.ready__container {
+  padding: 4rem;
+  text-align: center;
+}
+.ready__container h1 {
+  margin: 2rem 0;
+  font-size: 2.4rem;
+}

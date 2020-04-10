@@ -2,6 +2,7 @@ const User = require('../models/userModel');
 const factory = require('./factoryHandler');
 const asyncWrapper = require('../utils/asyncWrapper');
 const AppError = require('../utils/appError');
+const Agency = require('../models/agencyModel')
 
 exports.getAllUsers = asyncWrapper(async (req, res, next) => {
   const users = await User.find();
@@ -111,3 +112,14 @@ exports.markNotificationAsRead = asyncWrapper(async (req, res, next) => {
     notifications: user.notifications,
   });
 });
+
+exports.getMyAgency = asyncWrapper(async (req, res, next) => {
+  const agency = await Agency.findOne({user: req.user.id});
+
+  if (!agency) return next(new AppError("You do not have an agency! Start by creating one!", 404));
+
+  res.status(200).json({
+    status: 'success',
+    data: agency
+  });
+})

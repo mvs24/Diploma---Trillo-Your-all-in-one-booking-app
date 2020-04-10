@@ -367,6 +367,14 @@ const Header = React.memo((props) => {
     setOpenLogin(false);
   };
 
+  const makeImpactHandler = () => {
+    if (!isAuthenticated) {
+      setError('You need to be logged in. Please Log In');
+    } else {
+      props.history.push('/make-an-impact');
+    }
+  };
+
   const signupModalCloseHandler = () => {
     let updatedSignupData = { ...signupData };
 
@@ -512,7 +520,7 @@ const Header = React.memo((props) => {
     <React.Fragment>
       {loading && <LoadingSpinner asOverlay />}
       {error && (
-        <ErrorModal show onCancel={() => setError()}>
+        <ErrorModal show onClear={() => setError()}>
           {error}
         </ErrorModal>
       )}
@@ -654,7 +662,13 @@ const Header = React.memo((props) => {
             <IoIosSearch onClick={searchHandler} />
           </IconContext.Provider>
         </form>
-        <span className="impact">Make an impact</span>
+        <span
+          style={{ cursor: 'pointer' }}
+          onClick={makeImpactHandler}
+          className="impact"
+        >
+          Make an impact
+        </span>
         {userContent}
       </header>
     </React.Fragment>

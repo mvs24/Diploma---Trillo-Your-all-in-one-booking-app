@@ -27,7 +27,6 @@ const AgencyInfo = (props) => {
     getAgency();
   }, []);
 
-
   if (!agency) return null;
 
   const visitAgency = () => {
@@ -49,7 +48,7 @@ const AgencyInfo = (props) => {
           <li>
             <img
               className="agency__image"
-              src={`http://localhost:5000/public/img/agencies/${agency.image}`}
+              src={`http://localhost:5000/${agency.image}`}
             />
           </li>
           <li>

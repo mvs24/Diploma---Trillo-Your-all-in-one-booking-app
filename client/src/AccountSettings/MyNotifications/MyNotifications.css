@@ -1,18 +1,16 @@
 .notifications--container {
-	padding: 2.5rem;
-
+  padding: 2.5rem;
 }
 .notifications__header {
-	display: flex;
-	background:#faf9f9;
-	padding: 1.5rem;
-	align-items: center;
-	justify-content: space-around;
-	text-align: center;
-	margin: 0 auto;
+  display: flex;
+  background: #faf9f9;
+  padding: 1.5rem;
+  align-items: center;
+  justify-content: space-around;
+  text-align: center;
+  margin: 0 auto;
 }
 .notifications__header h1 {
-
   text-transform: uppercase;
   background-image: linear-gradient(
     to right bottom,
@@ -23,12 +21,8 @@
   background-clip: text;
 }
 .notifications__header p {
-	 text-transform: uppercase;
-  background-image: linear-gradient(
-    to right bottom,
-    #2998ff,
-    #5643fa
-  );
+  text-transform: uppercase;
+  background-image: linear-gradient(to right bottom, #2998ff, #5643fa);
   cursor: pointer;
   font-size: 1.6rem;
   color: transparent;
@@ -36,43 +30,42 @@
 }
 
 .notification__items {
-   background: #eaf0f5;
-   width: 100%;
-   padding: 3rem;
+  background: #eaf0f5;
+  width: 100%;
+  padding: 3rem;
 }
 
 .notification__item {
-	display: flex;
-	align-items: center;
-	margin: 2rem 10%;
-	justify-content: space-between;
-	width: 100%;
-	cursor: pointer;
-
+  display: flex;
+  align-items: center;
+  margin: 2rem 10%;
+  justify-content: space-between;
+  width: 100%;
+  cursor: pointer;
 }
-.notification__item img{
-	width: 4rem;
-	height: 4rem;
-	border-radius: 100px;
-	margin-left: 1rem;
+.notification__item img {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 100px;
+  margin-left: 1rem;
 }
 
 .notification__item p {
-	margin-left:auto;
-	font-size: 1.6rem;
+  margin-left: auto;
+  font-size: 1.6rem;
 }
 .not__read {
-	background: red;
-	width: 1rem;
-	height: 1rem;
-	border-radius: 100px;
+  background: red;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 100px;
 }
 
 .center__not__item {
-	display: flex;
-	width: 80%;
-	align-items: center;
-	background: white;
-	box-shadow: 0 1rem 2rem rgba(0,0,0,.3);
-	padding:1rem;
+  display: flex;
+  width: 80%;
+  align-items: center;
+  background: white;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.3);
+  padding: 1rem;
 }

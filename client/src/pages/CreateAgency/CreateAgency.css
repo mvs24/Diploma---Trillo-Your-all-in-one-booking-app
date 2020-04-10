@@ -1,0 +1,35 @@
+.create__agency__container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  background: #faf9f9;
+  padding: 3rem;
+}
+.first {
+  background: white;
+  padding: 6rem 15rem;
+}
+.create__agency__container input {
+  width: 40%;
+}
+.create__agency__container input:focus {
+  width: 50%;
+}
+.create__agency__container h1 {
+  font-size: 3rem;
+  text-transform: uppercase;
+  background-image: linear-gradient(to right bottom, #28b485, #28b485);
+  color: transparent;
+  background-clip: text;
+}
+.create__agency__container p {
+  font-size: 1.4rem;
+  margin: 2rem 0;
+}
+.create__agency__buttons {
+  margin-top: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

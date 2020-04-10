@@ -1,16 +1,16 @@
 import React from 'react';
-import {useHistory} from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import Button from '../../shared/components/Button/Button';
 import TourImg from '../../assets/tour-3-2.jpg';
 import './Home.css';
 import Tours from '../../components/Tours/Tours';
 
-const Home = React.memo(props => {
-  const history = useHistory()
+const Home = React.memo((props) => {
+  const history = useHistory();
 
   const discoverDreamTour = () => {
-    history.push('/discover-dream-tour')
-  }
+    history.push('/discover-dream-tour');
+  };
 
   return (
     <div className="home">
@@ -18,7 +18,9 @@ const Home = React.memo(props => {
         <img src={TourImg} alt="img" className="img__bcg" />
         <div className="bcg__container">
           <h1> Explore your ideas</h1>
-          <Button clicked={discoverDreamTour} type="success">Find your dream tour</Button>
+          <Button clicked={discoverDreamTour} type="success">
+            Find your dream tour
+          </Button>
         </div>
       </div>
       <Tours />

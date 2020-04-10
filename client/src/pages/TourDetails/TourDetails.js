@@ -48,6 +48,7 @@ const TourDetails = React.memo((props) => {
   const [processingDiscount, setProcessingDiscount] = useState();
   const [reload, setReload] = useState();
   const [userId, setUserId] = useState();
+  const [processBooking, setProcessBooking] = useState();
   const { cartTour, isAuthenticated } = props;
 
   useEffect(() => {
@@ -123,6 +124,7 @@ const TourDetails = React.memo((props) => {
 
   const bookTour = async () => {
     try {
+      setProcessBooking(true);
       const stripe = await stripePromise;
       const session = await axios(
         `/api/v1/bookings/tours/checkout-session/${tour._id}`
@@ -131,6 +133,7 @@ const TourDetails = React.memo((props) => {
       await stripe.redirectToCheckout({
         sessionId: session.data.session.id,
       });
+      setProcessBooking(true);
     } catch (err) {
       setError(err.response.data.message);
     }
@@ -139,7 +142,6 @@ const TourDetails = React.memo((props) => {
   if (!tour) {
     return <LoadingSpinner asOverlay />;
   }
-  if (!owner) return null;
 
   let addContent = <span>ADD TO CART</span>;
   if (adding) {
@@ -219,7 +221,25 @@ const TourDetails = React.memo((props) => {
     }
   };
 
-  if (isAuthenticated && (!owner || !userId)) return <LoadingSpinner />;
+  let bookProcessing = (
+    <Button className="bookNow" clicked={bookTour} type="success">
+      BOOK NOW! ONLY{' '}
+      {tour.priceDiscount ? (
+        <strike>${tour.price + tour.priceDiscount}</strike>
+      ) : null}{' '}
+      ${tour.price}
+    </Button>
+  );
+
+  if (processBooking) {
+    bookProcessing = (
+      <Button className="bookNow" disabled={true} type="success">
+        PROCESSING...
+      </Button>
+    );
+  }
+
+  console.log(tour.imageCover);
 
   return (
     <div className="tour__container">
@@ -228,13 +248,8 @@ const TourDetails = React.memo((props) => {
           {error}
         </ErrorModal>
       )}
-      <div
-        className="tour__bcg"
-        style={{
-          backgroundImage: `url(http://localhost:5000/public/img/tours/${tour.imageCover})`,
-        }}
-      >
-        &nbsp;
+      <div className="tour__bcg">
+        <img src={`http://localhost:5000/${tour.imageCover}`} />
       </div>
       <h4 className="heading">
         <span className="heading-span ">{tour.name}</span>
@@ -312,7 +327,7 @@ const TourDetails = React.memo((props) => {
         <div className="images">
           {tour.images.map((img) => (
             <div key={img} className="image__container">
-              <img src={`http://localhost:5000/public/img/tours/${img}`} />
+              <img src={`http://localhost:5000/${img}`} />
             </div>
           ))}
         </div>
@@ -347,7 +362,7 @@ const TourDetails = React.memo((props) => {
             {tour.images.map((img) => (
               <img
                 className="bookTour__image"
-                src={`http://localhost:5000/public/img/tours/${img}`}
+                src={`http://localhost:5000/${img}`}
               />
             ))}
           </div>
@@ -382,19 +397,12 @@ const TourDetails = React.memo((props) => {
               >
                 {addContent}
               </Button>
-              {isBooked ? (
+              {isBooked && (
                 <Button disabled className="bookNow">
                   BOOKED
                 </Button>
-              ) : (
-                <Button className="bookNow" clicked={bookTour} type="success">
-                  BOOK NOW! ONLY{' '}
-                  {tour.priceDiscount ? (
-                    <strike>${tour.price + tour.priceDiscount}</strike>
-                  ) : null}{' '}
-                  ${tour.price}
-                </Button>
               )}
+              {!isBooked && bookProcessing}
             </div>
           ) : (
             <Button clicked={() => setOpenDiscountModal(true)} type="success">

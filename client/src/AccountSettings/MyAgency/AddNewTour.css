@@ -1,0 +1,100 @@
+.add__new__tour__container {
+  background: white;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.add__new__tour__container input {
+  width: 50%;
+}
+.add__new__tour__container input:focus {
+  width: 60%;
+}
+.add__new__tour__container h1 {
+  font-size: 2.5rem;
+  text-transform: uppercase;
+  background-image: linear-gradient(
+    to right bottom,
+    rgb(85, 197, 122, 0.9),
+    rgb(126, 213, 111)
+  );
+  color: transparent;
+  background-clip: text;
+  text-align: center;
+}
+.add__new__tour__container form {
+  flex-basis: 100%;
+  width: 100%;
+  margin-left: 2rem;
+}
+
+.select {
+  width: 40%;
+  font-size: 1.4rem;
+}
+.date__input {
+  width: 75%;
+}
+.add__start__location--btn {
+  display: block;
+  margin: 3rem;
+}
+
+.input- {
+  background: #f4f2f2;
+  padding: 0.9rem;
+  width: 80%;
+  outline: none;
+  border-radius: 80px;
+  transition: all 0.5s ease;
+  font-weight: 400;
+  margin: 1rem;
+  border: 1px solid transparent;
+}
+
+.input-:hover {
+  background: #f0eeee;
+}
+
+.input-:focus {
+  outline: none;
+  width: 85%;
+  box-shadow: 0 0.7rem 0.7rem rgba(0, 0, 0, 0.3);
+}
+
+.input-::-webkit-input-placeholder {
+  color: #777;
+  padding: 0.3rem;
+}
+.add__tour--link {
+  text-decoration: none;
+  color: #ccc;
+  font-size: 1.3rem;
+  width: 100%;
+  margin: 1rem;
+}
+.add__tour--img {
+  width: 20rem;
+  height: 50%;
+  margin-right: 4rem;
+}
+.add_tour__img--container {
+  padding: 2rem;
+  margin: 2rem;
+  display: flex;
+  align-items: center;
+}
+
+.add__tour__images div {
+  display: flex;
+  align-items: center;
+  margin: 1rem 0rem;
+}
+.add__tour__images {
+  padding: 3rem;
+}
+.add__tour__images img {
+  width: 12rem;
+  height: 40%;
+}

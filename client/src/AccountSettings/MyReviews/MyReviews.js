@@ -15,7 +15,7 @@ const MyReviews = (props) => {
       <div className="wishlist__container">
         {reviews.map((review) => (
           <Review reviewId={review._id} tourId={review.tour} />
-        ))}
+        ))} 
       </div>
     </>
   );

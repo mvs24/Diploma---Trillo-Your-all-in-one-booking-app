@@ -51,9 +51,8 @@ const ImageUpload = (props) => {
         onChange={pickedHandler}
       />
       <div className={`image-upload ${props.center && 'center'}`}>
-       
         <Button type="success" clicked={pickImageHandler}>
-          Choose a new photo
+          {props.title ? props.title : 'Choose a new photo'}
         </Button>
       </div>
       {!isValid && <p>{props.errorText}</p>}

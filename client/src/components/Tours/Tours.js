@@ -55,7 +55,9 @@ const Tours = React.memo((props) => {
       changeUIForMostPopularTours();
       try {
         setLoading(true);
-        const tours = await axios.get('/api/v1/tours/mostPopular');
+        const tours = await axios.get(
+          `/api/v1/tours?sort='-numBought'&limit=5`
+        );
         setMostPopularTours(tours.data.data);
         setLoading(false);
       } catch (err) {

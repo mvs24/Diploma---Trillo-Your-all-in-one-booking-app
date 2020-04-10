@@ -24,6 +24,10 @@ $color-grey-light-2: #eee;
 $color-grey-dark: #777;
 $color-grey-dark-2: #999;
 $color-grey-dark-3: #333;
+ 
+--color-primary: #eb2f64;
+--color-primary-light: #FF3366;
+--color-primary-dark: #BA265D;
 
 $color-white: #fff;
 $color-black: #000; */

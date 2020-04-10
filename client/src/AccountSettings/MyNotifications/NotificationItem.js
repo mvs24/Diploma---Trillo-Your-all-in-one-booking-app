@@ -42,9 +42,7 @@ const MyNotifications = (props) => {
       {notification.read === false ? (
         <div className="center__not__item">
           <div className="not__read">&nbsp;</div>
-          <img
-            src={`http://localhost:5000/public/img/agencies/${agency.image}`}
-          />
+          <img src={`http://localhost:5000/${agency.image}`} />
           <p>{notification.message}</p>
           <p>
             <strong>{splittedDate[1].split('.')[0]}</strong> {splittedDate[0]}
@@ -52,9 +50,7 @@ const MyNotifications = (props) => {
         </div>
       ) : (
         <div className="center__not__item">
-          <img
-            src={`http://localhost:5000/public/img/agencies/${agency.image}`}
-          />
+          <img src={`http://localhost:5000/${agency.image}`} />
           <p>{notification.message}</p>
           <p>
             <strong>{splittedDate[1].split('.')[0]}</strong> {splittedDate[0]}

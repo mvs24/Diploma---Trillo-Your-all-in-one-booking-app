@@ -1,0 +1,56 @@
+.edit__agency--form {
+  text-align: center;
+}
+
+.edit__agency--container {
+  background: white;
+  min-height: 100%;
+  padding: 4rem;
+  width: 100%;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.4);
+}
+.edit__agency--container h1 {
+  font-size: 3rem;
+  text-transform: uppercase;
+  background-image: linear-gradient(
+    to right bottom,
+    rgb(85, 197, 122, 0.9),
+    rgb(126, 213, 111)
+  );
+  color: transparent;
+  background-clip: text;
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+.edit__agency--form input,
+.edit__agency--form textarea {
+  width: 60%;
+}
+.edit__agency--form input:focus {
+  width: 70%;
+}
+.input__data label {
+  margin: 0 auto;
+  font-size: 1.4rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.edit__agency--form--img {
+  margin: 3rem 0;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.edit__img {
+  width: 6rem;
+  height: 6rem;
+  border-radius: 100px;
+  margin-right: -3rem;
+}
+
+.save__changes {
+  margin: 4rem 10rem;
+  margin-left: auto;
+}

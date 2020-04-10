@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { IconContext } from 'react-icons';
-import { MdPeopleOutline } from 'react-icons/md';
+import { MdPeopleOutline, MdSettingsSystemDaydream } from 'react-icons/md';
 import { GiDetour } from 'react-icons/gi';
 import {
   IoIosStarOutline,
   IoMdHeartEmpty,
   IoMdNotificationsOutline,
-  IoIosLogOut, 
+  IoIosLogOut,
 } from 'react-icons/io';
 import { FiShoppingCart } from 'react-icons/fi';
 import Input from '../shared/components/Input/Input';
@@ -326,6 +326,14 @@ const AccountSettings = (props) => {
               <IoMdNotificationsOutline />
             </IconContext.Provider>
             <p className="">MY NOTIFICATIONS</p>
+          </li>
+          <li onClick={() => history.push('/my-agency')}>
+            <IconContext.Provider
+              value={{ className: 'icon__white tour__info--icon' }}
+            >
+              <MdSettingsSystemDaydream />
+            </IconContext.Provider>
+            <p className="">MY AGENCY (TOURS)</p>
           </li>
           <li onClick={logoutHandler} className="list__item">
             <IconContext.Provider

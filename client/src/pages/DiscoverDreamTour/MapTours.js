@@ -81,7 +81,7 @@ const MapTours = (props) => {
           {' '}
           <h1>Total Tours found: {props.totalToursLength}</h1>{' '}
           <Button
-          className='discover__button discover__button--within' 
+            className="discover__button discover__button--within"
             type="success"
             clicked={() => props.getToursWithinHandler(userLocation)}
           >
@@ -102,7 +102,11 @@ const MapTours = (props) => {
       {props.cancelBtn ? null : (
         <div>
           {' '}
-          <Button className='discover__button' type="success" clicked={showLocationHandler}>
+          <Button
+            className="discover__button"
+            type="success"
+            clicked={showLocationHandler}
+          >
             Show my location
           </Button>
         </div>

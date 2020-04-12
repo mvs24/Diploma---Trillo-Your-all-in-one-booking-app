@@ -172,6 +172,17 @@
   );
   transform: skewY(-4deg);
 }
+.reviews2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(30rem, max-content));
+  grid-template-rows: minmax(20rem, max-content);
+  padding: 10rem;
+  align-items: center;
+
+  justify-content: center;
+  background: white;
+  transform: skewY(-4deg);
+}
 
 .bookTour__image {
   width: 9.5rem;
@@ -244,41 +255,17 @@
 .bookNow {
   margin-top: 2rem;
 }
-/*
-.bookTour__container {
-  clip-path: polygon(0 0, 100% -110%, 100% 100%, 0 100%);
-  z-index: 2;
-  margin-top: -5rem;
-}
-..bookTour__container > * {
+.reviewsHeading {
+  font-size: 3rem;
+  text-transform: uppercase;
+  background-image: linear-gradient(
+    to right bottom,
+    rgb(85, 197, 122, 0.9),
+    rgb(126, 213, 111)
+  );
+  color: transparent;
+  background-clip: text;
+  display: block;
+  width: 100%;
   transform: skewY(4deg);
 }
-.tour__container {
-  
-}
-/* 
-Grey light 1: #faf9f9
-Grey light 2: #f4f2f2
-Grey light 3: #f0eeee
-Grey light 4: #ccc
-
-Grey dark 1: #333
-Grey dark 2: #777
-Grey dark 3: #999 */
-
-/* $color-primary: #55c57a;
-$color-primary-light: #7ed56f;
-$color-primary-dark: #28b485;
-
-$color-secondary-light: #ffb900;
-$color-secondary-dark: #ff7730;
-
-$color-tertiary-light: #2998ff;
-$color-tertiary-dark: #5643fa;
-
-$color-grey-light-1: #f7f7f7;
-$color-grey-light-2: #eee;
-
-$color-grey-dark: #777;
-$color-grey-dark-2: #999;
-$color-grey-dark-3: #333; */

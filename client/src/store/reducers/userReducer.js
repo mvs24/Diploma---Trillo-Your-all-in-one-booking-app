@@ -32,6 +32,7 @@ import {
   MARK_NOTIFICATIONS_AS_READ,
   MARK_NOTIFICATION_AS_READ,
   LOGOUT_USER,
+  REMOVE_FROM_CART,
 } from '../types/userTypes';
 
 const initialState = {
@@ -252,6 +253,14 @@ export default (state = initialState, action) => {
     case LOGOUT_USER: {
       return initialState;
     }
+    case REMOVE_FROM_CART:
+      const updated = state.cartTour.filter((el) => el.tour !== action.payload);
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        cartTour: updated,
+      };
     default:
       return state;
   }

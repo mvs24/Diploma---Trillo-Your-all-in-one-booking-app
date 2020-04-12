@@ -107,7 +107,7 @@ const MyAgency = (props) => {
           onClick={addNewTourHandler}
           ref={addTour}
         >
-          The next move
+          Maybe a new Tour?
         </h1>
       </div>
       {display === 'agency' && <Agency changeBcg agency={myAgency} />}

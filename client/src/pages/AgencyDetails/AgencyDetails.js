@@ -55,29 +55,32 @@ const AgencyDetails = (props) => {
 
   const goToPrevPage = () => {
     if (props.location.search.split('=')[1] > 1) {
-    props.history.replace(`${props.match.url}?page=${props.location.search.split('=')[1] - 1}`)
-
+      props.history.replace(
+        `${props.match.url}?page=${props.location.search.split('=')[1] - 1}`
+      );
     }
-  }
+  };
 
   const goToNextPage = () => {
-    const totalPages = Math.round(agency.tours.length / resPerPage)+1;
-    console.log(totalPages)
-     if (props.location.search.split('=')[1] < totalPages) {
-    props.history.replace(`${props.match.url}?page=${props.location.search.split('=')[1] * 1 + 1}`)
-
+    const totalPages = Math.round(agency.tours.length / resPerPage) + 1;
+    console.log(totalPages);
+    if (props.location.search.split('=')[1] < totalPages) {
+      props.history.replace(
+        `${props.match.url}?page=${props.location.search.split('=')[1] * 1 + 1}`
+      );
     }
-  }
+  };
 
   let pageContent = [];
   for (let i = 1; i <= Math.round(agency.tours.length / resPerPage) + 1; i++) {
     if (i === 1) {
       pageContent.push(
         <div className="span__center">
-          <span 
-          style={{cursor: "pointer"}}
+          <span
+            style={{ cursor: 'pointer' }}
             onClick={goToPrevPage}
-           className="span__center">
+            className="span__center"
+          >
             <IconContext.Provider
               value={{ className: 'icon__green tour__info--icon full star' }}
             >
@@ -101,7 +104,11 @@ const AgencyDetails = (props) => {
           >
             {i}
           </Link>
-          <span style={{cursor: 'pointer'}} onClick={goToNextPage} className="span__center">
+          <span
+            style={{ cursor: 'pointer' }}
+            onClick={goToNextPage}
+            className="span__center"
+          >
             <IconContext.Provider
               value={{ className: 'icon__green tour__info--icon full star' }}
             >
@@ -127,7 +134,9 @@ const AgencyDetails = (props) => {
   const start = (page - 1) * resPerPage;
   const end = page * resPerPage;
 
-  return ( 
+  let updatedAgencyTours = agency.tours.slice(start, end);
+
+  return (
     <>
       {error && (
         <ErrorModal show onClear={() => setError(false)}>
@@ -137,11 +146,18 @@ const AgencyDetails = (props) => {
       <div className="agency__details--container">
         <Agency agency={agency} />
         <div className="agency__tours">
-          <h1>TOURS</h1>
+          {updatedAgencyTours.length !== 0 && <h1>TOURS</h1>}
           <div className="agency__tour--item">
-            {agency.tours.slice(start, end).map((tour) => (
+            {updatedAgencyTours.map((tour) => (
               <TourItem shouldUpdate={shouldUpdate} tour={tour} />
             ))}
+            {updatedAgencyTours.length === 0 && (
+              <div className="u-text-center">
+                <h1 className="updatedAgencyTours">
+                  No tours found on this page!
+                </h1>
+              </div>
+            )}
           </div>
           <div className="pages__content">{pageContent.map((p) => p)}</div>
         </div>

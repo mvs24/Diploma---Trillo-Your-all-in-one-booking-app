@@ -18,6 +18,7 @@ import {
   addToWishlist,
   deleteError,
   removeFromWishlist,
+  removeFromCart,
 } from '../../store/actions/userActions';
 import ErrorModal from '../../shared/components/UI/ErrorModal';
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
@@ -430,6 +431,16 @@ const TourItem = React.memo((props) => {
     }
   };
 
+  const removeFromCartHandler = async () => {
+    try {
+      setLoading(true);
+      props.removeFromCart(tour._id);
+      setLoading(false);
+    } catch (err) {
+      setError(err.response.data.message);
+    }
+  };
+
   return (
     <>
       {loading && <LoadingSpinner asOverlay />}
@@ -539,6 +550,14 @@ const TourItem = React.memo((props) => {
             </Button>{' '}
           </div>
         )}
+        {props.cartItem && (
+          <div className="update__review">
+            {' '}
+            <Button clicked={removeFromCartHandler} type="pink">
+              REMOVE FROM CART
+            </Button>{' '}
+          </div>
+        )}
         {openUpdateReviewModal && (
           <Modal
             show
@@ -577,4 +596,5 @@ export default connect(mapStateToProps, {
   addToWishlist,
   deleteError,
   removeFromWishlist,
+  removeFromCart,
 })(TourItem);

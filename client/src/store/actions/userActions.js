@@ -33,6 +33,7 @@ import {
   MARK_NOTIFICATIONS_AS_READ,
   MARK_NOTIFICATION_AS_READ,
   LOGOUT_USER,
+  REMOVE_FROM_CART,
 } from '../types/userTypes';
 
 export const setHeaders = (token) => {
@@ -266,4 +267,14 @@ export const logoutUser = () => (dispatch) => {
   dispatch({
     type: LOGOUT_USER,
   });
+};
+
+export const removeFromCart = (tourId) => async (dispatch) => {
+  try {
+    dispatch({ type: LOADING });
+    await axios.delete(`/api/v1/cart/tours/${tourId}`);
+    dispatch({ type: REMOVE_FROM_CART, payload: tourId });
+  } catch (err) {
+    dispatch({ type: ERROR, errormsg: err.response.data.message });
+  }
 };

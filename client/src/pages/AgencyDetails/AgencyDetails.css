@@ -106,3 +106,22 @@
   display: flex;
   align-items: center;
 }
+
+.updatedAgencyTours {
+    font-size: 2.5rem;
+  text-transform: uppercase;
+  background-image: linear-gradient(
+    to right bottom,
+    rgb(85, 197, 122, 0.9),
+    rgb(126, 213, 111)
+  );
+  color: transparent;
+  background-clip: text;
+  display: block;
+  width: 100%;
+}
+.u-text-center {
+  width: 100%;
+  text-align: center;
+ margin: auto;
+}

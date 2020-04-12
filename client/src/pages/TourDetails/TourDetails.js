@@ -76,8 +76,11 @@ const TourDetails = React.memo((props) => {
         const agencyRes = await axios.get(
           '/api/v1/agencies/' + res.data.data.agency
         );
-        const userRes = await axios.get('/api/v1/users/loggedInUser');
-        setUserId(userRes.data.data.id);
+        if (isAuthenticated) {
+          const userRes = await axios.get('/api/v1/users/loggedInUser');
+          setUserId(userRes.data.data.id);
+        }
+
         setLoading(false);
         setTour(res.data.data);
         setOwner(agencyRes.data.data.user);
@@ -108,13 +111,19 @@ const TourDetails = React.memo((props) => {
   };
 
   const addToCartHandler = async () => {
-    try {
-      setAdding(true);
-      await props.addToCart(tour._id);
-      setAdding(false);
-      setAdded(true);
-    } catch (err) {
-      setError(err.response.data.message);
+    if (isAuthenticated) {
+      try {
+        setAdding(true);
+
+        await props.addToCart(tour._id);
+        setAdding(false);
+        setAdded(true);
+      } catch (err) {
+        setAdding();
+        setError(err.response.data.message);
+      }
+    } else {
+      setError('You are not logged in! Please log in!');
     }
   };
 
@@ -124,7 +133,9 @@ const TourDetails = React.memo((props) => {
 
   const bookTour = async () => {
     try {
-      setProcessBooking(true);
+      if (isAuthenticated) {
+        setProcessBooking(true);
+      }
       const stripe = await stripePromise;
       const session = await axios(
         `/api/v1/bookings/tours/checkout-session/${tour._id}`
@@ -135,6 +146,7 @@ const TourDetails = React.memo((props) => {
       });
       setProcessBooking(true);
     } catch (err) {
+      setProcessBooking();
       setError(err.response.data.message);
     }
   };
@@ -207,6 +219,8 @@ const TourDetails = React.memo((props) => {
   const submitPriceDiscountHandler = async () => {
     try {
       setLoading(true);
+      console.log(isAuthenticated);
+
       setProcessingDiscount(true);
 
       const res = await axios.post(`/api/v1/tours/${tourId}/price-discount`, {
@@ -238,7 +252,6 @@ const TourDetails = React.memo((props) => {
       </Button>
     );
   }
-
   return (
     <div className="tour__container">
       {error && (
@@ -338,7 +351,7 @@ const TourDetails = React.memo((props) => {
         <ReviewStatistics tourId={tour._id} />
       </section>
 
-      <div className="reviews">
+      <div className={`${tour.reviews.length !== 0 ? 'reviews' : 'reviews2'}`}>
         <Reviews
           showMore={showMoreHandler}
           showLess={showLessHandler}
@@ -374,7 +387,7 @@ const TourDetails = React.memo((props) => {
             </div>
           ) : (
             <div className="bookTour__info--1">
-              <h1>WHAT ARE YOU WAITING FOR?</h1> 
+              <h1>WHAT ARE YOU WAITING FOR?</h1>
               <p>
                 {tour.locations[tour.locations.length - 1].day} days. 1
                 Adventure. Infinite Memories. Make it yours today

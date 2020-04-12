@@ -24,7 +24,7 @@ const CartItem = (props) => {
       }
     };
     getTour();
-  }, []);
+  }, [tourId]);
 
   if (!tour) return <LoadingSpinner asOverlay />;
 
@@ -36,7 +36,7 @@ const CartItem = (props) => {
           {error}
         </ErrorModal>
       )}
-      <TourItem tour={tour} />
+      <TourItem cartItem tour={tour} />
     </div>
   );
 };

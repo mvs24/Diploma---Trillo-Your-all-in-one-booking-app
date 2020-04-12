@@ -19,6 +19,13 @@ const Reviews = (props) => {
 
   if (!reviews) return null;
 
+  if (reviews && reviews.length === 0)
+    return (
+      <div style={{ textAlign: 'center' }}>
+        <h1 className="reviewsHeading">There is no review for this tour!</h1>
+      </div>
+    );
+
   return reviews.map((review, i) => (
     <ReviewItem
       key={review._id}

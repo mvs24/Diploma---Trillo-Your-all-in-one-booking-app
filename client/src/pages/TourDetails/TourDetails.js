@@ -239,8 +239,6 @@ const TourDetails = React.memo((props) => {
     );
   }
 
-  console.log(tour.imageCover);
-
   return (
     <div className="tour__container">
       {error && (
@@ -376,7 +374,7 @@ const TourDetails = React.memo((props) => {
             </div>
           ) : (
             <div className="bookTour__info--1">
-              <h1>WHAT ARE YOU WAITING FOR?</h1>
+              <h1>WHAT ARE YOU WAITING FOR?</h1> 
               <p>
                 {tour.locations[tour.locations.length - 1].day} days. 1
                 Adventure. Infinite Memories. Make it yours today

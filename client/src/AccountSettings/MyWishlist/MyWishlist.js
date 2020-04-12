@@ -13,6 +13,12 @@ const MyWishlist = (props) => {
   if (!wishlist) return <LoadingSpinner asOverlay />;
 
   const wishlistData = wishlist.data;
+  if (wishlistData.length === 0)
+    return (
+      <div className="wish__data">
+        <h1>No Tour found in your wishlist!</h1>
+      </div>
+    );
 
   return (
     <>

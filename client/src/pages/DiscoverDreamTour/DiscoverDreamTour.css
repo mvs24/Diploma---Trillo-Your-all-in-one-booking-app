@@ -2,7 +2,7 @@
   width: 35vw;
   list-style: none;
   font-size: 1.5rem;
-  display: flex;
+  display: flex; 
   align-items: center;
   padding: 1rem;
   border-bottom: 1px solid #ccc;
@@ -11,8 +11,8 @@
   display: flex;
 }
 .discoverDreamTour__container {
-  padding: 6rem;
-  background: #faf9f9;
+  padding: 6rem; 
+  background: #fff;
   flex-basis: 15%;
 }
 
@@ -78,4 +78,19 @@
 
 .discover__button--confirm {
   margin: 2.5rem 10%;
+}
+
+.pageContent {
+  display: flex;
+}
+.updated__tours__heading {
+   text-transform: uppercase;
+  background-image: linear-gradient(
+    to right bottom,
+    rgb(85, 197, 122, 0.9),
+    rgb(126, 213, 111)
+  );
+  color: transparent;
+  background-clip: text;
+  margin: 3rem;
 }

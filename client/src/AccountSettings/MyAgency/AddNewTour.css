@@ -4,6 +4,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  padding-left: 5%;
 }
 .add__new__tour__container input {
   width: 50%;
@@ -27,6 +28,10 @@
   flex-basis: 100%;
   width: 100%;
   margin-left: 2rem;
+}
+.scroll__modal {
+  overflow-y: scroll;
+  height: 400px;
 }
 
 .select {
@@ -97,4 +102,27 @@
 .add__tour__images img {
   width: 12rem;
   height: 40%;
+}
+
+.save__create--tour {
+  margin: 2rem 0;
+  margin-left: 70%;
+}
+.medium__input {
+  width: 30%;
+}
+.group__flex {
+  display: flex;
+  align-items: center;
+}
+.group__flex input {
+  width: 40%;
+}
+.group__flex input:focus {
+  width: 42%;
+}
+.set__difficulty {
+  margin: 2rem auto;
+  display: flex;
+  align-items: center;
 }

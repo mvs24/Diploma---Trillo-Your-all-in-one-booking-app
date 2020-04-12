@@ -8,7 +8,7 @@ const AppError = require('../utils/appError');
 const User = require('../models/userModel');
 const multer = require('multer')
 const sharp = require('sharp')
-
+const uniqid = require('uniqid')
 
 const getToursBy = (sortBy) =>
   asyncWrapper(async (req, res, next) => {
@@ -99,40 +99,8 @@ const upload = multer({
   fileFilter: multerFilter
 });
 
-exports.uploadTourImages = upload.fields([
-  { name: 'imageCover', maxCount: 1 },
-  { name: 'images', maxCount: 3 }
-]);
-
-
-exports.resizeTourImages = asyncWrapper(async (req, res, next) => {
-  if (!req.file.imageCover || !req.files.images) return next();
-
-  // 1) Cover image
- 
-  await sharp(req.body.imageCover)
-    .resize(2000, 1333)
-    .toFormat('jpeg')
-    .jpeg({ quality: 90 })
-    .toFile(req.body.imageCover);
-
-  // 2) Images
-  req.body.images = [];
-  if (req.body.images) {
-    await req.body.images.forEach(async file => {
-       await sharp(file)
-    .resize(2000, 1333)
-    .toFormat('jpeg')
-    .jpeg({ quality: 90 })
-    .toFile(file);
-
-    })
-
-  }
-
-  next();
-});
-
+exports.uploadImageCover = upload.single('imageCover')
+exports.uploadImages = upload.array('image', 3)
 
 exports.createTour =  asyncWrapper(async (req, res, next) => {
     req.body.startDates = JSON.parse(req.body.startDates)
@@ -140,14 +108,21 @@ exports.createTour =  asyncWrapper(async (req, res, next) => {
      req.body.startLocation = {
       coordinates: JSON.parse(req.body.coordinates),
       address: req.body.address,
-      description: req.body.description
+      description: req.body.address
     }
   req.body.coordinates = undefined;
   req.body.address = undefined;
-  req.body.description = undefined;
+ 
   if (req.file) {
-    req.body.imageCover = req.file.path
+  req.body.imageCover = `public/img/tours/tour-${uniqid()}-cover.jpeg`;
+  await sharp(req.file.buffer)
+    .resize(2000, 1333)
+    .toFormat('jpeg')
+    .jpeg({ quality: 90 })
+    .toFile(`${req.body.imageCover}`);
   }
+
+  console.log(req.body)
 
     const doc = await Tour.create(req.body);
 

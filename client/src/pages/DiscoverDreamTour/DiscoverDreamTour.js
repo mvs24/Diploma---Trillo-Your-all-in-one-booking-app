@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import Button from '../../shared/components/Button/Button';
 import axios from 'axios';
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
@@ -11,6 +11,8 @@ import {
   IoMdStar,
   IoMdStarOutline,
   IoIosStarOutline,
+  IoIosArrowBack,
+  IoIosArrowForward
 } from 'react-icons/io';
 import Select from 'react-select';
 import './DiscoverDreamTour.css';
@@ -56,9 +58,11 @@ const DiscoverDreamTour = React.memo((props) => {
   const [reRender, setRerender] = useState();
   const [cancelBtn, setCancelBtn] = useState(false);
   const [shouldUpdate, setShouldUpdate] = useState();
+  const [page, setPage] = useState(1)
+  const [resPerPage, setResPerPage] = useState(4);
+  const {location} = props
 
-  useEffect(() => {
-    const getAllTours = async () => {
+  const getAllTours = async () => {
       try {
         setLoading(true);
         const res = await axios.get('/api/v1/tours');
@@ -69,8 +73,15 @@ const DiscoverDreamTour = React.memo((props) => {
       }
     };
 
+  useEffect(() => {
     getAllTours();
   }, []);
+
+
+  useEffect(() => {
+    setPage( props.location.search.split('=')[1] || 1);
+    setShouldUpdate(prev => !prev)
+  }, [location])
 
   const getRating = () => {
     let rating;
@@ -266,6 +277,73 @@ const DiscoverDreamTour = React.memo((props) => {
 
   if (!allTours) return <LoadingSpinner asOverlay />;
 
+ 
+  const goToPrevPage = () => {
+    const currentPage = props.location.search.split('=')[1] || 1;
+    if (currentPage > 1) 
+    props.history.replace(`${props.match.url}?page=${currentPage * 1 - 1}`)
+  }
+  const goToNextPage = () => {
+     const currentPage = props.location.search.split('=')[1] || 1;
+    if (currentPage < Math.round(allTours.length / resPerPage)) 
+    props.history.replace(`${props.match.url}?page=${currentPage * 1 + 1}`)
+  }
+
+  let pageContent = []
+   for (let i = 1; i <= Math.round(allTours.length / resPerPage) + 1; i++) {
+    if (i === 1) {
+      pageContent.push(
+        <div className="span__center">
+          <span 
+          style={{cursor: "pointer"}}
+            onClick={goToPrevPage}
+           className="span__center">
+            <IconContext.Provider
+              value={{ className: 'icon__green tour__info--icon full star' }}
+            >
+              <IoIosArrowBack />
+            </IconContext.Provider>
+          </span>
+          <Link
+            className={`page__number ${location}===${i} ? active : ''`}
+            to={`${props.match.url}?page=${i}`}
+          >
+            {i}
+          </Link>
+        </div>
+      );
+    } else if (i === Math.round(allTours.length / resPerPage) + 1) {
+      pageContent.push(
+        <div className="span__center">
+          <Link
+            className={`page__number ${location}===${i} ? active : ''`}
+            to={`${props.match.url}?page=${i}`}
+          >
+            {i}
+          </Link>
+          <span style={{cursor: 'pointer'}} onClick={goToNextPage} className="span__center">
+            <IconContext.Provider
+              value={{ className: 'icon__green tour__info--icon full star' }}
+            >
+              <IoIosArrowForward />
+            </IconContext.Provider>
+          </span>
+        </div>
+      );
+    } else {
+      pageContent.push(
+        <div>
+          <Link
+            className={`page__number ${location}===${i} ? active : ''`}
+            to={`${props.match.url}?page=${i}`}
+          >
+            {i}
+          </Link>
+        </div>
+      );
+    }
+  }
+
   let firstStars = [];
   for (let i = 0; i < 5; i++) {
     if (i < 4) {
@@ -338,6 +416,14 @@ const DiscoverDreamTour = React.memo((props) => {
   }
 
   if (!allTours) return <LoadingSpinner asOverlay />;
+
+  const start = (page - 1 )  * resPerPage;
+  const end = page * resPerPage
+
+  console.log(start, end)
+
+  // console.log()
+  let updatedAllTours = allTours.slice(start, end)
 
   return (
     <>
@@ -467,7 +553,7 @@ const DiscoverDreamTour = React.memo((props) => {
                       value="4"
                       checked={radioValue && +radioValue === 4 ? true : false}
                     />
-                    <label>{secondStars.map((el) => el)} 4 & up</label>
+                     <label>{secondStars.map((el) => el)} 4 & up</label>
                   </div>
                   <div className="rhd">
                     {' '}
@@ -486,10 +572,12 @@ const DiscoverDreamTour = React.memo((props) => {
           </div>
           <div className="all__tours__container">
             <div className="tours__grid">
-              {allTours.map((tour) => (
+           {updatedAllTours.length === 0 && <h1 className='updated__tours__heading'>No tours found!</h1>}   
+           {updatedAllTours.map((tour) => (
                 <TourItem shouldUpdate={shouldUpdate} tour={tour} />
               ))}
             </div>
+            <div className='pageContent'>{pageContent.map(el => el)}</div>
           </div>
         </div>
       </div>

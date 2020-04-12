@@ -1,0 +1,33 @@
+.btn__inline {
+    border: none;
+    color: #eb2f64;
+    font-size: 1.3rem;
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 2px; 
+    display: inline-block;
+    background-color: transparent;
+    cursor: pointer;
+    transition: all .2s;
+    margin-left: 3px;
+        transition: margin-left .2s;
+        text-decoration: none;
+        display: block;
+        width: 50%;
+        text-align: center;
+        margin: 3rem auto;
+}
+
+    .btn__inline:hover {
+        border-bottom:1px solid  #777;  
+    }
+
+    .btn__inline:focus {
+        outline: none;
+    }
+
+    
+
+.disabled {
+    color: #ccc;
+        cursor: not-allowed;
+}

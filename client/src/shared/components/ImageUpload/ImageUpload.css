@@ -21,3 +21,10 @@
   border-radius: 100px;
   /*object-fit: cover;*/
 }
+.inline__btn--img {
+  width: 100%;
+  margin: 2rem auto;
+}
+.inline__btn--container {
+  width: 100%;
+}

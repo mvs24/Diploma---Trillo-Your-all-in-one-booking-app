@@ -53,12 +53,31 @@ const AgencyDetails = (props) => {
 
   if (!agency) return <LoadingSpinner asOverlay />;
 
+  const goToPrevPage = () => {
+    if (props.location.search.split('=')[1] > 1) {
+    props.history.replace(`${props.match.url}?page=${props.location.search.split('=')[1] - 1}`)
+
+    }
+  }
+
+  const goToNextPage = () => {
+    const totalPages = Math.round(agency.tours.length / resPerPage)+1;
+    console.log(totalPages)
+     if (props.location.search.split('=')[1] < totalPages) {
+    props.history.replace(`${props.match.url}?page=${props.location.search.split('=')[1] * 1 + 1}`)
+
+    }
+  }
+
   let pageContent = [];
   for (let i = 1; i <= Math.round(agency.tours.length / resPerPage) + 1; i++) {
     if (i === 1) {
       pageContent.push(
         <div className="span__center">
-          <span className="span__center">
+          <span 
+          style={{cursor: "pointer"}}
+            onClick={goToPrevPage}
+           className="span__center">
             <IconContext.Provider
               value={{ className: 'icon__green tour__info--icon full star' }}
             >
@@ -82,7 +101,7 @@ const AgencyDetails = (props) => {
           >
             {i}
           </Link>
-          <span className="span__center">
+          <span style={{cursor: 'pointer'}} onClick={goToNextPage} className="span__center">
             <IconContext.Provider
               value={{ className: 'icon__green tour__info--icon full star' }}
             >
@@ -108,7 +127,7 @@ const AgencyDetails = (props) => {
   const start = (page - 1) * resPerPage;
   const end = page * resPerPage;
 
-  return (
+  return ( 
     <>
       {error && (
         <ErrorModal show onClear={() => setError(false)}>

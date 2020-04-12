@@ -14,6 +14,7 @@ const MyAgency = (props) => {
   const [error, setError] = useState();
   const [myTours, setMyTours] = useState();
   const [display, setDisplay] = useState('agency');
+  const [shouldUpdate, setShouldUpdate] = useState();
   const tours = useRef();
   const editAgency = useRef();
   const agency = useRef();
@@ -31,17 +32,18 @@ const MyAgency = (props) => {
         setMyAgency(res.data.data);
         setLoading(false);
       } catch (err) {
+        console.log(err.response.data);
         setLoading(false);
         setError(err.response.data.message);
       }
     };
 
     getMyAgency();
-  }, []);
+  }, [shouldUpdate]);
 
   if (error)
     return (
-      <ErrorModal show onClear={() => setError()}>
+      <ErrorModal show onClear={() => props.history.push('/make-an-impact')}>
         {error}
       </ErrorModal>
     );
@@ -80,6 +82,10 @@ const MyAgency = (props) => {
     setDisplay('addNewTour');
   };
 
+  const updateAgency = () => {
+    setShouldUpdate((prev) => !prev);
+  };
+
   return (
     <div className="myAgency__container">
       <div className="myAgency__links">
@@ -114,7 +120,9 @@ const MyAgency = (props) => {
         </div>
       )}
       {display === 'edit' && <EditAgency agency={myAgency} />}
-      {display === 'addNewTour' && <AddNewTour agency={myAgency} />}
+      {display === 'addNewTour' && (
+        <AddNewTour updateAgency={updateAgency} agency={myAgency} />
+      )}
     </div>
   );
 };

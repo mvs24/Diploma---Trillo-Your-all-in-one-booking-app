@@ -65,7 +65,9 @@
   color: #ffb900;
 }
 .agency__tour--item {
-  display: flex;
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(30rem, 32rem));
   padding: 2rem;
   justify-content: space-between;
   margin-bottom: 8rem;

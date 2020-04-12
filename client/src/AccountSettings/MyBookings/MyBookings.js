@@ -7,7 +7,7 @@ import TourItem from '../../components/TourItem/TourItem';
 import './MyBookings.css';
 
 const MyBookings = (props) => {
-  const [myBookings, setMyBookings] = useState();
+  const [myBookings, setMyBookings] = useState([]);
   const [loading, setLoading] = useState();
   const [error, setError] = useState();
   const { isAuthenticated } = props;
@@ -30,7 +30,12 @@ const MyBookings = (props) => {
 
   if (loading) return <LoadingSpinner asOverlay />;
 
-  if (!myBookings) return null;
+  if (myBookings.length === 0)
+    return (
+      <div className="wish__data">
+        <h1>You have not booked a tour yet!</h1>
+      </div>
+    );
 
   return (
     <div className="my__bookings">

@@ -10,6 +10,7 @@ import './AddNewTour.css';
 import PlaceInput from './PlaceInput';
 import ImageUpload from '../../shared/components/ImageUpload/ImageUpload';
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
+import InlineButton from '../../shared/components/InlineButton/InlineButton';
 
 const options = [
   { value: 'easy', label: 'EASY' },
@@ -20,7 +21,7 @@ const options = [
 const AddNewTour = (props) => {
   const [error, setError] = useState();
   const [loading, setLoading] = useState();
-  const [difficulty, setDifficulty] = useState('Category...');
+  const [difficulty, setDifficulty] = useState();
   const [openStartDatesModal, setOpenStartDatesModal] = useState();
   const [startDatesValid, setStartDatesValid] = useState();
   const [nrLocationsInput, setNrLocationsInput] = useState({
@@ -61,6 +62,8 @@ const AddNewTour = (props) => {
       validRequirements: {
         required: true,
         min: 1,
+        minValue: 1,
+        maxValue: 100,
       },
     },
     maxGroupSize: {
@@ -73,6 +76,8 @@ const AddNewTour = (props) => {
       touched: false,
       validRequirements: {
         required: true,
+        minValue: 1,
+        maxValue: 200,
       },
     },
     price: {
@@ -85,6 +90,8 @@ const AddNewTour = (props) => {
       touched: false,
       validRequirements: {
         required: true,
+        minValue: 50,
+        maxValue: 10000,
       },
     },
     summary: {
@@ -97,7 +104,6 @@ const AddNewTour = (props) => {
       touched: false,
       validRequirements: {
         required: true,
-        minlength: 15,
       },
     },
     description: {
@@ -108,17 +114,10 @@ const AddNewTour = (props) => {
       value: '',
       valid: false,
       touched: false,
-      validRequirements: {},
-    },
-    description: {
-      configOptions: {
-        type: 'textarea',
-        placeholder: 'Write a description for your tour (Min: 20 characters)',
+      validRequirements: {
+        required: true,
+        minlength: 20,
       },
-      value: '',
-      valid: false,
-      touched: false,
-      validRequirements: {},
     },
     nrStartDates: {
       configOptions: {
@@ -130,6 +129,8 @@ const AddNewTour = (props) => {
       touched: false,
       validRequirements: {
         required: true,
+        minValue: 1,
+        maxValue: 10,
       },
     },
   });
@@ -171,6 +172,7 @@ const AddNewTour = (props) => {
   const [secondUrl, setSecondUrl] = useState();
   const [thirdUrl, setThirdUrl] = useState();
   const [confirmedImages, setConfirmedImages] = useState();
+  const [overallFormIsValid, setOverallFormIsValid] = useState(true);
 
   const checkValidity = (value, requirements) => {
     let isValid = true;
@@ -189,6 +191,12 @@ const AddNewTour = (props) => {
     }
     if (requirements.moreThan) {
       isValid = isValid && new Date(value).getTime() > new Date().getTime();
+    }
+    if (requirements.minValue) {
+      isValid = isValid && +value >= requirements.minValue;
+    }
+    if (requirements.maxValue) {
+      isValid = isValid && +value <= requirements.maxValue;
     }
 
     return isValid;
@@ -395,7 +403,6 @@ const AddNewTour = (props) => {
     allStartDates.forEach((el) => {
       isValid = isValid && new Date(el.value).getTime() > new Date().getTime();
     });
-    console.log(isValid);
     if (!isValid) {
       setError('Control all the dates. Dates should be in the future...');
     } else {
@@ -437,16 +444,17 @@ const AddNewTour = (props) => {
 
     const locations = Array.from(document.querySelectorAll('.location'));
     const addresses = Array.from(document.querySelectorAll('.addressLocation'));
+    const days = Array.from(document.querySelectorAll('.dayLocation'));
 
     let isValid = true;
     locations.forEach((loc) => {
-      if (loc.value.indexOf(',') === 0) {
+      if (loc.value.indexOf(',') === -1) {
         isValid = false;
         setError(
           'The format of location is wrong...Use something like this: 42.345,23.5674'
         );
       }
-      console.log(loc.value.split(',')[0], loc.value.split(',')[1]);
+      if (!loc.value.split(',')[1]) isValid = false;
       if (
         +loc.value.split(',')[0] < -90 ||
         +loc.value.split(',')[0] > 90 ||
@@ -472,7 +480,22 @@ const AddNewTour = (props) => {
       setError('Address must be more than 2 characters.');
     }
 
-    if (isValid && isValidAddress) {
+    let isValidDay = true;
+    days.forEach((day) => {
+      console.log(day.value);
+      if (!day.value) isValidDay = false;
+      if (+day.value < 0) {
+        isValidDay = false;
+      }
+    });
+
+    if (!isValidDay) {
+      setError('Days are wrong...');
+    }
+
+    console.log(isValidDay);
+
+    if (isValid && isValidAddress && isValidDay) {
       for (let i = 0; i < locations.length; i++) {
         updatedLocations.push({
           coordinates: [
@@ -481,10 +504,11 @@ const AddNewTour = (props) => {
           ],
           address: addresses[i].value,
           description: addresses[i].value,
+          day: days[i].value,
         });
       }
       setLocations(updatedLocations);
-      setConfirmedNrLocations(true);
+      setConfirmedNrLocations(isValid && isValidAddress && isValidDay);
       setOpenLocationsModal();
     }
   };
@@ -514,6 +538,11 @@ const AddNewTour = (props) => {
           type="text"
           placeholder={`Address (${i + 1})`}
         />
+        <input
+          className="input- dayLocation"
+          type="number"
+          placeholder={`Day:`}
+        />
       </div>
     );
   }
@@ -531,13 +560,12 @@ const AddNewTour = (props) => {
       images.push(firstImage);
       images.push(secondImage);
       images.push(thirdImage);
+      setImages(images);
+      setOpenImagesModal(false);
+      setConfirmedImages(true);
     } else {
       setError('Please complete all the images correctly!');
     }
-
-    setImages(images);
-    setOpenImagesModal(false);
-    setConfirmedImages(true);
   };
 
   const saveTour = async (e) => {
@@ -553,6 +581,27 @@ const AddNewTour = (props) => {
       if (key === 'coordinates') {
         formData.append(key, JSON.stringify(startLocation[key]));
       } else formData.append(key, startLocation[key]);
+    }
+
+    let overallValid = true;
+
+    for (let key in tourData) {
+      overallValid = overallValid && tourData[key].valid;
+    }
+    overallValid =
+      overallValid &&
+      confirmedStartDates &&
+      confirmedStartLocation &&
+      confirmedStartDates &&
+      imageCover.isValid &&
+      confirmedNrLocations &&
+      confirmedStartLocation &&
+      confirmedImages &&
+      difficulty;
+
+    if (!overallValid) {
+      setError('Complete all the fields correctly!');
+      return;
     }
 
     formData.set('name', tourData.name.value);
@@ -576,6 +625,7 @@ const AddNewTour = (props) => {
         imageData
       );
       setLoading(false);
+      props.updateAgency();
     } catch (err) {
       setError(err.response.data.message);
       setLoading(false);
@@ -646,6 +696,7 @@ const AddNewTour = (props) => {
         )}
         {openLocationsModal && (
           <Modal
+            className="scroll__modal"
             header="LOCATIONS"
             show
             onCancel={() => setOpenLocationsModal()}
@@ -659,45 +710,52 @@ const AddNewTour = (props) => {
         <h1>ADD A NEW TOUR</h1>
         <div>
           {formData.map((el) => el)}
-          DIFFICULTY:{' '}
-          <Select
-            className="select"
-            value={difficulty}
-            onChange={handleChange}
-            options={options}
-          />
-          <Button
+          <div className="set__difficulty">
+            DIFFICULTY:{' '}
+            <Select
+              className="select"
+              value={difficulty}
+              onChange={handleChange}
+              options={options}
+            />
+          </div>
+          <InlineButton
             disabled={confirmedStartLocation}
             className="add__start__location--btn"
             type="success"
             clicked={openStartLocationHandler}
           >
             {confirmedStartLocation ? 'ADDED' : 'Add the start Location'}
-          </Button>
-          <Input
-            value={nrLocationsInput.value}
-            valid={nrLocationsInput.valid}
-            touched={nrLocationsInput.touched}
-            configOptions={nrLocationsInput.configOptions}
-            onChange={(e) => inputNrLocationsHandler(e, nrLocationsInput)}
-          />
-          <Button
-            disabled={confirmedNrLocations}
-            className=""
-            type="success"
-            clicked={openNumberOfLocations}
-          >
-            {confirmedNrLocations ? 'ADDED' : 'Add number of locations'}
-          </Button>
+          </InlineButton>
+          <div className="group__flex">
+            <Input
+              className="medium__input"
+              value={nrLocationsInput.value}
+              valid={nrLocationsInput.valid}
+              touched={nrLocationsInput.touched}
+              configOptions={nrLocationsInput.configOptions}
+              onChange={(e) => inputNrLocationsHandler(e, nrLocationsInput)}
+            />
+            <InlineButton
+              disabled={confirmedNrLocations || !nrLocationsInput.valid}
+              className=""
+              type="success"
+              clicked={openNumberOfLocations}
+            >
+              {confirmedNrLocations ? 'ADDED' : 'Add number of locations'}
+            </InlineButton>
+          </div>
           <div className="add_tour__img--container">
             {previewUrl && <img className="add__tour--img" src={previewUrl} />}
             <ImageUpload
+              disabled={imageCover.isValid}
+              inline
               title={'Set Cover Image of the tour!'}
               onInput={inputImageHandler}
             />
           </div>
           <div>
-            <Button
+            <InlineButton
               disabled={confirmedImages}
               type="success"
               clicked={() => setOpenImagesModal(true)}
@@ -705,12 +763,13 @@ const AddNewTour = (props) => {
               {confirmedImages
                 ? 'SELECTED'
                 : 'Set at least 3 images for the tour!'}
-            </Button>
+            </InlineButton>
           </div>
           {openImagesModal && (
             <Modal
               header="IMAGES OF THE TOUR!"
               show
+              className="scroll__modal"
               onCancel={() => setOpenImagesModal()}
             >
               <div className="add__tour__images">
@@ -757,7 +816,12 @@ const AddNewTour = (props) => {
               </Button>
             </Modal>
           )}
-          <Button type="pink" clicked={saveTour}>
+          <Button
+            className="save__create--tour"
+            disabled={!overallFormIsValid}
+            type="pink"
+            clicked={saveTour}
+          >
             Save & Create the Tour
           </Button>
         </div>

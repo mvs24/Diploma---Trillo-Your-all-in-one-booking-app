@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import ErrorModal from '../../shared/components/UI/ErrorModal';
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
@@ -8,10 +8,34 @@ import { GiDetour } from 'react-icons/gi';
 import { FaDollarSign } from 'react-icons/fa';
 import Button from '../../shared/components/Button/Button';
 import './MakeAnImpact.css';
+import axios from 'axios'
+
 
 const MakeAnImpact = (props) => {
   const [error, setError] = useState();
   const [loading, setLoading] = useState();
+  const [myAgency, setMyAgency] = useState()
+
+  useEffect(() => {
+    const getMyAgency = async () => {
+      try {
+        setLoading(true);
+        const res = await axios.get(`/api/v1/users/my/agency`);
+        setMyAgency(res.data.data);
+        setLoading(false);
+      } catch (err) {
+        console.log(err.response.data)
+        setLoading(false);
+        setError(err.response.data.message);
+      }
+    };
+
+    getMyAgency();
+  }, []);
+
+  if (myAgency) return <div onClick={() => props.history.push('/my-agency')}>
+    <h1 className='agency__heading'>You have an agency. Go to your agency.</h1></div>
+
 
   if (!props.isAuthenticated) return <LoadingSpinner asOverlay />;
 

@@ -96,9 +96,10 @@ const Map = (props) => {
 
   const loadDayMarkers = () => {
     return props.tour.locations.map((loc) => {
+      console.log(loc)
       return (
         <Marker
-          key={loc.coordinates}
+          key={loc.coordinates} 
           latitude={parseFloat(loc.coordinates[1])}
           longitude={parseFloat(loc.coordinates[0])}
         >

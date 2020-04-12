@@ -8,6 +8,12 @@ const MyReviews = (props) => {
   if (!isAuthenticated) return null;
 
   if (!reviews) return <LoadingSpinner asOverlay />;
+  if (reviews.length === 0)
+    return (
+      <div className="wish__data">
+        <h1>You haven't booked a tour yet!</h1>
+      </div>
+    );
 
   return (
     <>
@@ -15,7 +21,7 @@ const MyReviews = (props) => {
       <div className="wishlist__container">
         {reviews.map((review) => (
           <Review reviewId={review._id} tourId={review.tour} />
-        ))} 
+        ))}
       </div>
     </>
   );

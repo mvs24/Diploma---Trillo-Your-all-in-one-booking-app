@@ -12,3 +12,18 @@
   background-clip: text;
   text-align: center;
 }
+.wish__data {
+  margin: 2rem auto;
+  text-align: center;
+}
+.wish__data h1 {
+  font-size: 3rem;
+  text-transform: uppercase;
+  background-image: linear-gradient(
+    to right bottom,
+    rgb(85, 197, 122, 0.9),
+    rgb(126, 213, 111)
+  );
+  color: transparent;
+  background-clip: text;
+}

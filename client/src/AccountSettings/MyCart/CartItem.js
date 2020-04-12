@@ -29,7 +29,7 @@ const CartItem = (props) => {
   if (!tour) return <LoadingSpinner asOverlay />;
 
   return (
-    <div className="wishlist__container">
+    <div className="cart__container">
       {loading && <LoadingSpinner asOverlay />}
       {error && (
         <ErrorModal show onClear={() => setError()}>

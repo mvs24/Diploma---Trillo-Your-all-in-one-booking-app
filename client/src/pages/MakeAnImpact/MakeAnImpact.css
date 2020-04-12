@@ -67,3 +67,20 @@
   margin: 2rem 0;
   font-size: 2.4rem;
 }
+
+.agency__heading {
+  text-align: center;
+  font-size: 3rem;
+  text-transform: uppercase;
+  background-image: linear-gradient(
+    to right bottom,
+    rgb(85, 197, 122, 0.9),
+    rgb(126, 213, 111)
+  );
+  color: transparent;
+  background-clip: text;
+  display: block;
+  width: 100%;
+  cursor: pointer;
+  margin: auto;
+}

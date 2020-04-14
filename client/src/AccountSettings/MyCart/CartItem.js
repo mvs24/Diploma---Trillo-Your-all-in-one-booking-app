@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
 import ErrorModal from '../../shared/components/UI/ErrorModal';
 import axios from 'axios';
@@ -8,9 +9,10 @@ import '../MyWishlist/MyWishlist.css';
 
 const CartItem = (props) => {
   const [tour, setTour] = useState();
+  const [isLiked, setIsLiked] = useState();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
-  const { tourId } = props;
+  const { tourId, wishlist, isAuthenticated } = props;
 
   useEffect(() => {
     const getTour = async () => {
@@ -26,7 +28,22 @@ const CartItem = (props) => {
     getTour();
   }, [tourId]);
 
+  useEffect(() => {
+    let wishlistTours = []; //[ids]
+
+    wishlist.data.forEach((el) => {
+      wishlistTours.push(el.tour);
+    });
+
+    if (wishlistTours.includes(tourId)) {
+      setIsLiked(true);
+    } else {
+      setIsLiked();
+    }
+  }, [tourId]);
+
   if (!tour) return <LoadingSpinner asOverlay />;
+  if (!wishlist) return <LoadingSpinner asOverlay />;
 
   return (
     <div className="cart__container">
@@ -36,9 +53,13 @@ const CartItem = (props) => {
           {error}
         </ErrorModal>
       )}
-      <TourItem cartItem tour={tour} />
+      <TourItem isTourLiked={isLiked} cartItem tour={tour} />
     </div>
   );
 };
 
-export default CartItem;
+const mapStateToProps = (state) => ({
+  wishlist: state.user.wishlist,
+});
+
+export default connect(mapStateToProps)(CartItem);

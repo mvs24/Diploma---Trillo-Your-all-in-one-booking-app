@@ -93,6 +93,16 @@ const TourDetails = React.memo((props) => {
     getTour();
   }, []);
 
+  window.addEventListener('resize', () => {
+    if (window.innerWidth < 1013 && window.innerWidth > 736) {
+      setResPerPage(2);
+    } else if (window.innerWidth < 736) {
+      setResPerPage(1);
+    } else if (window.innerWidth >= 1013) {
+      setResPerPage(3);
+    }
+  });
+
   useEffect(() => {
     if (tour) {
       const toursInCart = cartTour.map((el) => el.tour);
@@ -252,6 +262,7 @@ const TourDetails = React.memo((props) => {
       </Button>
     );
   }
+
   return (
     <div className="tour__container">
       {error && (
@@ -284,8 +295,8 @@ const TourDetails = React.memo((props) => {
         </div>
       </div>
 
-      <section className="tour__info">
-        <div className="quick__facts">
+      <section className="tour__info tour__info-1">
+        <div className="quick__facts quick__facts-1">
           <h1>QUICK FACTS</h1>
 
           <ul>
@@ -328,7 +339,7 @@ const TourDetails = React.memo((props) => {
             </li>
           </ul>
         </div>
-        <div className="tour__about">
+        <div className="tour__about tour__about-1">
           <h1>ABOUT THE {tour.name}</h1>
           <p>{tour.description}</p>
         </div>
@@ -359,6 +370,7 @@ const TourDetails = React.memo((props) => {
           tourId={tour._id}
           page={page}
           limit={resPerPage}
+          resPerPage={resPerPage}
         />
       </div>
 

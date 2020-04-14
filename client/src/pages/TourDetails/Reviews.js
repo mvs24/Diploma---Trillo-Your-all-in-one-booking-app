@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const Reviews = (props) => {
   const [reviews, setReviews] = useState();
-  const { page, limit } = props;
+  const { page, limit, resPerPage } = props;
 
   useEffect(() => {
     const getAllReviewsOnTour = async () => {
@@ -15,7 +15,7 @@ const Reviews = (props) => {
       setReviews(res.data.data);
     };
     getAllReviewsOnTour();
-  }, [page, limit]);
+  }, [page, limit, resPerPage]);
 
   if (!reviews) return null;
 
@@ -36,6 +36,7 @@ const Reviews = (props) => {
       reviewLength={props.reviewLength}
       showMore={props.showMore}
       showLess={props.showLess}
+      resPerPage={resPerPage}
     />
   ));
 };

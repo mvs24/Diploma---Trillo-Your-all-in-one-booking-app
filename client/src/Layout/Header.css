@@ -3,8 +3,23 @@
   padding: 1rem;
   align-items: center;
   border-bottom: 2px solid #ccc;
-  max-height: 6rem;
+  width: 100%;
 }
+
+@media (max-width: 900px) {
+  .searchForm {
+    order: 2;
+    flex-basis: 0 0 100%;
+    align-self: center;
+  }
+  .search {
+    padding: 1rem 5rem;
+  }
+  .header {
+    flex-wrap: wrap;
+  }
+}
+
 .forgot__heading {
   text-transform: uppercase;
   background-image: linear-gradient(
@@ -33,6 +48,7 @@
   display: flex;
   flex-direction: column;
   min-height: 10rem;
+  flex-wrap: wrap;
 }
 
 .hidden__elements {

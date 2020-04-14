@@ -61,3 +61,38 @@
   font-size: 1.4rem;
   margin: 0 0.5rem;
 }
+@media (max-width: 1013px) {
+  .review__container {
+    width: 100%;
+  }
+  .review__info {
+  }
+  .review__info--right,
+  .review__info--left {
+    margin: 1rem;
+  }
+}
+
+@media (max-width: 865px) {
+  .review__container {
+    width: 100%;
+  }
+  .review__info {
+  }
+  .review__info--right,
+  .review__info--left {
+    margin: 0.4rem;
+  }
+  .star {
+    font-size: 2rem;
+  }
+  .review__container h1 {
+    font-size: 2rem;
+  }
+  .totalReviews {
+    font-size: 1.8rem;
+  }
+  .avgRating {
+    font-size: 2rem;
+  }
+}

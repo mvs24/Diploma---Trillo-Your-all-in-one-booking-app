@@ -11,10 +11,10 @@
   padding: 6rem 15rem;
 }
 .create__agency__container input {
-  width: 40%;
+  width: 80%;
 }
 .create__agency__container input:focus {
-  width: 50%;
+  width: 90%;
 }
 .create__agency__container h1 {
   font-size: 3rem;
@@ -32,4 +32,22 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+@media (max-width: 750px) {
+  .create__agency__container h1 {
+    font-size: 2rem;
+  }
+  .create__agency__container {
+    padding: 1rem;
+  }
+  .create__agency__container input {
+    width: 90%;
+  }
+  .create__agency__container input:focus {
+    width: 100%;
+  }
+  .first {
+    padding: 1rem;
+  }
 }

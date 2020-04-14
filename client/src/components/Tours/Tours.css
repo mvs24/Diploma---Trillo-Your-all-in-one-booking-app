@@ -22,3 +22,10 @@
   grid-column-gap: 1.5rem;
   row-gap: 4rem;
 }
+
+@media (max-width: 593px) {
+  .topToursContent {
+    grid-column-gap: 4.5rem;
+    row-gap: 2rem;
+  }
+}

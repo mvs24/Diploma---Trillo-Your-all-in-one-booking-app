@@ -108,7 +108,7 @@
 }
 
 .updatedAgencyTours {
-    font-size: 2.5rem;
+  font-size: 2.5rem;
   text-transform: uppercase;
   background-image: linear-gradient(
     to right bottom,
@@ -123,5 +123,17 @@
 .u-text-center {
   width: 100%;
   text-align: center;
- margin: auto;
+  margin: auto;
+}
+@media (max-width: 800px) {
+  .agency__details--info {
+    padding: 2rem;
+  }
+  .inline__info {
+    flex-direction: column;
+    align-items: center;
+  }
+  .agency__name {
+    flex-wrap: wrap;
+  }
 }

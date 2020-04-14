@@ -23,7 +23,7 @@ $color-grey-light-2: #eee;
 
 $color-grey-dark: #777;
 $color-grey-dark-2: #999;
-$color-grey-dark-3: #333;
+$color-grey-dark-3: #333; 
  
 --color-primary: #eb2f64;
 --color-primary-light: #FF3366;
@@ -52,8 +52,24 @@ body {
   color: #777;
 }
 
-.heading-2 {
-  font-size: 1.8rem;
-  line-height: 1.5;
-  font-weight: 300;
+@media (max-width: 1108px) {
+  html {
+    font-size: 57.5%;
+  }
+}
+
+@media (max-width: 750px) {
+  html {
+    font-size: 54.5%;
+  }
+}
+@media (max-width: 600px) {
+  html {
+    font-size: 50%;
+  }
+}
+@media (max-width: 450px) {
+  html {
+    font-size: 45%;
+  }
 }

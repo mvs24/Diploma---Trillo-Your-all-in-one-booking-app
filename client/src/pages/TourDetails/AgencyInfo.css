@@ -18,3 +18,9 @@
 .agency__description {
   margin: 4rem;
 }
+
+@media (max-width: 900px) {
+  .agency__info .quick__facts {
+    padding: 50% 15% 25% 8%;
+  }
+}

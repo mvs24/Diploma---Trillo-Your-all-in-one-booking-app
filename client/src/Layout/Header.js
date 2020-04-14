@@ -358,6 +358,17 @@ const Header = React.memo((props) => {
   const loginModalCloseHandler = () => {
     let updatedLoginData = { ...loginData };
 
+    // <div className="all">
+    //       <div className="show">
+    //         <IconContext.Provider value={{ className: 'icon' }}>
+    //           <IoIosApps />
+    //           <span className="categories">Categories</span>
+    //         </IconContext.Provider>
+    //       </div>
+
+    //       // <div className="hidden__elements">{categoriesToRender}</div>
+    //     </div>
+
     for (let key in updatedLoginData) {
       updatedLoginData[key].value = '';
     }
@@ -639,16 +650,6 @@ const Header = React.memo((props) => {
         >
           Trillo
         </h2>
-        <div className="all">
-          <div className="show">
-            <IconContext.Provider value={{ className: 'icon' }}>
-              <IoIosApps />
-              <span className="categories">Categories</span>
-            </IconContext.Provider>
-          </div>
-
-          <div className="hidden__elements">{categoriesToRender}</div>
-        </div>
 
         <form onSubmit={searchHandler} className="searchForm">
           <input

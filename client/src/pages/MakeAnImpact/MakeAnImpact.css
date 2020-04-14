@@ -84,3 +84,14 @@
   cursor: pointer;
   margin: auto;
 }
+
+@media (max-width: 700px) {
+  .boxes {
+    flex-direction: column;
+  }
+}
+@media (max-width: 500px) {
+  .create__container {
+    flex-direction: column;
+  }
+}

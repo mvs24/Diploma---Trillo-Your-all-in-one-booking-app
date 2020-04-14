@@ -10,7 +10,7 @@
   flex: 0 0 20%;
   padding: 2rem;
   background: linear-gradient(#f7f0f8, #f1f8f2);
-  color: white; 
+  color: white;
   font-size: 1rem;
   background-image: linear-gradient(
     to left top,
@@ -24,13 +24,12 @@
   margin: 3rem 1.5rem;
   transition: all 0.4s ease;
   cursor: pointer;
-  letter-spacing: .3;
-   font-weight: 400;
+  letter-spacing: 0.3;
+  font-weight: 400;
 }
 
 .myAgency__links h1:hover {
   transform: translateX(5px);
-
 }
 .border {
   border-bottom: 1px solid purple;
@@ -69,4 +68,23 @@
 .location-search-input::-webkit-input-placeholder {
   color: #777;
   padding: 0.3rem;
+}
+
+@media (max-width: 800px) {
+  .myAgency__container {
+    flex-direction: column;
+  }
+  .myAgency__links {
+    display: flex;
+  }
+  .myAgency__links h1 {
+    margin: auto;
+  }
+}
+
+@media (max-width: 650px) {
+  .myAgency__links {
+    display: flex;
+    flex-direction: column;
+  }
 }

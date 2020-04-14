@@ -41,3 +41,9 @@
 .discover__button--within {
   margin-left: 20%;
 }
+
+@media (max-width: 665px) {
+  .map {
+    width: 665px;
+  }
+}

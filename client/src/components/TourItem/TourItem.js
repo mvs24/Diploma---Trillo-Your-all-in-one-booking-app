@@ -76,11 +76,15 @@ const TourItem = React.memo((props) => {
   const history = useHistory();
   const { tour, wishlist, isAuthenticated, reviews } = props;
   const [should, setShould] = useState();
-  const { shouldUpdate } = props;
+  const { shouldUpdate, isTourLiked } = props;
 
   useEffect(() => {
     setShould(props.shouldUpdate);
   }, [shouldUpdate]);
+
+  useEffect(() => {
+    setIsLiked(isTourLiked);
+  }, [isTourLiked]);
 
   useEffect(() => {
     let wishlistTours = []; //[ids]
@@ -111,8 +115,6 @@ const TourItem = React.memo((props) => {
   //       wishlistTours.push(el.tour);
   //     });
   //   }
-
-  //   console.log('run')
 
   //   if (wishlistTours.includes(tour._id)) {
   //     setIsLiked(true);
@@ -434,9 +436,10 @@ const TourItem = React.memo((props) => {
   const removeFromCartHandler = async () => {
     try {
       setLoading(true);
-      props.removeFromCart(tour._id);
+      await props.removeFromCart(tour._id);
       setLoading(false);
     } catch (err) {
+      setLoading();
       setError(err.response.data.message);
     }
   };

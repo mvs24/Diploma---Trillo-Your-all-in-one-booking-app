@@ -83,6 +83,7 @@
   background-clip: text;
   display: block;
   width: 100%;
+  text-align: center;
 }
 
 .quick__facts li {
@@ -155,6 +156,17 @@
 
 .map__container {
   transform: skewY(-5deg);
+}
+
+@media (max-width: 865px) {
+  .tour__about p {
+    font-size: 1.3rem;
+    width: 100%;
+  }
+  .tour__about h1,
+  .quick__facts h1 {
+    font-size: 2rem;
+  }
 }
 
 .reviews {
@@ -268,4 +280,114 @@
   display: block;
   width: 100%;
   transform: skewY(4deg);
+}
+@media (max-width: 1013px) {
+  .review__container {
+    width: 100%;
+    padding: 1rem;
+  }
+  .review__info {
+    padding: 0;
+  }
+}
+@media (max-width: 1050px) {
+  .bookTour__info--1 h1 {
+    font-size: 2rem;
+  }
+}
+@media (max-width: 800px) {
+  .tour__about p {
+    margin: 0;
+    font-size: 1.3rem;
+    width: 120%;
+    margin: 1rem -6rem;
+  }
+}
+@media (max-width: 750px) {
+  .tour__info {
+    grid-template-columns: 1fr;
+  }
+
+  .tour__about-1 {
+    /*padding: 5rem 10rem 10rem 10rem;*/
+    transform: translateY(-4rem);
+    transform: skewY(-4deg);
+  }
+  .tour__about-1 > * {
+    transform: skewY(4deg);
+  }
+  .tour__about p {
+    width: 80%;
+  }
+  .tour__about h1 {
+    margin-top: 1rem;
+  }
+  .quick__facts {
+    padding: 20rem 10rem;
+  }
+  .quick__facts h1 {
+    margin: 3rem 0;
+    font-size: 2rem;
+    text-align: center;
+  }
+}
+
+@media (max-width: 700px) {
+  .review__info {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 450px) {
+  .tour__about-1 {
+    /*padding: 5rem 10rem 10rem 10rem;*/
+    padding-bottom: -10rem;
+    padding-top: 4rem;
+    transform: translateY(-4rem);
+    transform: skewY(-4deg);
+  }
+  .bookTour__info--1 p {
+    font-size: 1.3rem;
+  }
+  .bookTour__container {
+    padding: 6rem;
+    font-size: 1.5rem;
+  }
+  .agency__info--polygon {
+    margin: -3rem;
+    padding-bottom: 4rem;
+  }
+  .bookTour__info--1 h1 {
+    font-size: 1.6rem;
+  }
+  .agency__info--polygon > * {
+    transform: translateY(-7rem);
+  }
+  .quick__facts-1 {
+    padding: 20rem 12rem;
+    margin-top: -18rem;
+  }
+  .quick__facts-1 h1 {
+    margin: 3rem 0;
+    font-size: 2rem;
+    text-align: center;
+  }
+}
+
+@media (max-width: 950px) {
+  .bookTour__info {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .bookTour__info--1 {
+    margin: 2rem;
+  }
+  .bookTour__buttons {
+    margin-right: 30%;
+  }
 }

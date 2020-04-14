@@ -125,3 +125,54 @@
   align-items: center;
   justify-content: center;
 }
+
+@media (max-width: 50em) {
+  .settings__container {
+    padding: 2rem 1rem;
+  }
+}
+
+@media (max-width: 47em) {
+  .user__links {
+    padding: 2rem;
+    font-size: 1.5rem;
+  }
+  .user__links li {
+    font-size: 1.4rem;
+  }
+  .user__info h1 {
+    font-size: 1.8rem;
+  }
+  .user__info input {
+    width: 55%;
+  }
+  .user__info button {
+    padding: 1.5rem 2rem;
+  }
+  .save__btn {
+    margin-left: auto;
+    margin-top: 1rem;
+  }
+  .passwordChange__container input {
+    width: 60%;
+  }
+  .passwordChange__container {
+    border-top: 1px solid #ccc;
+    padding: 4rem 2rem;
+    width: 100%;
+  }
+  .user__photo--container {
+    flex-direction: column;
+  }
+}
+@media (max-width: 42em) {
+  .save__btn {
+    margin-top: 2rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .settings__info {
+    flex-direction: column;
+  }
+}

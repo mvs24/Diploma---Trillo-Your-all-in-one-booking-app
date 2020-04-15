@@ -6,10 +6,12 @@ import thunk from 'redux-thunk';
 import App from './App';
 import './index.css';
 import userReducer from './store/reducers/userReducer';
+import flightsReducer from './store/reducers/flightsReducer';
 // import * as serviceWorker from './serviceWorker';
 
 const rootReducer = combineReducers({
   user: userReducer,
+  flights: flightsReducer,
 });
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(

@@ -4,7 +4,7 @@ const AppError = require('../utils/appError');
 const factory = require('./factoryHandler');
 const asyncWrapper = require('../utils/asyncWrapper');
 
-const getFlightsForSingleAgency = type =>
+const getFlightsForSingleAgency = (type) =>
   asyncWrapper(async (req, res, next) => {
     let filter = {};
 
@@ -23,7 +23,7 @@ const getFlightsForSingleAgency = type =>
     let futureFlights = [];
     let finishedFlights = [];
 
-    flights.forEach(el => {
+    flights.forEach((el) => {
       if (el.depart.getTime() > Date.now()) {
         futureFlights.push(el);
       } else {
@@ -45,7 +45,7 @@ const getFlightsForSingleAgency = type =>
     res.status(200).json({
       status: 'success',
       results,
-      data
+      data,
     });
   });
 
@@ -59,7 +59,7 @@ exports.updateFlight = asyncWrapper(async (req, res, next) => {
 
   if (!flight) return next(new AppError('Flight not found', 404));
 
-  Object.keys(req.body).forEach(el => {
+  Object.keys(req.body).forEach((el) => {
     flight[el] = req.body[el];
   });
 
@@ -67,6 +67,24 @@ exports.updateFlight = asyncWrapper(async (req, res, next) => {
 
   res.status(200).json({
     status: 'success',
-    data: updatedFlight
+    data: updatedFlight,
+  });
+});
+
+exports.getSearchedFlights = asyncWrapper(async (req, res, next) => {
+  const { from, to, depart, package, returnDate } = req.query;
+
+  const flights = await Flight.find({
+    from: new RegExp(from, 'i'),
+    to: new RegExp(to, 'i'),
+    depart,
+    package,
+    returnDate,
+  });
+
+  res.status(200).json({
+    status: 'success',
+    results: flights.length,
+    data: flights,
   });
 });

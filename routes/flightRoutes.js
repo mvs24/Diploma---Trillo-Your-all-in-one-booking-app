@@ -20,12 +20,14 @@ router
   .route('/')
   .post(
     authController.protect,
-    authController.restrictTo('agencyCreator'),
+    authController.restrictTo('agencyCreator', 'user'),
     setAgencyId,
     controlCategory('flights'),
     flightController.createFlight
   )
   .get(flightController.getFutureFlights);
+
+router.get('/searchedFlights', flightController.getSearchedFlights);
 
 router.use(
   authController.protect,
@@ -40,7 +42,7 @@ router
       'numBought',
       'agency',
       'ratingsQuantity',
-      'ratingsAverage'
+      'ratingsAverage',
     ]);
     next();
   }, flightController.updateFlight)

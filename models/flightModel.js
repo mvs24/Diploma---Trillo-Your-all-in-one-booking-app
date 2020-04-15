@@ -5,91 +5,91 @@ const Agency = require('./agencyModel');
 
 const flightSchema = new mongoose.Schema({
   from: {
-    type: {
-      type: String,
-      default: 'Point',
-      enum: {
-        values: ['Point'],
-        message: 'Type must be Point'
-      }
-    },
-    coordinates: [Number],
-    address: String,
-    description: String
+    // type: {
+    //   type: String,
+    //   default: 'Point',
+    //   enum: {
+    //     values: ['Point'],
+    //     message: 'Type must be Point'
+    //   }
+    // },
+    // coordinates: [Number],
+    type: String,
+    // description: String
   },
   to: {
-    type: {
-      type: String,
-      default: 'Point',
-      enum: {
-        values: ['Point'],
-        message: 'Type must be Point'
-      }
-    },
-    coordinates: [Number],
-    address: String,
-    description: String
+    // type: {
+    //   type: String,
+    //   default: 'Point',
+    //   enum: {
+    //     values: ['Point'],
+    //     message: 'Type must be Point'
+    //   }
+    // },
+    // coordinates: [Number],
+    type: String,
+    // description: String
   },
   depart: {
     type: Date,
-    required: [true, 'A flight must have depart specified']
+    required: [true, 'A flight must have depart specified'],
   },
   returnDate: Date,
   ratingsAverage: {
     type: Number,
     default: 0.0,
-    set: val => Math.round(val * 10) / 10
+    set: (val) => Math.round(val * 10) / 10,
   },
   ratingsQuantity: {
     type: Number,
-    default: 0
+    default: 0,
   },
   package: {
     type: String,
     enum: {
       values: ['Economic', 'First Class'],
-      message: 'Package must be either Economic or First Class'
-    }
+      message: 'Package must be either Economic or First Class',
+    },
   },
   pricePerPerson: {
     type: Number,
-    required: [true, 'A flight must have price per Person specified']
+    required: [true, 'A flight must have price per Person specified'],
   },
   priceDiscount: {
     type: Number,
     validate: {
-      validator: function(val) {
+      validator: function (val) {
         return val < this.pricePerPerson;
       },
-      message: 'Discount price ({VALUE}) should be below regular price'
-    }
+      message: 'Discount price ({VALUE}) should be below regular price',
+    },
   },
   maxGroupSize: {
     type: Number,
-    required: [true, 'Maximum group size must not be empty']
+    required: [true, 'Maximum group size must not be empty'],
   },
   variety: {
     type: String,
     enum: {
       values: ['Round-Trip', 'One-Way'],
-      message: 'Package must be either Economic or First Class'
-    }
+      message: 'Package must be either Economic or First Class',
+    },
   },
   agency: {
     type: mongoose.Schema.ObjectId,
-    ref: 'Agency'
+    ref: 'Agency',
   },
   numBought: {
     type: Number,
-    default: 0
-  }
+    default: 0,
+  },
 });
 
 // // Virtual populate
 flightSchema.virtual('reviews', {
   ref: 'ReviewFlight',
   foreignField: 'flight',
-  localField: '_id'
+  localField: '_id',
 });
 
 // flightSchema.virtual('bookings', {
@@ -104,7 +104,7 @@ flightSchema.virtual('reviews', {
 //   localField: '_id'
 // });
 
-flightSchema.pre(/^find/, function(next) {
+flightSchema.pre(/^find/, function (next) {
   this.populate('reviews');
   // .populate({ path: 'bookings', select: 'user createdAt' })
   // .populate({ path: 'wishlists', select: 'user' });
@@ -112,7 +112,7 @@ flightSchema.pre(/^find/, function(next) {
   next();
 });
 
-flightSchema.pre(/^find/, function(next) {
+flightSchema.pre(/^find/, function (next) {
   this.populate({ path: 'guides', select: 'name lastname photo' });
 
   next();
@@ -130,19 +130,19 @@ const updateAgencyOnTour = async (Model, agencyId, type, next) => {
   await Agency.findByIdAndUpdate(agencyId, { numOptions: newNumOptions });
 };
 
-flightSchema.post('save', async function(doc, next) {
+flightSchema.post('save', async function (doc, next) {
   await updateAgencyOnTour(Agency, doc.agency, 'create', next);
 
   next();
 });
 
-flightSchema.post(/^findOneAndDelete/, async function(doc, next) {
+flightSchema.post(/^findOneAndDelete/, async function (doc, next) {
   await updateAgencyOnTour(Agency, doc.agency, 'delete', next);
 
   next();
 });
 
-flightSchema.pre('save', function(next) {
+flightSchema.pre('save', function (next) {
   if (this.variety !== 'Round-Trip') {
     this.returnDate = undefined;
   } else {

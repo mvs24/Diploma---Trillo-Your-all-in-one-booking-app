@@ -650,6 +650,12 @@ const Header = React.memo((props) => {
         >
           Trillo
         </h2>
+        <h3
+          className="heading__flights"
+          onClick={() => props.history.push('/categories/flights')}
+        >
+          Flights
+        </h3>
 
         <form onSubmit={searchHandler} className="searchForm">
           <input

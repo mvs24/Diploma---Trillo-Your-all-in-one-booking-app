@@ -19,6 +19,8 @@ import Search from './pages/Search/Search';
 import MakeAnImpact from './pages/MakeAnImpact/MakeAnImpact';
 import CreateAgency from './pages/CreateAgency/CreateAgency';
 import MyAgency from './AccountSettings/MyAgency/MyAgency';
+import Flights from './pages/Flights/Flights';
+import RequestedFlights from './pages/Flights/RequestedFlights';
 
 function App(props) {
   const setUserData = async () => {
@@ -53,6 +55,8 @@ function App(props) {
           <Route path="/make-an-impact" exact component={MakeAnImpact} />
           <Route path="/create-agency" exact component={CreateAgency} />
           <Route path="/my-agency" exact component={MyAgency} />
+          <Route path="/categories/flights" exact component={Flights} />
+          <Route path="/requested/flights" exact component={RequestedFlights} />
         </Switch>
       </Layout>
       <Route

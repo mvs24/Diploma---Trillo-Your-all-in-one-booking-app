@@ -158,3 +158,8 @@
   text-align: center;
   color: #ffb900;
 }
+
+.heading__flights {
+  font-size: 1.5rem;
+  cursor: pointer;
+}

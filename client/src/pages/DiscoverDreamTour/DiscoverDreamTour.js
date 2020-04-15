@@ -420,9 +420,6 @@ const DiscoverDreamTour = React.memo((props) => {
   const start = (page - 1 )  * resPerPage;
   const end = page * resPerPage
 
-  console.log(start, end)
-
-  // console.log()
   let updatedAllTours = allTours.slice(start, end)
 
   return (

@@ -33,6 +33,10 @@
 
    background: linear-gradient(to right, #FF3366, #BA265D);
 }
+.blue{
+   background: linear-gradient(to right, #2998ff, #5643fa);
+
+}
 
 .neutral {
   background: #faf9f9;

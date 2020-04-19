@@ -75,6 +75,7 @@ const flightSchema = new mongoose.Schema({
       message: 'Package must be either Economic or First Class',
     },
   },
+  time: String,
   agency: {
     type: mongoose.Schema.ObjectId,
     ref: 'Agency',

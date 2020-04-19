@@ -1,0 +1,33 @@
+.requestedFlights__container {
+  background: #faf9f9;
+  min-height: 100vh;
+}
+.flight__container {
+  background: white;
+}
+.flight__info {
+  display: flex;
+  align-items: center;
+}
+
+.flight__info img {
+  width: 6rem;
+  height: 6rem;
+  border-radius: 100px;
+}
+.flight__container {
+  width: 70%;
+  margin: 1rem auto;
+  font-size: 1.6rem;
+  display: flex;
+  flex-direction: column;
+}
+.flight__container p {
+  margin: 0 1.5rem;
+  text-align: center;
+  width: 70%;
+}
+.flight__container button {
+  align-self: flex-end;
+  margin: 0.5rem;
+}

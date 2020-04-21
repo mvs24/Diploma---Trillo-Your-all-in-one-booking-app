@@ -126,6 +126,11 @@ const Flights = (props) => {
   const searchFlightsHandler = async (e) => {
     e.preventDefault();
 
+    console.log(flightsInput);
+    if (selectedWay === 'oneWay') {
+      delete flightsInput['returnDate'];
+    }
+
     let isValid = true;
     for (let key in flightsInput) {
       if (!flightsInput[key].valid) {
@@ -145,11 +150,15 @@ const Flights = (props) => {
       to: flightsInput.to.value,
       depart: flightsInput.depart.value,
       package: selectedOption.value,
-      returnDate: flightsInput.returnDate.value,
+      returnDate: flightsInput.returnDate
+        ? flightsInput.returnDate.value
+        : null,
     };
 
     await props.getRequestedFlights(data);
-    props.history.push('/requested/flights');
+    props.history.push(
+      `/requested/flights?variety=${data.variety}&from=${data.from}&to=${data.to}&depart=${data.depart}&package=${data.package}&returnDate=${data.returnDate}`
+    );
   };
 
   const checkBoxHandler = (e) => {

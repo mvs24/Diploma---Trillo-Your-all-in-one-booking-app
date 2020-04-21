@@ -4,26 +4,29 @@
 }
 .flight__container {
   background: white;
+  border-radius: .4rem;
+  border: 1px solid #ccc;
+  margin: .5rem 0;
 }
 .flight__info {
   display: flex;
   align-items: center;
 }
 
-.flight__info img {
+.flight__img {
   width: 6rem;
   height: 6rem;
   border-radius: 100px;
 }
 .flight__container {
-  width: 70%;
+  width: 90%;
   margin: 1rem auto;
   font-size: 1.6rem;
   display: flex;
   flex-direction: column;
 }
 .flight__container p {
-  margin: 0 1.5rem;
+  margin: .6rem 0;
   text-align: center;
   width: 70%;
 }
@@ -33,4 +36,10 @@
 }
 .bookNow__btn {
 	margin: 2rem;
+}
+.from__to {
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }

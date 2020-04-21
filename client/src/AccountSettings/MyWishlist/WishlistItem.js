@@ -36,7 +36,7 @@ const WishlistItem = (props) => {
           {error}
         </ErrorModal>
       )}
-      <TourItem tour={tour} />
+      <TourItem wishlistTourItem={true} tour={tour} />
     </div>
   );
 };

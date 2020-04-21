@@ -76,7 +76,7 @@ const TourItem = React.memo((props) => {
   const history = useHistory();
   const { tour, wishlist, isAuthenticated, reviews } = props;
   const [should, setShould] = useState();
-  const { shouldUpdate, isTourLiked } = props;
+  const { shouldUpdate, isTourLiked, removed, removeTour } = props;
 
   useEffect(() => {
     setShould(props.shouldUpdate);
@@ -105,6 +105,26 @@ const TourItem = React.memo((props) => {
       setShould(false);
     }
   }, [shouldUpdate]);
+
+  useEffect(() => {
+    let wishlistTours = []; //[ids]
+
+    if (wishlist && isAuthenticated) {
+      wishlist.data.forEach((el) => {
+        wishlistTours.push(el.tour);
+      });
+    }
+
+    if (wishlistTours.includes(tour._id)) {
+      setIsLiked(true);
+      setUpdated(true);
+      setShould(false);
+    } else {
+      setIsLiked();
+      setUpdated(true);
+      setShould(false);
+    }
+  }, [removeTour, wishlist]);
 
   // if (!updated || should ) {
   //   ///THIS WAS CRAZY!!!!!!!!!!!!!!!
@@ -437,6 +457,7 @@ const TourItem = React.memo((props) => {
     try {
       setLoading(true);
       await props.removeFromCart(tour._id);
+      props.removed();
       setLoading(false);
     } catch (err) {
       setLoading();
@@ -499,13 +520,15 @@ const TourItem = React.memo((props) => {
           alt="Tour"
           className="tour__img"
         />
-        <IconContext.Provider value={{ className: 'tour__like' }}>
-          {isLiked ? (
-            <IoIosHeart onClick={() => removeTourFromWishlist(tour._id)} />
-          ) : (
-            <IoIosHeartEmpty onClick={() => addTourToWishlist(tour._id)} />
-          )}
-        </IconContext.Provider>
+        {props.wishlistTourItem ? null : (
+          <IconContext.Provider value={{ className: 'tour__like' }}>
+            {isLiked ? (
+              <IoIosHeart onClick={() => removeTourFromWishlist(tour._id)} />
+            ) : (
+              <IoIosHeartEmpty onClick={() => addTourToWishlist(tour._id)} />
+            )}
+          </IconContext.Provider>
+        )}
         <h5 className="tour__name">{tour.name}</h5>
         <div className="tour__location">
           <IconContext.Provider value={{ className: 'icon__green' }}>

@@ -10,6 +10,35 @@ const RequestedFlights = (props) => {
   const [requestedFlights, setRequestedFlights] = useState();
   const [loading, setLoading] = useState();
   const [error, setError] = useState();
+  const [myFlights, setMyFlights] = useState();
+  const [myFlightsIds, setMyFlightsIds] = useState();
+  const { isAuthenticated } = props;
+
+  useEffect(() => {
+    const getMyFlights = async () => {
+      try {
+        setLoading(true);
+        const res = await axios.get('/api/v1/bookings/flights/futureBookings');
+        setLoading(false);
+        setMyFlights(res.data.data);
+      } catch (err) {
+        setError(err.response.data.message);
+      }
+    };
+    if (isAuthenticated) {
+      getMyFlights();
+    }
+  }, [isAuthenticated]);
+
+  useEffect(() => {
+    let myFlightsIds = [];
+    if (myFlights) {
+      myFlightsIds = myFlights.map((flight) => flight._id);
+      setMyFlightsIds(myFlightsIds);
+    }
+  }, [myFlights]);
+
+  console.log(myFlightsIds);
 
   useEffect(() => {
     const getRequestedFlights = async () => {
@@ -36,6 +65,7 @@ const RequestedFlights = (props) => {
   }, []);
 
   if (!requestedFlights) return <h1>No flights found...</h1>;
+  if (!myFlightsIds) return <LoadingSpinner asOverlay />;
 
   if (!requestedFlights || requestedFlights.length === 0)
     return <h1>No flights found!</h1>;
@@ -51,11 +81,15 @@ const RequestedFlights = (props) => {
       <div className="flight__filters">Filters</div>
       <div className="all__flights">
         {requestedFlights.map((flight) => (
-          <Flight flight={flight} />
+          <Flight booked={myFlightsIds.includes(flight._id)} flight={flight} />
         ))}
       </div>
     </div>
   );
 };
 
-export default RequestedFlights;
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.user.isAuthenticated,
+});
+
+export default connect(mapStateToProps)(RequestedFlights);

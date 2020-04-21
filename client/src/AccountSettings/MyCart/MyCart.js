@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { connect } from 'react-redux';
 import CartItem from './CartItem';
 import './MyCart.css';
 
 const MyCart = (props) => {
+  const [removed, setRemoved] = useState()
   const { cartTour, isAuthenticated } = props;
 
   if (!isAuthenticated) return null;
@@ -15,11 +16,15 @@ const MyCart = (props) => {
       </div>
     );
 
+  const removeHandler = () => {
+    setRemoved(prev => !prev)
+  }
+
   return (
     <div className="my__cartContainer">
       <div className="cart__container">
         {cartTour.map((el) => (
-          <CartItem tourId={el.tour} />
+          <CartItem removeTour={removed} removed={removeHandler} tourId={el.tour} />
         ))}
       </div>
     </div>

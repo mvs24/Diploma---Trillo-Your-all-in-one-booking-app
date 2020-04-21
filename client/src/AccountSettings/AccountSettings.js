@@ -9,6 +9,7 @@ import {
   IoMdHeartEmpty,
   IoMdNotificationsOutline,
   IoIosLogOut,
+  IoIosAirplane,
 } from 'react-icons/io';
 import { FiShoppingCart } from 'react-icons/fi';
 import Input from '../shared/components/Input/Input';
@@ -315,6 +316,14 @@ const AccountSettings = (props) => {
               <FiShoppingCart />
             </IconContext.Provider>
             <p className="">MY SHOPPING CART (TOURS)</p>
+          </li>
+          <li onClick={() => history.push('/my-flights')}>
+            <IconContext.Provider
+              value={{ className: 'icon__white tour__info--icon' }}
+            >
+              <IoIosAirplane /> 
+            </IconContext.Provider>
+            <p className="">MY FLIGHTS</p>
           </li>
           <li
             onClick={() => history.push('/my-notifications')}

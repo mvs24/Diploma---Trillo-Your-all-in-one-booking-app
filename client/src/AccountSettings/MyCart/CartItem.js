@@ -12,7 +12,7 @@ const CartItem = (props) => {
   const [isLiked, setIsLiked] = useState();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
-  const { tourId, wishlist, isAuthenticated } = props;
+  const { tourId, wishlist, isAuthenticated, removeTour } = props;
 
   useEffect(() => {
     const getTour = async () => {
@@ -40,7 +40,7 @@ const CartItem = (props) => {
     } else {
       setIsLiked();
     }
-  }, [tourId]);
+  }, [tourId, removeTour]);
 
   if (!tour) return <LoadingSpinner asOverlay />;
   if (!wishlist) return <LoadingSpinner asOverlay />;
@@ -53,7 +53,12 @@ const CartItem = (props) => {
           {error}
         </ErrorModal>
       )}
-      <TourItem isTourLiked={isLiked} cartItem tour={tour} />
+      <TourItem
+        removed={props.removed}
+        isTourLiked={isLiked}
+        cartItem
+        tour={tour}
+      />
     </div>
   );
 };

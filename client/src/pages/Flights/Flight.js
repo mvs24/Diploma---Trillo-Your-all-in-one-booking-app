@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
+import ErrorModal from '../../shared/components/UI/ErrorModal';
+
 import Button from '../../shared/components/Button/Button';
 import axios from 'axios';
 import './Flight.css';
@@ -21,6 +24,8 @@ const Flight = (props) => {
   const [selectedOption, setSelectedOption] = useState();
   const [openConfirmTickets, setOpenConfirmTickets] = useState();
   const [processBooking, setProcessBooking] = useState();
+  const history = useHistory();
+  const { isAuthenticated } = props;
 
   useEffect(() => {
     const getAgency = async () => {
@@ -40,9 +45,7 @@ const Flight = (props) => {
 
   if (!agency) return <LoadingSpinner asOverlay />;
 
-  const stripePromise = loadStripe(
-    'pk_test_zUIsJ0pP0ioBysHoQcStX9cC00X97vuB7d'
-  );
+  const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_API);
 
   const bookFlight = async () => {
     const nrTickes = selectedOption.value;
@@ -70,9 +73,23 @@ const Flight = (props) => {
     setSelectedOption(selectedOption);
   };
 
+  const visitAgencyHandler = () => {
+    history.push(`/flights/agency/${flight.agency}`);
+  };
+
+  let returnDt;
+  if (flight.returnDate) {
+    returnDt = flight.returnDate.split('T')[0];
+  }
+
   return (
     <div className="flight__container">
       {loading && <LoadingSpinner asOverlay />}
+      {error && (
+        <ErrorModal show onClear={() => setError()}>
+          {error}
+        </ErrorModal>
+      )}
       {openConfirmTickets && (
         <Modal
           show
@@ -86,25 +103,76 @@ const Flight = (props) => {
               options={options}
             />
             <Button
+              disabled={processBooking}
               type="success"
               className="bookNow__btn"
               clicked={bookFlight}
             >
-              Book Now
+              {processBooking ? 'Processing' : 'Book Now'}
             </Button>
           </div>
         </Modal>
       )}
       <div className="flight__info">
-        <img src={`http://localhost:5000${agency.image}`} />
         <p>Agency: {agency.name}</p>
-        <p>{flight.package}</p>
-        <p>Depart: {flight.time}</p>
-        <p>Price per person: ${flight.pricePerPerson}</p>
+
+        <p>Type: {flight.variety}</p>
+        <p>
+          <span> Depart: {flight.depart.split('T')[0]} </span>
+          {flight.time ? <strong>:{flight.time}</strong> : null}
+        </p>
+        <p>
+          {returnDt ? (
+            <span>Return Date:{returnDt} </span>
+          ) : (
+            <span>Return Date: ---</span>
+          )}{' '}
+        </p>
       </div>
-      <Button clicked={() => setOpenConfirmTickets(true)} type="blue">
-        Confirm number of tickets
-      </Button>
+      <div className="from__to">
+        <p>{flight.package}</p>
+
+        <p>FROM: {flight.from}</p>
+        <p>TO: {flight.to}</p>
+
+        <p>
+          Price per person: <strong> ${flight.pricePerPerson}</strong>
+        </p>
+      </div>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginTop: '1.5rem',
+        }}
+      >
+        <Button type="success" clicked={visitAgencyHandler}>
+          VISIT AGENCY
+        </Button>
+        <img
+          className="flight__img"
+          src={`http://localhost:5000${agency.image}`}
+        />
+
+        {!props.myFlight ? (
+          <Button
+            disabled={props.booked}
+            clicked={() => {
+              if (props.isAuthenticated) {
+                setOpenConfirmTickets(true);
+              } else {
+                setError('You need to be logged in to book a flight!');
+              }
+            }}
+            type="blue"
+          >
+            {props.booked ? 'Booked' : 'Confirm number of tickets'}
+          </Button>
+        ) : (
+          <div></div>
+        )}
+      </div>
     </div>
   );
 };

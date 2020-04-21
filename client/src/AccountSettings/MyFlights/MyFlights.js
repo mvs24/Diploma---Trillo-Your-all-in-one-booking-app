@@ -3,46 +3,46 @@ import { connect } from 'react-redux';
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
 import ErrorModal from '../../shared/components/UI/ErrorModal';
 import axios from 'axios';
-import TourItem from '../../components/TourItem/TourItem';
-import './MyBookings.css';
+import Flight from '../../pages/Flights/Flight';
+import './MyFlights.css';
 
 const MyBookings = (props) => {
-  const [myBookings, setMyBookings] = useState([]);
+  const [myFlights, setMyFlights] = useState([]);
   const [loading, setLoading] = useState();
   const [error, setError] = useState();
   const { isAuthenticated } = props;
 
   useEffect(() => {
-    const getMyBookings = async () => {
+    const getMyFlights = async () => {
       try {
         setLoading(true);
-        const res = await axios.get('/api/v1/users/my/bookings');
+        const res = await axios.get('/api/v1/bookings/flights/futureBookings');
         setLoading(false);
-        setMyBookings(res.data.data);
+        setMyFlights(res.data.data);
       } catch (err) {
         setError(err.response.data.message);
       }
     };
 
     if (isAuthenticated) {
-      getMyBookings();
+      getMyFlights();
     }
   }, [isAuthenticated]);
 
   if (loading) return <LoadingSpinner asOverlay />;
 
-  if (myBookings.length === 0)
+  if (myFlights.length === 0)
     return (
       <div className="wish__data">
-        <h1>You have not booked a tour yet!</h1>
+        <h1>You have not booked a flight yet!</h1>
       </div>
     );
 
   return (
-    <div className="my__bookings">
+    <div className="my__flights">
       {error && <ErrorModal>{error}</ErrorModal>}
-      {myBookings.map((booking) => (
-        <TourItem tour={booking.tour} booked />
+      {myFlights.map((flight) => (
+        <Flight myFlight flight={flight} />
       ))}
     </div>
   );

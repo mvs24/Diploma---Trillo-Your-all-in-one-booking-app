@@ -8,6 +8,7 @@ import './MyFlights.css';
 
 const MyBookings = (props) => {
   const [myFlights, setMyFlights] = useState([]);
+  const [shouldFlightUpdate, setShouldFlightUpdate] = useState();
   const [loading, setLoading] = useState();
   const [error, setError] = useState();
   const { isAuthenticated } = props;
@@ -27,7 +28,7 @@ const MyBookings = (props) => {
     if (isAuthenticated) {
       getMyFlights();
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, shouldFlightUpdate]);
 
   if (loading) return <LoadingSpinner asOverlay />;
 
@@ -38,11 +39,15 @@ const MyBookings = (props) => {
       </div>
     );
 
+  const reviewUpdateHandler = () => {
+    setShouldFlightUpdate((prev) => !prev);
+  };
+
   return (
     <div className="my__flights">
       {error && <ErrorModal>{error}</ErrorModal>}
       {myFlights.map((flight) => (
-        <Flight myFlight flight={flight} />
+        <Flight reviewUpdated={reviewUpdateHandler} myFlight flight={flight} />
       ))}
     </div>
   );

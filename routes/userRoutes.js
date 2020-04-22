@@ -4,6 +4,7 @@ const authController = require('../controllers/authController');
 const userController = require('../controllers/userController');
 const bookingTourController = require('../controllers/bookingTourController');
 const reviewTourController = require('../controllers/reviewTourController');
+const reviewFlightController = require('../controllers/reviewFlightController');
 const filterBody = require('../globalMiddlewares/filterBody');
 const fileUpload = require('../globalMiddlewares/file-upload');
 const router = express.Router();
@@ -49,6 +50,12 @@ router.get(
   '/my/bookings',
   authController.protect,
   bookingTourController.getMyBookings
+);
+
+router.get(
+  '/my/reviews/flights',
+  authController.protect,
+  reviewFlightController.getMyReviews
 );
 
 router.get(

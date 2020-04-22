@@ -24,6 +24,7 @@ import RequestedFlights from './pages/Flights/RequestedFlights';
 import SuccessFlightBooking from './components/SuccessFlightBooking/SuccessFlightBooking';
 import MyFlights from './AccountSettings/MyFlights/MyFlights';
 import FlightAgencyDetails from './pages/FlightAgencyDetails/FlightAgencyDetails';
+import FlightDetails from './pages/Flights/FlightDetails'
 
 function App(props) {
   const setUserData = async () => {
@@ -66,9 +67,10 @@ function App(props) {
             exact
             component={FlightAgencyDetails}
           />
+          <Route path="/flights/:flightId" exact component={FlightDetails} />
         </Switch>
       </Layout>
-      <Route
+      <Route 
         path="/success/tours/:tourId/users/:userId/price/:price"
         exact
         component={SuccessBooking}

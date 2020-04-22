@@ -4,9 +4,9 @@
 }
 .flight__container {
   background: white;
-  border-radius: .4rem;
+  border-radius: 0.4rem;
   border: 1px solid #ccc;
-  margin: .5rem 0;
+  margin: 0.5rem 0;
 }
 .flight__info {
   display: flex;
@@ -19,14 +19,14 @@
   border-radius: 100px;
 }
 .flight__container {
-  width: 90%;
+  width: 100%;
   margin: 1rem auto;
   font-size: 1.6rem;
   display: flex;
   flex-direction: column;
 }
 .flight__container p {
-  margin: .6rem 0;
+  margin: 0.6rem 0;
   text-align: center;
   width: 70%;
 }
@@ -35,11 +35,30 @@
   margin: 0.5rem;
 }
 .bookNow__btn {
-	margin: 2rem;
+  margin: 2rem;
 }
 .from__to {
-
   display: flex;
   align-items: center;
   justify-content: flex-start;
+}
+.review__flight {
+  width: 35%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.review__flight h5 {
+  width: 50%;
+  font-size: 1.6rem;
+}
+.flight__rating__container {
+  display: flex;
+  align-items: center;
+}
+.flight__rating__container span {
+  margin: 0 0.3rem;
+  display: flex;
+  align-items: center;
 }

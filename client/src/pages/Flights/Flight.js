@@ -3,18 +3,35 @@ import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
 import ErrorModal from '../../shared/components/UI/ErrorModal';
-
+import { IconContext } from 'react-icons';
+import {
+  IoMdStar,
+  IoIosStarOutline,
+  IoIosStarHalf,
+  IoMdStarOutline,
+} from 'react-icons/io';
 import Button from '../../shared/components/Button/Button';
 import axios from 'axios';
 import './Flight.css';
 import Select from 'react-select';
 import Modal from '../../shared/components/UI/Modal';
 import { loadStripe } from '@stripe/stripe-js';
+import Textarea from '../../shared/components/Input/Textarea';
 
 let options = [];
 for (let i = 1; i <= 5; i++) {
   options.push({ value: i, label: i });
 }
+
+const StarCmp = (props) => (
+  <IconContext.Provider
+    value={{
+      className: `icon__green tour__info--icon full star review--icon ${props.starName}`,
+    }}
+  >
+    {props.children}
+  </IconContext.Provider>
+);
 
 const Flight = (props) => {
   const { flight } = props;
@@ -24,6 +41,20 @@ const Flight = (props) => {
   const [selectedOption, setSelectedOption] = useState();
   const [openConfirmTickets, setOpenConfirmTickets] = useState();
   const [processBooking, setProcessBooking] = useState();
+  const [review, setReview] = useState();
+  const [openReviewModal, setOpenReviewModal] = useState();
+  const [reviewed, setReviewed] = useState();
+  const [reviewId, setReviewId] = useState();
+  const [myReview, setMyReview] = useState({
+    configOptions: {
+      type: 'text',
+      placeholder: 'Your Review',
+    },
+    value: '',
+    valid: true,
+    touched: false,
+    validRequirements: {},
+  });
   const history = useHistory();
   const { isAuthenticated } = props;
 
@@ -41,6 +72,22 @@ const Flight = (props) => {
     };
 
     getAgency();
+  }, [flight]);
+
+  useEffect(() => {
+    const getMyReviews = async () => {
+      const res = await axios.get(`/api/v1/users/my/reviews/flights`);
+      const flightIds = res.data.data.map((flight) => flight.flight);
+
+      if (flightIds.includes(flight._id)) {
+        const myRev = res.data.data.find((el) => el.flight === flight._id);
+        setReviewed(true);
+        setReview(myRev.rating);
+        setReviewId(myRev._id);
+      }
+    };
+
+    getMyReviews();
   }, [flight]);
 
   if (!agency) return <LoadingSpinner asOverlay />;
@@ -77,14 +124,189 @@ const Flight = (props) => {
     history.push(`/flights/agency/${flight.agency}`);
   };
 
+  const checkValidity = (value, requirements) => {
+    let isValid = true;
+
+    if (requirements.required) {
+      isValid = isValid && value.trim().length !== 0;
+    }
+    if (requirements.minlength) {
+      isValid = isValid && value.trim().length >= requirements.minlength;
+    }
+    if (requirements.isEmail) {
+      isValid = isValid && /\S+@\S+\.\S+/.test(value);
+    }
+
+    return isValid;
+  };
+
+  const textInputHandler = (e) => {
+    const updatedReview = { ...myReview };
+    updatedReview.value = e.target.value;
+    updatedReview.touched = true;
+    updatedReview.valid = checkValidity(
+      updatedReview.value,
+      updatedReview.validRequirements
+    );
+
+    setMyReview(updatedReview);
+  };
+
   let returnDt;
   if (flight.returnDate) {
     returnDt = flight.returnDate.split('T')[0];
   }
 
+  let reviewToUpdate = [];
+  if (!review) {
+    for (let i = 1; i <= 5; i++) {
+      reviewToUpdate.push(
+        <StarCmp starName={`star-${i}`}>
+          <IoIosStarOutline data-review={`${i}`} />
+        </StarCmp>
+      );
+    }
+  } else {
+    for (let i = 1; i <= 5; i++) {
+      if (i <= review) {
+        reviewToUpdate.push(
+          <StarCmp starName={`star-${i}`}>
+            <IoMdStar data-review={`${i}`} />
+          </StarCmp>
+        );
+      } else {
+        reviewToUpdate.push(
+          <StarCmp starName={`star-${i}`}>
+            <IoIosStarOutline data-review={`${i}`} />
+          </StarCmp>
+        );
+      }
+    }
+  }
+
+  const reviewHandler = (e) => {
+    if (e.target.closest('svg')) {
+      const review = e.target.closest('svg').getAttribute('data-review');
+      setReview(review);
+      setOpenReviewModal(true);
+    }
+  };
+
+  const submitReview = async (e) => {
+    e.preventDefault();
+    const data = {
+      review: myReview.value,
+      rating: review,
+    };
+
+    try {
+      let res;
+      if (!reviewed) {
+        res = await axios.post(`/api/v1/flights/${flight._id}/reviews`, data);
+        setReviewId(res.data.data._id);
+      } else {
+        res = await axios.patch(
+          `/api/v1/flights/${flight._id}/reviews/${reviewId}`,
+          data
+        );
+        setReviewId(res.data.data._id);
+      }
+      props.reviewUpdated();
+      setReviewed(true);
+      setOpenReviewModal(false);
+    } catch (err) {
+      setError(err.response.data.message);
+    }
+  };
+
+  const visitFlightHandler = () => {
+    history.push('/flights/' + flight._id);
+  };
+
+  const dec = +flight.ratingsAverage.toFixed(2).toString().substring(0, 1);
+  const fr = +flight.ratingsAverage.toFixed(2).toString().substring(2, 3);
+  let nrFr = +fr;
+
+  let halfStar = (
+    <IconContext.Provider
+      value={{
+        className: 'icon__green tour__info--icon full star flight__star',
+      }}
+    >
+      <IoIosStarHalf />
+    </IconContext.Provider>
+  );
+  if (nrFr === 0) {
+    halfStar = null;
+  } else if (nrFr.toFixed(1) > 7) {
+    halfStar = (
+      <IconContext.Provider
+        value={{
+          className: 'icon__green tour__info--icon full star flight__star',
+        }}
+      >
+        <IoMdStar />
+      </IconContext.Provider>
+    );
+  } else if (nrFr.toFixed(1) < 2.5) {
+    halfStar = (
+      <IconContext.Provider
+        value={{
+          className: 'icon__green tour__info--icon full star flight__star',
+        }}
+      >
+        <IoMdStarOutline />
+      </IconContext.Provider>
+    );
+  }
+
+  let stars = [];
+  for (let i = 0; i < dec; i++) {
+    stars.push(
+      <IconContext.Provider
+        value={{
+          className: 'icon__green tour__info--icon full star flight__star',
+        }}
+      >
+        <IoMdStar />
+      </IconContext.Provider>
+    );
+  }
+
   return (
     <div className="flight__container">
       {loading && <LoadingSpinner asOverlay />}
+      {openReviewModal && (
+        <Modal
+          onCancel={() => {
+            setOpenReviewModal(false);
+          }}
+          header={'FEEDBACK'}
+          show
+        >
+          <div className="review__center">
+            {' '}
+            <h1 className="leave__review--heading your__review--heading">
+              {' '}
+              Your Rating:{' '}
+            </h1>{' '}
+            <p onClick={reviewHandler} className="my__review--stars">
+              {reviewToUpdate.map((el) => el)}
+            </p>
+          </div>
+          <div className="review__form" onSubmit={submitReview}>
+            <Textarea
+              touched={myReview.touched}
+              valid={myReview.valid}
+              configOptions={myReview.configOptions}
+              onChange={textInputHandler}
+            />
+            <Button clicked={submitReview} type="success">
+              Leave your review!
+            </Button>
+          </div>
+        </Modal>
+      )}
       {error && (
         <ErrorModal show onClear={() => setError()}>
           {error}
@@ -115,6 +337,16 @@ const Flight = (props) => {
       )}
       <div className="flight__info">
         <p>Agency: {agency.name}</p>
+        <p className="flight__rating__container">
+          {' '}
+          <span>Rating: </span>
+          <span>
+            {' '}
+            {stars.map((star) => star)}
+            {halfStar}
+          </span>{' '}
+          ({flight.ratingsAverage})
+        </p>
 
         <p>Type: {flight.variety}</p>
         <p>
@@ -150,6 +382,9 @@ const Flight = (props) => {
         <Button type="success" clicked={visitAgencyHandler}>
           VISIT AGENCY
         </Button>
+        <Button type="blue" clicked={visitFlightHandler}>
+          VISIT FLIGHT
+        </Button>
         <img
           className="flight__img"
           src={`http://localhost:5000${agency.image}`}
@@ -170,7 +405,14 @@ const Flight = (props) => {
             {props.booked ? 'Booked' : 'Confirm number of tickets'}
           </Button>
         ) : (
-          <div></div>
+          <div className="review__flight">
+            {reviewed ? <h5>Update your Review</h5> : <h5>Leave a review</h5>}
+            {reviewed ? (
+              <p onClick={reviewHandler}>{reviewToUpdate.map((el) => el)}</p>
+            ) : (
+              <p onClick={reviewHandler}>{reviewToUpdate.map((el) => el)}</p>
+            )}
+          </div>
         )}
       </div>
     </div>

@@ -25,8 +25,8 @@ router
   .route('/:id')
   .patch(
     authController.protect,
-    authController.restrictTo('user'),
-    controlCreator(ReviewFlight),
+    // authController.restrictTo('user'),
+    // controlCreator(ReviewFlight),
     filterBody(['flight', 'user']),
     reviewFlightController.updateReview
   )

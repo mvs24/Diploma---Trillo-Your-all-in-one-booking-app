@@ -272,10 +272,20 @@ const Flights = (props) => {
                 />
               ) : null}
             </div>
-            <Button type="blue">Search</Button>
+            <div className="flights__btns">
+              <Button type="blue">Search</Button>
+              <Button
+                clicked={() => props.history.push('/all-flights')}
+                className="all__flights__btn"
+                type="pink"
+              >
+                All Flights
+              </Button>
+            </div>
           </form>
         </div>
       </div>
+
       <div className="sea__airplane__container">
         <img className="seaImg" src={SeaImg} />
         <img src={AirplaneImg} className="airplaneImg" />

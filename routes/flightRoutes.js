@@ -14,6 +14,8 @@ const router = express.Router({ mergeParams: true });
 router.use('/:flightId/reviews', reviewFlightRouter);
 router.use('/:flightId/wishlistFlight', wishlistFlightRouter);
 
+router.route('/:flightId/review-stats').get(flightController.getReviewStats);
+
 router.route('/finishedFlights').get(flightController.getFinishedFlights);
 
 router
@@ -28,6 +30,7 @@ router
   .get(flightController.getFutureFlights);
 
 router.get('/searchedFlights', flightController.getSearchedFlights);
+router.route('/:id').get(flightController.getFlight);
 
 router.use(
   authController.protect,
@@ -37,6 +40,7 @@ router.use(
 
 router
   .route('/:id')
+  .get(flightController.getFlight)
   .patch((req, res, next) => {
     req.body = filterObj(req.body, [
       'numBought',

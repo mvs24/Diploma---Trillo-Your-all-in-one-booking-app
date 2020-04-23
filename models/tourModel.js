@@ -12,113 +12,113 @@ const tourSchema = new mongoose.Schema(
       unique: true,
       trim: true,
       maxlength: [40, 'A tour name must have less or equal then 40 characters'],
-      minlength: [3, 'A tour name must have more or equal then 6 characters']
+      minlength: [3, 'A tour name must have more or equal then 6 characters'],
     },
     slug: String,
     duration: {
       type: Number,
       required: [true, 'A tour must have a duration'],
-      min: 1
+      min: 1,
     },
     maxGroupSize: {
       type: Number,
       required: [true, 'A tour must have a group size'],
-      min: 5
+      min: 5,
     },
     difficulty: {
       type: String,
       required: [true, 'A tour must have a difficulty'],
       enum: {
         values: ['easy', 'medium', 'difficult'],
-        message: 'Difficulty is either: easy, medium or difficult'
-      }
+        message: 'Difficulty is either: easy, medium or difficult',
+      },
     },
     ratingsAverage: {
       type: Number,
       default: 0.0,
-      set: val => Math.round(val * 10) / 10
+      set: (val) => Math.round(val * 10) / 10,
     },
     ratingsQuantity: {
       type: Number,
-      default: 0
+      default: 0,
     },
     price: {
       type: Number,
-      required: [true, 'A tour must have a price']
+      required: [true, 'A tour must have a price'],
     },
     priceDiscount: {
       type: Number,
-      validate: { 
-        validator: function(val) {
+      validate: {
+        validator: function (val) {
           return val < this.price;
         },
-        message: 'Discount price ({VALUE}) should be below regular price'
-      }
+        message: 'Discount price ({VALUE}) should be below regular price',
+      },
     },
     summary: {
       type: String,
       trim: true,
-      required: [true, 'A tour must have a summary']
+      required: [true, 'A tour must have a summary'],
     },
     description: {
       type: String,
-      trim: true
+      trim: true,
     },
     imageCover: {
-      type: String
+      type: String,
     },
     images: [String],
     createdAt: {
       type: Date,
       default: Date.now(),
-      select: false
+      select: false,
     },
     startDates: [Date],
     startLocation: {
       type: {
         type: String,
         default: 'Point',
-        enum: ['Point']
+        enum: ['Point'],
       },
       coordinates: [Number],
       address: String,
-      description: String
+      description: String,
     },
     locations: [
       {
         type: {
           type: String,
           default: 'Point',
-          enum: ['Point']
+          enum: ['Point'],
         },
         coordinates: [Number],
         address: String,
         description: String,
-        day: Number
-      }
+        day: Number,
+      },
     ],
     guides: [
       {
         type: mongoose.Schema.ObjectId,
-        ref: 'User'
-      }
+        ref: 'User',
+      },
     ],
     agency: {
       type: mongoose.Schema.ObjectId,
-      ref: 'Agency'
+      ref: 'Agency',
     },
     user: {
       type: mongoose.Schema.ObjectId,
-      ref: 'User'
+      ref: 'User',
     },
     numBought: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
   },
   {
     toJSON: { virtuals: true },
-    toObject: { virtuals: true }
+    toObject: { virtuals: true },
   }
 );
 
@@ -126,7 +126,7 @@ const tourSchema = new mongoose.Schema(
 // tourSchema.index({ slug: 1 });
 // tourSchema.index({ startLocation: '2dsphere' });
 
-tourSchema.virtual('durationWeeks').get(function() {
+tourSchema.virtual('durationWeeks').get(function () {
   return this.duration / 7;
 });
 
@@ -134,31 +134,25 @@ tourSchema.virtual('durationWeeks').get(function() {
 tourSchema.virtual('reviews', {
   ref: 'ReviewTour',
   foreignField: 'tour',
-  localField: '_id'
+  localField: '_id',
 });
 
 tourSchema.virtual('bookings', {
   ref: 'BookingTour',
   foreignField: 'tour',
-  localField: '_id'
+  localField: '_id',
 });
 
 tourSchema.virtual('wishlists', {
   ref: 'WishlistTour',
   foreignField: 'tour',
-  localField: '_id'
+  localField: '_id',
 });
 
-tourSchema.pre(/^find/, function(next) {
+tourSchema.pre(/^find/, function (next) {
   this.populate('reviews')
     .populate({ path: 'bookings', select: 'user createdAt' })
     .populate({ path: 'wishlists', select: 'user' });
-
-  next();
-});
-
-tourSchema.pre(/^find/, function(next) {
-  this.populate({ path: 'guides', select: 'name lastname photo' });
 
   next();
 });
@@ -180,19 +174,19 @@ const updateAgencyOnTour = async (Model, agencyId, type, next) => {
   );
 };
 
-tourSchema.post('save', async function(doc, next) {
+tourSchema.post('save', async function (doc, next) {
   await updateAgencyOnTour(Agency, doc.agency, 'create', next);
 
   next();
 });
 
-tourSchema.pre(/^findOneAndDelete/, async function(next) {
+tourSchema.pre(/^findOneAndDelete/, async function (next) {
   this.tour = await this.findOne();
 
   next();
 });
 
-tourSchema.post(/^findOneAndDelete/, async function(next) {
+tourSchema.post(/^findOneAndDelete/, async function (next) {
   await updateAgencyOnTour(Agency, this.tour.agency, 'delete', next);
 
   next();

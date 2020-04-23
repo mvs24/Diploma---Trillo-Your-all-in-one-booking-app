@@ -63,3 +63,26 @@
   padding-left: 5rem;
   padding-right: 5rem;
 }
+
+.all__flights__btn {
+  padding: 1.5rem 5rem;
+}
+.flights__btns {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-right: 20%;
+}
+.blue__heading {
+  font-size: 3rem;
+  text-transform: uppercase;
+  background-image: linear-gradient(to right bottom, #5643fa, #2998ff);
+  color: transparent;
+  background-clip: text;
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+.blue__review {
+  color: #5643fa;
+}

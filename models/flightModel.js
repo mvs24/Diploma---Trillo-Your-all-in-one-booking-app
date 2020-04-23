@@ -3,88 +3,98 @@ const mongoose = require('mongoose');
 const AppError = require('../utils/appError');
 const Agency = require('./agencyModel');
 
-const flightSchema = new mongoose.Schema({
-  from: {
-    // type: {
-    //   type: String,
-    //   default: 'Point',
-    //   enum: {
-    //     values: ['Point'],
-    //     message: 'Type must be Point'
-    //   }
-    // },
-    // coordinates: [Number],
-    type: String,
-    // description: String
-  },
-  to: {
-    // type: {
-    //   type: String,
-    //   default: 'Point',
-    //   enum: {
-    //     values: ['Point'],
-    //     message: 'Type must be Point'
-    //   }
-    // },
-    // coordinates: [Number],
-    type: String,
-    // description: String
-  },
-  depart: {
-    type: Date,
-    required: [true, 'A flight must have depart specified'],
-  },
-  returnDate: Date,
-  ratingsAverage: {
-    type: Number,
-    default: 0.0,
-    set: (val) => Math.round(val * 10) / 10,
-  },
-  ratingsQuantity: {
-    type: Number,
-    default: 0,
-  },
-  package: {
-    type: String,
-    enum: {
-      values: ['Economic', 'First Class'],
-      message: 'Package must be either Economic or First Class',
+const flightSchema = new mongoose.Schema(
+  {
+    from: {
+      type: String,
     },
-  },
-  pricePerPerson: {
-    type: Number,
-    required: [true, 'A flight must have price per Person specified'],
-  },
-  priceDiscount: {
-    type: Number,
-    validate: {
-      validator: function (val) {
-        return val < this.pricePerPerson;
+    fromLocation: {
+      type: {
+        type: String,
+        default: 'Point',
+        enum: {
+          values: ['Point'],
+          message: 'Type must be Point',
+        },
       },
-      message: 'Discount price ({VALUE}) should be below regular price',
+      coordinates: [Number],
+      description: String,
+    },
+    toLocation: {
+      type: {
+        type: String,
+        default: 'Point',
+        enum: {
+          values: ['Point'],
+          message: 'Type must be Point',
+        },
+      },
+      coordinates: [Number],
+      description: String,
+    },
+    to: {
+      type: String,
+    },
+    depart: {
+      type: Date,
+      required: [true, 'A flight must have depart specified'],
+    },
+    returnDate: Date,
+    ratingsAverage: {
+      type: Number,
+      default: 0.0,
+      set: (val) => Math.round(val * 10) / 10,
+    },
+    ratingsQuantity: {
+      type: Number,
+      default: 0,
+    },
+    package: {
+      type: String,
+      enum: {
+        values: ['Economic', 'First Class'],
+        message: 'Package must be either Economic or First Class',
+      },
+    },
+    pricePerPerson: {
+      type: Number,
+      required: [true, 'A flight must have price per Person specified'],
+    },
+    priceDiscount: {
+      type: Number,
+      validate: {
+        validator: function (val) {
+          return val < this.pricePerPerson;
+        },
+        message: 'Discount price ({VALUE}) should be below regular price',
+      },
+    },
+    maxGroupSize: {
+      type: Number,
+      required: [true, 'Maximum group size must not be empty'],
+    },
+    variety: {
+      type: String,
+      enum: {
+        values: ['Round-Trip', 'One-Way'],
+        message: 'Package must be either Economic or First Class',
+      },
+    },
+    time: String,
+    agency: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Agency',
+    },
+    numBought: {
+      type: Number,
+      default: 0,
     },
   },
-  maxGroupSize: {
-    type: Number,
-    required: [true, 'Maximum group size must not be empty'],
-  },
-  variety: {
-    type: String,
-    enum: {
-      values: ['Round-Trip', 'One-Way'],
-      message: 'Package must be either Economic or First Class',
-    },
-  },
-  time: String,
-  agency: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'Agency',
-  },
-  numBought: {
-    type: Number,
-    default: 0,
-  },
-});
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
+);
 
 // // Virtual populate
 flightSchema.virtual('reviews', {
@@ -105,16 +115,8 @@ flightSchema.virtual('reviews', {
 //   localField: '_id'
 // });
 
-flightSchema.pre(/^find/, function (next) {
+flightSchema.pre(/^findOne/, function (next) {
   this.populate('reviews');
-  // .populate({ path: 'bookings', select: 'user createdAt' })
-  // .populate({ path: 'wishlists', select: 'user' });
-
-  next();
-});
-
-flightSchema.pre(/^find/, function (next) {
-  this.populate({ path: 'guides', select: 'name lastname photo' });
 
   next();
 });

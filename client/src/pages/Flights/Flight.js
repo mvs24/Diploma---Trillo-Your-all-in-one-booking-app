@@ -382,9 +382,11 @@ const Flight = (props) => {
         <Button type="success" clicked={visitAgencyHandler}>
           VISIT AGENCY
         </Button>
-        <Button type="blue" clicked={visitFlightHandler}>
-          VISIT FLIGHT
-        </Button>
+        {!props.flightDetails && (
+          <Button type="blue" clicked={visitFlightHandler}>
+            VISIT FLIGHT
+          </Button>
+        )}
         <img
           className="flight__img"
           src={`http://localhost:5000${agency.image}`}

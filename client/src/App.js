@@ -25,6 +25,7 @@ import SuccessFlightBooking from './components/SuccessFlightBooking/SuccessFligh
 import MyFlights from './AccountSettings/MyFlights/MyFlights';
 import FlightAgencyDetails from './pages/FlightAgencyDetails/FlightAgencyDetails';
 import FlightDetails from './pages/Flights/FlightDetails'
+import AllFlights from './pages/AllFlights/AllFlights'
 
 function App(props) {
   const setUserData = async () => {
@@ -68,6 +69,7 @@ function App(props) {
             component={FlightAgencyDetails}
           />
           <Route path="/flights/:flightId" exact component={FlightDetails} />
+          <Route path="/all-flights" exact component={AllFlights} />
         </Switch>
       </Layout>
       <Route 

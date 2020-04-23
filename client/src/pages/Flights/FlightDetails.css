@@ -1,0 +1,44 @@
+.flightDetails__container {
+  padding: 4rem;
+  background: #faf9f9;
+  min-height: 100vh;
+}
+.flight__container--1 {
+  background: white;
+  box-shadow: 1rem 2rem 2rem rgba(0, 0, 0, 0.5);
+}
+.flight__links__container {
+  background: linear-gradient(to right bottom, #2998ff, #5643fa);
+  color: white;
+  font-size: 2.2rem;
+  padding: 1.4rem;
+  list-style: none;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.flight__links__container li {
+  cursor: pointer;
+  transition: all 0.4s ease;
+  border-bottom: 2px solid transparent;
+}
+
+.agency__info--1 {
+  display: flex;
+  padding: 3rem;
+  color: #2998ff;
+  align-items: center;
+  justify-content: space-around;
+}
+.agency__info--1 img {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 100px;
+}
+.info__container {
+  display: flex;
+  flex-direction: column;
+}
+.border__link {
+  transform: translateY(-10px);
+}

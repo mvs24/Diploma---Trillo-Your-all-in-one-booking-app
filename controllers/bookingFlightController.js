@@ -5,6 +5,7 @@ const BookingFlight = require('../models/bookingFlightModel');
 const Flight = require('../models/flightModel');
 const factory = require('./factoryHandler');
 const asyncWrapper = require('../utils/asyncWrapper');
+const AppError = require('../utils/AppError');
 
 const getBookings = (type) =>
   asyncWrapper(async (req, res, next) => {
@@ -82,6 +83,17 @@ exports.getCheckoutSession = asyncWrapper(async (req, res, next) => {
     status: 'success',
     session,
   });
+});
+
+exports.controlNumberGroupSize = asyncWrapper(async (req, res, next) => {
+  const flight = await Flight.findOne({ _id: req.params.flightId });
+  if (flight.numBought >= flight.maxGroupSize) {
+    return next(
+      new AppError('This flight has reached maximum number of persons...', 400)
+    );
+  }
+
+  next();
 });
 
 exports.createBooking = factory.createOne(BookingFlight);

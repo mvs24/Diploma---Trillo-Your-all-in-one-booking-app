@@ -6,9 +6,13 @@ const setFlightUserId = require('../globalMiddlewares/setFlightUserId');
 
 const router = express.Router();
 
+router
+  .route('/control/numGroupSize')
+  .get(bookingFlightController.controlNumberGroupSize);
 router.post(
   '/checkout-session/:flightId',
   authController.protect,
+  bookingFlightController.controlNumberGroupSize,
   bookingFlightController.getCheckoutSession
 );
 
@@ -20,12 +24,11 @@ router
   .route('/futureBookings')
   .get(authController.protect, bookingFlightController.getFutureBookings);
 
-router
-  .route('/:flightId')
-  .post(
-    authController.protect,
-    setFlightUserId,
-    bookingFlightController.createBooking
-  );
+router.route('/:flightId').post(
+  authController.protect,
+  setFlightUserId,
+
+  bookingFlightController.createBooking
+);
 
 module.exports = router;

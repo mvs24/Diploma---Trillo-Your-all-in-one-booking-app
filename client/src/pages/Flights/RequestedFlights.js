@@ -38,8 +38,6 @@ const RequestedFlights = (props) => {
     }
   }, [myFlights]);
 
-  console.log(myFlightsIds);
-
   useEffect(() => {
     const getRequestedFlights = async () => {
       try {
@@ -64,6 +62,7 @@ const RequestedFlights = (props) => {
     getRequestedFlights();
   }, []);
 
+  if (loading) return <LoadingSpinner asOverlay />;
   if (!requestedFlights) return <h1>No flights found...</h1>;
   if (!myFlightsIds) return <LoadingSpinner asOverlay />;
 

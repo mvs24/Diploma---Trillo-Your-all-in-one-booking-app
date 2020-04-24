@@ -7,12 +7,14 @@ import TourItem from '../../components/TourItem/TourItem';
 import './MyAgency.css';
 import EditAgency from './EditAgency';
 import AddNewTour from './AddNewTour';
+import Flight from '../../pages/Flights/Flight';
 
 const MyAgency = (props) => {
   const [myAgency, setMyAgency] = useState();
   const [loading, setLoading] = useState();
   const [error, setError] = useState();
   const [myTours, setMyTours] = useState();
+  const [myFlights, setMyFlights] = useState();
   const [display, setDisplay] = useState('agency');
   const [shouldUpdate, setShouldUpdate] = useState();
   const tours = useRef();
@@ -23,16 +25,24 @@ const MyAgency = (props) => {
   useEffect(() => {
     const getMyAgency = async () => {
       try {
+        let tourFlightRes;
         setLoading(true);
         const res = await axios.get(`/api/v1/users/my/agency`);
-        const tourRes = await axios.get(
-          `/api/v1/agencies/${res.data.data._id}/tours`
-        );
-        setMyTours(tourRes.data.data);
+        if (res.data.data.category === 'tours') {
+          tourFlightRes = await axios.get(
+            `/api/v1/agencies/${res.data.data._id}/tours`
+          );
+          setMyTours(tourFlightRes.data.data);
+        } else if (res.data.data.category === 'flights') {
+          tourFlightRes = await axios.get(
+            `/api/v1/agencies/${res.data.data._id}/flights`
+          );
+          setMyFlights(tourFlightRes.data.data);
+        }
+
         setMyAgency(res.data.data);
         setLoading(false);
       } catch (err) {
-        console.log(err.response.data);
         setLoading(false);
         setError(err.response.data.message);
       }
@@ -49,41 +59,67 @@ const MyAgency = (props) => {
     );
   if (!myAgency) return <LoadingSpinner asOverlay />;
 
-  const toursHandler = () => {
+  const toursHandler = (e) => {
+    const links = Array.from(document.querySelectorAll('.border'));
+    links.forEach((link) => link.classList.remove('border'));
     tours.current.classList.add('border');
-    agency.current.classList.remove('border');
-    editAgency.current.classList.remove('border');
-    addTour.current.classList.remove('border');
-
     setDisplay('tours');
   };
 
-  const agencyHandler = () => {
-    agency.current.classList.add('border');
-    tours.current.classList.remove('border');
-    addTour.current.classList.remove('border');
-    editAgency.current.classList.remove('border');
-    setDisplay('agency');
+  const agencyHandler = (e) => {
+    if (myAgency.category === 'tours') {
+      const links = Array.from(document.querySelectorAll('.border'));
+      links.forEach((link) => link.classList.remove('border'));
+
+      e.target.classList.add('border');
+      setDisplay('agency');
+    } else {
+      const links = Array.from(document.querySelectorAll('.border'));
+      links.forEach((link) => link.classList.remove('border'));
+
+      e.target.classList.add('border');
+      setDisplay('agency');
+    }
   };
 
-  const editAgencyHandler = () => {
-    agency.current.classList.remove('border');
-    tours.current.classList.remove('border');
-    addTour.current.classList.remove('border');
-    editAgency.current.classList.add('border');
-    setDisplay('edit');
+  const editAgencyHandler = (e) => {
+    if (myAgency.category === 'tours') {
+      const links = Array.from(document.querySelectorAll('.border'));
+      links.forEach((link) => link.classList.remove('border'));
+
+      e.target.classList.add('border');
+      setDisplay('edit');
+    } else {
+      const links = Array.from(document.querySelectorAll('.border'));
+      links.forEach((link) => link.classList.remove('border'));
+
+      e.target.classList.add('border');
+      setDisplay('edit');
+    }
   };
 
-  const addNewTourHandler = () => {
-    agency.current.classList.remove('border');
-    tours.current.classList.remove('border');
-    addTour.current.classList.add('border');
-    editAgency.current.classList.remove('border');
-    setDisplay('addNewTour');
+  const addNewTourHandler = (e) => {
+    if (myAgency.category === 'tours') {
+      const links = Array.from(document.querySelectorAll('.border'));
+      links.forEach((link) => link.classList.remove('border'));
+
+      addTour.current.classList.add('border');
+      setDisplay('addNewTour');
+    } else {
+      const links = Array.from(document.querySelectorAll('.border'));
+      links.forEach((link) => link.classList.remove('border'));
+    }
   };
 
   const updateAgency = () => {
     setShouldUpdate((prev) => !prev);
+  };
+
+  const flightsHandler = (e) => {
+    const links = Array.from(document.querySelectorAll('.border'));
+    links.forEach((link) => link.classList.remove('border'));
+    e.target.classList.add('border');
+    setDisplay('flights');
   };
 
   return (
@@ -92,9 +128,16 @@ const MyAgency = (props) => {
         <h1 className="myAgency__heading" onClick={agencyHandler} ref={agency}>
           My Agency
         </h1>
-        <h1 onClick={toursHandler} className="myAgency__heading" ref={tours}>
-          My Tours
-        </h1>
+        {myAgency.category === 'flights' && (
+          <h1 onClick={flightsHandler} className="myAgency__heading">
+            My Flights
+          </h1>
+        )}
+        {myAgency.category === 'tours' && (
+          <h1 onClick={toursHandler} className="myAgency__heading" ref={tours}>
+            My Tours
+          </h1>
+        )}
         <h1
           className="myAgency__heading"
           onClick={editAgencyHandler}
@@ -102,16 +145,33 @@ const MyAgency = (props) => {
         >
           Edit Agency
         </h1>
-        <h1
-          className="myAgency__heading"
-          onClick={addNewTourHandler}
-          ref={addTour}
-        >
-          Maybe a new Tour?
-        </h1>
+        {myAgency.category === 'tours' && (
+          <h1
+            className="myAgency__heading"
+            onClick={addNewTourHandler}
+            ref={addTour}
+          >
+            Maybe a new Tour?
+          </h1>
+        )}
+        {myAgency.category === 'flights' && (
+          <h1 className="myAgency__heading">Maybe a new Flight?</h1>
+        )}
       </div>
-      {display === 'agency' && <Agency changeBcg agency={myAgency} />}
-      {display === 'tours' && (
+      {myAgency.category === 'flights' && display === 'flights' && (
+        <div className="my__agencyFlights">
+          {myFlights.map((flight) => (
+            <Flight owner flight={flight} />
+          ))}
+        </div>
+      )}
+      {display === 'agency' && myAgency.category === 'tours' && (
+        <Agency changeBcg agency={myAgency} />
+      )}
+      {display === 'agency' && myAgency.category === 'flights' && (
+        <Agency flight changeBcg agency={myAgency} />
+      )}
+      {myAgency.category === 'tours' && display === 'tours' && (
         <div className="my__tours">
           {' '}
           {myTours.map((tour) => (
@@ -120,7 +180,7 @@ const MyAgency = (props) => {
         </div>
       )}
       {display === 'edit' && <EditAgency agency={myAgency} />}
-      {display === 'addNewTour' && (
+      {myAgency.category === 'tours' && display === 'addNewTour' && (
         <AddNewTour updateAgency={updateAgency} agency={myAgency} />
       )}
     </div>

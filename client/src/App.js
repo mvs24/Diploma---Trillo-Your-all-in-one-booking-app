@@ -24,8 +24,8 @@ import RequestedFlights from './pages/Flights/RequestedFlights';
 import SuccessFlightBooking from './components/SuccessFlightBooking/SuccessFlightBooking';
 import MyFlights from './AccountSettings/MyFlights/MyFlights';
 import FlightAgencyDetails from './pages/FlightAgencyDetails/FlightAgencyDetails';
-import FlightDetails from './pages/Flights/FlightDetails'
-import AllFlights from './pages/AllFlights/AllFlights'
+import FlightDetails from './pages/Flights/FlightDetails';
+import AllFlights from './pages/AllFlights/AllFlights';
 
 function App(props) {
   const setUserData = async () => {
@@ -36,6 +36,8 @@ function App(props) {
   if (localStorage.getItem('jwt')) {
     setUserData();
   }
+
+  console.log('app');
 
   return (
     <BrowserRouter>
@@ -72,7 +74,8 @@ function App(props) {
           <Route path="/all-flights" exact component={AllFlights} />
         </Switch>
       </Layout>
-      <Route 
+
+      <Route
         path="/success/tours/:tourId/users/:userId/price/:price"
         exact
         component={SuccessBooking}

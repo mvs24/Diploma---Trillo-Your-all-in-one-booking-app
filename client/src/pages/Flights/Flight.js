@@ -273,6 +273,44 @@ const Flight = (props) => {
     );
   }
 
+  let flightOwnerContent = null;
+
+  let myFlightContent = null;
+  if (!props.myFlight) {
+    myFlightContent = (
+      <Button
+        disabled={props.booked}
+        clicked={() => {
+          if (props.isAuthenticated) {
+            setOpenConfirmTickets(true);
+          } else {
+            setError('You need to be logged in to book a flight!');
+          }
+        }}
+        type="blue"
+      >
+        {props.booked ? 'Booked' : 'Confirm number of tickets'}
+      </Button>
+    );
+  } else {
+    myFlightContent = (
+      <div className="review__flight">
+        {reviewed ? <h5>Update your Review</h5> : <h5>Leave a review</h5>}
+        {reviewed ? (
+          <p onClick={reviewHandler}>{reviewToUpdate.map((el) => el)}</p>
+        ) : (
+          <p onClick={reviewHandler}>{reviewToUpdate.map((el) => el)}</p>
+        )}
+      </div>
+    );
+  }
+
+  if (props.owner) {
+    flightOwnerContent = null;
+  } else {
+    flightOwnerContent = myFlightContent;
+  }
+
   return (
     <div className="flight__container">
       {loading && <LoadingSpinner asOverlay />}
@@ -339,7 +377,7 @@ const Flight = (props) => {
         <p>Agency: {agency.name}</p>
         <p className="flight__rating__container">
           {' '}
-          <span>Rating: </span>
+          <span>Average Rating: </span>
           <span>
             {' '}
             {stars.map((star) => star)}
@@ -389,33 +427,11 @@ const Flight = (props) => {
         )}
         <img
           className="flight__img"
-          src={`http://localhost:5000${agency.image}`}
+          src={`http://localhost:5000/${agency.image}`}
         />
 
-        {!props.myFlight ? (
-          <Button
-            disabled={props.booked}
-            clicked={() => {
-              if (props.isAuthenticated) {
-                setOpenConfirmTickets(true);
-              } else {
-                setError('You need to be logged in to book a flight!');
-              }
-            }}
-            type="blue"
-          >
-            {props.booked ? 'Booked' : 'Confirm number of tickets'}
-          </Button>
-        ) : (
-          <div className="review__flight">
-            {reviewed ? <h5>Update your Review</h5> : <h5>Leave a review</h5>}
-            {reviewed ? (
-              <p onClick={reviewHandler}>{reviewToUpdate.map((el) => el)}</p>
-            ) : (
-              <p onClick={reviewHandler}>{reviewToUpdate.map((el) => el)}</p>
-            )}
-          </div>
-        )}
+        {props.owner ? <Button>Make a price discount</Button> : null}
+        {flightOwnerContent}
       </div>
     </div>
   );

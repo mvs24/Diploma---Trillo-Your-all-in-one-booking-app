@@ -4,7 +4,6 @@ export default (props) => {
   const { agency, flight } = props;
   if (!agency) return null;
   let image = `http://localhost:5000/${agency.image}`;
-  if (flight) image = `http://localhost:5000${agency.image}`;
 
   return (
     <div
@@ -21,7 +20,9 @@ export default (props) => {
       </div>
       <div className="inline__info">
         <h1 className="total__tours">
-          <p>Total {flight ? 'Flights' : 'Tours'}</p>
+          <p>
+            TOTAL <span>{agency.category.toUpperCase()}</span>
+          </p>
           <p> {flight ? agency.flights.length : agency.tours.length}</p>
         </h1>
         <h1 className="total__tours">

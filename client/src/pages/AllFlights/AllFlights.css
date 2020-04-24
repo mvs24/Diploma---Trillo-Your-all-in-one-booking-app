@@ -1,0 +1,62 @@
+.all__flights__heading {
+  text-align: center;
+  font-size: 3rem;
+  text-transform: uppercase;
+  background-image: linear-gradient(to right bottom, #2998ff, #5643fa);
+  color: transparent;
+  background-clip: text;
+  display: block;
+  width: 100%;
+}
+.all__flights__item {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.showMore__button {
+  margin: 2rem auto;
+  display: block;
+}
+.showMore__button:disabled {
+  background: #f0eeee;
+}
+.all__flights__container {
+  background: #faf9f9;
+  padding: 3rem;
+
+  width: 100%;
+}
+.all__flights__filter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 1.6rem;
+}
+.select__flights {
+  width: 50%;
+  grid-column: 2/3;
+  margin: 3rem 0;
+}
+
+.filter__flex {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.input__flex {
+  display: flex;
+  align-items: center;
+}
+.input__flex label {
+  display: flex;
+  align-items: center;
+  margin: 0.5rem 0.3rem;
+}
+.allFlights__btn__container {
+  margin: 2rem auto;
+}
+
+/*$color-tertiary-light: #2998ff;*/
+/*$color-tertiary-dark: #5643fa;*/

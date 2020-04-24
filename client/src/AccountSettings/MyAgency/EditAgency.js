@@ -169,6 +169,8 @@ const EditAgency = ({ agency }) => {
     }
   };
 
+  let agencyImg = `http://localhost:5000/${agency.image}`;
+
   return (
     <div className="edit__agency--container">
       {loading && <LoadingSpinner asOverlay />}
@@ -184,10 +186,7 @@ const EditAgency = ({ agency }) => {
           {previewUrl ? (
             <img className="edit__img" src={previewUrl} />
           ) : (
-            <img
-              className="edit__img"
-              src={`http://localhost:5000/${agency.image}`}
-            />
+            <img className="edit__img" src={agencyImg} />
           )}
 
           <ImageUpload

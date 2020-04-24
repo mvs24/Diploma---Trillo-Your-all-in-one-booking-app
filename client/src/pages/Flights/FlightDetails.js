@@ -101,6 +101,8 @@ const FlightDetails = (props) => {
   if (loading) return <LoadingSpinner asOverlay />;
   if (!flight || !agency) return <h1>No flight found with that ID...</h1>;
 
+  console.log(agency.image);
+
   return (
     <div className="flightDetails__container">
       {error && (
@@ -148,7 +150,7 @@ const FlightDetails = (props) => {
           <div className="info__container">
             <div className="agency__info--1">
               <h2>Agency: {agency.name}</h2>
-              <img src={`http://localhost:5000${agency.image}`} />
+              <img src={`http://localhost:5000/${agency.image}`} />
               <Button
                 type="success"
                 clicked={() =>

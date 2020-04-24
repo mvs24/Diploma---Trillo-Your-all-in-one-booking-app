@@ -321,9 +321,9 @@ const AccountSettings = (props) => {
             <IconContext.Provider
               value={{ className: 'icon__white tour__info--icon' }}
             >
-              <IoIosAirplane /> 
+              <IoIosAirplane />
             </IconContext.Provider>
-            <p className="">MY FLIGHTS</p>
+            <p className="">BOOKED FLIGHTS</p>
           </li>
           <li
             onClick={() => history.push('/my-notifications')}
@@ -342,7 +342,7 @@ const AccountSettings = (props) => {
             >
               <MdSettingsSystemDaydream />
             </IconContext.Provider>
-            <p className="">MY AGENCY (TOURS)</p>
+            <p className="">MY AGENCY</p>
           </li>
           <li onClick={logoutHandler} className="list__item">
             <IconContext.Provider

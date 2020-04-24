@@ -12,10 +12,20 @@ import './CreateAgency.css';
 import axios from 'axios';
 import Textarea from '../../shared/components/Input/Textarea';
 import ImageUpload from '../../shared/components/ImageUpload/ImageUpload';
+import Select from 'react-select';
+
+const options = [
+  { value: 'tours', label: 'Tours' },
+  { value: 'flights', label: 'Flights' },
+];
 
 const MakeAnImpact = (props) => {
   const [error, setError] = useState();
   const [loading, setLoading] = useState();
+  const [selectedOption, setSelectedOption] = useState({
+    value: 'category',
+    label: 'Category',
+  });
   const [agencyData, setAgencyData] = useState({
     name: {
       configOptions: {
@@ -90,11 +100,15 @@ const MakeAnImpact = (props) => {
   };
 
   const createAgencyHandler = async () => {
+    if (!image.value) {
+      setError('Please complete all the fields!');
+      return;
+    }
     try {
       const formData = new FormData();
       formData.set('name', agencyData.name.value);
       formData.set('description', agencyData.description.value);
-      formData.set('category', 'tours');
+      formData.set('category', selectedOption.value);
       formData.append('image', image.value);
       setLoading(true);
       const agency = await axios.post(`/api/v1/agencies`, formData);
@@ -144,6 +158,10 @@ const MakeAnImpact = (props) => {
     }
   }
 
+  const handleChange = (selectedOption) => {
+    setSelectedOption(selectedOption);
+  };
+
   return (
     <div className="create__agency__container">
       {loading && <LoadingSpinner asOverlay />}
@@ -155,18 +173,29 @@ const MakeAnImpact = (props) => {
       <div className="first">
         <h1>How about the information about your agency?</h1>
         <p>
-          It's ok if you can't think of a good name right now. You can change it
-          later.
+          It's ok if you can't think of a good name or description right now.
+          You can change it later.
         </p>
-        {formData.map((el) => el)}
-        <div className="user__photo--container">
-          {previewUrl && (
-            <img className="user__photo--image" src={previewUrl} />
-          )}
-          <ImageUpload
-            title={'Logo of your agency'}
-            onInput={inputImageHandler}
-          />
+        <div className="info__agency__container">
+          {formData.map((el) => el)}
+
+          <div>
+            <Select
+              value={selectedOption}
+              onChange={handleChange}
+              options={options}
+              className="category__select"
+            />
+          </div>
+          <div className="user__photo--container">
+            {previewUrl && (
+              <img className="user__photo--image" src={previewUrl} />
+            )}
+            <ImageUpload
+              title={'Logo of your agency'}
+              onInput={inputImageHandler}
+            />
+          </div>
         </div>
         <div className="create__agency__buttons">
           <Button

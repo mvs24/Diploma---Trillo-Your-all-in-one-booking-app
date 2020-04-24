@@ -18,7 +18,7 @@ const agencySchema = new mongoose.Schema(
       required: [true, 'An agency must be part of a category'],
       enum: {
         values: ['flights', 'tours', 'hotels'],
-        message: 'Category must be either: flights, tours or hotels',
+        message: 'Category must be either: flights or tours',
       },
     },
     image: String,

@@ -3,8 +3,7 @@ const mongoose = require('mongoose');
 const AppError = require('../utils/appError');
 const Agency = require('./agencyModel');
 
-const flightSchema = new mongoose.Schema(
-  {
+const flightSchema = new mongoose.Schema({
     from: {
       type: String,
     },

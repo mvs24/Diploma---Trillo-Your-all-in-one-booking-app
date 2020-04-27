@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import Logo from '../assets/logo.PNG';
+import Logo from '../assets/logo.png';
 import './Header.css';
 import { IconContext } from 'react-icons';
 import { IoIosApps, IoIosSearch, IoIosAirplane } from 'react-icons/io';

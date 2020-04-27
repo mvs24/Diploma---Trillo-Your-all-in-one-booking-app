@@ -8,7 +8,7 @@ import './MyAgency.css';
 import EditAgency from './EditAgency';
 import AddNewTour from './AddNewTour';
 import Flight from '../../pages/Flights/Flight';
-import AddNewFlight from './AddNewFlight'
+import AddNewFlight from './AddNewFlight';
 
 const MyAgency = (props) => {
   const [myAgency, setMyAgency] = useState();
@@ -123,12 +123,12 @@ const MyAgency = (props) => {
     setDisplay('flights');
   };
 
-  const addNewFlightHandler = e => {
+  const addNewFlightHandler = (e) => {
     const links = Array.from(document.querySelectorAll('.border'));
     links.forEach((link) => link.classList.remove('border'));
     e.target.classList.add('border');
     setDisplay('addNewFlight');
-  }
+  };
 
   return (
     <div className="myAgency__container">
@@ -163,7 +163,9 @@ const MyAgency = (props) => {
           </h1>
         )}
         {myAgency.category === 'flights' && (
-          <h1 onClick={addNewFlightHandler} className="myAgency__heading">Maybe a new Flight?</h1>
+          <h1 onClick={addNewFlightHandler} className="myAgency__heading">
+            Maybe a new Flight?
+          </h1>
         )}
       </div>
       {myAgency.category === 'flights' && display === 'flights' && (
@@ -188,7 +190,9 @@ const MyAgency = (props) => {
         </div>
       )}
       {display === 'edit' && <EditAgency agency={myAgency} />}
-      {myAgency.category === 'flights' && display === 'addNewFlight' && <AddNewFlight agency={myAgency}/>}
+      {myAgency.category === 'flights' && display === 'addNewFlight' && (
+        <AddNewFlight updateAgency={updateAgency} agency={myAgency} />
+      )}
       {myAgency.category === 'tours' && display === 'addNewTour' && (
         <AddNewTour updateAgency={updateAgency} agency={myAgency} />
       )}

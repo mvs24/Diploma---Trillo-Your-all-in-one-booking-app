@@ -112,7 +112,7 @@ const AddNewFlight = (props) => {
   const [fromLocation, setFromLocation] = useState({
     configOptions: {
       type: 'text',
-      placeholder: 'Coordinates (LNG, LAT): (ex: -32.345,43.2345)',
+      placeholder: 'Coordinates (LATITUDE, LONGITUDE): (ex: -32.345,43.2345)',
     },
     value: '',
     valid: false,
@@ -121,7 +121,7 @@ const AddNewFlight = (props) => {
       required: true,
     },
   });
-  const [fromAddress, setDromAddress] = useState({
+  const [fromAddress, setFromAddress] = useState({
     configOptions: {
       type: 'text',
       placeholder: 'Address',
@@ -131,12 +131,13 @@ const AddNewFlight = (props) => {
     touched: false,
     validRequirements: {
       required: true,
+      minlength: 2,
     },
   });
   const [toLocation, setToLocation] = useState({
     configOptions: {
       type: 'text',
-      placeholder: 'Coordinates (LNG, LAT): (ex: -32.345,43.2345)',
+      placeholder: 'Coordinates (LATITUDE, LONGITUDE): (ex: -32.345,43.2345)',
     },
     value: '',
     valid: false,
@@ -155,6 +156,7 @@ const AddNewFlight = (props) => {
     touched: false,
     validRequirements: {
       required: true,
+      minlength: 2,
     },
   });
   const [flightPackage, setFlightPackage] = useState({
@@ -178,6 +180,14 @@ const AddNewFlight = (props) => {
       required: true,
     },
   });
+  const [
+    fromAddressLocationControlled,
+    setFromAddressLocationControlled,
+  ] = useState();
+  const [
+    toAddressLocationControlled,
+    setToAddressLocationControlled,
+  ] = useState();
 
   const [overallFormIsValid, setOverallFormIsValid] = useState();
 
@@ -221,14 +231,17 @@ const AddNewFlight = (props) => {
     );
     newUpdatedData[inputIdentifier] = updatedIdentifier;
 
+    if (inputIdentifier === 'depart') {
+      let isValid = new Date(updatedIdentifier.value) > Date.now();
+      updatedIdentifier.valid = isValid;
+    }
+
     setFlightData(newUpdatedData);
 
     let isFormValid = true;
     for (let key in newUpdatedData) {
       isFormValid = isFormValid && newUpdatedData[key].valid;
     }
-
-    setFormValid(isFormValid);
   };
 
   const openFlightLocationModal = (type) => {
@@ -252,17 +265,41 @@ const AddNewFlight = (props) => {
         </div>
       );
     } else if (flightData[key].configOptions.type === 'button') {
-      flightFormData.push(
-        <InlineButton
-          clicked={() =>
-            openFlightLocationModal(flightData[key].configOptions.locationType)
-          }
-          type="success"
-          className="btnLocation"
-        >
-          {flightData[key].configOptions.placeholder}
-        </InlineButton>
-      );
+      if (flightData[key].configOptions.placeholder === 'FROM Location') {
+        flightFormData.push(
+          <InlineButton
+            clicked={() =>
+              openFlightLocationModal(
+                flightData[key].configOptions.locationType
+              )
+            }
+            disabled={fromAddressLocationControlled}
+            type="success"
+            className="btnLocation"
+          >
+            {fromAddressLocationControlled
+              ? 'FROM Location Saved'
+              : flightData[key].configOptions.placeholder}
+          </InlineButton>
+        );
+      } else if (flightData[key].configOptions.placeholder === 'TO Location') {
+        flightFormData.push(
+          <InlineButton
+            clicked={() =>
+              openFlightLocationModal(
+                flightData[key].configOptions.locationType
+              )
+            }
+            disabled={toAddressLocationControlled}
+            type="success"
+            className="btnLocation"
+          >
+            {toAddressLocationControlled
+              ? 'TO Location Saved'
+              : flightData[key].configOptions.placeholder}
+          </InlineButton>
+        );
+      }
     } else {
       flightFormData.push(
         <Input
@@ -277,22 +314,205 @@ const AddNewFlight = (props) => {
   }
 
   const inputLocationHandler = (e, type) => {
-	  	
-	if (type === 'from') {
-		// TODO
-	  	
-  	} else if (type === 'to') {
-  		// TODO
-  	}
-   
+    if (type === 'from') {
+      //
+      const updatedFromLocation = { ...fromLocation };
+
+      if (e.target.value.indexOf(',') === -1) {
+        updatedFromLocation.valid = false;
+      } else if (e.target.value.indexOf(',') > 0) {
+        if (
+          +e.target.value.split(',')[0] < -90 ||
+          +e.target.value.split(',')[0] > 90 ||
+          +e.target.value.split(',')[1] < -180 ||
+          +e.target.value.split(',')[1] > 180
+        ) {
+          updatedFromLocation.valid = false;
+        } else {
+          updatedFromLocation.valid = true;
+        }
+      }
+
+      updatedFromLocation.touched = true;
+      updatedFromLocation.value = e.target.value;
+      setFromLocation(updatedFromLocation);
+    } else if (type === 'to') {
+      const updatedToLocation = { ...toLocation };
+
+      if (e.target.value.indexOf(',') === -1) {
+        updatedToLocation.valid = false;
+      } else if (e.target.value.indexOf(',') > 0) {
+        if (
+          +e.target.value.split(',')[0] < -90 ||
+          +e.target.value.split(',')[0] > 90 ||
+          +e.target.value.split(',')[1] < -180 ||
+          +e.target.value.split(',')[1] > 180
+        ) {
+          updatedToLocation.valid = false;
+        } else {
+          updatedToLocation.valid = true;
+        }
+      }
+
+      updatedToLocation.touched = true;
+      updatedToLocation.value = e.target.value;
+      setToLocation(updatedToLocation);
+    }
+  };
+
+  const saveFromLocation = () => {
+    if (fromLocation.value.toString().indexOf(',') === -1) {
+      setError('The values are wrong...Lat: [-90, 90] Lng: [-180, 180]');
+      return;
+    } else {
+      if (
+        +fromLocation.value.split(',')[0] < -90 ||
+        +fromLocation.value.split(',')[0] > 90 ||
+        +fromLocation.value.split(',')[1] < -180 ||
+        +fromLocation.value.split(',')[1] > 180
+      ) {
+        setError('The values are wrong...Lat: [-90, 90] Lng: [-180, 180]');
+      } else {
+        //correct
+        if (fromAddress.valid) {
+          setFlightLocationModal();
+          setFromAddressLocationControlled(true);
+        } else {
+          setError('Control your data!');
+        }
+      }
+    }
+  };
+
+  const saveToLocation = () => {
+    if (toLocation.value.toString().indexOf(',') === -1) {
+      setError('The values are wrong...Lat: [-90, 90] Lng: [-180, 180]');
+      return;
+    } else {
+      if (
+        +toLocation.value.split(',')[0] < -90 ||
+        +toLocation.value.split(',')[0] > 90 ||
+        +toLocation.value.split(',')[1] < -180 ||
+        +toLocation.value.split(',')[1] > 180
+      ) {
+        setError('The values are wrong...Lat: [-90, 90] Lng: [-180, 180]');
+      } else {
+        //correct
+        if (toAddress.valid) {
+          setFlightLocationModal();
+          setToAddressLocationControlled(true);
+        } else {
+          setError('Control your data!');
+        }
+      }
+    }
   };
 
   const inputAddressHandler = (e, type) => {
+    if (type === 'from') {
+      const newUpdatedData = { ...fromAddress };
 
+      newUpdatedData.value = e.target.value;
+      newUpdatedData.touched = true;
+      newUpdatedData.valid = checkValidity(
+        newUpdatedData.value,
+        newUpdatedData.validRequirements
+      );
+
+      setFromAddress(newUpdatedData);
+    } else if (type === 'to') {
+      const newUpdatedData = { ...toAddress };
+
+      newUpdatedData.value = e.target.value;
+      newUpdatedData.touched = true;
+      newUpdatedData.valid = checkValidity(
+        newUpdatedData.value,
+        newUpdatedData.validRequirements
+      );
+
+      setToAddress(newUpdatedData);
+    }
   };
 
   const returnDateHandleChange = (e) => {
+    const newUpdatedData = { ...inputReturnDate };
 
+    newUpdatedData.value = e.target.value;
+    newUpdatedData.touched = true;
+    newUpdatedData.valid = checkValidity(
+      newUpdatedData.value,
+      newUpdatedData.validRequirements
+    );
+
+    newUpdatedData.valid = new Date(newUpdatedData.value) > Date.now();
+
+    setInputReturnDate(newUpdatedData);
+  };
+
+  const saveFlightHandler = async () => {
+    let fromLng = fromLocation.value.split(',')[1];
+    if (fromLng === '') {
+      fromLng = 0;
+    }
+
+    let toLng = toLocation.value.split(',')[1];
+    if (toLng === '') {
+      toLng = 0;
+    }
+
+    let isValid = true;
+    for (let key in flightData) {
+      if ((flightData[key].configOptions.type === 'button') === false) {
+        isValid = isValid && flightData[key].valid;
+      }
+    }
+
+    isValid = isValid && fromAddressLocationControlled;
+    isValid = isValid && toAddressLocationControlled;
+
+    isValid = isValid && flightPackage.value !== 'flightPackage';
+    isValid = isValid && variety.value !== 'variety';
+
+    if (variety.value === 'Round-Trip') {
+      isValid = isValid && inputReturnDate.valid;
+    }
+
+    if (!isValid) {
+      setError('Control your data. Something is not completed or is wrong!!!');
+    } else {
+      const data = {
+        from: flightData['from'].value,
+        to: flightData['to'].value,
+        fromLocation: {
+          coordinates: [fromLng, fromLocation.value.split(',')[0]],
+          description: fromAddress.value,
+        },
+        toLocation: {
+          coordinates: [toLng, fromLocation.value.split(',')[0]],
+          description: toAddress.value,
+        },
+        depart: flightData.depart.value,
+        returnDate:
+          variety.value === 'Round-Trip' ? inputReturnDate.value : undefined,
+        package: flightPackage.value,
+        pricePerPerson: +flightData.pricePerPeson.value,
+        maxGroupSize: +flightData.maxGroupSize.value,
+        variety: variety.value,
+      };
+
+      try {
+        setLoading(true);
+        const res = await axios.post(
+          `/api/v1/agencies/${props.agency._id}/flights`,
+          data
+        );
+        setLoading(false);
+        props.updateAgency();
+      } catch (err) {
+        setError(err.response.data.message);
+        setLoading();
+      }
+    }
   };
 
   let flightLocationContent = null;
@@ -314,6 +534,9 @@ const AddNewFlight = (props) => {
           configOptions={fromAddress.configOptions}
           onChange={(e) => inputAddressHandler(e, 'from')}
         />
+        <Button type="blue" clicked={saveFromLocation}>
+          Save FROM Location
+        </Button>
       </Modal>
     );
   } else if (flightLocationModal && flightType === 'TO Location') {
@@ -333,6 +556,9 @@ const AddNewFlight = (props) => {
           configOptions={toAddress.configOptions}
           onChange={(e) => inputAddressHandler(e, 'to')}
         />
+        <Button type="blue" clicked={saveToLocation}>
+          Save To Location
+        </Button>
       </Modal>
     );
   }
@@ -400,7 +626,11 @@ const AddNewFlight = (props) => {
             options={packageOptions}
           />
         </div>
-        <Button className="save__flight" type="pink">
+        <Button
+          clicked={saveFlightHandler}
+          className="save__flight"
+          type="pink"
+        >
           Save & Create the flight
         </Button>
       </div>

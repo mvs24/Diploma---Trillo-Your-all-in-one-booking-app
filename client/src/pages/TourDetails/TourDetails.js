@@ -14,7 +14,7 @@ import Map from '../../Map';
 import ReviewStatistics from './ReviewStatistics';
 import Reviews from './Reviews';
 import AgencyInfo from './AgencyInfo';
-import Logo from '../../assets/logo.PNG';
+import Logo from '../../assets/logo.png';
 import Button from '../../shared/components/Button/Button';
 import { addToCart } from '../../store/actions/userActions';
 import { loadStripe } from '@stripe/stripe-js';

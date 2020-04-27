@@ -101,8 +101,6 @@ const FlightDetails = (props) => {
   if (loading) return <LoadingSpinner asOverlay />;
   if (!flight || !agency) return <h1>No flight found with that ID...</h1>;
 
-  console.log(agency.image);
-
   return (
     <div className="flightDetails__container">
       {error && (
@@ -143,7 +141,7 @@ const FlightDetails = (props) => {
           </li>
           <li data-link="fromTo" onClick={() => openPage('fromTo')}>
             {' '}
-            {flight.returnDate ? <span>From-To</span> : <span> From</span>}
+            <span>From-To</span>
           </li>
         </div>
         {page === 'info' && (

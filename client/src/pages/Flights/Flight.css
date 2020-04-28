@@ -62,3 +62,8 @@
   display: flex;
   align-items: center;
 }
+
+.flight__text__discount {
+  height: 10rem;
+  margin: 1rem 1rem;
+}

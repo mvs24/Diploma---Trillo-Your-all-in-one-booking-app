@@ -29,7 +29,21 @@ const MyNotifications = (props) => {
   }, []);
 
   const notificationHandler = async () => {
-    props.markNotificationAsRead(notification._id, history, notification.tour);
+    if (agency.category === 'flights') {
+      props.markNotificationAsRead(
+        notification._id,
+        history,
+        notification.flight,
+        'flight'
+      );
+    } else if (agency.category === 'tours') {
+      props.markNotificationAsRead(
+        notification._id,
+        history,
+        notification.tour,
+        'tour'
+      );
+    }
   };
 
   if (!agency) return <LoadingSpinner asOverlay />;

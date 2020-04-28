@@ -11,6 +11,10 @@ const filterObj = require('../utils/filterObj');
 
 const router = express.Router({ mergeParams: true });
 
+router
+  .route('/:flightId/price-discount')
+  .patch(flightController.makePriceDiscount);
+
 router.use('/:flightId/reviews', reviewFlightRouter);
 router.use('/:flightId/wishlistFlight', wishlistFlightRouter);
 

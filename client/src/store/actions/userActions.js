@@ -242,19 +242,23 @@ export const markNotificationsAsRead = () => async (dispatch) => {
 export const markNotificationAsRead = (
   notificationId,
   history,
-  tourId
+  id,
+  type
 ) => async (dispatch) => {
   try {
     dispatch({ type: LOADING });
     const res = await axios.patch(
       `/api/v1/users/notifications/${notificationId}/markAsRead`
     );
-    console.log(res.data.notifications);
+
     dispatch({
       type: MARK_NOTIFICATION_AS_READ,
       payload: res.data.notifications,
     });
-    history.push(`/tours/${tourId}`);
+
+    if (type === 'flight') {
+      history.push(`/flights/${id}`);
+    } else if (type === 'tour') history.push(`/tours/${id}`);
   } catch (err) {
     dispatch({ type: ERROR, errormsg: err.response.data.message });
   }

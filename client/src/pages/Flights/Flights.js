@@ -23,6 +23,11 @@ const options = [
 ];
 
 const Flights = (props) => {
+  // <div className="sea__airplane__container">
+  //   <img className="seaImg" src={SeaImg} />
+  //   <img src={AirplaneImg} className="airplaneImg" />
+  // </div>
+
   const oneWay = useRef();
   const roundTrip = useRef();
   const [flightsInput, setFlightsInput] = useState({
@@ -284,11 +289,6 @@ const Flights = (props) => {
             </div>
           </form>
         </div>
-      </div>
-
-      <div className="sea__airplane__container">
-        <img className="seaImg" src={SeaImg} />
-        <img src={AirplaneImg} className="airplaneImg" />
       </div>
     </div>
   );

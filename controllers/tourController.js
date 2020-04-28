@@ -6,9 +6,9 @@ const asyncWrapper = require('../utils/asyncWrapper');
 const Agency = require('../models/agencyModel');
 const AppError = require('../utils/appError');
 const User = require('../models/userModel');
-const multer = require('multer')
-const sharp = require('sharp')
-const uniqid = require('uniqid')
+const multer = require('multer');
+const sharp = require('sharp');
+const uniqid = require('uniqid');
 
 const getToursBy = (sortBy) =>
   asyncWrapper(async (req, res, next) => {
@@ -83,7 +83,6 @@ const getTours = (type) =>
 
 exports.getTour = factory.getOne(Tour);
 
-
 const multerStorage = multer.memoryStorage();
 
 const multerFilter = (req, file, cb) => {
@@ -96,42 +95,42 @@ const multerFilter = (req, file, cb) => {
 
 const upload = multer({
   storage: multerStorage,
-  fileFilter: multerFilter
+  fileFilter: multerFilter,
 });
 
-exports.uploadImageCover = upload.single('imageCover')
-exports.uploadImages = upload.array('image', 3)
+exports.uploadImageCover = upload.single('imageCover');
+exports.uploadImages = upload.array('image', 3);
 
-exports.createTour =  asyncWrapper(async (req, res, next) => {
-    req.body.startDates = JSON.parse(req.body.startDates)
-    req.body.locations = JSON.parse(req.body.locations);
-     req.body.startLocation = {
-      coordinates: JSON.parse(req.body.coordinates),
-      address: req.body.address,
-      description: req.body.address
-    }
+exports.createTour = asyncWrapper(async (req, res, next) => {
+  req.body.startDates = JSON.parse(req.body.startDates);
+  req.body.locations = JSON.parse(req.body.locations);
+  req.body.startLocation = {
+    coordinates: JSON.parse(req.body.coordinates),
+    address: req.body.address,
+    description: req.body.address,
+  };
   req.body.coordinates = undefined;
   req.body.address = undefined;
- 
+
   if (req.file) {
-  req.body.imageCover = `public/img/tours/tour-${uniqid()}-cover.jpeg`;
-  await sharp(req.file.buffer)
-    .resize(2000, 1333)
-    .toFormat('jpeg')
-    .jpeg({ quality: 90 })
-    .toFile(`${req.body.imageCover}`);
+    req.body.imageCover = `public/img/tours/tour-${uniqid()}-cover.jpeg`;
+    await sharp(req.file.buffer)
+      .resize(2000, 1333)
+      .toFormat('jpeg')
+      .jpeg({ quality: 90 })
+      .toFile(`${req.body.imageCover}`);
   }
 
-  console.log(req.body)
+  console.log(req.body);
 
-    const doc = await Tour.create(req.body);
+  const doc = await Tour.create(req.body);
 
-    res.status(201).json({
-      status: 'success',
-      data: doc
-    });
+  res.status(201).json({
+    status: 'success',
+    data: doc,
   });
-exports.updateTour = factory.updateOne(Tour)
+});
+exports.updateTour = factory.updateOne(Tour);
 exports.deleteTour = factory.deleteOne(Tour);
 exports.getFinishedTours = getTours('finished');
 exports.getAllTours = getTours('future');
@@ -151,8 +150,6 @@ exports.getTourStatistics = asyncWrapper(async (req, res, next) => {
       },
     },
   ]);
-
-  console.log(stats);
 
   res.status(200).json({
     status: 'success',

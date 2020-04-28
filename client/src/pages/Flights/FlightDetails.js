@@ -101,6 +101,8 @@ const FlightDetails = (props) => {
   if (loading) return <LoadingSpinner asOverlay />;
   if (!flight || !agency) return <h1>No flight found with that ID...</h1>;
 
+  console.log(flight.priceDiscount);
+
   return (
     <div className="flightDetails__container">
       {error && (
@@ -173,8 +175,20 @@ const FlightDetails = (props) => {
               <h2>Package: {flight.package}</h2>
             </div>
             <div className="agency__info--1">
-              <h1>
-                Price/person: <strong>${flight.pricePerPerson}</strong>
+              {flight.priceDiscount ? (
+                <h2 className="price__discount">
+                  Hurry up! We have a Price Discount for you: $
+                  {flight.priceDiscount}
+                </h2>
+              ) : null}
+              <h1 className="flight__price">
+                Price/person:{' '}
+                {flight.priceDiscount ? (
+                  <strike>
+                    ${flight.pricePerPerson + flight.priceDiscount}
+                  </strike>
+                ) : null}{' '}
+                <strong>${flight.pricePerPerson}</strong>
               </h1>
               {booked ? (
                 <Button disabled={true}>Booked</Button>

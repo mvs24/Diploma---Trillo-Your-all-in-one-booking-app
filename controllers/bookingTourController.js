@@ -61,3 +61,14 @@ exports.getMyBookings = async (req, res, next) => {
 
 exports.createBooking = factory.createOne(BookingTour);
 exports.getAllBookings = factory.getAll(BookingTour);
+
+exports.controlNumberGroupSize = asyncWrapper(async (req, res, next) => {
+  const tour = await Tour.findOne({ _id: req.params.tourId });
+  if (tour.numBought >= tour.maxGroupSize) {
+    return next(
+      new AppError('This tour has reached maximum number of persons...', 400)
+    );
+  }
+
+  next();
+});

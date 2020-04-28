@@ -1,11 +1,10 @@
 .flights__container {
   display: flex;
-  min-height: 100vh;
   width: 100vw;
+  justify-content: center;
 }
 .flights__form {
-  flex-basis: 65%;
-  margin-right: 5rem;
+  flex-basis: 70%;
 }
 .flights__form h1 {
   font-size: 2.5rem;
@@ -13,10 +12,8 @@
   background-image: linear-gradient(to right bottom, #2998ff, #5643fa);
   color: transparent;
   background-clip: text;
-
   text-align: center;
 }
-
 .sea__airplane__container {
   position: relative;
 }
@@ -38,6 +35,7 @@
   display: flex;
   padding: 7rem 2rem 2rem 2rem;
   align-items: center;
+  justify-content: center;
 }
 .label__container div {
   margin: 0 1rem;
@@ -58,7 +56,8 @@
   width: 50%;
 }
 .flights__form button {
-  margin-left: 40%;
+  /*align-self: center;*/
+  margin-left: 30%;
   margin-top: 2rem;
   padding-left: 5rem;
   padding-right: 5rem;
@@ -71,7 +70,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-right: 20%;
+  margin-right: 30%;
 }
 .blue__heading {
   font-size: 3rem;

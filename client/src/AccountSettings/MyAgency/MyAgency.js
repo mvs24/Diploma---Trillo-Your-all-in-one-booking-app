@@ -171,7 +171,7 @@ const MyAgency = (props) => {
       {myAgency.category === 'flights' && display === 'flights' && (
         <div className="my__agencyFlights">
           {myFlights.map((flight) => (
-            <Flight owner flight={flight} />
+            <Flight updateAgency={updateAgency} owner flight={flight} />
           ))}
         </div>
       )}

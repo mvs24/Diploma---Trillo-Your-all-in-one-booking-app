@@ -42,3 +42,11 @@
 .border__link {
   transform: translateY(-10px);
 }
+
+.price__discount {
+  font-size: 1.5rem;
+  color: #ba265d;
+}
+.flight__price {
+  color: #55c57a;
+}

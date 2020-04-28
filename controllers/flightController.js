@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const Flight = require('../models/flightModel');
+const Agency = require('../models/agencyModel');
+const User = require('../models/userModel');
 const ApiFeatures = require('../utils/ApiFeatures');
 const AppError = require('../utils/appError');
 const factory = require('./factoryHandler');
@@ -88,6 +90,68 @@ exports.getSearchedFlights = asyncWrapper(async (req, res, next) => {
     status: 'success',
     results: flights.length,
     data: flights,
+  });
+});
+
+exports.makePriceDiscount = asyncWrapper(async (req, res, next) => {
+  const flight = await Flight.findById(req.params.flightId);
+  const agency = await Agency.findById(flight.agency.toString());
+
+  if (!req.body.priceDiscount)
+    return next(new AppError('Please specify a price discount', 400));
+
+  const userToNotify = [];
+  agency.flights.forEach((flight) => {
+    flight.bookings.forEach((booking) => {
+      userToNotify.push(booking.user);
+    });
+  });
+
+  let msg = 'We have made a price discount! Visit us to learn more!';
+
+  if (req.body.message) {
+    msg = req.body.message;
+  }
+
+  const notification = {
+    message: msg,
+    agency: agency._id,
+    flight: flight._id,
+    createdAt: Date.now(),
+  };
+
+  // SAVING PERFORMANCE USING A HASH TABLE O(n)
+
+  let visited = {};
+  let users = [];
+  userToNotify.forEach((userId) => {
+    if (visited[userId]) {
+      visited[userId]++;
+    } else {
+      visited[userId] = 1;
+    }
+  });
+
+  for (let key in visited) {
+    users.push(key);
+  }
+
+  const priceDiscount = req.body.priceDiscount;
+  flight.priceDiscount = priceDiscount;
+  flight.pricePerPerson -= priceDiscount;
+  await flight.save();
+
+  users.forEach(async (userId) => {
+    const user = await User.findById(userId);
+    if (user) {
+      user.notifications.push(notification);
+      await user.save();
+    }
+  });
+
+  res.status(200).json({
+    status: 'success',
+    data: flight,
   });
 });
 

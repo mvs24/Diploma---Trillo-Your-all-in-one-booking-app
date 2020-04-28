@@ -64,6 +64,7 @@ const userSchema = new mongoose.Schema({
         ref: 'Agency',
       },
       tour: { type: mongoose.Schema.ObjectId, ref: 'Tour' },
+      flight: { type: mongoose.Schema.ObjectId, ref: 'Flight' },
       read: {
         type: Boolean,
         default: false,

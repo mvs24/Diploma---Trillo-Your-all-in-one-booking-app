@@ -9,6 +9,7 @@ const router = express.Router();
 router.get(
   '/checkout-session/:tourId',
   authController.protect,
+  bookingTourController.controlNumberGroupSize,
   bookingTourController.getCheckoutSession
 );
 

@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const AppError = require('../utils/appError');
 const Agency = require('./agencyModel');
 
-const flightSchema = new mongoose.Schema({
+const flightSchema = new mongoose.Schema(
+  {
     from: {
       type: String,
     },
@@ -102,11 +103,11 @@ flightSchema.virtual('reviews', {
   localField: '_id',
 });
 
-// flightSchema.virtual('bookings', {
-//   ref: 'BookingFlight',
-//   foreignField: 'flight',
-//   localField: '_id'
-// });
+flightSchema.virtual('bookings', {
+  ref: 'BookingFlight',
+  foreignField: 'flight',
+  localField: '_id',
+});
 
 // flightSchema.virtual('wishlists', {
 //   ref: 'WishlistFlight',
@@ -114,8 +115,8 @@ flightSchema.virtual('reviews', {
 //   localField: '_id'
 // });
 
-flightSchema.pre(/^findOne/, function (next) {
-  this.populate('reviews');
+flightSchema.pre(/^find/, function (next) {
+  this.populate('reviews').populate('bookings');
 
   next();
 });

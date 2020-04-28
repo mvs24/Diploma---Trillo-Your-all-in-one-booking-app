@@ -17,6 +17,7 @@ import Select from 'react-select';
 import Modal from '../../shared/components/UI/Modal';
 import { loadStripe } from '@stripe/stripe-js';
 import Textarea from '../../shared/components/Input/Textarea';
+import Input from '../../shared/components/Input/Input';
 
 let options = [];
 for (let i = 1; i <= 5; i++) {
@@ -34,8 +35,8 @@ const StarCmp = (props) => (
 );
 
 const Flight = (props) => {
-  const { flight } = props;
   const [agency, setAgency] = useState();
+  const [flight, setFlight] = useState(props.flight);
   const [loading, setLoading] = useState();
   const [error, setError] = useState();
   const [selectedOption, setSelectedOption] = useState();
@@ -45,6 +46,31 @@ const Flight = (props) => {
   const [openReviewModal, setOpenReviewModal] = useState();
   const [reviewed, setReviewed] = useState();
   const [reviewId, setReviewId] = useState();
+  const [openPriceDiscountModal, setOpenPriceDiscountModal] = useState();
+  const [inputPriceDiscount, setInputPriceDiscount] = useState({
+    configOptions: {
+      type: 'number',
+      placeholder: 'Price Discount',
+    },
+    value: '',
+    valid: true,
+    touched: false,
+    validRequirements: {
+      required: true,
+      minValue: 1,
+    },
+  });
+  const [messageDiscount, setMessageDiscount] = useState({
+    configOptions: {
+      type: 'text',
+      placeholder:
+        'This message will go to all the users who has booked one of your flight as a notification! If you do not send a message we will provide a message for you. (Max: 35 characters)',
+    },
+    value: '',
+    valid: true,
+    touched: false,
+    validRequirements: {},
+  });
   const [myReview, setMyReview] = useState({
     configOptions: {
       type: 'text',
@@ -109,6 +135,7 @@ const Flight = (props) => {
       await stripe.redirectToCheckout({
         sessionId: session.data.session.id,
       });
+
       setProcessBooking(true);
     } catch (err) {
       setProcessBooking();
@@ -135,6 +162,13 @@ const Flight = (props) => {
     }
     if (requirements.isEmail) {
       isValid = isValid && /\S+@\S+\.\S+/.test(value);
+    }
+
+    if (requirements.minValue) {
+      isValid = isValid && value >= requirements.minValue;
+    }
+    if (requirements.maxValue) {
+      isValid = isValid && value <= requirements.maxValue;
     }
 
     return isValid;
@@ -221,6 +255,52 @@ const Flight = (props) => {
 
   const visitFlightHandler = () => {
     history.push('/flights/' + flight._id);
+  };
+
+  const priceDiscountHandler = (e) => {
+    const updatedData = { ...inputPriceDiscount };
+
+    updatedData.value = e.target.value;
+    updatedData.touched = true;
+    updatedData.valid = checkValidity(
+      updatedData.value,
+      updatedData.validRequirements
+    );
+
+    setInputPriceDiscount(updatedData);
+  };
+
+  const priceDiscountMessageHandler = (e) => {
+    const updatedData = { ...messageDiscount };
+
+    updatedData.value = e.target.value;
+    updatedData.touched = true;
+    updatedData.valid = checkValidity(
+      updatedData.value,
+      updatedData.validRequirements
+    );
+
+    setMessageDiscount(updatedData);
+  };
+
+  const makePriceDiscountHandler = async () => {
+    const data = {
+      priceDiscount: +inputPriceDiscount.value,
+      message: messageDiscount.value,
+    };
+    try {
+      setLoading(true);
+      const res = await axios.patch(
+        `/api/v1/flights/${flight._id}/price-discount`,
+        data
+      );
+      setFlight(res.data.data);
+      setOpenPriceDiscountModal();
+      setLoading();
+    } catch (err) {
+      setLoading();
+      setError(err.response.data.message);
+    }
   };
 
   const dec = +flight.ratingsAverage.toFixed(2).toString().substring(0, 1);
@@ -314,6 +394,32 @@ const Flight = (props) => {
   return (
     <div className="flight__container">
       {loading && <LoadingSpinner asOverlay />}
+      {openPriceDiscountModal && (
+        <Modal
+          onCancel={() => setOpenPriceDiscountModal()}
+          show
+          header="Make a Price Discount"
+        >
+          <Input
+            value={inputPriceDiscount.value}
+            valid={inputPriceDiscount.valid}
+            touched={inputPriceDiscount.touched}
+            configOptions={inputPriceDiscount.configOptions}
+            onChange={(e) => priceDiscountHandler(e)}
+          />
+          <Textarea
+            className="flight__text__discount"
+            value={messageDiscount.value}
+            valid={messageDiscount.valid}
+            touched={messageDiscount.touched}
+            configOptions={messageDiscount.configOptions}
+            onChange={(e) => priceDiscountMessageHandler(e)}
+          />
+          <Button clicked={makePriceDiscountHandler} type="pink">
+            Make a Price Discount
+          </Button>
+        </Modal>
+      )}
       {openReviewModal && (
         <Modal
           onCancel={() => {
@@ -405,9 +511,25 @@ const Flight = (props) => {
         <p>FROM: {flight.from}</p>
         <p>TO: {flight.to}</p>
 
-        <p>
-          Price per person: <strong> ${flight.pricePerPerson}</strong>
-        </p>
+        {flight.priceDiscount ? (
+          <p className="flight__price">
+            Price/person:{' '}
+            {flight.priceDiscount ? (
+              <strike>${flight.pricePerPerson + flight.priceDiscount}</strike>
+            ) : null}{' '}
+            <strong>${flight.pricePerPerson}</strong>
+          </p>
+        ) : (
+          <p>
+            Price/person:{' '}
+            {flight.priceDiscount ? (
+              <strike className="flight__price">
+                ${flight.pricePerPerson + flight.priceDiscount}
+              </strike>
+            ) : null}{' '}
+            <strong>${flight.pricePerPerson}</strong>
+          </p>
+        )}
       </div>
       <div
         style={{
@@ -430,7 +552,11 @@ const Flight = (props) => {
           src={`http://localhost:5000/${agency.image}`}
         />
 
-        {props.owner ? <Button>Make a price discount</Button> : null}
+        {props.owner ? (
+          <Button clicked={() => setOpenPriceDiscountModal(true)} type="pink">
+            Make a price discount
+          </Button>
+        ) : null}
         {flightOwnerContent}
       </div>
     </div>

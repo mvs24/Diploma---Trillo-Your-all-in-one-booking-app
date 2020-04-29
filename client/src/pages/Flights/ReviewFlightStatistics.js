@@ -9,6 +9,8 @@ import {
 } from 'react-icons/io';
 import ErrorModal from '../../shared/components/UI/ErrorModal';
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
+import ReviewFlightItem from './ReviewFlightItem';
+import './ReviewFlightStatistics.css';
 
 const ReviewFlightStatistics = (props) => {
   const [reviewStats, setReviewStats] = useState();
@@ -36,6 +38,8 @@ const ReviewFlightStatistics = (props) => {
 
     getReviewStats();
   }, []);
+
+  console.log(props.flightReviews);
 
   if (!avgRating) return null;
 
@@ -146,6 +150,11 @@ const ReviewFlightStatistics = (props) => {
             );
           })}
         </div>
+      </div>
+      <div className="flightReviews__container">
+        {props.flightReviews.map((review) => (
+          <ReviewFlightItem review={review} />
+        ))}
       </div>
     </div>
   );

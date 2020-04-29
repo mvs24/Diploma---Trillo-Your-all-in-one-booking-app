@@ -69,6 +69,10 @@ const flightSchema = new mongoose.Schema(
         message: 'Discount price ({VALUE}) should be below regular price',
       },
     },
+    priceDiscountMessage: {
+      type: String,
+      default: 'Hurry up! We have a Price Discount for you:',
+    },
     maxGroupSize: {
       type: Number,
       required: [true, 'Maximum group size must not be empty'],

@@ -41,7 +41,7 @@ exports.signup = asyncWrapper(async (req, res, next) => {
   res.status(201).json({
     status: 'success',
     token,
-    data: { name, lastname, email, photo: userPhoto },
+    data: { name, lastname, email, photo: userPhoto, id: user._id },
   });
 });
 
@@ -76,6 +76,7 @@ exports.login = asyncWrapper(async (req, res, next) => {
       lastname: user.lastname,
       email: user.email,
       photo: user.photo,
+      id: user._id,
     },
   });
 });

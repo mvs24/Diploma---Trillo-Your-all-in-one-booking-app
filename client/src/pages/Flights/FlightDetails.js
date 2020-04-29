@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { connect } from 'react-redux';
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
 import ErrorModal from '../../shared/components/UI/ErrorModal';
 import Select from 'react-select';
@@ -10,6 +11,8 @@ import './FlightDetails.css';
 import Button from '../../shared/components/Button/Button';
 import ReviewFlightStatistics from './ReviewFlightStatistics';
 import FlightMap from './FlightMap';
+import Input from '../../shared/components/Input/Input';
+import Textarea from '../../shared/components/Input/Textarea';
 
 let options = [];
 for (let i = 1; i <= 5; i++) {
@@ -27,6 +30,32 @@ const FlightDetails = (props) => {
   const [booked, setBooked] = useState();
   const [page, setPage] = useState('info');
   const [error, setError] = useState();
+  const [inputPriceDiscount, setInputPriceDiscount] = useState({
+    configOptions: {
+      type: 'number',
+      placeholder: 'Price Discount',
+    },
+    value: '',
+    valid: true,
+    touched: false,
+    validRequirements: {
+      required: true,
+      minValue: 1,
+    },
+  });
+  const [messageDiscount, setMessageDiscount] = useState({
+    configOptions: {
+      type: 'text',
+      placeholder:
+        'This message will go to all the users who has booked one of your flight as a notification! If you do not send a message we will provide a message for you. (Max: 35 characters)',
+    },
+    value: '',
+    valid: true,
+    touched: false,
+    validRequirements: {},
+  });
+
+  const [openPriceDiscountModal, setOpenPriceDiscountModal] = useState();
   const flightId = props.match.params.flightId;
 
   useEffect(() => {
@@ -57,6 +86,86 @@ const FlightDetails = (props) => {
 
     getFlight();
   }, []);
+
+  const checkValidity = (value, requirements) => {
+    let isValid = true;
+
+    if (requirements.required) {
+      isValid = isValid && value.trim().length !== 0;
+    }
+    if (requirements.minlength) {
+      isValid = isValid && value.trim().length >= requirements.minlength;
+    }
+    if (requirements.isEmail) {
+      isValid = isValid && /\S+@\S+\.\S+/.test(value);
+    }
+
+    if (requirements.minValue) {
+      isValid = isValid && value >= requirements.minValue;
+    }
+    if (requirements.maxValue) {
+      isValid = isValid && value <= requirements.maxValue;
+    }
+
+    return isValid;
+  };
+
+  const priceDiscountHandler = (e) => {
+    const updatedData = { ...inputPriceDiscount };
+
+    updatedData.value = e.target.value;
+    updatedData.touched = true;
+    updatedData.valid = checkValidity(
+      updatedData.value,
+      updatedData.validRequirements
+    );
+
+    setInputPriceDiscount(updatedData);
+  };
+
+  const priceDiscountMessageHandler = (e) => {
+    const updatedData = { ...messageDiscount };
+
+    updatedData.value = e.target.value;
+    updatedData.touched = true;
+    updatedData.valid = checkValidity(
+      updatedData.value,
+      updatedData.validRequirements
+    );
+
+    setMessageDiscount(updatedData);
+  };
+
+  const makePriceDiscountHandler = async () => {
+    const data = {
+      priceDiscount: +inputPriceDiscount.value,
+      message: messageDiscount.value,
+    };
+    try {
+      setLoading(true);
+      const res = await axios.patch(
+        `/api/v1/flights/${flight._id}/price-discount`,
+        data
+      );
+      setFlight(res.data.data);
+      setOpenPriceDiscountModal();
+      setLoading();
+    } catch (err) {
+      setLoading();
+      setError(err.response.data.message);
+    }
+  };
+
+  if (!agency || !props.user) return <LoadingSpinner asOverlay />;
+
+  let ownerContent = null;
+  if (agency.user === props.user.id) {
+    ownerContent = (
+      <Button type="pink" clicked={() => setOpenPriceDiscountModal(true)}>
+        Make a Price Discount
+      </Button>
+    );
+  }
 
   const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_API);
 
@@ -101,14 +210,38 @@ const FlightDetails = (props) => {
   if (loading) return <LoadingSpinner asOverlay />;
   if (!flight || !agency) return <h1>No flight found with that ID...</h1>;
 
-  console.log(flight.priceDiscount);
-
   return (
     <div className="flightDetails__container">
       {error && (
         <ErrorModal show onClear={() => setError()}>
           {error}
         </ErrorModal>
+      )}
+      {openPriceDiscountModal && (
+        <Modal
+          onCancel={() => setOpenPriceDiscountModal()}
+          show
+          header="Make a Price Discount"
+        >
+          <Input
+            value={inputPriceDiscount.value}
+            valid={inputPriceDiscount.valid}
+            touched={inputPriceDiscount.touched}
+            configOptions={inputPriceDiscount.configOptions}
+            onChange={(e) => priceDiscountHandler(e)}
+          />
+          <Textarea
+            className="flight__text__discount"
+            value={messageDiscount.value}
+            valid={messageDiscount.valid}
+            touched={messageDiscount.touched}
+            configOptions={messageDiscount.configOptions}
+            onChange={(e) => priceDiscountMessageHandler(e)}
+          />
+          <Button clicked={makePriceDiscountHandler} type="pink">
+            Make a Price Discount
+          </Button>
+        </Modal>
       )}
       {openConfirmTickets && (
         <Modal
@@ -177,8 +310,9 @@ const FlightDetails = (props) => {
             <div className="agency__info--1">
               {flight.priceDiscount ? (
                 <h2 className="price__discount">
-                  Hurry up! We have a Price Discount for you: $
-                  {flight.priceDiscount}
+                  {flight.priceDiscountMessage ||
+                    'We have made a price discount! Visit us to learn more!'}{' '}
+                  ${flight.priceDiscount}
                 </h2>
               ) : null}
               <h1 className="flight__price">
@@ -190,7 +324,9 @@ const FlightDetails = (props) => {
                 ) : null}{' '}
                 <strong>${flight.pricePerPerson}</strong>
               </h1>
-              {booked ? (
+              {ownerContent ? (
+                ownerContent
+              ) : booked ? (
                 <Button disabled={true}>Booked</Button>
               ) : (
                 <Button type="blue" clicked={() => setOpenConfirmTickets(true)}>
@@ -202,7 +338,10 @@ const FlightDetails = (props) => {
         )}
         {page === 'reviews' && (
           <div className="info__container">
-            <ReviewFlightStatistics flightId={flight._id} />
+            <ReviewFlightStatistics
+              flightReviews={flight.reviews}
+              flightId={flight._id}
+            />
           </div>
         )}
         {page === 'fromTo' && (
@@ -216,4 +355,10 @@ const FlightDetails = (props) => {
   );
 };
 
-export default FlightDetails;
+const mapStateToProps = (state) => {
+  return {
+    user: state.user.userData,
+  };
+};
+
+export default connect(mapStateToProps)(FlightDetails);

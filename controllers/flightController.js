@@ -139,6 +139,7 @@ exports.makePriceDiscount = asyncWrapper(async (req, res, next) => {
   const priceDiscount = req.body.priceDiscount;
   flight.priceDiscount = priceDiscount;
   flight.pricePerPerson -= priceDiscount;
+  flight.priceDiscountMessage = msg;
   await flight.save();
 
   users.forEach(async (userId) => {

@@ -385,7 +385,9 @@ const Flight = (props) => {
     );
   }
 
-  if (props.owner) {
+  if (!agency) return <LoadingSpinner asOverlay />;
+
+  if (agency.user === props.user.id) {
     flightOwnerContent = null;
   } else {
     flightOwnerContent = myFlightContent;
@@ -565,6 +567,7 @@ const Flight = (props) => {
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.user.isAuthenticated,
+  user: state.user.userData,
 });
 
 export default connect(mapStateToProps)(Flight);

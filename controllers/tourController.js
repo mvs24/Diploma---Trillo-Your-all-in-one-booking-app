@@ -121,8 +121,6 @@ exports.createTour = asyncWrapper(async (req, res, next) => {
       .toFile(`${req.body.imageCover}`);
   }
 
-  console.log(req.body);
-
   const doc = await Tour.create(req.body);
 
   res.status(201).json({

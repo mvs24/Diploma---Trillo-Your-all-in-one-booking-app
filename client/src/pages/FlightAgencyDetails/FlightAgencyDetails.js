@@ -48,15 +48,17 @@ const FlightAgencyDetails = (props) => {
   }, [isAuthenticated]);
 
   useEffect(() => {
-    let myFlightsIds = [];
-    if (myFlights) {
-      myFlightsIds = myFlights.map((flight) => flight._id);
-      setMyFlightsIds(myFlightsIds);
+    if (isAuthenticated) {
+      let myFlightsIds = [];
+      if (myFlights) {
+        myFlightsIds = myFlights.map((flight) => flight._id);
+        setMyFlightsIds(myFlightsIds);
+      }
     }
   }, [myFlights]);
 
   if (!agency) return <LoadingSpinner asOverlay />;
-  if (!myFlightsIds) return <LoadingSpinner />;
+  if (isAuthenticated && !myFlightsIds) return <LoadingSpinner />;
 
   return (
     <>
@@ -71,7 +73,7 @@ const FlightAgencyDetails = (props) => {
         <div>
           {agency.flights.map((flight) => (
             <Flight
-              booked={myFlightsIds.includes(flight._id)}
+              booked={isAuthenticated && myFlightsIds.includes(flight._id)}
               white
               flight={flight}
             />

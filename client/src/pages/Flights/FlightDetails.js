@@ -57,24 +57,28 @@ const FlightDetails = (props) => {
 
   const [openPriceDiscountModal, setOpenPriceDiscountModal] = useState();
   const flightId = props.match.params.flightId;
-
+  const { isAuthenticated } = props;
   useEffect(() => {
     const getFlight = async () => {
+      let bookingRes;
       try {
         setLoading(true);
         const res = await axios.get(`/api/v1/flights/${flightId}`);
         const agencyRes = await axios.get(
           `/api/v1/agencies/${res.data.data.agency}`
         );
-        const bookingRes = await axios.get(
-          '/api/v1/bookings/flights/futureBookings'
-        );
-        setMyFlights(bookingRes.data.data);
-        const myFlightsId = bookingRes.data.data.map((el) => el._id);
-        if (myFlightsId.includes(flightId)) {
-          setBooked(true);
+        if (props.isAuthenticated) {
+          bookingRes = await axios.get(
+            '/api/v1/bookings/flights/futureBookings'
+          );
         }
-
+        if (props.isAuthenticated) {
+          setMyFlights(bookingRes.data.data);
+          const myFlightsId = bookingRes.data.data.map((el) => el._id);
+          if (myFlightsId.includes(flightId)) {
+            setBooked(true);
+          }
+        }
         setLoading();
         setFlight(res.data.data);
         setAgency(agencyRes.data.data);
@@ -85,7 +89,7 @@ const FlightDetails = (props) => {
     };
 
     getFlight();
-  }, []);
+  }, [isAuthenticated]);
 
   const checkValidity = (value, requirements) => {
     let isValid = true;
@@ -156,10 +160,11 @@ const FlightDetails = (props) => {
     }
   };
 
-  if (!agency || !props.user) return <LoadingSpinner asOverlay />;
+  if (!agency) return <LoadingSpinner asOverlay />;
 
   let ownerContent = null;
-  if (agency.user === props.user.id) {
+  if (isAuthenticated && agency.user === props.user.id) {
+    console.log('hym');
     ownerContent = (
       <Button type="pink" clicked={() => setOpenPriceDiscountModal(true)}>
         Make a Price Discount
@@ -358,6 +363,7 @@ const FlightDetails = (props) => {
 const mapStateToProps = (state) => {
   return {
     user: state.user.userData,
+    isAuthenticated: state.user.isAuthenticated,
   };
 };
 

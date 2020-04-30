@@ -48,6 +48,7 @@ const TourDetails = React.memo((props) => {
   const [processingDiscount, setProcessingDiscount] = useState();
   const [reload, setReload] = useState();
   const [userId, setUserId] = useState();
+  const [finishedTours, setFinishedTours] = useState();
   const [processBooking, setProcessBooking] = useState();
   const { cartTour, isAuthenticated } = props;
 
@@ -76,6 +77,10 @@ const TourDetails = React.memo((props) => {
         const agencyRes = await axios.get(
           '/api/v1/agencies/' + res.data.data.agency
         );
+        const finishedRes = await axios.get(`/api/v1/tours/finishedTours`);
+        let finishedTours = finishedRes.data.data.map((el) => el._id);
+        setFinishedTours(finishedTours);
+
         if (isAuthenticated) {
           const userRes = await axios.get('/api/v1/users/loggedInUser');
           setUserId(userRes.data.data.id);
@@ -93,7 +98,9 @@ const TourDetails = React.memo((props) => {
     getTour();
   }, []);
 
+  let innerWidth = window.innerWidth;
   window.addEventListener('resize', () => {
+    innerWidth = window.innerWidth;
     if (window.innerWidth < 1013 && window.innerWidth > 736) {
       setResPerPage(2);
     } else if (window.innerWidth < 736) {
@@ -102,6 +109,15 @@ const TourDetails = React.memo((props) => {
       setResPerPage(3);
     }
   });
+  useEffect(() => {
+    if (window.innerWidth < 1013 && window.innerWidth > 736) {
+      setResPerPage(2);
+    } else if (window.innerWidth < 736) {
+      setResPerPage(1);
+    } else if (window.innerWidth >= 1013) {
+      setResPerPage(3);
+    }
+  }, [window.innerWidth]);
 
   useEffect(() => {
     if (tour) {
@@ -261,6 +277,8 @@ const TourDetails = React.memo((props) => {
     );
   }
 
+  console.log(finishedTours);
+
   return (
     <div className="tour__container">
       {error && (
@@ -388,7 +406,9 @@ const TourDetails = React.memo((props) => {
             ))}
           </div>
 
-          {isOwner ? (
+          {finishedTours.includes(tour._id) ? (
+            <h1 className="tourDetails__finished">THIS TOUR HAS FINISHED</h1>
+          ) : isOwner ? (
             <div className="bookTour__info--1">
               <h1 style={{ fontSize: '1.6rem' }}>
                 DO YOU WANT TO MAKE A PRICE DISCOUNT AS THE OWNER OF THIS TOUR?
@@ -407,8 +427,7 @@ const TourDetails = React.memo((props) => {
               ) : null}
             </div>
           )}
-
-          {!isOwner ? (
+          {finishedTours.includes(tour._id) ? null : !isOwner ? (
             <div className="bookTour__buttons">
               <Button
                 disabled={added}
@@ -430,30 +449,32 @@ const TourDetails = React.memo((props) => {
               MAKE A PRICE DISCOUNT
             </Button>
           )}
-          {openDiscountModal && (
-            <Modal
-              header={`Make a price discount`}
-              show
-              onCancel={() => setOpenDiscountModal()}
-            >
-              <Input
-                value={priceDiscountInput.value}
-                valid={priceDiscountInput.valid}
-                touched={priceDiscountInput.touched}
-                configOptions={priceDiscountInput.configOptions}
-                onChange={(e) => inputHandler(e)}
-              />
-              <Button
-                clicked={submitPriceDiscountHandler}
-                disabled={!priceDiscountInputValid}
-                type="success"
-              >
-                {processingDiscount
-                  ? 'PROCESSING'
-                  : 'Submit your Price Discount'}
-              </Button>
-            </Modal>
-          )}
+          {finishedTours.includes(tour._id)
+            ? null
+            : openDiscountModal && (
+                <Modal
+                  header={`Make a price discount`}
+                  show
+                  onCancel={() => setOpenDiscountModal()}
+                >
+                  <Input
+                    value={priceDiscountInput.value}
+                    valid={priceDiscountInput.valid}
+                    touched={priceDiscountInput.touched}
+                    configOptions={priceDiscountInput.configOptions}
+                    onChange={(e) => inputHandler(e)}
+                  />
+                  <Button
+                    clicked={submitPriceDiscountHandler}
+                    disabled={!priceDiscountInputValid}
+                    type="success"
+                  >
+                    {processingDiscount
+                      ? 'PROCESSING'
+                      : 'Submit your Price Discount'}
+                  </Button>
+                </Modal>
+              )}
         </div>
       </div>
     </div>

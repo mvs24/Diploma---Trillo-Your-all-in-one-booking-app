@@ -564,9 +564,15 @@ const TourItem = React.memo((props) => {
             {tour.ratingsQuantity})
           </p>
         </div>
-        <Button clicked={detailsHandler} type="success">
-          Details
-        </Button>
+        {props.finished ? (
+          <Button clicked={detailsHandler} type="pink">
+            Finished
+          </Button>
+        ) : (
+          <Button clicked={detailsHandler} type="success">
+            Details
+          </Button>
+        )}
         {reviewContent}
         {props.updateReview && (
           <div className="update__review">

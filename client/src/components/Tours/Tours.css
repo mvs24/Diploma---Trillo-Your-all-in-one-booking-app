@@ -22,6 +22,31 @@
   grid-column-gap: 1.5rem;
   row-gap: 4rem;
 }
+.finishedTours {
+   border-top: 2px solid #eee;
+   margin-top: 2rem;
+}
+.finished__heading {
+    font-size: 2.5rem;
+  text-transform: uppercase;
+  background-image: linear-gradient(
+    to right bottom,
+    #eb2f64,
+    #BA265D
+  );
+  color: transparent;
+  background-clip: text;
+  display: block;
+  width: 100%;
+  margin: auto;
+  text-align: center;
+  margin-top: 3rem;
+}
+.finished__tours__container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(30rem, 35rem));
+ 
+}
 
 @media (max-width: 593px) {
   .topToursContent {

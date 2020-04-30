@@ -197,10 +197,8 @@ const AllFlights = (props) => {
     setSelectedRating(rating);
   };
 
-  console.log(start, end);
-
   const allFlights = flights.slice(start, end);
-  console.log(allFlights);
+
   return (
     <div className="all__flights__container">
       <h1 className="all__flights__heading">

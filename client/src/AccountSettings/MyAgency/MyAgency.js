@@ -9,6 +9,7 @@ import EditAgency from './EditAgency';
 import AddNewTour from './AddNewTour';
 import Flight from '../../pages/Flights/Flight';
 import AddNewFlight from './AddNewFlight';
+import FinishedTours from './FinishedTours';
 
 const MyAgency = (props) => {
   const [myAgency, setMyAgency] = useState();
@@ -16,6 +17,7 @@ const MyAgency = (props) => {
   const [error, setError] = useState();
   const [myTours, setMyTours] = useState();
   const [myFlights, setMyFlights] = useState();
+  const [finishedTours, setFinishedTours] = useState();
   const [display, setDisplay] = useState('agency');
   const [shouldUpdate, setShouldUpdate] = useState();
   const tours = useRef();
@@ -33,6 +35,7 @@ const MyAgency = (props) => {
           tourFlightRes = await axios.get(
             `/api/v1/agencies/${res.data.data._id}/tours`
           );
+
           setMyTours(tourFlightRes.data.data);
         } else if (res.data.data.category === 'flights') {
           tourFlightRes = await axios.get(
@@ -130,6 +133,13 @@ const MyAgency = (props) => {
     setDisplay('addNewFlight');
   };
 
+  const finishedToursHandler = (e) => {
+    const links = Array.from(document.querySelectorAll('.border'));
+    links.forEach((link) => link.classList.remove('border'));
+    e.target.classList.add('border');
+    setDisplay('finishedTours');
+  };
+
   return (
     <div className="myAgency__container">
       <div className="myAgency__links">
@@ -144,6 +154,11 @@ const MyAgency = (props) => {
         {myAgency.category === 'tours' && (
           <h1 onClick={toursHandler} className="myAgency__heading" ref={tours}>
             My Tours
+          </h1>
+        )}
+        {myAgency.category === 'tours' && (
+          <h1 onClick={finishedToursHandler} className="myAgency__heading">
+            Finished Tours
           </h1>
         )}
         <h1
@@ -195,6 +210,9 @@ const MyAgency = (props) => {
       )}
       {myAgency.category === 'tours' && display === 'addNewTour' && (
         <AddNewTour updateAgency={updateAgency} agency={myAgency} />
+      )}
+      {myAgency.category === 'tours' && display === 'finishedTours' && (
+        <FinishedTours updateAgency={updateAgency} agency={myAgency} />
       )}
     </div>
   );

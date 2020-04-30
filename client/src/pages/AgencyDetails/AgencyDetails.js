@@ -25,6 +25,7 @@ const AgencyDetails = (props) => {
   const [page, setPage] = useState(1);
   const [resPerPage, setResPerPage] = useState(3);
   const [shouldUpdate, setShouldUpdate] = useState();
+  const [finishedTours, setFinishedTours] = useState([])
 
   const { agencyId } = props.agencyId || props.match.params;
 
@@ -33,6 +34,11 @@ const AgencyDetails = (props) => {
       try {
         setLoading(true);
         const res = await axios.get(`/api/v1/agencies/${agencyId}`);
+        const finishedRes = await axios.get(
+            `/api/v1/agencies/${agencyId}/tours/finishedTours`
+          );
+        let finishedTours = finishedRes.data.data.map(el => el._id);
+          setFinishedTours(finishedTours);
         setAgency(res.data.data);
         setLoading(false);
       } catch (err) {
@@ -149,15 +155,15 @@ const AgencyDetails = (props) => {
           {updatedAgencyTours.length !== 0 && <h1>TOURS</h1>}
           <div className="agency__tour--item">
             {updatedAgencyTours.map((tour) => (
-              <TourItem shouldUpdate={shouldUpdate} tour={tour} />
+              <TourItem finished={finishedTours.includes(tour._id)} shouldUpdate={shouldUpdate} tour={tour} />
             ))}
             {updatedAgencyTours.length === 0 && (
               <div className="u-text-center">
                 <h1 className="updatedAgencyTours">
-                  No tours found on this page!
-                </h1>
+                  No tours found on this page! 
+                </h1> 
               </div>
-            )}
+            )} 
           </div>
           <div className="pages__content">{pageContent.map((p) => p)}</div>
         </div>

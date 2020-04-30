@@ -12,7 +12,7 @@ import {
   IoMdStarOutline,
   IoIosStarOutline,
   IoIosArrowBack,
-  IoIosArrowForward
+  IoIosArrowForward,
 } from 'react-icons/io';
 import Select from 'react-select';
 import './DiscoverDreamTour.css';
@@ -48,7 +48,10 @@ const DiscoverDreamTour = React.memo((props) => {
   const [error, setError] = useState();
   const [openCategory, setOpenCategory] = useState();
   const [openRatings, setOpenRatings] = useState();
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOption, setSelectedOption] = useState({
+    value: null,
+    label: 'Sort By',
+  });
   const [selectedDistanceOption, setSelectedDistanceOption] = useState();
   const [checkedIn, setCheckedIn] = useState([]);
   const [radioValue, setRadioValue] = useState();
@@ -58,30 +61,29 @@ const DiscoverDreamTour = React.memo((props) => {
   const [reRender, setRerender] = useState();
   const [cancelBtn, setCancelBtn] = useState(false);
   const [shouldUpdate, setShouldUpdate] = useState();
-  const [page, setPage] = useState(1)
+  const [page, setPage] = useState(1);
   const [resPerPage, setResPerPage] = useState(4);
-  const {location} = props
+  const { location } = props;
 
   const getAllTours = async () => {
-      try {
-        setLoading(true);
-        const res = await axios.get('/api/v1/tours');
-        setAllTours(res.data.data);
-        setLoading(false);
-      } catch (err) {
-        setError(err.response.data.message);
-      }
-    };
+    try {
+      setLoading(true);
+      const res = await axios.get('/api/v1/tours');
+      setAllTours(res.data.data);
+      setLoading(false);
+    } catch (err) {
+      setError(err.response.data.message);
+    }
+  };
 
   useEffect(() => {
     getAllTours();
   }, []);
 
-
   useEffect(() => {
-    setPage( props.location.search.split('=')[1] || 1);
-    setShouldUpdate(prev => !prev)
-  }, [location])
+    setPage(props.location.search.split('=')[1] || 1);
+    setShouldUpdate((prev) => !prev);
+  }, [location]);
 
   const getRating = () => {
     let rating;
@@ -277,27 +279,27 @@ const DiscoverDreamTour = React.memo((props) => {
 
   if (!allTours) return <LoadingSpinner asOverlay />;
 
- 
   const goToPrevPage = () => {
     const currentPage = props.location.search.split('=')[1] || 1;
-    if (currentPage > 1) 
-    props.history.replace(`${props.match.url}?page=${currentPage * 1 - 1}`)
-  }
+    if (currentPage > 1)
+      props.history.replace(`${props.match.url}?page=${currentPage * 1 - 1}`);
+  };
   const goToNextPage = () => {
-     const currentPage = props.location.search.split('=')[1] || 1;
-    if (currentPage < Math.round(allTours.length / resPerPage)) 
-    props.history.replace(`${props.match.url}?page=${currentPage * 1 + 1}`)
-  }
+    const currentPage = props.location.search.split('=')[1] || 1;
+    if (currentPage < Math.round(allTours.length / resPerPage))
+      props.history.replace(`${props.match.url}?page=${currentPage * 1 + 1}`);
+  };
 
-  let pageContent = []
-   for (let i = 1; i <= Math.round(allTours.length / resPerPage) + 1; i++) {
+  let pageContent = [];
+  for (let i = 1; i <= Math.round(allTours.length / resPerPage) + 1; i++) {
     if (i === 1) {
       pageContent.push(
         <div className="span__center">
-          <span 
-          style={{cursor: "pointer"}}
+          <span
+            style={{ cursor: 'pointer' }}
             onClick={goToPrevPage}
-           className="span__center">
+            className="span__center"
+          >
             <IconContext.Provider
               value={{ className: 'icon__green tour__info--icon full star' }}
             >
@@ -321,7 +323,11 @@ const DiscoverDreamTour = React.memo((props) => {
           >
             {i}
           </Link>
-          <span style={{cursor: 'pointer'}} onClick={goToNextPage} className="span__center">
+          <span
+            style={{ cursor: 'pointer' }}
+            onClick={goToNextPage}
+            className="span__center"
+          >
             <IconContext.Provider
               value={{ className: 'icon__green tour__info--icon full star' }}
             >
@@ -417,10 +423,10 @@ const DiscoverDreamTour = React.memo((props) => {
 
   if (!allTours) return <LoadingSpinner asOverlay />;
 
-  const start = (page - 1 )  * resPerPage;
-  const end = page * resPerPage
+  const start = (page - 1) * resPerPage;
+  const end = page * resPerPage;
 
-  let updatedAllTours = allTours.slice(start, end)
+  let updatedAllTours = allTours.slice(start, end);
 
   return (
     <>
@@ -454,7 +460,7 @@ const DiscoverDreamTour = React.memo((props) => {
             </div>
           </Modal>
         )}
-        <h1 className="discover__h1">Total Tours: {allTours.length}</h1>
+        <h1 className="discover__h1">Total Future Tours: {allTours.length}</h1>
 
         <div className="discover__header">
           <li className="filter">
@@ -550,7 +556,7 @@ const DiscoverDreamTour = React.memo((props) => {
                       value="4"
                       checked={radioValue && +radioValue === 4 ? true : false}
                     />
-                     <label>{secondStars.map((el) => el)} 4 & up</label>
+                    <label>{secondStars.map((el) => el)} 4 & up</label>
                   </div>
                   <div className="rhd">
                     {' '}
@@ -569,12 +575,14 @@ const DiscoverDreamTour = React.memo((props) => {
           </div>
           <div className="all__tours__container">
             <div className="tours__grid">
-           {updatedAllTours.length === 0 && <h1 className='updated__tours__heading'>No tours found!</h1>}   
-           {updatedAllTours.map((tour) => (
+              {updatedAllTours.length === 0 && (
+                <h1 className="updated__tours__heading">No tours found!</h1>
+              )}
+              {updatedAllTours.map((tour) => (
                 <TourItem shouldUpdate={shouldUpdate} tour={tour} />
               ))}
             </div>
-            <div className='pageContent'>{pageContent.map(el => el)}</div>
+            <div className="pageContent">{pageContent.map((el) => el)}</div>
           </div>
         </div>
       </div>

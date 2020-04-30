@@ -107,6 +107,8 @@ const EditAgency = ({ agency }) => {
   };
 
   const inputImageHandler = (value, isValid) => {
+    if (isValid) {
+    }
     setImage({
       value,
       isValid,

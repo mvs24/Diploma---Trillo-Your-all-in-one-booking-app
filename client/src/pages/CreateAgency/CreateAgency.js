@@ -121,16 +121,18 @@ const MakeAnImpact = (props) => {
   };
 
   const inputImageHandler = (value, isValid) => {
-    setImage({
-      value,
-      isValid,
-    });
+    if (isValid) {
+      setImage({
+        value,
+        isValid,
+      });
 
-    const fileReader = new FileReader();
-    fileReader.onload = () => {
-      setPreviewUrl(fileReader.result);
-    };
-    fileReader.readAsDataURL(value);
+      const fileReader = new FileReader();
+      fileReader.onload = () => {
+        setPreviewUrl(fileReader.result);
+      };
+      fileReader.readAsDataURL(value);
+    }
   };
 
   let formData = [];

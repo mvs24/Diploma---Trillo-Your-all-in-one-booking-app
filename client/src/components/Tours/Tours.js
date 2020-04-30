@@ -12,6 +12,7 @@ const Tours = React.memo((props) => {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [activeLink, setActiveLink] = useState('top');
+  const [finishedTours, setFinishedTours] = useState()
   const [mostPopularToursLoaded, setMostPopularToursLoaded] = useState(false);
   const [topToursLoaded, setTopToursLoaded] = useState(false);
   const topToursRef = useRef(null);
@@ -56,8 +57,9 @@ const Tours = React.memo((props) => {
       try {
         setLoading(true);
         const tours = await axios.get(
-          `/api/v1/tours?sort='-numBought'&limit=5`
+          `/api/v1/tours/mostPopular`
         );
+        console.log(tours.data.data)
         setMostPopularTours(tours.data.data);
         setLoading(false);
       } catch (err) {
@@ -70,6 +72,24 @@ const Tours = React.memo((props) => {
   useEffect(() => {
     getTopFiveTours();
   }, []);
+
+  useEffect(() => { 
+    const getFinishedTours = async () => {
+      try {
+        setLoading(true);
+        const res = await axios.get(
+          `/api/v1/tours/finishedTours`
+        );
+        setFinishedTours(res.data.data);
+        setLoading(false);
+      } catch (err) {
+        setLoading(false);
+        setError(err.response.data.message);
+      }
+    }
+
+    getFinishedTours()
+  }, [])
 
   let topToursContent =
     activeLink === 'top'
@@ -96,6 +116,14 @@ const Tours = React.memo((props) => {
       </div>
       {loading && <LoadingSpinner />}
       <div className="topToursContent">{topToursContent} </div>
+      <div className='finishedTours'>
+        {finishedTours ? <div >
+            <h1 className='finished__heading'>FINISHED TOURS: ({finishedTours.length})</h1>
+            <div className='finished__tours__container'>
+            {finishedTours.map(tour => <TourItem key={tour._id} tour={tour} />)}
+          </div> </div> :null} 
+        
+      </div>
     </div>
   );
   return toursContent;

@@ -387,7 +387,7 @@ const Flight = (props) => {
 
   if (!agency) return <LoadingSpinner asOverlay />;
 
-  if (agency.user === props.user.id) {
+  if (props.isAuthenticated && agency.user === props.user.id) {
     flightOwnerContent = null;
   } else {
     flightOwnerContent = myFlightContent;

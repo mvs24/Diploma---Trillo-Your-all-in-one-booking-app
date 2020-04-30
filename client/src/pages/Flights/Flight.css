@@ -6,7 +6,8 @@
   background: white;
   border-radius: 0.4rem;
   border: 1px solid #ccc;
-  margin: 0.5rem 0;
+  margin: 1rem 0;
+  box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.4);
 }
 .flight__info {
   display: flex;

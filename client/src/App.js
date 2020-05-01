@@ -26,6 +26,8 @@ import MyFlights from './AccountSettings/MyFlights/MyFlights';
 import FlightAgencyDetails from './pages/FlightAgencyDetails/FlightAgencyDetails';
 import FlightDetails from './pages/Flights/FlightDetails';
 import AllFlights from './pages/AllFlights/AllFlights';
+import PrivateRoute from './utils/PrivateRoute';
+import NotFound from './pages/NotFound/NotFound';
 
 function App(props) {
   const setUserData = async () => {
@@ -37,8 +39,6 @@ function App(props) {
     setUserData();
   }
 
-  console.log('app');
-
   return (
     <BrowserRouter>
       <Layout>
@@ -46,25 +46,29 @@ function App(props) {
           <Route path="/tours/:tourId" exact component={TourDetails} />
           <Route path="/categories/tours" exact component={Tours} />
           <Route path="/" exact component={Home} />
-          <Route path="/me" exact component={AccountSettings} />
-          <Route path="/my-bookings" exact component={MyBookings} />
+          <PrivateRoute path="/me" exact component={AccountSettings} />
+          <PrivateRoute path="/my-bookings" exact component={MyBookings} />
           <Route path="/agencies/:agencyId" exact component={AgencyDetails} />
-          <Route path="/my-notifications" exact component={MyNotifications} />
+          <PrivateRoute
+            path="/my-notifications"
+            exact
+            component={MyNotifications}
+          />
           <Route
             path="/discover-dream-tour"
             exact
             component={DiscoverDreamTour}
           />
-          <Route path="/my-wishlist" exact component={MyWishlist} />
-          <Route path="/my-cart" exact component={MyCart} />
-          <Route path="/my-reviews" exact component={MyReviews} />
+          <PrivateRoute path="/my-wishlist" exact component={MyWishlist} />
+          <PrivateRoute path="/my-cart" exact component={MyCart} />
+          <PrivateRoute path="/my-reviews" exact component={MyReviews} />
           <Route path="/search/:searchInput" exact component={Search} />
           <Route path="/make-an-impact" exact component={MakeAnImpact} />
           <Route path="/create-agency" exact component={CreateAgency} />
           <Route path="/my-agency" exact component={MyAgency} />
           <Route path="/categories/flights" exact component={Flights} />
           <Route path="/requested/flights" exact component={RequestedFlights} />
-          <Route path="/my-flights" exact component={MyFlights} />
+          <PrivateRoute path="/my-flights" exact component={MyFlights} />
           <Route
             path="/flights/agency/:agencyId"
             exact
@@ -72,6 +76,7 @@ function App(props) {
           />
           <Route path="/flights/:flightId" exact component={FlightDetails} />
           <Route path="/all-flights" exact component={AllFlights} />
+          <Route component={NotFound} />
         </Switch>
       </Layout>
 

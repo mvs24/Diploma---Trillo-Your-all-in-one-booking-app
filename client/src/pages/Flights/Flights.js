@@ -81,7 +81,10 @@ const Flights = (props) => {
     },
   });
   const [flightsInputValid, setFlightsInputValid] = useState(false);
-  const [selectedOption, setSelectedOption] = useState();
+  const [selectedOption, setSelectedOption] = useState({
+    value: null,
+    label: 'Package',
+  });
   const [variety, setVariety] = useState();
   const [error, setError] = useState();
   const [selectedWay, setSelectedWay] = useState('roundTrip');
@@ -131,7 +134,6 @@ const Flights = (props) => {
   const searchFlightsHandler = async (e) => {
     e.preventDefault();
 
-    console.log(flightsInput);
     if (selectedWay === 'oneWay') {
       delete flightsInput['returnDate'];
     }
@@ -191,7 +193,7 @@ const Flights = (props) => {
         <h1>Discover the world with our flights</h1>
         <div>
           <div className="label__container">
-            <div>
+            <div className="input__checkbox__container">
               <input
                 value="Round-Trip"
                 onChange={checkBoxHandler}
@@ -199,10 +201,11 @@ const Flights = (props) => {
                 name="check"
                 ref={roundTrip}
                 type="radio"
+                id="round"
               />
-              <label>Round-Trip</label>
+              <label htmlFor={'round'}>Round-Trip</label>
             </div>
-            <div>
+            <div className="input__checkbox__container">
               <input
                 value="One-Way"
                 onChange={checkBoxHandler}
@@ -210,8 +213,9 @@ const Flights = (props) => {
                 name="check"
                 ref={oneWay}
                 type="radio"
+                id="radio__"
               />
-              <label>One-Way</label>
+              <label htmlFor="radio__">One-Way</label>
             </div>
             <div className="select__class">
               <Select

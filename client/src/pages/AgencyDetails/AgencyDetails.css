@@ -59,17 +59,17 @@
 .agency__tours {
   background: #f4f2f2;
   text-align: center;
-  padding: 8rem 0;
+  padding: 8rem 4rem;
 }
 .agency__tours h1 {
   color: #ffb900;
+  margin-top: -1rem;
 }
 .agency__tour--item {
   flex: 1;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(30rem, 32rem));
   padding: 2rem;
-  justify-content: space-between;
   margin-bottom: 8rem;
 }
 .agency__tour--item > * {
@@ -84,16 +84,13 @@
   transition: all 0.1s ease;
   list-style: none;
   cursor: pointer;
+  color: #5643fa;
 }
 
-.page__number:focus {
-  border-bottom: 1px solid #ccc;
-}
-.page__number:active {
-  border-bottom: 1px solid #ccc;
-}
 .active {
-  border-bottom: 1px solid #ccc;
+  border-bottom: 3px solid #ccc;
+  transform: scale(1.01);
+  color: black;
 }
 
 .pages__content {

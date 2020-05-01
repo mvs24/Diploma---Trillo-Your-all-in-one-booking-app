@@ -25,7 +25,7 @@ const AgencyDetails = (props) => {
   const [page, setPage] = useState(1);
   const [resPerPage, setResPerPage] = useState(3);
   const [shouldUpdate, setShouldUpdate] = useState();
-  const [finishedTours, setFinishedTours] = useState([])
+  const [finishedTours, setFinishedTours] = useState([]);
 
   const { agencyId } = props.agencyId || props.match.params;
 
@@ -35,10 +35,10 @@ const AgencyDetails = (props) => {
         setLoading(true);
         const res = await axios.get(`/api/v1/agencies/${agencyId}`);
         const finishedRes = await axios.get(
-            `/api/v1/agencies/${agencyId}/tours/finishedTours`
-          );
-        let finishedTours = finishedRes.data.data.map(el => el._id);
-          setFinishedTours(finishedTours);
+          `/api/v1/agencies/${agencyId}/tours/finishedTours`
+        );
+        let finishedTours = finishedRes.data.data.map((el) => el._id);
+        setFinishedTours(finishedTours);
         setAgency(res.data.data);
         setLoading(false);
       } catch (err) {
@@ -61,79 +61,119 @@ const AgencyDetails = (props) => {
 
   const goToPrevPage = () => {
     if (props.location.search.split('=')[1] > 1) {
+      Array.from(document.querySelectorAll('.active')).forEach((el) =>
+        el.classList.remove('active')
+      );
+      document
+        .querySelector(`#page-${props.location.search.split('=')[1] - 1}`)
+        .classList.add('active');
       props.history.replace(
-        `${props.match.url}?page=${props.location.search.split('=')[1] - 1}`
+        `${props.match.url}?page=${props.location.search.split('=')[1] * 1 - 1}`
       );
     }
   };
 
   const goToNextPage = () => {
     const totalPages = Math.round(agency.tours.length / resPerPage) + 1;
-    console.log(totalPages);
+
     if (props.location.search.split('=')[1] < totalPages) {
+      Array.from(document.querySelectorAll('.active')).forEach((el) =>
+        el.classList.remove('active')
+      );
+      document
+        .querySelector(`#page-${props.location.search.split('=')[1] * 1 + 1}`)
+        .classList.add('active');
       props.history.replace(
         `${props.match.url}?page=${props.location.search.split('=')[1] * 1 + 1}`
       );
     }
   };
 
+  const linkHandler = (e) => {
+    Array.from(document.querySelectorAll('.active')).forEach((el) =>
+      el.classList.remove('active')
+    );
+    e.target.classList.add('active');
+  };
+
   let pageContent = [];
   for (let i = 1; i <= Math.round(agency.tours.length / resPerPage) + 1; i++) {
-    if (i === 1) {
-      pageContent.push(
-        <div className="span__center">
-          <span
-            style={{ cursor: 'pointer' }}
-            onClick={goToPrevPage}
-            className="span__center"
-          >
-            <IconContext.Provider
-              value={{ className: 'icon__green tour__info--icon full star' }}
-            >
-              <IoIosArrowBack />
-            </IconContext.Provider>
-          </span>
-          <Link
-            className={`page__number ${location}===${i} ? active : ''`}
-            to={`${props.match.url}?page=${i}`}
-          >
-            {i}
-          </Link>
-        </div>
-      );
-    } else if (i === Math.round(agency.tours.length / resPerPage) + 1) {
-      pageContent.push(
-        <div className="span__center">
-          <Link
-            className={`page__number ${location}===${i} ? active : ''`}
-            to={`${props.match.url}?page=${i}`}
-          >
-            {i}
-          </Link>
-          <span
-            style={{ cursor: 'pointer' }}
-            onClick={goToNextPage}
-            className="span__center"
-          >
-            <IconContext.Provider
-              value={{ className: 'icon__green tour__info--icon full star' }}
-            >
-              <IoIosArrowForward />
-            </IconContext.Provider>
-          </span>
-        </div>
-      );
-    } else {
+    if (Math.round(agency.tours.length / resPerPage) <= 1) {
       pageContent.push(
         <div>
           <Link
-            className={`page__number ${location}===${i} ? active : ''`}
+            id={`page-${i}`}
+            onClick={linkHandler}
+            className={`page__number page-${i}`}
             to={`${props.match.url}?page=${i}`}
           >
             {i}
           </Link>
         </div>
       );
+    } else {
+      if (i === 1) {
+        pageContent.push(
+          <div className="span__center">
+            <span
+              style={{ cursor: 'pointer' }}
+              onClick={goToPrevPage}
+              className="span__center"
+            >
+              <IconContext.Provider
+                value={{ className: 'blue__review tour__info--icon full star' }}
+              >
+                <IoIosArrowBack />
+              </IconContext.Provider>
+            </span>
+            <Link
+              id={`page-${i}`}
+              onClick={linkHandler}
+              className={`page__number`}
+              to={`${props.match.url}?page=${i}`}
+            >
+              {i}
+            </Link>
+          </div>
+        );
+      } else if (i === Math.round(agency.tours.length / resPerPage) + 1) {
+        pageContent.push(
+          <div className="span__center">
+            <Link
+              id={`page-${i}`}
+              onClick={linkHandler}
+              className={`page__number`}
+              to={`${props.match.url}?page=${i}`}
+            >
+              {i}
+            </Link>
+            <span
+              style={{ cursor: 'pointer' }}
+              onClick={goToNextPage}
+              className="span__center"
+            >
+              <IconContext.Provider
+                value={{ className: 'blue__review tour__info--icon full star' }}
+              >
+                <IoIosArrowForward />
+              </IconContext.Provider>
+            </span>
+          </div>
+        );
+      } else {
+        pageContent.push(
+          <div>
+            <Link
+              id={`page-${i}`}
+              onClick={linkHandler}
+              className={`page__number page-${i}`}
+              to={`${props.match.url}?page=${i}`}
+            >
+              {i}
+            </Link>
+          </div>
+        );
+      }
     }
   }
 
@@ -155,15 +195,19 @@ const AgencyDetails = (props) => {
           {updatedAgencyTours.length !== 0 && <h1>TOURS</h1>}
           <div className="agency__tour--item">
             {updatedAgencyTours.map((tour) => (
-              <TourItem finished={finishedTours.includes(tour._id)} shouldUpdate={shouldUpdate} tour={tour} />
+              <TourItem
+                finished={finishedTours.includes(tour._id)}
+                shouldUpdate={shouldUpdate}
+                tour={tour}
+              />
             ))}
             {updatedAgencyTours.length === 0 && (
               <div className="u-text-center">
                 <h1 className="updatedAgencyTours">
-                  No tours found on this page! 
-                </h1> 
+                  No tours found on this page!
+                </h1>
               </div>
-            )} 
+            )}
           </div>
           <div className="pages__content">{pageContent.map((p) => p)}</div>
         </div>

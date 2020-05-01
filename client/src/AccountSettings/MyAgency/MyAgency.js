@@ -10,6 +10,8 @@ import AddNewTour from './AddNewTour';
 import Flight from '../../pages/Flights/Flight';
 import AddNewFlight from './AddNewFlight';
 import FinishedTours from './FinishedTours';
+import FinishedFlights from './FinishedFlights';
+import Empty from '../../assets/empty.jpg';
 
 const MyAgency = (props) => {
   const [myAgency, setMyAgency] = useState();
@@ -140,6 +142,13 @@ const MyAgency = (props) => {
     setDisplay('finishedTours');
   };
 
+  const finishedFlightsHandler = (e) => {
+    const links = Array.from(document.querySelectorAll('.border'));
+    links.forEach((link) => link.classList.remove('border'));
+    e.target.classList.add('border');
+    setDisplay('finishedFlights');
+  };
+
   return (
     <div className="myAgency__container">
       <div className="myAgency__links">
@@ -149,6 +158,11 @@ const MyAgency = (props) => {
         {myAgency.category === 'flights' && (
           <h1 onClick={flightsHandler} className="myAgency__heading">
             My Flights
+          </h1>
+        )}
+        {myAgency.category === 'flights' && (
+          <h1 onClick={finishedFlightsHandler} className="myAgency__heading">
+            Finished Flights
           </h1>
         )}
         {myAgency.category === 'tours' && (
@@ -198,15 +212,21 @@ const MyAgency = (props) => {
       )}
       {myAgency.category === 'tours' && display === 'tours' && (
         <div className="my__tours">
-          {' '}
-          {myTours.map((tour) => (
-            <TourItem tour={tour} />
-          ))}{' '}
+          {myTours.length > 0 ? (
+            myTours.map((tour) => <TourItem tour={tour} />)
+          ) : (
+            <div>
+              <h1 className=" noTourFoundHeading">No Tour found!</h1>
+            </div>
+          )}
         </div>
       )}
       {display === 'edit' && <EditAgency agency={myAgency} />}
       {myAgency.category === 'flights' && display === 'addNewFlight' && (
         <AddNewFlight updateAgency={updateAgency} agency={myAgency} />
+      )}
+      {myAgency.category === 'flights' && display === 'finishedFlights' && (
+        <FinishedFlights agency={myAgency} />
       )}
       {myAgency.category === 'tours' && display === 'addNewTour' && (
         <AddNewTour updateAgency={updateAgency} agency={myAgency} />

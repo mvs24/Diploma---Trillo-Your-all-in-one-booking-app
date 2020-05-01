@@ -96,3 +96,18 @@
   width: 100%;
   box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.4);
 }
+
+.noTourFoundHeading {
+  font-size: 3rem;
+  text-transform: uppercase;
+  background-image: linear-gradient(
+    to right bottom,
+    rgb(85, 197, 122, 0.9),
+    rgb(126, 213, 111)
+  );
+  color: transparent;
+  background-clip: text;
+  display: block;
+  width: 100%;
+  text-align: center;
+}

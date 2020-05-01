@@ -2,7 +2,7 @@ const User = require('../models/userModel');
 const factory = require('./factoryHandler');
 const asyncWrapper = require('../utils/asyncWrapper');
 const AppError = require('../utils/appError');
-const Agency = require('../models/agencyModel')
+const Agency = require('../models/agencyModel');
 
 exports.getAllUsers = asyncWrapper(async (req, res, next) => {
   const users = await User.find();
@@ -55,6 +55,8 @@ exports.getUnReadNotifications = asyncWrapper(async (req, res, next) => {
   const { id } = req.user;
   const user = await User.findById(id);
 
+  console.log(user.notifications);
+
   const unReadNotifications = user.notifications.filter(
     (not) => not.read === false
   );
@@ -70,11 +72,7 @@ exports.getMyNotifications = asyncWrapper(async (req, res, next) => {
   const { id } = req.user;
   const user = await User.findOne({ _id: id });
 
-  const sortedNotifications = user.notifications.sort((a, b) => {
-    a = new Date(a.createdAt);
-    b = new Date(b.createdAt);
-    return a > b ? -1 : a < b ? 1 : 0;
-  });
+  const sortedNotifications = user.notifications;
 
   res.status(200).json({
     status: 'success',
@@ -114,12 +112,15 @@ exports.markNotificationAsRead = asyncWrapper(async (req, res, next) => {
 });
 
 exports.getMyAgency = asyncWrapper(async (req, res, next) => {
-  const agency = await Agency.findOne({user: req.user.id});
+  const agency = await Agency.findOne({ user: req.user.id });
 
-  if (!agency) return next(new AppError("You do not have an agency! Start by creating one!", 404));
+  if (!agency)
+    return next(
+      new AppError('You do not have an agency! Start by creating one!', 404)
+    );
 
   res.status(200).json({
     status: 'success',
-    data: agency
+    data: agency,
   });
-})
+});

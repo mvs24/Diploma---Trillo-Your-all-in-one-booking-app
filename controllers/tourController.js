@@ -19,8 +19,10 @@ const getToursBy = (sortBy) =>
     );
 
     let wantedTours = [];
-    if (tours.length > 5) {
-      wantedTours = tours.splice(0, 5);
+    if (tours.length > 8) {
+      wantedTours = tours.splice(0, 8);
+    } else {
+      wantedTours = tours;
     }
 
     res.status(200).json({
@@ -235,7 +237,6 @@ exports.discountTour = asyncWrapper(async (req, res, next) => {
     message: msg,
     agency: agency._id,
     tour: tour._id,
-    createdAt: Date.now(),
   };
 
   for (let i = 0; i < userToNotify.length - 1; i++) {

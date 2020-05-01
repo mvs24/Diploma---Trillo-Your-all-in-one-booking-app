@@ -37,6 +37,7 @@ const AllFlights = (props) => {
   const [totalFlights, setTotalFlights] = useState();
   const [checkedIn, setCheckedIn] = useState([]);
   const [radioValue, setRadioValue] = useState();
+  const [finishedFlights, setFinishedFlights] = useState();
   const [selectedRating, setSelectedRating] = useState();
 
   const start = 0;
@@ -61,6 +62,22 @@ const AllFlights = (props) => {
     getFlights();
   }, [selectedRating]);
 
+  useEffect(() => {
+    const getFinishedFlights = async () => {
+      try {
+        setLoading(true);
+        const res = await axios.get(`/api/v1/flights/finishedFlights`);
+        setFinishedFlights(res.data.data);
+        setLoading(false);
+      } catch (err) {
+        setLoading(false);
+        setError(err.response.data.message);
+      }
+    };
+
+    getFinishedFlights();
+  }, []);
+
   const handleChange = (selectedOption) => {
     setSelectedOption(selectedOption);
     const selectedValue = selectedOption.value;
@@ -70,13 +87,13 @@ const AllFlights = (props) => {
         sortBySelection('-ratingsQuantity');
         break;
       case 'highestRated':
-        sortBySelection('-ratingsAverage');
+        sortBySelection('ratingsAverage');
         break;
       case 'lowestPrice':
-        sortBySelection('pricePerPerson');
+        sortBySelection('-pricePerPerson');
         break;
       case 'highestPrice':
-        sortBySelection('-pricePerPerson');
+        sortBySelection('pricePerPerson');
         break;
       case 'maxGroupSize':
         sortBySelection('-maxGroupSize');
@@ -192,6 +209,14 @@ const AllFlights = (props) => {
     }
   }
 
+  if (!finishedFlights) return <LoadingSpinner asOverlay />;
+  if (finishedFlights.length === 0)
+    return (
+      <div className="edit__agency--container">
+        No finished Flights found! Keep going!
+      </div>
+    );
+
   const radioHandler = async (e) => {
     const rating = +e.target.value;
     setSelectedRating(rating);
@@ -289,6 +314,21 @@ const AllFlights = (props) => {
         >
           Show More
         </Button>
+      </div>
+
+      <div className="finishedTours">
+        {finishedFlights ? (
+          <div>
+            <h1 className="finished__heading">
+              FINISHED FLIGHTS: ({finishedFlights.length})
+            </h1>
+            <div>
+              {finishedFlights.map((flight) => (
+                <Flight finished key={flight._id} flight={flight} />
+              ))}
+            </div>{' '}
+          </div>
+        ) : null}
       </div>
     </div>
   );

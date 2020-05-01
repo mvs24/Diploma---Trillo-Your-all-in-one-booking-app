@@ -34,6 +34,7 @@ import {
   MARK_NOTIFICATION_AS_READ,
   LOGOUT_USER,
   REMOVE_FROM_CART,
+  AGENCY_CREATED,
 } from '../types/userTypes';
 
 export const setHeaders = (token) => {
@@ -281,4 +282,8 @@ export const removeFromCart = (tourId) => async (dispatch) => {
   } catch (err) {
     dispatch({ type: ERROR, errormsg: err.response.data.message });
   }
+};
+
+export const agencyCreated = () => {
+  return { type: AGENCY_CREATED };
 };

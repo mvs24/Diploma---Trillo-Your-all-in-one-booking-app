@@ -15,12 +15,25 @@ const MyNotifications = (props) => {
     props.markNotificationsAsRead();
   };
 
+  const compare = (a, b) => {
+    if (new Date(a.createdAt).getTime() < new Date(b.createdAt).getTime())
+      return 1;
+    else return -1;
+  };
+
   let unReadLength = 0;
-  notifications.forEach((el) => {
+
+  notifications.sort(compare).forEach((el) => {
     if (el.read === false) {
       unReadLength++;
     }
   });
+
+  /////////////////////////////////
+  // TODO
+  // PAGINATION ON NOTIFICATIONS
+  // With Show More BTN
+  // const updatedNotifications = notifications.sort().slice(start,end)
 
   return (
     <div className="notifications--container">
@@ -30,7 +43,7 @@ const MyNotifications = (props) => {
       </div>
       <div className="notification__items">
         <div className="circle">&nbsp;</div>
-        {notifications.map((notification) => (
+        {notifications.sort().map((notification) => (
           <NotificationItem notification={notification} />
         ))}
       </div>

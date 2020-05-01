@@ -2,6 +2,8 @@
   display: flex;
   width: 100vw;
   justify-content: center;
+  background: #faf9f9;
+  padding: 5.2rem;
 }
 .flights__form {
   flex-basis: 70%;
@@ -12,10 +14,10 @@
   background-image: linear-gradient(to right bottom, #2998ff, #5643fa);
   color: transparent;
   background-clip: text;
-  text-align: center;
+  text-align: center; 
 }
 .sea__airplane__container {
-  position: relative;
+  position: relative; 
 }
 
 .airplaneImg {
@@ -54,6 +56,7 @@
 }
 .select__class {
   width: 50%;
+  font-size: 1.4rem;
 }
 .flights__form button {
   /*align-self: center;*/
@@ -84,4 +87,7 @@
 }
 .blue__review {
   color: #5643fa;
+}
+.input__checkbox__container, .input__checkbox__container > * {
+  cursor: pointer;
 }

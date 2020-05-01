@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+import { useHistory } from 'react-router-dom';
 import ErrorModal from '../../shared/components/UI/ErrorModal';
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
 import Input from '../../shared/components/Input/Input';
@@ -12,6 +13,7 @@ const FinishedTours = ({ agency }) => {
   const [finishedTours, setFinishedTours] = useState();
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
     const getFinishedTours = async () => {
@@ -35,11 +37,13 @@ const FinishedTours = ({ agency }) => {
   if (finishedTours.length === 0)
     return (
       <div className="edit__agency--container">
-        No finished tours found! Keep going!
+        <div>
+          <div style={{ textAlign: 'center' }}>
+            <h1 style={{ marginBottom: '4rem' }}>No Finished Tour found!</h1>
+          </div>
+        </div>
       </div>
     );
-
-  console.log(finishedTours);
 
   return (
     <div className="edit__agency--container">

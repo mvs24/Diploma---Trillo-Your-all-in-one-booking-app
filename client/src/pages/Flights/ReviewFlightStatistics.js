@@ -18,6 +18,9 @@ const ReviewFlightStatistics = (props) => {
   const [avgRating, setAvgRating] = useState();
   const [error, setError] = useState();
   const [loading, setLoading] = useState();
+  const [start, setStart] = useState(0);
+  const [end, setEnd] = useState(3);
+  const [resPerPage, setResPerPage] = useState(3);
 
   useEffect(() => {
     const getReviewStats = async () => {
@@ -39,7 +42,23 @@ const ReviewFlightStatistics = (props) => {
     getReviewStats();
   }, []);
 
-  console.log(props.flightReviews);
+  const showMore = () => {
+    setStart((prev) => prev + resPerPage);
+    setEnd((prev) => end + resPerPage);
+  };
+
+  const showLess = () => {
+    setStart((prev) => prev - resPerPage);
+    setEnd((prev) => end - resPerPage);
+  };
+
+  if (loading) return <LoadingSpinner asOverlay />;
+  if (props.flightReviews.length === 0)
+    return (
+      <div className="review__container blue__reviews">
+        <h2 className="finishedHeading--1">No Reviews for this flight!</h2>
+      </div>
+    );
 
   if (!avgRating) return null;
 
@@ -84,6 +103,8 @@ const ReviewFlightStatistics = (props) => {
       </IconContext.Provider>
     );
   }
+
+  const updatedFlightReviews = props.flightReviews.slice(start, end);
 
   return (
     <div className="review__container blue__reviews">
@@ -152,8 +173,21 @@ const ReviewFlightStatistics = (props) => {
         </div>
       </div>
       <div className="flightReviews__container">
-        {props.flightReviews.map((review) => (
-          <ReviewFlightItem review={review} />
+        {updatedFlightReviews.map((review) => (
+          <ReviewFlightItem
+            totalFlights={props.flightReviews}
+            start={start}
+            end={end}
+            showLess={showLess}
+            showMore={showMore}
+            last={
+              review._id ===
+              updatedFlightReviews[updatedFlightReviews.length - 1]._id
+            }
+            first={review._id === updatedFlightReviews[0]._id}
+            totalFlights={props.flightReviews}
+            review={review}
+          />
         ))}
       </div>
     </div>

@@ -13,6 +13,7 @@ import ReviewFlightStatistics from './ReviewFlightStatistics';
 import FlightMap from './FlightMap';
 import Input from '../../shared/components/Input/Input';
 import Textarea from '../../shared/components/Input/Textarea';
+import moment from 'moment';
 
 let options = [];
 for (let i = 1; i <= 5; i++) {
@@ -30,6 +31,7 @@ const FlightDetails = (props) => {
   const [booked, setBooked] = useState();
   const [page, setPage] = useState('info');
   const [error, setError] = useState();
+  const [finishedFlights, setFinishedFlights] = useState();
   const [inputPriceDiscount, setInputPriceDiscount] = useState({
     configOptions: {
       type: 'number',
@@ -67,6 +69,9 @@ const FlightDetails = (props) => {
         const agencyRes = await axios.get(
           `/api/v1/agencies/${res.data.data.agency}`
         );
+        const finishedRes = await axios.get(`/api/v1/flights/finishedFlights`);
+        const finishedFlights = finishedRes.data.data.map((el) => el._id);
+        setFinishedFlights(finishedFlights);
         if (props.isAuthenticated) {
           bookingRes = await axios.get(
             '/api/v1/bookings/flights/futureBookings'
@@ -164,7 +169,6 @@ const FlightDetails = (props) => {
 
   let ownerContent = null;
   if (isAuthenticated && agency.user === props.user.id) {
-    console.log('hym');
     ownerContent = (
       <Button type="pink" clicked={() => setOpenPriceDiscountModal(true)}>
         Make a Price Discount
@@ -300,9 +304,12 @@ const FlightDetails = (props) => {
             </div>
             <div className="agency__info--1">
               <h2>Type: {flight.variety}</h2>
-              <h2>Depart: {flight.depart}</h2>
+              <h2>Depart: {moment(flight.depart).format('MMMM Do YYYY')}</h2>
               {flight.returnDate ? (
-                <h2>Return Date: {flight.returnDate}</h2>
+                <h2>
+                  Return Date:{' '}
+                  {moment(flight.returnDate).format('MMMM Do YYYY')}
+                </h2>
               ) : (
                 <h2>Return Date --- </h2>
               )}
@@ -329,7 +336,9 @@ const FlightDetails = (props) => {
                 ) : null}{' '}
                 <strong>${flight.pricePerPerson}</strong>
               </h1>
-              {ownerContent ? (
+              {finishedFlights.includes(flight._id) ? (
+                <h1 className="finishedHeading">Finished</h1>
+              ) : ownerContent ? (
                 ownerContent
               ) : booked ? (
                 <Button disabled={true}>Booked</Button>

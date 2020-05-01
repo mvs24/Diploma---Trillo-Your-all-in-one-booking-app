@@ -50,3 +50,11 @@
 .flight__price {
   color: #55c57a;
 }
+.finishedHeading {
+  font-size: 2.2rem;
+  text-transform: uppercase;
+  background-image: linear-gradient(to right, #2998ff, rgb(126, 213, 111));
+  color: transparent;
+  background-clip: text;
+  display: block;
+}

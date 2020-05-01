@@ -33,6 +33,7 @@ import {
   MARK_NOTIFICATION_AS_READ,
   LOGOUT_USER,
   REMOVE_FROM_CART,
+  AGENCY_CREATED,
 } from '../types/userTypes';
 
 const initialState = {
@@ -45,6 +46,7 @@ const initialState = {
   reviews: null,
   notifications: null,
   unReadNotifications: null,
+  agencyCreated: false,
 };
 
 export default (state = initialState, action) => {
@@ -260,6 +262,11 @@ export default (state = initialState, action) => {
         loading: false,
         error: null,
         cartTour: updated,
+      };
+    case AGENCY_CREATED:
+      return {
+        ...state,
+        agencyCreated: true,
       };
     default:
       return state;

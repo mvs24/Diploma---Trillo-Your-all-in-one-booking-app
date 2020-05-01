@@ -192,7 +192,7 @@ const Header = React.memo((props) => {
   const [resetFormValid, setResetFormValid] = useState(false);
   const [sendingEmail, setSendingEmail] = useState();
   const [resetError, setResetError] = useState();
-
+  const [myAgency, setMyAgency] = useState();
   const {
     isAuthenticated,
     getMyWishlist,
@@ -200,6 +200,27 @@ const Header = React.memo((props) => {
     getMyNotifications,
     getUnReadNotifications,
   } = props;
+
+  useEffect(() => {
+    const getMyAgency = async () => {
+      try {
+        let tourFlightRes;
+        setLoading(true);
+        const res = await axios.get(`/api/v1/users/my/agency`);
+
+        setMyAgency(res.data.data);
+        setLoading(false);
+      } catch (err) {
+        setLoading(false);
+      }
+    };
+
+    if (isAuthenticated) {
+      getMyAgency();
+    } else {
+      setMyAgency(null);
+    }
+  }, [isAuthenticated]);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -275,15 +296,12 @@ const Header = React.memo((props) => {
     );
     updatedData[inputIdentifier] = updatedIdentifier;
 
-    console.log(updatedData);
-
     setResetForm(updatedData);
 
     let isFormValid = true;
     for (let key in updatedData) {
       isFormValid = isFormValid && updatedData[key].valid;
     }
-    console.log(isFormValid);
 
     setResetFormValid(isFormValid);
   };
@@ -657,13 +675,23 @@ const Header = React.memo((props) => {
             <IoIosSearch onClick={searchHandler} />
           </IconContext.Provider>
         </form>
-        <span
-          style={{ cursor: 'pointer' }}
-          onClick={makeImpactHandler}
-          className="impact"
-        >
-          Make an impact
-        </span>
+        {myAgency || props.agencyCreated ? (
+          <span
+            style={{ cursor: 'pointer' }}
+            onClick={() => props.history.push('/my-agency')}
+            className="impact"
+          >
+            My Agency
+          </span>
+        ) : (
+          <span
+            style={{ cursor: 'pointer' }}
+            onClick={makeImpactHandler}
+            className="impact"
+          >
+            Make an impact
+          </span>
+        )}
         {userContent}
       </header>
     </React.Fragment>
@@ -679,6 +707,7 @@ const mapStateToProps = (state) => ({
   cartTour: state.user.cartTour,
   notifications: state.user.notifications,
   unReadNotifications: state.user.unReadNotifications,
+  agencyCreated: state.user.agencyCreated,
 });
 
 export default connect(mapStateToProps, {

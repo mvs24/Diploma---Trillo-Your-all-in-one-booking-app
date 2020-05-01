@@ -48,6 +48,8 @@ const MyNotifications = (props) => {
 
   if (!agency) return <LoadingSpinner asOverlay />;
 
+  console.log(notification.createdAt);
+
   const splittedDate = notification.createdAt.split('T');
 
   return (

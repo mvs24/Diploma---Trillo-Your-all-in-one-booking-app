@@ -13,6 +13,7 @@ import axios from 'axios';
 import Textarea from '../../shared/components/Input/Textarea';
 import ImageUpload from '../../shared/components/ImageUpload/ImageUpload';
 import Select from 'react-select';
+import { agencyCreated } from '../../store/actions/userActions';
 
 const options = [
   { value: 'tours', label: 'Tours' },
@@ -112,6 +113,7 @@ const MakeAnImpact = (props) => {
       formData.append('image', image.value);
       setLoading(true);
       const agency = await axios.post(`/api/v1/agencies`, formData);
+      props.agencyCreated();
       setLoading(false);
       props.history.push('/my-agency');
     } catch (err) {
@@ -227,4 +229,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(MakeAnImpact);
+export default connect(mapStateToProps, { agencyCreated })(MakeAnImpact);

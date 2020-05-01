@@ -356,7 +356,7 @@ const Flight = (props) => {
   let flightOwnerContent = null;
 
   let myFlightContent = null;
-  if (!props.myFlight) {
+  if (!props.myFlight && !props.finished) {
     myFlightContent = (
       <Button
         disabled={props.booked}
@@ -372,7 +372,7 @@ const Flight = (props) => {
         {props.booked ? 'Booked' : 'Confirm number of tickets'}
       </Button>
     );
-  } else {
+  } else if (props.myFlight) {
     myFlightContent = (
       <div className="review__flight">
         {reviewed ? <h5>Update your Review</h5> : <h5>Leave a review</h5>}
@@ -554,7 +554,7 @@ const Flight = (props) => {
           src={`http://localhost:5000/${agency.image}`}
         />
 
-        {props.owner ? (
+        {!props.finished && props.owner ? (
           <Button clicked={() => setOpenPriceDiscountModal(true)} type="pink">
             Make a price discount
           </Button>

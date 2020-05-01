@@ -1,0 +1,58 @@
+.page--- {
+  z-index: 1;
+  height: 150%;
+  width: 100%;
+
+  overflow: hidden;
+}
+
+.content--- {
+  text-align: center;
+  padding-top: 118px;
+}
+
+.content--- h1 {
+  font-weight: 300;
+  font-size: 165px;
+  line-height: 1;
+  margin-bottom: -10px;
+  opacity: 0.6;
+}
+
+.content--- h2 {
+  font-weight: 700;
+  font-size: 34px;
+  margin-bottom: 6px;
+  opacity: 0.9;
+}
+
+.content--- p {
+  font-weight: 300;
+  font-size: 14px;
+  opacity: 0.7;
+  margin-bottom: 140px;
+}
+
+.content--- a {
+  display: inline-block;
+  font-weight: 300;
+  font-size: 12px;
+  text-transform: uppercase;
+  border: 1px solid #cdd4de;
+  padding: 8px 14px;
+  border-radius: 4px;
+  opacity: 0.4;
+  cursor: pointer;
+}
+
+.img--- {
+  background-repeat: no-repeat;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  z-index: -1;
+  /*transform: scale(1.1);*/
+}

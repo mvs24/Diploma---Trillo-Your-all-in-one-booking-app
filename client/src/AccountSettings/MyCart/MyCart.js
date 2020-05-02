@@ -1,12 +1,12 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import CartItem from './CartItem';
 import './MyCart.css';
+import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
+import { getToursInCart } from '../../store/actions/userActions';
 
 const MyCart = (props) => {
-  const [removed, setRemoved] = useState()
-  const { cartTour, isAuthenticated } = props;
-
+  const { cartTour, wishlist, isAuthenticated } = props;
   if (!isAuthenticated) return null;
 
   if (cartTour.length === 0)
@@ -16,16 +16,12 @@ const MyCart = (props) => {
       </div>
     );
 
-  const removeHandler = () => {
-    setRemoved(prev => !prev)
-  }
-
   return (
     <div className="my__cartContainer">
       <div className="cart__container">
-        {cartTour.map((el) => (
-          <CartItem removeTour={removed} removed={removeHandler} tourId={el.tour} />
-        ))}
+        {cartTour.map((el) => {
+          return <CartItem tourId={el.tour} />;
+        })}
       </div>
     </div>
   );
@@ -34,6 +30,7 @@ const MyCart = (props) => {
 const mapStateToProps = (state) => ({
   cartTour: state.user.cartTour,
   isAuthenticated: state.user.isAuthenticated,
+  wishlist: state.user.wishlist,
 });
 
-export default connect(mapStateToProps)(MyCart);
+export default connect(mapStateToProps, { getToursInCart })(MyCart);

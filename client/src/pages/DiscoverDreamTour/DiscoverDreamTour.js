@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { connect } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
 import Button from '../../shared/components/Button/Button';
 import axios from 'axios';
@@ -61,9 +62,20 @@ const DiscoverDreamTour = React.memo((props) => {
   const [reRender, setRerender] = useState();
   const [cancelBtn, setCancelBtn] = useState(false);
   const [shouldUpdate, setShouldUpdate] = useState();
+  const [shouldUpdate2, setShouldUpdate2] = useState();
+
   const [page, setPage] = useState(1);
   const [resPerPage, setResPerPage] = useState(4);
-  const { location } = props;
+
+  const [myWishlistIds, setMyWishlistIds] = useState();
+
+  const { location, wishlist } = props;
+
+  useEffect(() => {
+    if (props.wishlist) {
+      setMyWishlistIds(props.wishlist.data.map((el) => el.tour));
+    }
+  }, [wishlist]);
 
   const getAllTours = async () => {
     try {
@@ -138,7 +150,7 @@ const DiscoverDreamTour = React.memo((props) => {
       setError(err.response.data.message);
     }
 
-    setShouldUpdate((prev) => !prev);
+    setShouldUpdate2((prev) => !prev);
   };
 
   const handleChange = (selectedOption) => {
@@ -221,7 +233,7 @@ const DiscoverDreamTour = React.memo((props) => {
     } catch (err) {
       setError(err.response.data.data.message);
     }
-    setShouldUpdate((prev) => !prev);
+    setShouldUpdate2((prev) => !prev);
   };
 
   const radioHandler = async (e) => {
@@ -246,7 +258,7 @@ const DiscoverDreamTour = React.memo((props) => {
         setError(err.response.data.data.message);
       }
     }
-    setShouldUpdate((prev) => !prev);
+    setShouldUpdate2((prev) => !prev);
   };
 
   const getToursWithinHandler = (userLocation) => {
@@ -270,24 +282,49 @@ const DiscoverDreamTour = React.memo((props) => {
     } catch (err) {
       setError(err.response.data.message);
     }
-    setShouldUpdate((prev) => !prev);
+    setShouldUpdate2((prev) => !prev);
   };
 
   const modifyBtn = () => {
     setCancelBtn(true);
   };
 
+  console.log(myWishlistIds);
+
+  if (!myWishlistIds) return <LoadingSpinner asOverlay />;
   if (!allTours) return <LoadingSpinner asOverlay />;
 
   const goToPrevPage = () => {
     const currentPage = props.location.search.split('=')[1] || 1;
-    if (currentPage > 1)
+    if (currentPage > 1) {
+      removeActiveClass();
+      document
+        .querySelector(`#page-${props.location.search.split('=')[1] - 1}`)
+        .classList.add('active');
       props.history.replace(`${props.match.url}?page=${currentPage * 1 - 1}`);
+    }
   };
   const goToNextPage = () => {
     const currentPage = props.location.search.split('=')[1] || 1;
-    if (currentPage < Math.round(allTours.length / resPerPage))
+    if (currentPage <= Math.round(allTours.length / resPerPage)) {
+      removeActiveClass();
+      document
+        .querySelector(`#page-${props.location.search.split('=')[1] * 1 + 1}`)
+        .classList.add('active');
+
       props.history.replace(`${props.match.url}?page=${currentPage * 1 + 1}`);
+    }
+  };
+
+  const removeActiveClass = () => {
+    Array.from(document.querySelectorAll('.active')).forEach((el) =>
+      el.classList.remove('active')
+    );
+  };
+
+  const linkHandler = (e) => {
+    removeActiveClass();
+    e.target.classList.add('active');
   };
 
   let pageContent = [];
@@ -307,7 +344,9 @@ const DiscoverDreamTour = React.memo((props) => {
             </IconContext.Provider>
           </span>
           <Link
-            className={`page__number ${location}===${i} ? active : ''`}
+            onClick={linkHandler}
+            id={`page-${i}`}
+            className={`page__number `}
             to={`${props.match.url}?page=${i}`}
           >
             {i}
@@ -318,7 +357,9 @@ const DiscoverDreamTour = React.memo((props) => {
       pageContent.push(
         <div className="span__center">
           <Link
-            className={`page__number ${location}===${i} ? active : ''`}
+            id={`page-${i}`}
+            onClick={linkHandler}
+            className={`page__number `}
             to={`${props.match.url}?page=${i}`}
           >
             {i}
@@ -340,7 +381,9 @@ const DiscoverDreamTour = React.memo((props) => {
       pageContent.push(
         <div>
           <Link
-            className={`page__number ${location}===${i} ? active : ''`}
+            id={`page-${i}`}
+            onClick={linkHandler}
+            className={`page__number`}
             to={`${props.match.url}?page=${i}`}
           >
             {i}
@@ -576,10 +619,17 @@ const DiscoverDreamTour = React.memo((props) => {
           <div className="all__tours__container">
             <div className="tours__grid">
               {updatedAllTours.length === 0 && (
-                <h1 className="updated__tours__heading">No tours found!</h1>
+                <h1 className="updated__tours__heading">
+                  No tours found on this page. Go Back!
+                </h1>
               )}
               {updatedAllTours.map((tour) => (
-                <TourItem shouldUpdate={shouldUpdate} tour={tour} />
+                <TourItem
+                  pageChanged={page}
+                  isTourLiked={myWishlistIds.includes(tour._id)}
+                  shouldUpdate2={shouldUpdate2}
+                  tour={tour}
+                />
               ))}
             </div>
             <div className="pageContent">{pageContent.map((el) => el)}</div>
@@ -598,4 +648,10 @@ const DiscoverDreamTour = React.memo((props) => {
   );
 });
 
-export default DiscoverDreamTour;
+const mapStateToProps = (state) => {
+  return {
+    wishlist: state.user.wishlist,
+  };
+};
+
+export default connect(mapStateToProps)(DiscoverDreamTour);

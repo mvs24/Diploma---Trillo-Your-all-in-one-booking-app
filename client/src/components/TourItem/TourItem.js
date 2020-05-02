@@ -19,6 +19,8 @@ import {
   deleteError,
   removeFromWishlist,
   removeFromCart,
+  getMyReviews,
+  getToursInCart,
 } from '../../store/actions/userActions';
 import ErrorModal from '../../shared/components/UI/ErrorModal';
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
@@ -74,17 +76,43 @@ const TourItem = React.memo((props) => {
     validRequirements: {},
   });
   const history = useHistory();
-  const { tour, wishlist, isAuthenticated, reviews } = props;
+  const [tour, setTour] = useState(props.tour);
+  const { wishlist, isAuthenticated, reviews } = props;
   const [should, setShould] = useState();
-  const { shouldUpdate, isTourLiked, removed, removeTour } = props;
+  const {
+    shouldUpdate,
+    shouldTour,
+    pageChanged,
+    isTourLiked,
+    removed,
+    removeTour,
+    shouldUpdate2,
+  } = props;
+
+  useEffect(() => {
+    setTour(props.tour);
+  }, [shouldTour]);
 
   useEffect(() => {
     setShould(props.shouldUpdate);
   }, [shouldUpdate]);
 
   useEffect(() => {
+    setTour(props.tour);
+
+    if (props.isLiked) {
+      setIsLiked(props.isLiked);
+    }
+  }, [pageChanged]);
+
+  useEffect(() => {
     setIsLiked(isTourLiked);
   }, [isTourLiked]);
+
+  useEffect(() => {
+    setTour(props.tour);
+    setIsLiked(isTourLiked);
+  }, [shouldUpdate2]);
 
   useEffect(() => {
     let wishlistTours = []; //[ids]
@@ -288,11 +316,15 @@ const TourItem = React.memo((props) => {
     e.preventDefault();
     const reviewData = { review: myReview.value, rating: starContent.length };
     setLoading(true);
-    await axios.post(`/api/v1/tours/${tour._id}/reviews`, reviewData);
+    const res = await axios.post(
+      `/api/v1/tours/${tour._id}/reviews`,
+      reviewData
+    );
     setLoading(false);
     setMyRating(reviewData.rating);
     setReviewed(true);
     setOpenReviewModal(false);
+    props.getMyReviews();
   };
 
   const openUpdateModal = () => {
@@ -362,7 +394,7 @@ const TourItem = React.memo((props) => {
       <div className="leave__review--container">
         {' '}
         <h1 className="leave__review--heading">Your Rating</h1>
-        <span> {myRatingContent}</span>
+        <span style={{ marginRight: '.5rem' }}> {myRatingContent}</span>
       </div>
     );
   } else if (props.booked && !reviewed) {
@@ -387,6 +419,15 @@ const TourItem = React.memo((props) => {
 
     setUpdateReviewStars(updatedRevieww);
     setReviewFilled(true);
+  }
+
+  const canelledReviewUpdate = [];
+  for (let i = 1; i <= 5; i++) {
+    canelledReviewUpdate.push(
+      <StarCmp starName={`star-${i}`}>
+        <IoIosStarOutline />
+      </StarCmp>
+    );
   }
 
   const getUpdatedReview = (e) => {
@@ -442,12 +483,14 @@ const TourItem = React.memo((props) => {
         `/api/v1/tours/${tour._id}/reviews/${props.reviewId}`,
         { review: myReviewUpdate.value, rating: reviewToUpdate }
       );
-
+      const tourRes = await axios.get(`/api/v1/tours/${res.data.data.tour}`);
+      setTour(tourRes.data.data);
       setLoading(false);
       setMyRating(reviewToUpdate);
       setReviewToUpdate(0);
       setUpdateReviewStars(updatedRevieww);
       setOpenUpdateReviewModal(false);
+      props.getMyReviews();
     } catch (err) {
       setError(err.response.data);
     }
@@ -457,7 +500,7 @@ const TourItem = React.memo((props) => {
     try {
       setLoading(true);
       await props.removeFromCart(tour._id);
-      props.removed();
+      props.getToursInCart();
       setLoading(false);
     } catch (err) {
       setLoading();
@@ -593,7 +636,10 @@ const TourItem = React.memo((props) => {
         {openUpdateReviewModal && (
           <Modal
             show
-            onCancel={() => setOpenUpdateReviewModal(false)}
+            onCancel={() => {
+              setOpenUpdateReviewModal(false);
+              setUpdateReviewStars(canelledReviewUpdate);
+            }}
             header="UPDATE YOUR REVIEW"
           >
             <div className="update__review--container">
@@ -629,4 +675,6 @@ export default connect(mapStateToProps, {
   deleteError,
   removeFromWishlist,
   removeFromCart,
+  getMyReviews,
+  getToursInCart,
 })(TourItem);

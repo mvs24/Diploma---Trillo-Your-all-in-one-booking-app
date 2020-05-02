@@ -22,6 +22,33 @@ const ReviewFlightStatistics = (props) => {
   const [end, setEnd] = useState(3);
   const [resPerPage, setResPerPage] = useState(3);
 
+  let innerWidth = window.innerWidth;
+  window.addEventListener('resize', () => {
+    innerWidth = window.innerWidth;
+    if (window.innerWidth < 1271 && window.innerWidth > 881) {
+      setResPerPage(2);
+      setEnd(2);
+    } else if (window.innerWidth < 881) {
+      setResPerPage(1);
+      setEnd(1);
+    } else if (window.innerWidth >= 1271) {
+      setResPerPage(3);
+      setEnd(3);
+    }
+  });
+  useEffect(() => {
+    if (window.innerWidth < 1271 && window.innerWidth > 881) {
+      setResPerPage(2);
+      setEnd(2);
+    } else if (window.innerWidth < 881) {
+      setResPerPage(1);
+      setEnd(1);
+    } else if (window.innerWidth >= 1271) {
+      setResPerPage(3);
+      setEnd(3);
+    }
+  }, [window.innerWidth]);
+
   useEffect(() => {
     const getReviewStats = async () => {
       try {

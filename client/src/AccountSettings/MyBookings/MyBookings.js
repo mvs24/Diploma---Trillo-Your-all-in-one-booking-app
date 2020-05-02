@@ -50,6 +50,7 @@ const MyBookings = (props) => {
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.user.isAuthenticated,
+  reviews: state.user.reviews,
 });
 
 export default connect(mapStateToProps)(MyBookings);

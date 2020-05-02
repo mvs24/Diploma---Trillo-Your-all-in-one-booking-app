@@ -69,6 +69,10 @@
   box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.3);
   padding: 1rem;
 }
+.showMoreNotification__btn--1 {
+  margin: 1rem auto;
+  text-align: center;
+}
 
 @media (max-width: 47em) {
   .notifications--container {

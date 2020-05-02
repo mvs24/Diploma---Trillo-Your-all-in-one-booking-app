@@ -48,8 +48,6 @@ const MyNotifications = (props) => {
 
   if (!agency) return <LoadingSpinner asOverlay />;
 
-  console.log(notification.createdAt);
-
   const splittedDate = notification.createdAt.split('T');
 
   return (
@@ -61,7 +59,7 @@ const MyNotifications = (props) => {
           <img src={`http://localhost:5000/${agency.image}`} />
           <p>{notification.message}</p>
           <p>
-            <strong>{splittedDate[1].split('.')[0]}</strong> {splittedDate[0]}
+            {splittedDate[0]} <strong>{splittedDate[1].split('.')[0]}</strong>
           </p>
         </div>
       ) : (

@@ -27,11 +27,11 @@ const options = [
   { value: 'mostPopular', label: 'Most popular' },
 ];
 
-const AllFlights = (props) => {
+const AllFlights = React.memo((props) => {
   const [flights, setFlights] = useState();
   const [error, setError] = useState();
   const [loading, setLoading] = useState();
-  const [end, setEnd] = useState(10);
+  const [end, setEnd] = useState(5);
   const [selectedOption, setSelectedOption] = useState(null);
   const [openRatings, setOpenRatings] = useState();
   const [totalFlights, setTotalFlights] = useState();
@@ -41,7 +41,7 @@ const AllFlights = (props) => {
   const [selectedRating, setSelectedRating] = useState();
 
   const start = 0;
-
+ 
   useEffect(() => {
     const getFlights = async () => {
       setLoading(true);
@@ -52,31 +52,17 @@ const AllFlights = (props) => {
         );
       } else {
         res = await axios.get('/api/v1/flights');
-      }
+      } 
+      const finishedRes = await axios.get(`/api/v1/flights/finishedFlights`);
+        setFinishedFlights(finishedRes.data.data);
       setLoading();
       setTotalFlights(res.data.results);
       setFlights(res.data.data);
-      setEnd(10);
+      setEnd(5);
     };
 
     getFlights();
   }, [selectedRating]);
-
-  useEffect(() => {
-    const getFinishedFlights = async () => {
-      try {
-        setLoading(true);
-        const res = await axios.get(`/api/v1/flights/finishedFlights`);
-        setFinishedFlights(res.data.data);
-        setLoading(false);
-      } catch (err) {
-        setLoading(false);
-        setError(err.response.data.message);
-      }
-    };
-
-    getFinishedFlights();
-  }, []);
 
   const handleChange = (selectedOption) => {
     setSelectedOption(selectedOption);
@@ -126,7 +112,7 @@ const AllFlights = (props) => {
   };
 
   const showMoreHandler = () => {
-    setEnd((prev) => prev + 10);
+    setEnd((prev) => prev + 5);
   };
 
   const openRatingsHandler = () => {
@@ -178,7 +164,7 @@ const AllFlights = (props) => {
         </IconContext.Provider>
       );
     }
-  }
+  }  
 
   let thirdStars = [];
   for (let i = 0; i < 5; i++) {
@@ -330,8 +316,8 @@ const AllFlights = (props) => {
           </div>
         ) : null}
       </div>
-    </div>
+    </div>  
   );
-};
+})
 
 export default AllFlights;

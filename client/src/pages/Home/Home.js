@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Button from '../../shared/components/Button/Button';
 import TourImg from '../../assets/tour-1-1.jpg';
@@ -9,7 +9,7 @@ const Home = React.memo((props) => {
   const history = useHistory();
 
   const discoverDreamTour = () => {
-    history.push('/discover-dream-tour');
+    history.push('/discover-dream-tour?page=1');
   };
 
   return (

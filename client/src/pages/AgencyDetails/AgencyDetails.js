@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { connect } from 'react-redux';
 import { NavLink, Link } from 'react-router-dom';
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
 import ErrorModal from '../../shared/components/UI/ErrorModal';
@@ -26,8 +27,23 @@ const AgencyDetails = (props) => {
   const [resPerPage, setResPerPage] = useState(3);
   const [shouldUpdate, setShouldUpdate] = useState();
   const [finishedTours, setFinishedTours] = useState([]);
+  const [myWishlistIds, setMyWishlistIds] = useState();
 
+  const { location, wishlist } = props;
   const { agencyId } = props.agencyId || props.match.params;
+
+  useEffect(() => {
+    if (props.wishlist) {
+      setMyWishlistIds(props.wishlist.data.map((el) => el.tour));
+    }
+  }, [wishlist]);
+
+  const start = (page - 1) * resPerPage;
+  const end = page * resPerPage;
+
+  useEffect(() => {
+    setPage(props.location.search.split('=')[1] * 1);
+  }, [location]);
 
   useEffect(() => {
     const getAgency = async () => {
@@ -50,13 +66,7 @@ const AgencyDetails = (props) => {
     getAgency();
   }, []);
 
-  const { location } = props;
-
-  useEffect(() => {
-    setPage(props.location.search.split('=')[1]);
-    setShouldUpdate((prev) => !prev);
-  }, [location]);
-
+  if (!myWishlistIds) return <LoadingSpinner asOverlay />;
   if (!agency) return <LoadingSpinner asOverlay />;
 
   const goToPrevPage = () => {
@@ -94,6 +104,7 @@ const AgencyDetails = (props) => {
       el.classList.remove('active')
     );
     e.target.classList.add('active');
+    // setPage(props.location.search.split('=')[1] * 1);
   };
 
   let pageContent = [];
@@ -104,7 +115,7 @@ const AgencyDetails = (props) => {
           <Link
             id={`page-${i}`}
             onClick={linkHandler}
-            className={`page__number page-${i}`}
+            className={`page__number`}
             to={`${props.match.url}?page=${i}`}
           >
             {i}
@@ -177,9 +188,6 @@ const AgencyDetails = (props) => {
     }
   }
 
-  const start = (page - 1) * resPerPage;
-  const end = page * resPerPage;
-
   let updatedAgencyTours = agency.tours.slice(start, end);
 
   return (
@@ -196,6 +204,8 @@ const AgencyDetails = (props) => {
           <div className="agency__tour--item">
             {updatedAgencyTours.map((tour) => (
               <TourItem
+                pageChanged={page}
+                isTourLiked={myWishlistIds.includes(tour._id)}
                 finished={finishedTours.includes(tour._id)}
                 shouldUpdate={shouldUpdate}
                 tour={tour}
@@ -216,4 +226,10 @@ const AgencyDetails = (props) => {
   );
 };
 
-export default AgencyDetails;
+const mapStateToProps = (state) => {
+  return {
+    wishlist: state.user.wishlist,
+  };
+};
+
+export default connect(mapStateToProps)(AgencyDetails);

@@ -12,7 +12,8 @@ const CartItem = (props) => {
   const [isLiked, setIsLiked] = useState();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
-  const { tourId, wishlist, isAuthenticated, removeTour } = props;
+  const [shouldTour, setShouldTour] = useState();
+  const { tourId, wishlist, isAuthenticated, cartTour } = props;
 
   useEffect(() => {
     const getTour = async () => {
@@ -26,22 +27,21 @@ const CartItem = (props) => {
       }
     };
     getTour();
-  }, [tourId]);
+  }, [tourId, cartTour]);
 
   useEffect(() => {
-    let wishlistTours = []; //[ids]
+    setShouldTour((prev) => !prev);
+  }, [cartTour]);
 
-    wishlist.data.forEach((el) => {
-      wishlistTours.push(el.tour);
-    });
+  const [myWishlistIds, setMyWishlistIds] = useState();
 
-    if (wishlistTours.includes(tourId)) {
-      setIsLiked(true);
-    } else {
-      setIsLiked();
+  useEffect(() => {
+    if (props.wishlist) {
+      setMyWishlistIds(props.wishlist.data.map((el) => el.tour));
     }
-  }, [tourId, removeTour]);
+  }, [wishlist]);
 
+  if (!myWishlistIds) return <LoadingSpinner asOverlay />;
   if (!tour) return <LoadingSpinner asOverlay />;
   if (!wishlist) return <LoadingSpinner asOverlay />;
 
@@ -54,8 +54,8 @@ const CartItem = (props) => {
         </ErrorModal>
       )}
       <TourItem
-        removed={props.removed}
-        isTourLiked={isLiked}
+        shouldTour={shouldTour}
+        isTourLiked={myWishlistIds.includes(tour._id)}
         cartItem
         tour={tour}
       />
@@ -65,6 +65,7 @@ const CartItem = (props) => {
 
 const mapStateToProps = (state) => ({
   wishlist: state.user.wishlist,
+  cartTour: state.user.cartTour,
 });
 
 export default connect(mapStateToProps)(CartItem);

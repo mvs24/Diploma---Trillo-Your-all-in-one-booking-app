@@ -15,7 +15,7 @@ const FinishedTours = ({ agency }) => {
   const [loading, setLoading] = useState(false);
   const history = useHistory();
   const start = 0;
-  const [end, setEnd] = useState(6);
+  const [end, setEnd] = useState(5);
 
   useEffect(() => {
     const getFinishedTours = async () => {
@@ -36,7 +36,7 @@ const FinishedTours = ({ agency }) => {
   }, []);
 
   const showMoreHandler = () => {
-    setEnd((prev) => prev + 6);
+    setEnd((prev) => prev + 5);
   };
 
   if (!finishedTours) return <LoadingSpinner asOverlay />;
@@ -53,13 +53,16 @@ const FinishedTours = ({ agency }) => {
 
   return (
     <div className="my__tours">
+      <h1 className="my__wishlist--heading my__wishlist--heading-grid">
+        FINISHED TOURS ({finishedTours.length})
+      </h1>
+
       <div className="tours__grid">
         {finishedTours.map((tour) => (
           <TourItem key={tour._id} finished tour={tour} />
         ))}
       </div>
       <div className="searchBtn--grid">
-        {' '}
         <Button
           type="pink"
           disabled={end >= finishedTours.length}

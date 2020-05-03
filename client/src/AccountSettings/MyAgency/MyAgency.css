@@ -3,7 +3,6 @@
   background: #f4f2f2;
   padding: 7rem 3rem;
   min-height: 100vh;
-  font-weight: 100;
 }
 
 .myAgency__links {
@@ -81,14 +80,10 @@
   }
 }
 
-@media (max-width: 650px) {
-  .myAgency__links {
-    display: flex;
-    flex-direction: column;
-  }
-}
-
 .my__agencyFlights {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background: white;
   min-height: 100%;
   padding: 4rem;
@@ -110,17 +105,33 @@
   width: 100%;
   text-align: center;
 }
+
+.showMoreFlightsHandler__btn---1 {
+  margin: 3rem 0;
+}
+
 .tours__grid {
   grid-column: 1 / -1;
-  /*position: relative;*/
 }
+
 .myTours {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
 }
+
 .searchBtn--grid {
   margin: 5rem 0;
   align-self: center;
   text-align: center;
   grid-column: 2/3;
+}
+.my__wishlist--heading-grid {
+  grid-column: 2/3;
+}
+
+@media (max-width: 650px) {
+  .myAgency__links {
+    display: flex;
+    flex-direction: column;
+  }
 }

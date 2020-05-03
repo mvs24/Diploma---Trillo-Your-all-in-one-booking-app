@@ -13,7 +13,7 @@ const MyBookings = (props) => {
   const [loading, setLoading] = useState();
   const [error, setError] = useState();
   const start = 0;
-  const [end, setEnd] = useState(5);
+  const [end, setEnd] = useState(1);
   const { isAuthenticated } = props;
 
   useEffect(() => {
@@ -37,7 +37,7 @@ const MyBookings = (props) => {
   if (loading) return <LoadingSpinner asOverlay />;
 
   const showMoreHandler = () => {
-    setEnd((prev) => prev + 5);
+    setEnd((prev) => prev + 1);
   };
 
   if (myFlights.length === 0)
@@ -55,6 +55,9 @@ const MyBookings = (props) => {
     <>
       <div className="my__flights">
         {error && <ErrorModal>{error}</ErrorModal>}
+        <h1 className="my__wishlist--heading">
+          BOOKED FLIGHTS ({myFlights.length})
+        </h1>
         {myFlights.slice(start, end).map((flight) => (
           <Flight
             reviewUpdated={reviewUpdateHandler}

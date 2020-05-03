@@ -29,7 +29,7 @@ const MyAgency = (props) => {
   const addTour = useRef();
   const start = 0;
   const [end, setEnd] = useState(6);
-  const [endFlight, setEndFlight] = useState(1);
+  const [endFlight, setEndFlight] = useState(5);
 
   useEffect(() => {
     const getMyAgency = async () => {
@@ -66,7 +66,7 @@ const MyAgency = (props) => {
   };
 
   const showMoreFlightsHandler = () => {
-    setEndFlight((prev) => prev + 1);
+    setEndFlight((prev) => prev + 5);
   };
 
   if (error)
@@ -169,7 +169,7 @@ const MyAgency = (props) => {
         </h1>
         {myAgency.category === 'flights' && (
           <h1 onClick={flightsHandler} className="myAgency__heading">
-            My Flights
+            My Flights ({myFlights.length})
           </h1>
         )}
         {myAgency.category === 'flights' && (
@@ -179,7 +179,7 @@ const MyAgency = (props) => {
         )}
         {myAgency.category === 'tours' && (
           <h1 onClick={toursHandler} className="myAgency__heading" ref={tours}>
-            My Tours
+            My Tours ({myTours.length})
           </h1>
         )}
         {myAgency.category === 'tours' && (
@@ -215,16 +215,16 @@ const MyAgency = (props) => {
             {myFlights.slice(start, endFlight).map((flight) => (
               <Flight updateAgency={updateAgency} owner flight={flight} />
             ))}
-          </div>
-          <div className="showMoreFlightsHandler__btn">
-            {' '}
-            <Button
-              type="pink"
-              disabled={endFlight >= myFlights.length}
-              clicked={showMoreFlightsHandler}
-            >
-              Show More
-            </Button>
+            <div className="showMoreFlightsHandler__btn---1">
+              {' '}
+              <Button
+                type="pink"
+                disabled={endFlight >= myFlights.length}
+                clicked={showMoreFlightsHandler}
+              >
+                Show More
+              </Button>
+            </div>
           </div>
         </>
       )}
@@ -249,7 +249,7 @@ const MyAgency = (props) => {
             {' '}
             <Button
               type="pink"
-              disabled={end >= tours.length}
+              disabled={end >= myTours.length}
               clicked={showMoreHandler}
             >
               Show More

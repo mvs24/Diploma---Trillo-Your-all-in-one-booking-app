@@ -10,6 +10,8 @@ const FinishedFlights = ({ agency }) => {
   const [finishedFlights, setFinishedFlights] = useState();
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const start = 0;
+  const [end, setEnd] = useState(5);
 
   useEffect(() => {
     const getFinishedFlights = async () => {
@@ -29,6 +31,10 @@ const FinishedFlights = ({ agency }) => {
     getFinishedFlights();
   }, []);
 
+  const showMoreHandler = () => {
+    setEnd((prev) => prev + 5);
+  };
+
   if (!finishedFlights) return <LoadingSpinner asOverlay />;
   if (finishedFlights.length === 0)
     return (
@@ -38,10 +44,22 @@ const FinishedFlights = ({ agency }) => {
     );
 
   return (
-    <div className="edit__agency--container">
-      {finishedFlights.map((flight) => (
+    <div className="my__agencyFlights">
+      <h1 className="my__wishlist--heading">
+        FINISHED FLIGHTS ({finishedFlights.length})
+      </h1>
+      {finishedFlights.slice(start, end).map((flight) => (
         <Flight key={flight._id} flight={flight} />
       ))}
+      <div className="showMoreFlightsHandler__btn---1">
+        <Button
+          type="pink"
+          disabled={end >= finishedFlights.length}
+          clicked={showMoreHandler}
+        >
+          Show More
+        </Button>
+      </div>
     </div>
   );
 };

@@ -29,7 +29,9 @@ const MyWishlist = (props) => {
 
   return (
     <>
-      <h1 className="my__wishlist--heading">MY WISHLIST</h1>
+      <h1 className="my__wishlist--heading">
+        MY WISHLIST ({wishlistData.length})
+      </h1>
       <div className="wishlist__container">
         {wishlistData.slice(start, end).map((wishData) => (
           <WishlistItem tourId={wishData.tour} />

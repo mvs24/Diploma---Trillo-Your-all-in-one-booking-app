@@ -47,7 +47,9 @@ const MyBookings = (props) => {
 
   return (
     <>
-      <h1 className="my__wishlist--heading">MY BOOKINGS</h1>
+      <h1 className="my__wishlist--heading">
+        MY BOOKINGS ({myBookings.length})
+      </h1>
       <div className="wishlist__container">
         {myBookings.slice(start, end).map((booking) => (
           <TourItem tour={booking.tour} booked />

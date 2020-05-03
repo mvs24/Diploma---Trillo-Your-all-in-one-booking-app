@@ -30,20 +30,23 @@ const options = [
 
 const AllFlights = React.memo((props) => {
   const [flights, setFlights] = useState();
+  const [sorted, setSorted] = useState();
+  const [notUpdate, setNotUpdate] = useState();
   const [error, setError] = useState();
   const [loading, setLoading] = useState();
   const [end, setEnd] = useState(5);
   const [selectedOption, setSelectedOption] = useState(null);
   const [openRatings, setOpenRatings] = useState();
-  const [totalFlights, setTotalFlights] = useState();
   const [checkedIn, setCheckedIn] = useState([]);
   const [radioValue, setRadioValue] = useState();
   const [finishedFlights, setFinishedFlights] = useState();
   const [selectedRating, setSelectedRating] = useState();
   const [myFlights, setMyFlights] = useState([]);
+  const [endFinished, setEndFinished] = useState(5);
 
   const start = 0;
   const { isAuthenticated } = props;
+
   useEffect(() => {
     const getMyFlights = async () => {
       try {
@@ -66,23 +69,36 @@ const AllFlights = React.memo((props) => {
     const getFlights = async () => {
       setLoading(true);
       let res;
-      if (selectedRating) {
-        res = await axios.get(
-          `/api/v1/flights?ratingsAverage[gte]=${selectedRating}`
-        );
-      } else {
-        res = await axios.get('/api/v1/flights');
-      }
+      res = await axios.get('/api/v1/flights');
       const finishedRes = await axios.get(`/api/v1/flights/finishedFlights`);
       setFinishedFlights(finishedRes.data.data);
       setLoading();
-      setTotalFlights(res.data.results);
       setFlights(res.data.data);
       setEnd(5);
     };
 
     getFlights();
-  }, [selectedRating]);
+  }, []);
+
+  const sortBySelection = async (selectedType) => {
+    let res;
+    if (selectedRating) {
+      setLoading(true);
+      res = await axios.get(
+        `/api/v1/flights?sort=${selectedType}&ratingsAverage[gte]=${selectedRating}`
+      );
+      setLoading();
+      setFlights(res.data.data);
+      setSorted((prev) => !prev);
+    } else {
+      setLoading(true);
+      res = await axios.get(`/api/v1/flights?sort=${selectedType}`);
+      setLoading();
+      setFlights(res.data.data);
+      setNotUpdate(true);
+      setSorted((prev) => !prev);
+    }
+  };
 
   const handleChange = (selectedOption) => {
     setSelectedOption(selectedOption);
@@ -93,41 +109,22 @@ const AllFlights = React.memo((props) => {
         sortBySelection('-ratingsQuantity');
         break;
       case 'highestRated':
-        sortBySelection('ratingsAverage');
+        sortBySelection('-ratingsAverage');
         break;
       case 'lowestPrice':
-        sortBySelection('-pricePerPerson');
-        break;
-      case 'highestPrice':
         sortBySelection('pricePerPerson');
         break;
-      case 'maxGroupSize':
-        sortBySelection('-maxGroupSize');
+      case 'highestPrice':
+        sortBySelection('-pricePerPerson');
         break;
       case 'mostPopular':
         sortBySelection('-numBought');
         break;
+      case 'maxGroupSize':
+        sortBySelection('-maxGroupSize');
+        break;
       default:
-        sortBySelection('pricePerPerson');
-    }
-  };
-
-  const sortBySelection = async (selectedType) => {
-    let res;
-    if (selectedRating) {
-      setLoading(true);
-      res = await axios.get(
-        `/api/v1/flights?ratingsAverage[gte]=${selectedRating}&sort=${selectedType}`
-      );
-      setLoading();
-      setTotalFlights(res.data.results);
-      setFlights(res.data.data);
-    } else {
-      setLoading(true);
-      res = await axios.get(`/api/v1/flights?sort=${selectedType}`);
-      setLoading();
-      setTotalFlights(res.data.results);
-      setFlights(res.data.data);
+        sortBySelection('-ratingsAverage');
     }
   };
 
@@ -226,6 +223,50 @@ const AllFlights = React.memo((props) => {
   const radioHandler = async (e) => {
     const rating = +e.target.value;
     setSelectedRating(rating);
+    let res;
+
+    let selectedOptionValue = '';
+
+    switch (selectedOption.value) {
+      case 'mostReviewed':
+        selectedOptionValue = '-ratingsQuantity';
+        break;
+      case 'highestRated':
+        selectedOptionValue = '-ratingsAverage';
+        break;
+      case 'lowestPrice':
+        selectedOptionValue = 'pricePerPerson';
+        break;
+      case 'highestPrice':
+        selectedOptionValue = '-pricePerPerson';
+        break;
+      case 'mostPopular':
+        selectedOptionValue = '-numBought';
+        break;
+      case 'maxGroupSize':
+        selectedOptionValue = '-maxGroupSize';
+        break;
+      default:
+        selectedOptionValue = '-ratingsAverage';
+    }
+
+    setLoading(true);
+    if (selectedOption) {
+      res = await axios.get(
+        `/api/v1/flights?sort=${selectedOptionValue}&ratingsAverage[gte]=${rating}`
+      );
+      setFlights(res.data.data);
+      setSorted((prev) => !prev);
+    } else {
+      res = await axios.get(`/api/v1/flights?ratingsAverage[gte]=${rating}`);
+      setFlights(res.data.data);
+      setSorted((prev) => !prev);
+    }
+    setLoading();
+  };
+
+  const showMoreFinishedHandler = () => {
+    setEndFinished((prev) => prev + 5);
   };
 
   const allFlights = flights.slice(start, end);
@@ -233,7 +274,7 @@ const AllFlights = React.memo((props) => {
   return (
     <div className="all__flights__container">
       <h1 className="all__flights__heading">
-        All Future Flights ({totalFlights})
+        All Future Flights ({flights.length})
       </h1>
       <div className="all__flights__filter">
         <div onClick={openRatingsHandler} className=" allFlights__filter">
@@ -308,14 +349,19 @@ const AllFlights = React.memo((props) => {
           </ErrorModal>
         )}
         {allFlights.map((flight) => (
-          <Flight booked={myFlights.includes(flight._id)} flight={flight} />
+          <Flight
+            notUpdate={notUpdate}
+            sorted={sorted}
+            booked={myFlights.includes(flight._id)}
+            flight={flight}
+          />
         ))}
       </div>
       <div className="allFlights__btn__container">
         <Button
-          disabled={totalFlights <= end}
+          disabled={flights.length <= end}
           className="showMore__button"
-          type="blue"
+          type="pink"
           clicked={showMoreHandler}
         >
           Show More
@@ -329,9 +375,20 @@ const AllFlights = React.memo((props) => {
               FINISHED FLIGHTS: ({finishedFlights.length})
             </h1>
             <div>
-              {finishedFlights.map((flight) => {
+              {finishedFlights.slice(start, endFinished).map((flight) => {
                 return <Flight finished key={flight._id} flight={flight} />;
               })}
+
+              <div className="allFlights__btn__container">
+                <Button
+                  disabled={finishedFlights.length <= endFinished}
+                  className="showMore__button"
+                  type="pink"
+                  clicked={showMoreFinishedHandler}
+                >
+                  Show More Finished Flights
+                </Button>
+              </div>
             </div>{' '}
           </div>
         ) : null}

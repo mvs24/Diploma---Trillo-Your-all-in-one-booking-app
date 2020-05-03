@@ -27,7 +27,7 @@ for (let i = 1; i <= 5; i++) {
 const StarCmp = (props) => (
   <IconContext.Provider
     value={{
-      className: `icon__green tour__info--icon full star review--icon ${props.starName}`,
+      className: `blue__review tour__info--icon full star review--icon ${props.starName}`,
     }}
   >
     {props.children}
@@ -83,7 +83,7 @@ const Flight = React.memo((props) => {
     validRequirements: {},
   });
   const history = useHistory();
-  const { isAuthenticated } = props;
+  const { isAuthenticated, sorted } = props;
 
   useEffect(() => {
     const getAgency = async () => {
@@ -98,10 +98,15 @@ const Flight = React.memo((props) => {
       }
     };
 
-    getAgency();
+    if (!props.notUpdated) {
+      getAgency();
+    }
+
+    console.log('1');
   }, [flight]);
 
   useEffect(() => {
+    console.log(2);
     const getMyReviews = async () => {
       const res = await axios.get(`/api/v1/users/my/reviews/flights`);
       const flightIds = res.data.data.map((flight) => flight.flight);
@@ -115,8 +120,15 @@ const Flight = React.memo((props) => {
       }
     };
 
-    getMyReviews();
+    if (!props.notUpdated) {
+      console.log('run');
+      getMyReviews();
+    }
   }, [flight]);
+
+  useEffect(() => {
+    setFlight(props.flight);
+  }, [sorted]);
 
   if (!agency) return <LoadingSpinner asOverlay />;
 
@@ -319,7 +331,7 @@ const Flight = React.memo((props) => {
   let halfStar = (
     <IconContext.Provider
       value={{
-        className: 'icon__green tour__info--icon full star flight__star',
+        className: 'blue__review tour__info--icon full star flight__star',
       }}
     >
       <IoIosStarHalf />
@@ -331,7 +343,7 @@ const Flight = React.memo((props) => {
     halfStar = (
       <IconContext.Provider
         value={{
-          className: 'icon__green tour__info--icon full star flight__star',
+          className: 'blue__review tour__info--icon full star flight__star',
         }}
       >
         <IoMdStar />
@@ -341,7 +353,7 @@ const Flight = React.memo((props) => {
     halfStar = (
       <IconContext.Provider
         value={{
-          className: 'icon__green tour__info--icon full star flight__star',
+          className: 'blue__review tour__info--icon full star flight__star',
         }}
       >
         <IoMdStarOutline />
@@ -354,7 +366,7 @@ const Flight = React.memo((props) => {
     stars.push(
       <IconContext.Provider
         value={{
-          className: 'icon__green tour__info--icon full star flight__star',
+          className: 'blue__review tour__info--icon full star flight__star',
         }}
       >
         <IoMdStar />

@@ -25,7 +25,7 @@ const MyReviews = (props) => {
 
   return (
     <>
-      <h1 className="my__wishlist--heading">MY REVIEWS</h1>
+      <h1 className="my__wishlist--heading">MY REVIEWS ({reviews.length})</h1>
       <div className="wishlist__container">
         {reviews.slice(start, end).map((review) => (
           <Review reviewId={review._id} tourId={review.tour} />

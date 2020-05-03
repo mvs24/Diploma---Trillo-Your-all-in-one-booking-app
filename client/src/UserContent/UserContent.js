@@ -21,8 +21,8 @@ const UserContent = (props) => {
   }
 
   const goToWishlistPage = () => {
-    history.push('/my-wishlist')
-  }
+    history.push('/my-wishlist');
+  };
 
   if (wishlist)
     wishlistContent = (
@@ -30,7 +30,11 @@ const UserContent = (props) => {
         <IconContext.Provider value={{ className: 'icon heart' }}>
           <FiHeart />
           <span className="wish__length">
-            {wishlist.results > 9 ? <span>9+</span> : wishlist.results}
+            {wishlist.results > 9 ? (
+              <span className="heart9">9+</span>
+            ) : (
+              wishlist.results
+            )}
           </span>
         </IconContext.Provider>
       </div>
@@ -69,17 +73,24 @@ const UserContent = (props) => {
         </div>
         {wishlistContent}
 
-        <div onClick={() => history.push('/my-cart')} className="shopping__container">
+        <div
+          onClick={() => history.push('/my-cart')}
+          className="shopping__container"
+        >
           <IconContext.Provider value={{ className: 'icon cart shop' }}>
             <FiShoppingCart />
-            <span className="cart__length">{cartTourLength}</span>
+            <span className="cart__length">
+              {cartTourLength > 9 ? '9+' : cartTourLength}
+            </span>
           </IconContext.Provider>
         </div>
 
         <div onClick={notificationHandler} className="notifications__container">
           <IconContext.Provider value={{ className: 'icon cart notify' }}>
             <IoMdNotificationsOutline />
-            <span className="notify__length">{unReadLength}</span>
+            <span className="notify__length">
+              {unReadLength > 9 ? '9+' : unReadLength}
+            </span>
           </IconContext.Provider>
         </div>
 
@@ -99,7 +110,7 @@ const UserContent = (props) => {
 
 const mapStateToProps = (state) => ({
   userData: state.user.userData,
-  isAuthenticated: state.user.isAuthenticated
+  isAuthenticated: state.user.isAuthenticated,
 });
 
 export default connect(mapStateToProps)(UserContent);

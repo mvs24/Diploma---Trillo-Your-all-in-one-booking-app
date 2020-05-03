@@ -4,9 +4,12 @@ import CartItem from './CartItem';
 import './MyCart.css';
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
 import { getToursInCart } from '../../store/actions/userActions';
+import Button from '../../shared/components/Button/Button';
 
 const MyCart = (props) => {
   const { cartTour, wishlist, isAuthenticated } = props;
+  const start = 0;
+  const [end, setEnd] = useState(6);
   if (!isAuthenticated) return null;
 
   if (cartTour.length === 0)
@@ -16,12 +19,26 @@ const MyCart = (props) => {
       </div>
     );
 
+  const showMoreHandler = () => {
+    setEnd((prev) => prev + 6);
+  };
+
   return (
     <div className="my__cartContainer">
       <div className="cart__container">
-        {cartTour.map((el) => {
+        {cartTour.slice(start, end).map((el) => {
           return <CartItem tourId={el.tour} />;
         })}
+      </div>
+      <div className="searchBtn--grid">
+        {' '}
+        <Button
+          type="blue"
+          disabled={end >= cartTour.length}
+          clicked={showMoreHandler}
+        >
+          Show More
+        </Button>
       </div>
     </div>
   );

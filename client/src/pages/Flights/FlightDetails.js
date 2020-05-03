@@ -20,7 +20,7 @@ for (let i = 1; i <= 5; i++) {
   options.push({ value: i, label: i });
 }
 
-const FlightDetails = (props) => {
+const FlightDetails = React.memo((props) => {
   const [flight, setFlight] = useState();
   const [myFlights, setMyFlights] = useState();
   const [selectedOption, setSelectedOption] = useState();
@@ -367,7 +367,7 @@ const FlightDetails = (props) => {
       </div>
     </div>
   );
-};
+});
 
 const mapStateToProps = (state) => {
   return {

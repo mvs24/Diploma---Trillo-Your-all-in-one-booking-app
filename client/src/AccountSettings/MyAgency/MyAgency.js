@@ -12,6 +12,7 @@ import AddNewFlight from './AddNewFlight';
 import FinishedTours from './FinishedTours';
 import FinishedFlights from './FinishedFlights';
 import Empty from '../../assets/empty.jpg';
+import Button from '../../shared/components/Button/Button';
 
 const MyAgency = (props) => {
   const [myAgency, setMyAgency] = useState();
@@ -26,6 +27,9 @@ const MyAgency = (props) => {
   const editAgency = useRef();
   const agency = useRef();
   const addTour = useRef();
+  const start = 0;
+  const [end, setEnd] = useState(6);
+  const [endFlight, setEndFlight] = useState(1);
 
   useEffect(() => {
     const getMyAgency = async () => {
@@ -56,6 +60,14 @@ const MyAgency = (props) => {
 
     getMyAgency();
   }, [shouldUpdate]);
+
+  const showMoreHandler = () => {
+    setEnd((prev) => prev + 6);
+  };
+
+  const showMoreFlightsHandler = () => {
+    setEndFlight((prev) => prev + 1);
+  };
 
   if (error)
     return (
@@ -198,11 +210,23 @@ const MyAgency = (props) => {
         )}
       </div>
       {myAgency.category === 'flights' && display === 'flights' && (
-        <div className="my__agencyFlights">
-          {myFlights.map((flight) => (
-            <Flight updateAgency={updateAgency} owner flight={flight} />
-          ))}
-        </div>
+        <>
+          <div className="my__agencyFlights">
+            {myFlights.slice(start, endFlight).map((flight) => (
+              <Flight updateAgency={updateAgency} owner flight={flight} />
+            ))}
+          </div>
+          <div className="showMoreFlightsHandler__btn">
+            {' '}
+            <Button
+              type="pink"
+              disabled={endFlight >= myFlights.length}
+              clicked={showMoreFlightsHandler}
+            >
+              Show More
+            </Button>
+          </div>
+        </>
       )}
       {display === 'agency' && myAgency.category === 'tours' && (
         <Agency changeBcg agency={myAgency} />
@@ -212,16 +236,30 @@ const MyAgency = (props) => {
       )}
       {myAgency.category === 'tours' && display === 'tours' && (
         <div className="my__tours">
-          {myTours.length > 0 ? (
-            myTours.map((tour) => <TourItem tour={tour} />)
-          ) : (
-            <div>
-              <h1 className=" noTourFoundHeading">No Tour found!</h1>
-            </div>
-          )}
+          <div className="tours__grid">
+            {myTours.length > 0 ? (
+              myTours.slice(start, end).map((tour) => <TourItem tour={tour} />)
+            ) : (
+              <div>
+                <h1 className=" noTourFoundHeading">No Tour found!</h1>
+              </div>
+            )}
+          </div>
+          <div className="searchBtn--grid">
+            {' '}
+            <Button
+              type="pink"
+              disabled={end >= tours.length}
+              clicked={showMoreHandler}
+            >
+              Show More
+            </Button>
+          </div>
         </div>
       )}
-      {display === 'edit' && <EditAgency agency={myAgency} />}
+      {display === 'edit' && (
+        <EditAgency updateAgency={updateAgency} agency={myAgency} />
+      )}
       {myAgency.category === 'flights' && display === 'addNewFlight' && (
         <AddNewFlight updateAgency={updateAgency} agency={myAgency} />
       )}
@@ -229,7 +267,13 @@ const MyAgency = (props) => {
         <FinishedFlights agency={myAgency} />
       )}
       {myAgency.category === 'tours' && display === 'addNewTour' && (
-        <AddNewTour updateAgency={updateAgency} agency={myAgency} />
+        <AddNewTour
+          addTourRef={addTour}
+          agencyRef={agency}
+          setDisplay={setDisplay}
+          updateAgency={updateAgency}
+          agency={myAgency}
+        />
       )}
       {myAgency.category === 'tours' && display === 'finishedTours' && (
         <FinishedTours updateAgency={updateAgency} agency={myAgency} />

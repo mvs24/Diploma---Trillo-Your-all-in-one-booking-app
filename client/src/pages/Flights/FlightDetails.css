@@ -26,7 +26,8 @@
 .agency__info--1 {
   display: flex;
   padding: 3rem;
-  color: #2998ff;
+  color: #777;
+  font-weight: 300;
   align-items: center;
   justify-content: space-around;
 }

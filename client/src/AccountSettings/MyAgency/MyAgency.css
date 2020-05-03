@@ -18,14 +18,13 @@
     rgb(126, 213, 111)
   );
   box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.4);
-  font-weight: 100;
 }
 .myAgency__links h1 {
   margin: 3rem 1.5rem;
   transition: all 0.4s ease;
   cursor: pointer;
   letter-spacing: 0.3;
-  font-weight: 400;
+  font-weight: 300;
 }
 
 .myAgency__links h1:hover {
@@ -110,4 +109,18 @@
   display: block;
   width: 100%;
   text-align: center;
+}
+.tours__grid {
+  grid-column: 1 / -1;
+  /*position: relative;*/
+}
+.myTours {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+.searchBtn--grid {
+  margin: 5rem 0;
+  align-self: center;
+  text-align: center;
+  grid-column: 2/3;
 }

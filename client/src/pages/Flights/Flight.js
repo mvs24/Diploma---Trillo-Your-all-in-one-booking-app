@@ -34,7 +34,7 @@ const StarCmp = (props) => (
   </IconContext.Provider>
 );
 
-const Flight = (props) => {
+const Flight = React.memo((props) => {
   const [agency, setAgency] = useState();
   const [flight, setFlight] = useState(props.flight);
   const [loading, setLoading] = useState();
@@ -47,6 +47,7 @@ const Flight = (props) => {
   const [reviewed, setReviewed] = useState();
   const [reviewId, setReviewId] = useState();
   const [openPriceDiscountModal, setOpenPriceDiscountModal] = useState();
+  const [currentRating, setCurrentRating] = useState();
   const [inputPriceDiscount, setInputPriceDiscount] = useState({
     configOptions: {
       type: 'number',
@@ -109,6 +110,7 @@ const Flight = (props) => {
         const myRev = res.data.data.find((el) => el.flight === flight._id);
         setReviewed(true);
         setReview(myRev.rating);
+        setCurrentRating(myRev.rating);
         setReviewId(myRev._id);
       }
     };
@@ -237,15 +239,22 @@ const Flight = (props) => {
       let res;
       if (!reviewed) {
         res = await axios.post(`/api/v1/flights/${flight._id}/reviews`, data);
+        const flightRes = await axios.get(
+          `/api/v1/flights/${res.data.data.flight}`
+        );
         setReviewId(res.data.data._id);
+        setFlight(flightRes.data.data);
       } else {
         res = await axios.patch(
           `/api/v1/flights/${flight._id}/reviews/${reviewId}`,
           data
         );
+        const flightRes = await axios.get(
+          `/api/v1/flights/${res.data.data.flight}`
+        );
         setReviewId(res.data.data._id);
+        setFlight(flightRes.data.data);
       }
-      props.reviewUpdated();
       setReviewed(true);
       setOpenReviewModal(false);
     } catch (err) {
@@ -426,6 +435,7 @@ const Flight = (props) => {
         <Modal
           onCancel={() => {
             setOpenReviewModal(false);
+            setReview(currentRating);
           }}
           header={'FEEDBACK'}
           show
@@ -563,7 +573,7 @@ const Flight = (props) => {
       </div>
     </div>
   );
-};
+});
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.user.isAuthenticated,

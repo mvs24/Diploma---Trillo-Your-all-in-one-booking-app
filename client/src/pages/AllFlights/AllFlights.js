@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import axios from 'axios';
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
 import ErrorModal from '../../shared/components/UI/ErrorModal';
@@ -39,9 +40,28 @@ const AllFlights = React.memo((props) => {
   const [radioValue, setRadioValue] = useState();
   const [finishedFlights, setFinishedFlights] = useState();
   const [selectedRating, setSelectedRating] = useState();
+  const [myFlights, setMyFlights] = useState([]);
 
   const start = 0;
- 
+  const { isAuthenticated } = props;
+  useEffect(() => {
+    const getMyFlights = async () => {
+      try {
+        setLoading(true);
+        const res = await axios.get('/api/v1/bookings/flights/futureBookings');
+        setLoading(false);
+        const myFlights = res.data.data.map((el) => el._id);
+        setMyFlights(myFlights);
+      } catch (err) {
+        setError(err.response.data.message);
+      }
+    };
+
+    if (isAuthenticated) {
+      getMyFlights();
+    }
+  }, [isAuthenticated]);
+
   useEffect(() => {
     const getFlights = async () => {
       setLoading(true);
@@ -52,9 +72,9 @@ const AllFlights = React.memo((props) => {
         );
       } else {
         res = await axios.get('/api/v1/flights');
-      } 
+      }
       const finishedRes = await axios.get(`/api/v1/flights/finishedFlights`);
-        setFinishedFlights(finishedRes.data.data);
+      setFinishedFlights(finishedRes.data.data);
       setLoading();
       setTotalFlights(res.data.results);
       setFlights(res.data.data);
@@ -164,7 +184,7 @@ const AllFlights = React.memo((props) => {
         </IconContext.Provider>
       );
     }
-  }  
+  }
 
   let thirdStars = [];
   for (let i = 0; i < 5; i++) {
@@ -288,7 +308,7 @@ const AllFlights = React.memo((props) => {
           </ErrorModal>
         )}
         {allFlights.map((flight) => (
-          <Flight flight={flight} />
+          <Flight booked={myFlights.includes(flight._id)} flight={flight} />
         ))}
       </div>
       <div className="allFlights__btn__container">
@@ -309,15 +329,19 @@ const AllFlights = React.memo((props) => {
               FINISHED FLIGHTS: ({finishedFlights.length})
             </h1>
             <div>
-              {finishedFlights.map((flight) => (
-                <Flight finished key={flight._id} flight={flight} />
-              ))}
+              {finishedFlights.map((flight) => {
+                return <Flight finished key={flight._id} flight={flight} />;
+              })}
             </div>{' '}
           </div>
         ) : null}
       </div>
-    </div>  
+    </div>
   );
-})
+});
 
-export default AllFlights;
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.user.isAuthenticated,
+});
+
+export default connect(mapStateToProps)(AllFlights);

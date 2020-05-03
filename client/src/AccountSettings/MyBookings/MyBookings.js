@@ -5,11 +5,14 @@ import ErrorModal from '../../shared/components/UI/ErrorModal';
 import axios from 'axios';
 import TourItem from '../../components/TourItem/TourItem';
 import './MyBookings.css';
+import Button from '../../shared/components/Button/Button';
 
 const MyBookings = (props) => {
   const [myBookings, setMyBookings] = useState([]);
   const [loading, setLoading] = useState();
   const [error, setError] = useState();
+  const start = 0;
+  const [end, setEnd] = useState(6);
   const { isAuthenticated } = props;
 
   useEffect(() => {
@@ -31,6 +34,10 @@ const MyBookings = (props) => {
 
   if (loading) return <LoadingSpinner asOverlay />;
 
+  const showMoreHandler = () => {
+    setEnd((prev) => prev + 6);
+  };
+
   if (myBookings.length === 0)
     return (
       <div className="wish__data">
@@ -39,12 +46,24 @@ const MyBookings = (props) => {
     );
 
   return (
-    <div className="my__bookings">
-      {error && <ErrorModal>{error}</ErrorModal>}
-      {myBookings.map((booking) => (
-        <TourItem tour={booking.tour} booked />
-      ))}
-    </div>
+    <>
+      <h1 className="my__wishlist--heading">MY BOOKINGS</h1>
+      <div className="wishlist__container">
+        {myBookings.slice(start, end).map((booking) => (
+          <TourItem tour={booking.tour} booked />
+        ))}
+      </div>
+      <div className="searchBtn--grid">
+        {' '}
+        <Button
+          type="blue"
+          disabled={end >= myBookings.length}
+          clicked={showMoreHandler}
+        >
+          Show More
+        </Button>
+      </div>
+    </>
   );
 };
 

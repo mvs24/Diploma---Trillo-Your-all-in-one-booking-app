@@ -272,8 +272,6 @@ const AddNewTour = (props) => {
       };
       fileReader.readAsDataURL(value);
     }
-
-    console.log(images);
   };
 
   const handleChange = (selectedOption) => {
@@ -493,8 +491,6 @@ const AddNewTour = (props) => {
       setError('Days are wrong...');
     }
 
-    console.log(isValidDay);
-
     if (isValid && isValidAddress && isValidDay) {
       for (let i = 0; i < locations.length; i++) {
         updatedLocations.push({
@@ -626,11 +622,16 @@ const AddNewTour = (props) => {
       );
       setLoading(false);
       props.updateAgency();
+      props.setDisplay('agency');
+      props.agencyRef.current.classList.add('border');
+      props.addTourRef.current.classList.remove('border');
     } catch (err) {
       setError(err.response.data.message);
       setLoading(false);
     }
   };
+
+  if (loading) return <LoadingSpinner asOverlay />;
 
   return (
     <>
@@ -779,9 +780,9 @@ const AddNewTour = (props) => {
                   )}
                   <ImageUpload
                     title={'Image 1'}
-                    onInput={(value, isValid) =>
-                      inputImagesHandler('first', value, isValid)
-                    }
+                    onInput={(value, isValid) => {
+                      if (isValid) inputImagesHandler('first', value, isValid);
+                    }}
                   />
                 </div>
                 <div>
@@ -790,9 +791,9 @@ const AddNewTour = (props) => {
                   )}
                   <ImageUpload
                     title={'Image 2'}
-                    onInput={(value, isValid) =>
-                      inputImagesHandler('second', value, isValid)
-                    }
+                    onInput={(value, isValid) => {
+                      if (isValid) inputImagesHandler('second', value, isValid);
+                    }}
                   />
                 </div>
                 <div>
@@ -801,9 +802,9 @@ const AddNewTour = (props) => {
                   )}
                   <ImageUpload
                     title={'Image 1'}
-                    onInput={(value, isValid) =>
-                      inputImagesHandler('third', value, isValid)
-                    }
+                    onInput={(value, isValid) => {
+                      if (isValid) inputImagesHandler('third', value, isValid);
+                    }}
                   />
                 </div>
               </div>

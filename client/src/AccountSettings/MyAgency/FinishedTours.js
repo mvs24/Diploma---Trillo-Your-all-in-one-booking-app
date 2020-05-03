@@ -14,6 +14,8 @@ const FinishedTours = ({ agency }) => {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const history = useHistory();
+  const start = 0;
+  const [end, setEnd] = useState(6);
 
   useEffect(() => {
     const getFinishedTours = async () => {
@@ -33,6 +35,10 @@ const FinishedTours = ({ agency }) => {
     getFinishedTours();
   }, []);
 
+  const showMoreHandler = () => {
+    setEnd((prev) => prev + 6);
+  };
+
   if (!finishedTours) return <LoadingSpinner asOverlay />;
   if (finishedTours.length === 0)
     return (
@@ -46,10 +52,22 @@ const FinishedTours = ({ agency }) => {
     );
 
   return (
-    <div className="edit__agency--container">
-      {finishedTours.map((tour) => (
-        <TourItem key={tour._id} finished tour={tour} />
-      ))}
+    <div className="my__tours">
+      <div className="tours__grid">
+        {finishedTours.map((tour) => (
+          <TourItem key={tour._id} finished tour={tour} />
+        ))}
+      </div>
+      <div className="searchBtn--grid">
+        {' '}
+        <Button
+          type="pink"
+          disabled={end >= finishedTours.length}
+          clicked={showMoreHandler}
+        >
+          Show More
+        </Button>
+      </div>
     </div>
   );
 };

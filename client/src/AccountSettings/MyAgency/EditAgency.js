@@ -9,7 +9,8 @@ import Button from '../../shared/components/Button/Button';
 
 import './EditAgency.css';
 
-const EditAgency = ({ agency }) => {
+const EditAgency = (props) => {
+  const { agency } = props;
   const [agencyData, setAgencyData] = useState({
     name: {
       configOptions: {
@@ -108,17 +109,17 @@ const EditAgency = ({ agency }) => {
 
   const inputImageHandler = (value, isValid) => {
     if (isValid) {
-    }
-    setImage({
-      value,
-      isValid,
-    });
+      setImage({
+        value,
+        isValid,
+      });
 
-    const fileReader = new FileReader();
-    fileReader.onload = () => {
-      setPreviewUrl(fileReader.result);
-    };
-    fileReader.readAsDataURL(value);
+      const fileReader = new FileReader();
+      fileReader.onload = () => {
+        setPreviewUrl(fileReader.result);
+      };
+      fileReader.readAsDataURL(value);
+    }
   };
 
   let formData = [];
@@ -165,6 +166,7 @@ const EditAgency = ({ agency }) => {
         formData
       );
       setLoading();
+      props.updateAgency();
     } catch (err) {
       setError(err.response.data);
       setLoading();

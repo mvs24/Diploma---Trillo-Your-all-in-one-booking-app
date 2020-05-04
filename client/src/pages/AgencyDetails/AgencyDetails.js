@@ -1,20 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { NavLink, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
 import ErrorModal from '../../shared/components/UI/ErrorModal';
 import { IconContext } from 'react-icons';
-import { GoLocation } from 'react-icons/go';
-import { MdDateRange } from 'react-icons/md';
-import {
-  IoIosStarOutline,
-  IoIosArrowBack,
-  IoIosArrowForward,
-} from 'react-icons/io';
-import { MdPeopleOutline, MdAccessTime } from 'react-icons/md';
-import { FaLevelUpAlt, FaSortNumericUp } from 'react-icons/fa';
-import Button from '../../shared/components/Button/Button';
+import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import './AgencyDetails.css';
 import TourItem from '../../components/TourItem/TourItem';
 import Agency from '../../components/Agency/Agency';
@@ -29,8 +20,19 @@ const AgencyDetails = (props) => {
   const [finishedTours, setFinishedTours] = useState([]);
   const [myWishlistIds, setMyWishlistIds] = useState();
 
+  const page1 = useRef(null);
+
+  const [startPage, setStartPage] = useState(0);
+  const [endPage, setEndPage] = useState(4);
+
   const { location, wishlist } = props;
   const { agencyId } = props.agencyId || props.match.params;
+  useEffect(() => {
+    const page = props.location.search.split('=')[1];
+
+    setStartPage(page * 1 - 1);
+    setEndPage(page * 1 + 3);
+  }, []);
 
   useEffect(() => {
     if (props.wishlist) {
@@ -42,7 +44,47 @@ const AgencyDetails = (props) => {
   const end = page * resPerPage;
 
   useEffect(() => {
-    setPage(props.location.search.split('=')[1] * 1);
+    const currentPage = props.location.search.split('=')[1] * 1;
+
+    if (agency && currentPage > Math.ceil(agency.tours.length / resPerPage))
+      return;
+
+    setPage(currentPage);
+
+    if (agency) {
+      if (currentPage > Math.ceil(endPage - 2)) {
+        if (currentPage === endPage) {
+          setStartPage(
+            (prevStart) => prevStart + Math.ceil((endPage - startPage) / 2)
+          );
+          setEndPage(
+            (prevEnd) => prevEnd + Math.ceil((endPage - startPage) / 2)
+          );
+        } else {
+          setStartPage(
+            (prevStart) => prevStart + Math.ceil((endPage - startPage) / 2) - 1
+          );
+          setEndPage(
+            (prevEnd) => prevEnd + Math.ceil((endPage - startPage) / 2) - 1
+          );
+        }
+      } else {
+        if (startPage >= 1) {
+          if (currentPage === 2) {
+            setStartPage((prevStart) => prevStart - 1);
+            setEndPage((prevEnd) => prevEnd - 1);
+          } else {
+            if (currentPage === startPage + 1) {
+              setStartPage((prevStart) => prevStart - 2);
+              setEndPage((prevEnd) => prevEnd - 2);
+            } else {
+              setStartPage((prevStart) => prevStart - 1);
+              setEndPage((prevEnd) => prevEnd - 1);
+            }
+          }
+        }
+      }
+    }
   }, [location]);
 
   useEffect(() => {
@@ -71,12 +113,6 @@ const AgencyDetails = (props) => {
 
   const goToPrevPage = () => {
     if (props.location.search.split('=')[1] > 1) {
-      Array.from(document.querySelectorAll('.active')).forEach((el) =>
-        el.classList.remove('active')
-      );
-      document
-        .querySelector(`#page-${props.location.search.split('=')[1] - 1}`)
-        .classList.add('active');
       props.history.replace(
         `${props.match.url}?page=${props.location.search.split('=')[1] * 1 - 1}`
       );
@@ -86,36 +122,33 @@ const AgencyDetails = (props) => {
   const goToNextPage = () => {
     const totalPages = Math.round(agency.tours.length / resPerPage) + 1;
 
+    if (
+      props.location.search.split('=')[1] * 1 + 1 >
+      Math.ceil(agency.tours.length / resPerPage)
+    )
+      return;
+
     if (props.location.search.split('=')[1] < totalPages) {
-      Array.from(document.querySelectorAll('.active')).forEach((el) =>
-        el.classList.remove('active')
-      );
-      document
-        .querySelector(`#page-${props.location.search.split('=')[1] * 1 + 1}`)
-        .classList.add('active');
       props.history.replace(
         `${props.match.url}?page=${props.location.search.split('=')[1] * 1 + 1}`
       );
     }
   };
 
-  const linkHandler = (e) => {
-    Array.from(document.querySelectorAll('.active')).forEach((el) =>
-      el.classList.remove('active')
-    );
-    e.target.classList.add('active');
-    // setPage(props.location.search.split('=')[1] * 1);
-  };
-
   let pageContent = [];
-  for (let i = 1; i <= Math.round(agency.tours.length / resPerPage) + 1; i++) {
+  for (let i = startPage + 1; i <= endPage; i++) {
     if (Math.round(agency.tours.length / resPerPage) <= 1) {
       pageContent.push(
         <div>
           <Link
             id={`page-${i}`}
-            onClick={linkHandler}
-            className={`page__number`}
+            className={` ${
+              i > Math.ceil(agency.tours.length / resPerPage) * 1
+                ? 'disabled'
+                : ''
+            } ${
+              props.location.search.split('=')[1] == i ? 'active' : ''
+            } page__number`}
             to={`${props.match.url}?page=${i}`}
           >
             {i}
@@ -123,9 +156,9 @@ const AgencyDetails = (props) => {
         </div>
       );
     } else {
-      if (i === 1) {
+      if (i === startPage + 1) {
         pageContent.push(
-          <div className="span__center">
+          <div className={`span__center`}>
             <span
               style={{ cursor: 'pointer' }}
               onClick={goToPrevPage}
@@ -139,21 +172,32 @@ const AgencyDetails = (props) => {
             </span>
             <Link
               id={`page-${i}`}
-              onClick={linkHandler}
-              className={`page__number`}
+              className={`${
+                i > Math.ceil(agency.tours.length / resPerPage) * 1
+                  ? 'disabled'
+                  : ''
+              } ${
+                props.location.search.split('=')[1] == i ? 'active' : ''
+              } page__number`}
               to={`${props.match.url}?page=${i}`}
             >
               {i}
             </Link>
           </div>
         );
-      } else if (i === Math.round(agency.tours.length / resPerPage) + 1) {
+      } else if (i === endPage) {
         pageContent.push(
           <div className="span__center">
             <Link
+              ref={page1}
               id={`page-${i}`}
-              onClick={linkHandler}
-              className={`page__number`}
+              className={` ${
+                i > Math.ceil(agency.tours.length / resPerPage) * 1
+                  ? 'disabled'
+                  : ''
+              } ${
+                props.location.search.split('=')[1] == i ? 'active' : ''
+              } page__number`}
               to={`${props.match.url}?page=${i}`}
             >
               {i}
@@ -176,8 +220,13 @@ const AgencyDetails = (props) => {
           <div>
             <Link
               id={`page-${i}`}
-              onClick={linkHandler}
-              className={`page__number page-${i}`}
+              className={` ${
+                i > Math.ceil(agency.tours.length / resPerPage) * 1
+                  ? 'disabled'
+                  : ''
+              } ${
+                props.location.search.split('=')[1] == i ? 'active' : ''
+              } page__number`}
               to={`${props.match.url}?page=${i}`}
             >
               {i}
@@ -197,6 +246,7 @@ const AgencyDetails = (props) => {
           {error}
         </ErrorModal>
       )}
+      {loading && <LoadingSpinner asOverlay />}
       <div className="agency__details--container">
         <Agency agency={agency} />
         <div className="agency__tours">

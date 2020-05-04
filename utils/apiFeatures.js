@@ -6,14 +6,14 @@ class ApiFeatures {
 
   filter = () => {
     let queryObj = { ...this.queryString };
-    const exludedFields = ["sort", "page", "fields", "limit"];
+    const exludedFields = ['sort', 'page', 'fields', 'limit'];
 
-    exludedFields.forEach(el => {
+    exludedFields.forEach((el) => {
       delete queryObj[el];
     });
 
     let queryStr = JSON.stringify(queryObj);
-    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, val => `$${val}`);
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (val) => `$${val}`);
 
     this.query = this.query.find(JSON.parse(queryStr));
 
@@ -21,21 +21,21 @@ class ApiFeatures {
   };
 
   filterCategory = () => {
-      if (this.queryString.difficulty) {
-    const difficulties =  this.queryString.difficulty.split(',');
-    
-      this.query = this.query.find({difficulty: {$in: difficulties}})
+    if (this.queryString.difficulty) {
+      const difficulties = this.queryString.difficulty.split(',');
+
+      this.query = this.query.find({ difficulty: { $in: difficulties } });
     }
     return this;
-  }
+  };
 
   sort = () => {
     if (this.queryString.sort) {
-      const sortBy = this.queryString.sort.split(",").join(" ");
+      const sortBy = this.queryString.sort.split(',').join(' ');
       this.query = this.query.sort(sortBy);
     } else {
       // Sort by the most popular one!
-      this.query = this.query.sort("numOptionsBought ratingsAverage");
+      this.query = this.query.sort('numOptionsBought ratingsAverage');
     }
 
     return this;
@@ -43,7 +43,7 @@ class ApiFeatures {
 
   select = () => {
     if (this.queryString.fields) {
-      const selectBy = this.queryString.fields.split(",").join(" ");
+      const selectBy = this.queryString.fields.split(',').join(' ');
       this.query = this.query.select(selectBy);
     }
 

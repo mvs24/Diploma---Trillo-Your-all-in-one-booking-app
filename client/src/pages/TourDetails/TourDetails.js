@@ -23,7 +23,7 @@ import Input from '../../shared/components/Input/Input';
 const TourDetails = React.memo((props) => {
   const [tour, setTour] = useState(null);
   const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [added, setAdded] = useState(false);
   const [adding, setAdding] = useState(false);
   const [page, setPage] = useState(1);
@@ -60,6 +60,7 @@ const TourDetails = React.memo((props) => {
         setLoading(false);
         setMyBookings(res.data.data);
       } catch (err) {
+        setLoading(false)
         setError(err.response.data.message);
       }
     };
@@ -89,9 +90,9 @@ const TourDetails = React.memo((props) => {
         setLoading(false);
         setTour(res.data.data);
         setOwner(agencyRes.data.data.user);
-      } catch (err) {
-        setError(err.response.data.message);
+      } catch (err) { 
         setLoading(false);
+        setError(err.response.data.message);
       }
     };
 
@@ -175,8 +176,14 @@ const TourDetails = React.memo((props) => {
     }
   };
 
+  if (loading) return <LoadingSpinner asOverlay/>
+
+  if (error) return <ErrorModal show onClear={() => {setError(false)}}>
+          {error}
+        </ErrorModal> 
+
   if (!tour) {
-    return <LoadingSpinner asOverlay />;
+    return <LoadingSpinner asOverlay/>
   }
 
   let addContent = <span>ADD TO CART</span>;
@@ -277,14 +284,12 @@ const TourDetails = React.memo((props) => {
     );
   }
 
-  console.log(finishedTours);
-
   return (
     <div className="tour__container">
       {error && (
         <ErrorModal show onClear={() => setError(false)}>
           {error}
-        </ErrorModal>
+        </ErrorModal> 
       )}
       <div className="tour__bcg">
         <img src={`http://localhost:5000/${tour.imageCover}`} />

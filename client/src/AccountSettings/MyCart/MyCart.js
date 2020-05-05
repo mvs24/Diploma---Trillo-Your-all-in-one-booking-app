@@ -10,12 +10,13 @@ const MyCart = (props) => {
   const { cartTour, wishlist, isAuthenticated } = props;
   const start = 0;
   const [end, setEnd] = useState(6);
-  if (!isAuthenticated) return null;
+  if (!isAuthenticated) return <LoadingSpinner asOverlay />;
 
+  if (props.loading) return <LoadingSpinner asOverlay />;
   if (cartTour.length === 0)
     return (
-      <div className="wish__data">
-        <h1>No Tour found in your cart!</h1>
+      <div className="wish__data__heading">
+        <h1 className="noFlightHeading">No Tour found in your cart!</h1>
       </div>
     );
 
@@ -31,7 +32,6 @@ const MyCart = (props) => {
         })}
       </div>
       <div className="searchBtn--grid">
-        {' '}
         <Button
           type="blue"
           disabled={end >= cartTour.length}
@@ -48,6 +48,7 @@ const mapStateToProps = (state) => ({
   cartTour: state.user.cartTour,
   isAuthenticated: state.user.isAuthenticated,
   wishlist: state.user.wishlist,
+  loading: state.user.loading,
 });
 
 export default connect(mapStateToProps, { getToursInCart })(MyCart);

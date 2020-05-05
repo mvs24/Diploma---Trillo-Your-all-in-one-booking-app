@@ -2,3 +2,14 @@
   background: #faf9f9;
   padding: 4rem;
 }
+
+.noFlightHeading {
+  text-align: center;
+  font-size: 3rem;
+  text-transform: uppercase;
+  background-image: linear-gradient(to right bottom, #5643fa, #ffb900);
+  color: transparent;
+  background-clip: text;
+  display: block;
+  width: 100%;
+}

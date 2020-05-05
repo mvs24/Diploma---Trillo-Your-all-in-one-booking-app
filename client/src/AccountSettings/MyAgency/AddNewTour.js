@@ -526,7 +526,7 @@ const AddNewTour = (props) => {
       <div>
         <input
           className="input- location"
-          placeholder={`Location (${i + 1})`}
+          placeholder={`Location(${i + 1}) Geo coordinates expl.(12.3,-3.12)`}
           type="text"
         />
         <input
@@ -668,7 +668,7 @@ const AddNewTour = (props) => {
             <input
               className="input- coordinates"
               type="text"
-              placeholder="Geographical Coordinates e.g (41.341530, 19.803328)"
+              placeholder="Geographical Coordinates e.g (41.3410,19.81)"
             />
             <input
               className="input- address"
@@ -688,9 +688,10 @@ const AddNewTour = (props) => {
                 className="add__tour--link"
                 href="https://www.google.com/maps"
               >
-                Don't know how to set the Latitude and Longitude of a plce?
+                Don't know how to set the Latitude and Longitude of a place?
                 Click on the location and get the coordinates on this format
-                (41.341530, 19.803328)
+                (Lat,Lng)->(21.530,-11.83) Please do not include any white
+                space...
               </a>
             </div>
           </Modal>
@@ -706,6 +707,18 @@ const AddNewTour = (props) => {
             <Button type="success" clicked={confirmLocationsHandler}>
               Confirm your Locations
             </Button>
+            <div>
+              <a
+                target="blank"
+                className="add__tour--link"
+                href="https://www.google.com/maps"
+              >
+                Don't know how to set the Latitude and Longitude of a place?
+                Click on the location and get the coordinates on this format
+                (Lat,Lng)->(21.530,-11.83) Please do not include any white
+                space...
+              </a>
+            </div>
           </Modal>
         )}
         <h1>ADD A NEW TOUR</h1>

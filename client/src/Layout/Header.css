@@ -5,6 +5,14 @@
   border-bottom: 2px solid #ccc;
   width: 100%;
 }
+.heading__trillo {
+  font-size: 1.8rem;
+  margin: 0 2.2rem 0 0.7rem;
+  text-transform: uppercase;
+  background-image: linear-gradient(to right bottom, #5643fa, #ffb900);
+  color: transparent;
+  background-clip: text;
+}
 
 @media (max-width: 900px) {
   .searchForm {
@@ -133,9 +141,15 @@
 
 .search__icon {
   margin-left: -3.5rem;
-  cursor: pointer;
+
   color: #333;
   font-size: 2.1rem;
+}
+.pointer {
+  cursor: pointer;
+}
+.not-allowed {
+  cursor: not-allowed;
 }
 
 .impact {

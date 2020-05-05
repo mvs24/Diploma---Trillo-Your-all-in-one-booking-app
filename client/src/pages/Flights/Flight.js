@@ -507,7 +507,7 @@ const Flight = React.memo((props) => {
         <p>Agency: {agency.name}</p>
         <p className="flight__rating__container">
           {' '}
-          <span>Average Rating: </span>
+          <span>Rating: </span>
           <span>
             {' '}
             {stars.map((star) => star)}

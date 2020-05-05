@@ -90,7 +90,29 @@ export const loginUser = (userData) => async (dispatch) => {
     });
     return false;
   }
-};
+}; 
+
+// export const changePassword = () => async dispatch => {
+//   try {
+//     dispatch({ type: SET_CURRENT_USER_LOADING });
+//     const response = await axios.get('/api/v1/users/loggedInUser');
+
+//      setHeaders(response.data.token);
+//     localStorage.setItem('jwt', response.data.token);
+
+ 
+//     dispatch({ type: SET_CURRENT_USER, payload: response.data.data });
+//     return true;
+//   } catch (err) {
+//     dispatch({
+//       type: SET_CURRENT_USER_ERROR,
+//       errormsg: err.response.data.message,
+//     });
+//     return false;
+//   }
+// }
+
+
 
 export const setCurrentUser = () => async (dispatch) => {
   try {

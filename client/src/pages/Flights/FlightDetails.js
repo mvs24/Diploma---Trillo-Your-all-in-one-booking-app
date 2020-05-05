@@ -25,7 +25,7 @@ const FlightDetails = React.memo((props) => {
   const [myFlights, setMyFlights] = useState();
   const [selectedOption, setSelectedOption] = useState();
   const [agency, setAgency] = useState();
-  const [loading, setLoading] = useState();
+  const [loading, setLoading] = useState(true);
   const [openConfirmTickets, setOpenConfirmTickets] = useState();
   const [processBooking, setProcessBooking] = useState();
   const [booked, setBooked] = useState();
@@ -165,7 +165,22 @@ const FlightDetails = React.memo((props) => {
     }
   };
 
-  if (!agency) return <LoadingSpinner asOverlay />;
+  if (loading) return <LoadingSpinner asOverlay />;
+  if (error)
+    return (
+      <ErrorModal
+        show
+        onClear={() => {
+          setError();
+          setLoading();
+        }}
+      >
+        {error}
+      </ErrorModal>
+    );
+
+  if (!flight || !agency)
+    return <h1 style={{ textAlign: 'center' }}>No Flight found</h1>;
 
   let ownerContent = null;
   if (isAuthenticated && agency.user === props.user.id) {

@@ -50,13 +50,15 @@ exports.getCheckoutSession = asyncWrapper(async (req, res, next) => {
 
   if (!req.body.numPersons)
     return next(new AppError('Please specify number of persons', 400));
+   
 
+   
   const name = flight.returnDate
-    ? `Depart: ${moment(flight.depart, 'YYYY-MM-DD HH:mm')}  - Return: ${moment(
+    ? `Depart: ${moment(flight.depart, 'YYYY-MM-DD')}  - Return: ${moment(
         flight.returnDate,
-        'YYYY-MM-DD HH:mm'
+        'YYYY-MM-DD'
       )}`
-    : `Depart: ${moment(flight.depart, 'YYYY-MM-DD HH:mm')}`;
+    : `Depart: ${moment(flight.depart, 'YYYY-MM-DD ')}`;
 
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],

@@ -28,6 +28,9 @@ import FlightDetails from './pages/Flights/FlightDetails';
 import AllFlights from './pages/AllFlights/AllFlights';
 import PrivateRoute from './utils/PrivateRoute';
 import NotFound from './pages/NotFound/NotFound';
+import Footer from './components/Footer/Footer'
+import AboutUs from './pages/AboutUs/AboutUs'
+
 
 function App(props) {
   const setUserData = async () => {
@@ -41,6 +44,7 @@ function App(props) {
 
   return (
     <BrowserRouter>
+
       <Layout>
         <Switch>
           <Route path="/tours/:tourId" exact component={TourDetails} />
@@ -76,9 +80,12 @@ function App(props) {
           />
           <Route path="/flights/:flightId" exact component={FlightDetails} />
           <Route path="/all-flights" exact component={AllFlights} />
+          <Route path="/about-us" exact component={AboutUs} />
           <Route component={NotFound} />
         </Switch>
+    
       </Layout>
+   
 
       <Route
         path="/success/tours/:tourId/users/:userId/price/:price"

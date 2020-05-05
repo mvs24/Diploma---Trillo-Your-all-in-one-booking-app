@@ -28,7 +28,7 @@ const getToursBy = (sortBy) =>
     res.status(200).json({
       status: 'success',
       results: wantedTours.length,
-      data: wantedTours,
+      data: wantedTours, 
     });
   });
 
@@ -136,7 +136,7 @@ exports.getFinishedTours = getTours('finished');
 exports.getAllTours = getTours('future');
 
 exports.getTopFiveTours = getToursBy('-ratingsAverage');
-exports.getMostPopularTours = getToursBy('-bought');
+exports.getMostPopularTours = getToursBy('-numBought');
 
 exports.getTourStatistics = asyncWrapper(async (req, res, next) => {
   const stats = await Tour.aggregate([
@@ -216,6 +216,8 @@ exports.getReviewStats = asyncWrapper(async (req, res, next) => {
 exports.discountTour = asyncWrapper(async (req, res, next) => {
   const tour = await Tour.findById(req.params.id);
   const agency = await Agency.findById(tour.agency.toString());
+
+  if (!tour)  return next(new AppError('No tour found with that id', 400));
 
   if (!req.body.priceDiscount)
     return next(new AppError('Please specify a price discount', 400));

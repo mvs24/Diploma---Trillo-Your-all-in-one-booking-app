@@ -1,8 +1,5 @@
 .home {
-  width: 100vw;
-  height: 85vh;
-
-  position: relative;
+  width: 100%;
 }
 .bcg {
   object-fit: cover;
@@ -13,7 +10,8 @@
 
 .bcg img {
   width: 100%;
-  height: 100%;
+  height: 85vh;
+  position: relative;
 }
 
 .bcg__container {

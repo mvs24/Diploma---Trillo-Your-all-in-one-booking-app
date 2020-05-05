@@ -13,17 +13,17 @@ const MyWishlist = (props) => {
 
   if (!isAuthenticated) return null;
 
-  if (!wishlist) return <LoadingSpinner asOverlay />;
+  if (!wishlist || props.loading) return <LoadingSpinner asOverlay />;
 
   const wishlistData = wishlist.data;
   if (wishlistData.length === 0)
     return (
-      <div className="wish__data">
-        <h1>No Tour found in your wishlist!</h1>
+      <div className="wish__data__heading">
+        <h1 className='noFlightHeading'> No Tour found in your wishlist!</h1>
       </div>
     );
 
-  const showMoreHandler = () => {
+  const showMoreHandler = () => { 
     setEnd((prev) => prev + 6);
   };
 
@@ -54,6 +54,7 @@ const MyWishlist = (props) => {
 const mapStateToProps = (state) => ({
   wishlist: state.user.wishlist,
   isAuthenticated: state.user.isAuthenticated,
+  loading: state.user.loading
 });
 
 export default connect(mapStateToProps)(MyWishlist);

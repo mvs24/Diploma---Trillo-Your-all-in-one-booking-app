@@ -1,5 +1,5 @@
 .tour__container {
-  width: 100vw;
+  width: 100%;
 }
 .tour__bcg {
   width: 100%;
@@ -20,7 +20,7 @@
   text-align: center;
   color: #fff;
   position: absolute;
-  top: 40%;
+  top: 40%; 
   left: 50%;
   transform: translate(-50%, -50%);
   width: 25%;
@@ -33,7 +33,7 @@
   box-decoration-break: clone;
   position: relative;
   background-image: linear-gradient(
-    to right bottom,
+    to right bottom, 
     rgb(85, 197, 122, 0.9),
     rgb(126, 213, 111)
   );

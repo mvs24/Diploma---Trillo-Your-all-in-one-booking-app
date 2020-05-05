@@ -1,0 +1,19 @@
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3rem;
+}
+.copyright {
+  display: flex;
+  align-items: center;
+}
+.about__us {
+  display: flex;
+  align-items: center;
+  font-size: 1.4rem;
+}
+.about__us > * {
+  margin: 0 2rem;
+  cursor: pointer;
+}

@@ -8,7 +8,6 @@ const SuccessFlightBooking = (props) => {
       flight: props.match.params.flightId,
       numPersons: props.match.params.numPersons,
     };
-
     axios
       .post('/api/v1/bookings/flights/' + data.flight, {
         numPersons: data.numPersons,
@@ -17,7 +16,7 @@ const SuccessFlightBooking = (props) => {
       .catch((err) => console.log(err.response.data));
   }, []);
 
-  return <Redirect to="/" />;
+  return <Redirect to="/my-flights" />;
 };
 
 export default SuccessFlightBooking;

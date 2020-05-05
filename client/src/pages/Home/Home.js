@@ -11,9 +11,8 @@ const Home = React.memo((props) => {
   const discoverDreamTour = () => {
     history.push('/discover-dream-tour?page=1');
   };
-
   return (
-    <div className="home">
+    <div className="home"> 
       <div className="bcg">
         <img src={TourImg} alt="img" className="img__bcg" />
         <div className="bcg__container">

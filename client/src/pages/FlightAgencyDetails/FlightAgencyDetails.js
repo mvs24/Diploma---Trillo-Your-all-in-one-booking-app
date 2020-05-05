@@ -2,16 +2,20 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import ErrorModal from '../../shared/components/UI/ErrorModal';
+import Button from '../../shared/components/Button/Button';
+
 import Agency from '../../components/Agency/Agency';
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
 import Flight from '../../pages/Flights/Flight';
 
 const FlightAgencyDetails = (props) => {
   const [agency, setAgency] = useState();
-  const [loading, setLoading] = useState();
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
   const [myFlights, setMyFlights] = useState();
   const [myFlightsIds, setMyFlightsIds] = useState();
+  const start = 0;
+  const [end, setEnd] = useState(4);
   const { isAuthenticated } = props;
 
   useEffect(() => {
@@ -39,6 +43,7 @@ const FlightAgencyDetails = (props) => {
         setLoading(false);
         setMyFlights(res.data.data);
       } catch (err) {
+        setLoading();
         setError(err.response.data.message);
       }
     };
@@ -57,8 +62,20 @@ const FlightAgencyDetails = (props) => {
     }
   }, [myFlights]);
 
-  if (!agency) return <LoadingSpinner asOverlay />;
-  if (isAuthenticated && !myFlightsIds) return <LoadingSpinner />;
+  if (loading) return <LoadingSpinner asOverlay />;
+  if (error)
+    return (
+      <ErrorModal show onClear={() => setError(false)}>
+        {error}
+      </ErrorModal>
+    );
+
+  if (!agency) return <h1>No Agency Found!</h1>;
+  if (isAuthenticated && !myFlightsIds) return <LoadingSpinner asOverlay />;
+
+  const showMoreHandler = () => {
+    setEnd((prev) => prev + 4);
+  };
 
   return (
     <>
@@ -70,14 +87,23 @@ const FlightAgencyDetails = (props) => {
       )}
       <div className="agency__details--container">
         <Agency agency={agency} flight />
-        <div>
-          {agency.flights.map((flight) => (
+        <div className="flightsAgencyCnt">
+          {agency.flights.slice(start, end).map((flight) => (
             <Flight
               booked={isAuthenticated && myFlightsIds.includes(flight._id)}
               white
               flight={flight}
             />
           ))}
+          <div className="searchBtn--grid">
+            <Button
+              type="pink"
+              disabled={end >= agency.flights.length}
+              clicked={showMoreHandler}
+            >
+              Show More
+            </Button>
+          </div>
         </div>
       </div>
     </>

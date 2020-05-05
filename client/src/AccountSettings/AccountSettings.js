@@ -24,6 +24,7 @@ import {
   logoutUser,
 } from '../store/actions/userActions';
 import ErrorModal from '../shared/components/UI/ErrorModal';
+import Modal from '../shared/components/UI/Modal';
 
 const AccountSettings = (props) => {
   const [updatedData, setUpdatedData] = useState({
@@ -119,6 +120,7 @@ const AccountSettings = (props) => {
   const [passwordFormValid, setPasswordFormValid] = useState(true);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [openPasswordChangedModal, setOpenPasswordChangedModal] = useState();
   const history = useHistory();
   const { user } = props;
 
@@ -245,11 +247,40 @@ const AccountSettings = (props) => {
     };
     try {
       setLoading(true);
-      await axios.post('/api/v1/users/updatePassword', data);
+      const res = await axios.post('/api/v1/users/updatePassword', data);
+      // props.changePassword()
       setLoading(false);
+      setOpenPasswordChangedModal(true);
+      setPasswordData((prev) => {
+        return {
+          ...prev,
+          passwordCurrent: {
+            ...prev.passwordCurrent,
+            value: '',
+            valid: false,
+            touched: false,
+          },
+          password: {
+            ...prev.password,
+            value: '',
+            valid: false,
+            touched: false,
+          },
+          passwordConfirm: {
+            ...prev.passwordConfirm,
+            value: '',
+            valid: false,
+            touched: false,
+          },
+        };
+      });
     } catch (err) {
       setLoading(false);
-      setError(err.response.data.message);
+      setError(
+        err.response.data.message
+          ? err.response.data.message
+          : 'Please complete the fields correctly!'
+      );
     }
   };
 
@@ -263,6 +294,12 @@ const AccountSettings = (props) => {
   };
 
   if (!user) return <LoadingSpinner asOverlay />;
+  if (error)
+    return (
+      <ErrorModal show onClear={() => setError(false)}>
+        {error}
+      </ErrorModal>
+    );
 
   return (
     <div className="settings__container">
@@ -271,6 +308,18 @@ const AccountSettings = (props) => {
         <ErrorModal show onClear={() => setError(false)}>
           {error}
         </ErrorModal>
+      )}
+      {openPasswordChangedModal && (
+        <Modal
+          header="Success"
+          show
+          onCancel={() => setOpenPasswordChangedModal()}
+        >
+          <h2>Password changed successfully</h2>
+          <Button type="success" clicked={() => setOpenPasswordChangedModal()}>
+            OK
+          </Button>
+        </Modal>
       )}
       {props.error && (
         <ErrorModal show onClear={props.deleteError}>

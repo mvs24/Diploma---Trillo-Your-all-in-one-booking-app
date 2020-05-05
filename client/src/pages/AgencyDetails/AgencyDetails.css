@@ -117,7 +117,7 @@
   display: block;
   width: 100%;
 }
-.disabled {
+.disabledLink {
   pointer-events: none;
   cursor: not-allowed;
 }

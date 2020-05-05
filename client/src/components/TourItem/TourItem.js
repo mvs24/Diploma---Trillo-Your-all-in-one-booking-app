@@ -320,6 +320,8 @@ const TourItem = React.memo((props) => {
       `/api/v1/tours/${tour._id}/reviews`,
       reviewData
     );
+    const tourRes = await axios.get(`/api/v1/tours/${res.data.data.tour}`);
+    setTour(tourRes.data.data);
     setLoading(false);
     setMyRating(reviewData.rating);
     setReviewed(true);

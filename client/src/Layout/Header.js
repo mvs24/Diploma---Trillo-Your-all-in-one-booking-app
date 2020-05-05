@@ -416,9 +416,10 @@ const Header = React.memo((props) => {
 
   const searchHandler = (e) => {
     e.preventDefault();
-
-    props.history.push(`/search/${searchInput}`);
-    setSearchInput('');
+    if (searchInput !== '') {
+      props.history.push(`/search/${searchInput}`);
+      setSearchInput('');
+    }
   };
 
   const forgotEmailHandler = async () => {
@@ -653,7 +654,7 @@ const Header = React.memo((props) => {
         <h2
           style={{ cursor: 'pointer' }}
           onClick={() => props.history.push('/')}
-          className="heading-2"
+          className="heading__trillo"
         >
           Trillo
         </h2>
@@ -671,7 +672,13 @@ const Header = React.memo((props) => {
             className="search"
             placeholder="Search anything"
           />
-          <IconContext.Provider value={{ className: 'icon search__icon' }}>
+          <IconContext.Provider
+            value={{
+              className: `${
+                searchInput === '' ? 'not-allowed' : 'pointer'
+              } icon search__icon`,
+            }}
+          >
             <IoIosSearch onClick={searchHandler} />
           </IconContext.Provider>
         </form>

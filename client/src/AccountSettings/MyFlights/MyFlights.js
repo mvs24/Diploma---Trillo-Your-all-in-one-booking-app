@@ -42,8 +42,8 @@ const MyBookings = (props) => {
 
   if (myFlights.length === 0)
     return (
-      <div className="wish__data">
-        <h1>You have not booked a flight yet!</h1>
+      <div className="wish__data__heading">
+        <h1 className="noFlightHeading">You have not booked a flight yet!</h1>
       </div>
     );
 
@@ -67,7 +67,6 @@ const MyBookings = (props) => {
         ))}
       </div>
       <div className="searchBtn--grid">
-        {' '}
         <Button
           type="pink"
           disabled={end >= myFlights.length}

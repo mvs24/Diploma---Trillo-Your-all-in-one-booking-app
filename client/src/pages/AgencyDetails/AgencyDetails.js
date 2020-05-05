@@ -12,7 +12,7 @@ import Agency from '../../components/Agency/Agency';
 
 const AgencyDetails = (props) => {
   const [agency, setAgency] = useState();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [page, setPage] = useState(1);
   const [resPerPage, setResPerPage] = useState(3);
@@ -25,7 +25,7 @@ const AgencyDetails = (props) => {
   const [startPage, setStartPage] = useState(0);
   const [endPage, setEndPage] = useState(4);
 
-  const { location, wishlist } = props;
+  const { location, wishlist, isAuthenticated } = props;
   const { agencyId } = props.agencyId || props.match.params;
   useEffect(() => {
     const page = props.location.search.split('=')[1];
@@ -35,10 +35,10 @@ const AgencyDetails = (props) => {
   }, []);
 
   useEffect(() => {
-    if (props.wishlist) {
+    if (isAuthenticated && props.wishlist) {
       setMyWishlistIds(props.wishlist.data.map((el) => el.tour));
     }
-  }, [wishlist]);
+  }, [isAuthenticated, wishlist]);
 
   const start = (page - 1) * resPerPage;
   const end = page * resPerPage;
@@ -108,8 +108,15 @@ const AgencyDetails = (props) => {
     getAgency();
   }, []);
 
-  if (!myWishlistIds) return <LoadingSpinner asOverlay />;
-  if (!agency) return <LoadingSpinner asOverlay />;
+  if (loading) return <LoadingSpinner asOverlay />;
+  if (error)
+    return (
+      <ErrorModal show onClear={() => setError(false)}>
+        {error}
+      </ErrorModal>
+    );
+  if (isAuthenticated && !myWishlistIds) return <LoadingSpinner asOverlay />;
+  if (!agency) return <h1>No Agency found!</h1>;
 
   const goToPrevPage = () => {
     if (props.location.search.split('=')[1] > 1) {
@@ -144,7 +151,7 @@ const AgencyDetails = (props) => {
             id={`page-${i}`}
             className={` ${
               i > Math.ceil(agency.tours.length / resPerPage) * 1
-                ? 'disabled'
+                ? 'disabledLink'
                 : ''
             } ${
               props.location.search.split('=')[1] == i ? 'active' : ''
@@ -174,7 +181,7 @@ const AgencyDetails = (props) => {
               id={`page-${i}`}
               className={`${
                 i > Math.ceil(agency.tours.length / resPerPage) * 1
-                  ? 'disabled'
+                  ? 'disabledLink'
                   : ''
               } ${
                 props.location.search.split('=')[1] == i ? 'active' : ''
@@ -193,7 +200,7 @@ const AgencyDetails = (props) => {
               id={`page-${i}`}
               className={` ${
                 i > Math.ceil(agency.tours.length / resPerPage) * 1
-                  ? 'disabled'
+                  ? 'disabledLink'
                   : ''
               } ${
                 props.location.search.split('=')[1] == i ? 'active' : ''
@@ -222,7 +229,7 @@ const AgencyDetails = (props) => {
               id={`page-${i}`}
               className={` ${
                 i > Math.ceil(agency.tours.length / resPerPage) * 1
-                  ? 'disabled'
+                  ? 'disabledLink'
                   : ''
               } ${
                 props.location.search.split('=')[1] == i ? 'active' : ''
@@ -255,7 +262,9 @@ const AgencyDetails = (props) => {
             {updatedAgencyTours.map((tour) => (
               <TourItem
                 pageChanged={page}
-                isTourLiked={myWishlistIds.includes(tour._id)}
+                isTourLiked={
+                  isAuthenticated && myWishlistIds.includes(tour._id)
+                }
                 finished={finishedTours.includes(tour._id)}
                 shouldUpdate={shouldUpdate}
                 tour={tour}
@@ -279,6 +288,7 @@ const AgencyDetails = (props) => {
 const mapStateToProps = (state) => {
   return {
     wishlist: state.user.wishlist,
+    isAuthenticated: state.user.isAuthenticated,
   };
 };
 

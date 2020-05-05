@@ -24,7 +24,6 @@ exports.getAgencyStatistics = asyncWrapper(async (req, res, next) => {
     }
   ]);
 
-  console.log(agencyStatistics);
 
   res.status(200).json({
     status: 'success',
@@ -61,7 +60,6 @@ exports.getMostPopularAgencies = asyncWrapper(async (req, res, next) => {
     });
   });
 
-  console.log(names, ids);
 
   res.status(200).json({
     status: 'success',

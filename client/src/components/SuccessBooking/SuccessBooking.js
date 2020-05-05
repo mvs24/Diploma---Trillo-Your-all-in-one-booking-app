@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
+import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import { getMyReviews } from '../../store/actions/userActions';
 
 const SuccessBooking = (props) => {
   useEffect(() => {
@@ -15,7 +17,7 @@ const SuccessBooking = (props) => {
       .catch((err) => console.log(err.response.data));
   }, []);
 
-  return <Redirect to="/" />;
+  return <Redirect to="/my-bookings" />;
 };
 
-export default SuccessBooking;
+export default connect(null, { getMyReviews })(SuccessBooking);

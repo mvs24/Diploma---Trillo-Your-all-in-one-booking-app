@@ -8,7 +8,7 @@ import './MyBookings.css';
 import Button from '../../shared/components/Button/Button';
 
 const MyBookings = (props) => {
-  const [myBookings, setMyBookings] = useState([]);
+  const [myBookings, setMyBookings] = useState();
   const [loading, setLoading] = useState();
   const [error, setError] = useState();
   const start = 0;
@@ -33,6 +33,7 @@ const MyBookings = (props) => {
   }, [isAuthenticated]);
 
   if (loading) return <LoadingSpinner asOverlay />;
+  if (!myBookings) return <LoadingSpinner asOverlay />;
 
   const showMoreHandler = () => {
     setEnd((prev) => prev + 6);
@@ -40,8 +41,8 @@ const MyBookings = (props) => {
 
   if (myBookings.length === 0)
     return (
-      <div className="wish__data">
-        <h1>You have not booked a tour yet!</h1>
+      <div className="wish__data__heading">
+        <h1 className="noFlightHeading">You have not booked a tour yet!</h1>
       </div>
     );
 

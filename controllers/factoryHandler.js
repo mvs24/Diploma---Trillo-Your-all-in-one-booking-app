@@ -26,7 +26,7 @@ exports.getOne = (Model) =>
     const doc = await Model.findById(req.params.id);
 
     if (!doc) {
-      return new AppError('This document does not exists', 404);
+      return next(new AppError('This document does not exists', 404))
     }
 
     if (doc.password) doc.password = undefined;

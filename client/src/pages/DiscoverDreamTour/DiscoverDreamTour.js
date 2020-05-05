@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { useHistory, Link } from 'react-router-dom';
 import Button from '../../shared/components/Button/Button';
 import axios from 'axios';
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
@@ -10,7 +10,6 @@ import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
 import {
   IoIosStarHalf,
   IoMdStar,
-  IoMdStarOutline,
   IoIosStarOutline,
   IoIosArrowBack,
   IoIosArrowForward,
@@ -67,15 +66,66 @@ const DiscoverDreamTour = React.memo((props) => {
   const [page, setPage] = useState(1);
   const [resPerPage, setResPerPage] = useState(4);
 
+  const [startPage, setStartPage] = useState(0);
+  const [endPage, setEndPage] = useState(4);
+
   const [myWishlistIds, setMyWishlistIds] = useState();
 
-  const { location, wishlist } = props;
+  const { location, wishlist, isAuthenticated } = props;
 
   useEffect(() => {
-    if (props.wishlist) {
+    if (isAuthenticated && props.wishlist) {
       setMyWishlistIds(props.wishlist.data.map((el) => el.tour));
     }
-  }, [wishlist]);
+  }, [isAuthenticated, wishlist]);
+
+  useEffect(() => {
+    const currentPage = props.location.search.split('=')[1] * 1;
+
+    if (allTours && currentPage > Math.ceil(allTours.length / resPerPage))
+      return;
+
+    setPage(currentPage);
+
+    if (allTours) {
+      if (currentPage > Math.ceil(endPage - 2)) {
+        if (currentPage === endPage) {
+          setStartPage(
+            (prevStart) => prevStart + Math.ceil((endPage - startPage) / 2)
+          );
+          setEndPage(
+            (prevEnd) => prevEnd + Math.ceil((endPage - startPage) / 2)
+          );
+        } else {
+          setStartPage(
+            (prevStart) => prevStart + Math.ceil((endPage - startPage) / 2) - 1
+          );
+          setEndPage(
+            (prevEnd) => prevEnd + Math.ceil((endPage - startPage) / 2) - 1
+          );
+        }
+      } else {
+        if (startPage >= 1) {
+          if (currentPage === 2) {
+            setStartPage((prevStart) => prevStart - 1);
+            setEndPage((prevEnd) => prevEnd - 1);
+          } else {
+            if (currentPage === startPage + 1) {
+              setStartPage((prevStart) => prevStart - 2);
+              setEndPage((prevEnd) => prevEnd - 2);
+            } else {
+              setStartPage((prevStart) => prevStart - 1);
+              setEndPage((prevEnd) => prevEnd - 1);
+            }
+          }
+        }
+      }
+    }
+  }, [location]);
+
+  const resetPage = () => {
+    props.history.replace(`${props.match.url}?page=${1}`);
+  };
 
   const getAllTours = async () => {
     try {
@@ -93,9 +143,15 @@ const DiscoverDreamTour = React.memo((props) => {
   }, []);
 
   useEffect(() => {
-    setPage(props.location.search.split('=')[1] || 1);
-    setShouldUpdate((prev) => !prev);
-  }, [location]);
+    const page = props.location.search.split('=')[1];
+    setStartPage(page * 1 - 1);
+    setEndPage(page * 1 + 3);
+  }, []);
+
+  // useEffect(() => {
+  //   setPage(props.location.search.split('=')[1] || 1);
+  //   setShouldUpdate((prev) => !prev);
+  // }, [location]);
 
   const getRating = () => {
     let rating;
@@ -144,7 +200,6 @@ const DiscoverDreamTour = React.memo((props) => {
         );
       }
       setAllTours(res.data.data);
-      // setRerender(prev => !prev)
       setLoading(false);
     } catch (err) {
       setError(err.response.data.message);
@@ -182,6 +237,7 @@ const DiscoverDreamTour = React.memo((props) => {
       default:
         getToursSortedBy('-ratingsAverage');
     }
+    resetPage();
   };
 
   const handleDistanceChange = (selectedDistanceOption) => {
@@ -205,7 +261,31 @@ const DiscoverDreamTour = React.memo((props) => {
     let checkedInputs = getCheckedInputs();
     let option;
     if (selectedOption) {
-      option = selectedOption.value;
+      switch (selectedOption.value) {
+        case 'mostReviewed':
+          option = '-ratingsQuantity';
+          break;
+        case 'highestRated':
+          option = '-ratingsAverage';
+          break;
+        case 'lowestPrice':
+          option = 'price';
+          break;
+        case 'highestPrice':
+          option = '-price';
+          break;
+        case 'duration':
+          option = '-duration';
+          break;
+        case 'mostPopular':
+          option = '-numBought';
+          break;
+        case 'maxGroupSize':
+          option = '-maxGroupSize';
+          break;
+        default:
+          option = '-ratingsAverage';
+      }
     } else {
       option = '-ratingsAverage';
     }
@@ -229,6 +309,7 @@ const DiscoverDreamTour = React.memo((props) => {
           `/api/v1/tours?difficulty=${checkedInputs}&ratingsAverage[gte]=${rating}&sort=${option}`
         );
       setAllTours(res.data.data);
+      resetPage();
       setLoading();
     } catch (err) {
       setError(err.response.data.data.message);
@@ -246,18 +327,52 @@ const DiscoverDreamTour = React.memo((props) => {
       if (checkedInputs.length === 0) {
         checkedInputs = ['easy', 'medium', 'difficult'];
       }
+
+      let option;
+      if (selectedOption) {
+        switch (selectedOption.value) {
+          case 'mostReviewed':
+            option = '-ratingsQuantity';
+            break;
+          case 'highestRated':
+            option = '-ratingsAverage';
+            break;
+          case 'lowestPrice':
+            option = 'price';
+            break;
+          case 'highestPrice':
+            option = '-price';
+            break;
+          case 'duration':
+            option = '-duration';
+            break;
+          case 'mostPopular':
+            option = '-numBought';
+            break;
+          case 'maxGroupSize':
+            option = '-maxGroupSize';
+            break;
+          default:
+            option = '-ratingsAverage';
+        }
+      } else {
+        option = '-ratingsAverage';
+      }
+
       try {
         setLoading(true);
         const res = await axios.get(
-          `/api/v1/tours?ratingsAverage[gte]=${radioValue}&difficulty=${checkedInputs}`
+          `/api/v1/tours?ratingsAverage[gte]=${radioValue}&difficulty=${checkedInputs}&sort=${option}`
         );
 
         setAllTours(res.data.data);
         setLoading();
+        resetPage();
       } catch (err) {
         setError(err.response.data.data.message);
       }
     }
+
     setShouldUpdate2((prev) => !prev);
   };
 
@@ -279,6 +394,7 @@ const DiscoverDreamTour = React.memo((props) => {
       setOpenToursWithinModal();
       setCancelBtn(true);
       setLoading(false);
+      resetPage();
     } catch (err) {
       setError(err.response.data.message);
     }
@@ -289,107 +405,131 @@ const DiscoverDreamTour = React.memo((props) => {
     setCancelBtn(true);
   };
 
-  console.log(myWishlistIds);
-
-  if (!myWishlistIds) return <LoadingSpinner asOverlay />;
+  if (isAuthenticated && !myWishlistIds) return <LoadingSpinner asOverlay />;
   if (!allTours) return <LoadingSpinner asOverlay />;
 
   const goToPrevPage = () => {
-    const currentPage = props.location.search.split('=')[1] || 1;
-    if (currentPage > 1) {
-      removeActiveClass();
-      document
-        .querySelector(`#page-${props.location.search.split('=')[1] - 1}`)
-        .classList.add('active');
-      props.history.replace(`${props.match.url}?page=${currentPage * 1 - 1}`);
+    if (props.location.search.split('=')[1] > 1) {
+      props.history.replace(
+        `${props.match.url}?page=${props.location.search.split('=')[1] * 1 - 1}`
+      );
     }
   };
+
   const goToNextPage = () => {
-    const currentPage = props.location.search.split('=')[1] || 1;
-    if (currentPage <= Math.round(allTours.length / resPerPage)) {
-      removeActiveClass();
-      document
-        .querySelector(`#page-${props.location.search.split('=')[1] * 1 + 1}`)
-        .classList.add('active');
+    const totalPages = Math.round(allTours.length / resPerPage) + 1;
 
-      props.history.replace(`${props.match.url}?page=${currentPage * 1 + 1}`);
+    if (
+      props.location.search.split('=')[1] * 1 + 1 >
+      Math.ceil(allTours.length / resPerPage)
+    )
+      return;
+
+    if (props.location.search.split('=')[1] < totalPages) {
+      props.history.replace(
+        `${props.match.url}?page=${props.location.search.split('=')[1] * 1 + 1}`
+      );
     }
-  };
-
-  const removeActiveClass = () => {
-    Array.from(document.querySelectorAll('.active')).forEach((el) =>
-      el.classList.remove('active')
-    );
-  };
-
-  const linkHandler = (e) => {
-    removeActiveClass();
-    e.target.classList.add('active');
   };
 
   let pageContent = [];
-  for (let i = 1; i <= Math.round(allTours.length / resPerPage) + 1; i++) {
-    if (i === 1) {
-      pageContent.push(
-        <div className="span__center">
-          <span
-            style={{ cursor: 'pointer' }}
-            onClick={goToPrevPage}
-            className="span__center"
-          >
-            <IconContext.Provider
-              value={{ className: 'icon__green tour__info--icon full star' }}
-            >
-              <IoIosArrowBack />
-            </IconContext.Provider>
-          </span>
-          <Link
-            onClick={linkHandler}
-            id={`page-${i}`}
-            className={`page__number `}
-            to={`${props.match.url}?page=${i}`}
-          >
-            {i}
-          </Link>
-        </div>
-      );
-    } else if (i === Math.round(allTours.length / resPerPage) + 1) {
-      pageContent.push(
-        <div className="span__center">
-          <Link
-            id={`page-${i}`}
-            onClick={linkHandler}
-            className={`page__number `}
-            to={`${props.match.url}?page=${i}`}
-          >
-            {i}
-          </Link>
-          <span
-            style={{ cursor: 'pointer' }}
-            onClick={goToNextPage}
-            className="span__center"
-          >
-            <IconContext.Provider
-              value={{ className: 'icon__green tour__info--icon full star' }}
-            >
-              <IoIosArrowForward />
-            </IconContext.Provider>
-          </span>
-        </div>
-      );
-    } else {
+  for (let i = startPage + 1; i <= endPage; i++) {
+    if (Math.round(allTours.length / resPerPage) <= 1) {
       pageContent.push(
         <div>
           <Link
             id={`page-${i}`}
-            onClick={linkHandler}
-            className={`page__number`}
+            className={` ${
+              i > Math.ceil(allTours.length / resPerPage) * 1
+                ? 'disabledLink'
+                : ''
+            } ${
+              props.location.search.split('=')[1] == i ? 'active' : ''
+            } page__number`}
             to={`${props.match.url}?page=${i}`}
           >
             {i}
           </Link>
         </div>
       );
+    } else {
+      if (i === startPage + 1) {
+        pageContent.push(
+          <div className={`span__center`}>
+            <span
+              style={{ cursor: 'pointer' }}
+              onClick={goToPrevPage}
+              className="span__center"
+            >
+              <IconContext.Provider
+                value={{ className: 'blue__review tour__info--icon full star' }}
+              >
+                <IoIosArrowBack />
+              </IconContext.Provider>
+            </span>
+            <Link
+              id={`page-${i}`}
+              className={`${
+                i > Math.ceil(allTours.length / resPerPage) * 1
+                  ? 'disabledLink'
+                  : ''
+              } ${
+                props.location.search.split('=')[1] == i ? 'active' : ''
+              } page__number`}
+              to={`${props.match.url}?page=${i}`}
+            >
+              {i}
+            </Link>
+          </div>
+        );
+      } else if (i === endPage) {
+        pageContent.push(
+          <div className="span__center">
+            <Link
+              id={`page-${i}`}
+              className={` ${
+                i > Math.ceil(allTours.length / resPerPage) * 1
+                  ? 'disabledLink'
+                  : ''
+              } ${
+                props.location.search.split('=')[1] == i ? 'active' : ''
+              } page__number`}
+              to={`${props.match.url}?page=${i}`}
+            >
+              {i}
+            </Link>
+            <span
+              style={{ cursor: 'pointer' }}
+              onClick={goToNextPage}
+              className="span__center"
+            >
+              <IconContext.Provider
+                value={{ className: 'blue__review tour__info--icon full star' }}
+              >
+                <IoIosArrowForward />
+              </IconContext.Provider>
+            </span>
+          </div>
+        );
+      } else {
+        pageContent.push(
+          <div>
+            <Link
+              id={`page-${i}`}
+              className={` ${
+                i > Math.ceil(allTours.length / resPerPage) * 1
+                  ? 'disabledLink'
+                  : ''
+              } ${
+                props.location.search.split('=')[1] == i ? 'active' : ''
+              } page__number`}
+              to={`${props.match.url}?page=${i}`}
+            >
+              {i}
+            </Link>
+          </div>
+        );
+      }
     }
   }
 
@@ -546,7 +686,6 @@ const DiscoverDreamTour = React.memo((props) => {
                     <label>Easy</label>
                   </div>
                   <div>
-                    {' '}
                     <input
                       onChange={checkboxHandler}
                       type="checkbox"
@@ -556,7 +695,6 @@ const DiscoverDreamTour = React.memo((props) => {
                     <label>Medium</label>
                   </div>
                   <div>
-                    {' '}
                     <input
                       onChange={checkboxHandler}
                       type="checkbox"
@@ -591,7 +729,6 @@ const DiscoverDreamTour = React.memo((props) => {
                     <label>{firstStars.map((el) => el)} 4.5 & up</label>
                   </div>
                   <div className="rhd">
-                    {' '}
                     <input
                       name="radioGroup"
                       onChange={radioHandler}
@@ -602,7 +739,6 @@ const DiscoverDreamTour = React.memo((props) => {
                     <label>{secondStars.map((el) => el)} 4 & up</label>
                   </div>
                   <div className="rhd">
-                    {' '}
                     <input
                       name="radioGroup"
                       onChange={radioHandler}
@@ -626,7 +762,9 @@ const DiscoverDreamTour = React.memo((props) => {
               {updatedAllTours.map((tour) => (
                 <TourItem
                   pageChanged={page}
-                  isTourLiked={myWishlistIds.includes(tour._id)}
+                  isTourLiked={
+                    isAuthenticated && myWishlistIds.includes(tour._id)
+                  }
                   shouldUpdate2={shouldUpdate2}
                   tour={tour}
                 />
@@ -651,6 +789,7 @@ const DiscoverDreamTour = React.memo((props) => {
 const mapStateToProps = (state) => {
   return {
     wishlist: state.user.wishlist,
+    isAuthenticated: state.user.isAuthenticated,
   };
 };
 

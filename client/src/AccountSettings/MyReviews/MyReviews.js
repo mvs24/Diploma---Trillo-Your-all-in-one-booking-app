@@ -15,11 +15,11 @@ const MyReviews = (props) => {
 
   if (!isAuthenticated) return null;
 
-  if (!reviews) return <LoadingSpinner asOverlay />;
+  if (!reviews || props.loading) return <LoadingSpinner asOverlay />;
   if (reviews.length === 0)
     return (
-      <div className="wish__data">
-        <h1>You haven't booked a tour yet!</h1>
+      <div className="wish__data__heading">
+        <h1 className="noFlightHeading">You haven't reviewed a tour yet!</h1>
       </div>
     );
 
@@ -48,6 +48,7 @@ const MyReviews = (props) => {
 const mapStateToProps = (state) => ({
   reviews: state.user.reviews,
   isAuthenticated: state.user.isAuthenticated,
+  loading: state.user.loading,
 });
 
 export default connect(mapStateToProps)(MyReviews);

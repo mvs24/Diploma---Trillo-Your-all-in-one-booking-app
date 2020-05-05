@@ -43,7 +43,7 @@ const MakeAnImpact = (props) => {
         <div className="icon__heading">
           <IconContext.Provider value={{ className: 'icon create__icon' }}>
             <MdCreateNewFolder />
-            <h1>Jump into your bussiness creation.</h1>
+            <h1 className='jumpIn'>Jump into your bussiness creation.</h1>
           </IconContext.Provider>
         </div>
         <Button
@@ -60,9 +60,9 @@ const MakeAnImpact = (props) => {
             <GiDetour />
           </IconContext.Provider>
           <div>
-            <h1>Populate your agency</h1>
+            <h1 className='jumpIn--1'>Populate your agency</h1>
             <p>
-              Populate your agency with tours, adding images geographical
+              Populate your agency with tours / flights, adding images geographical
               coordinates, number of participants, number of days. We will do
               our best to show your tours to all the clients...
             </p>
@@ -73,7 +73,7 @@ const MakeAnImpact = (props) => {
             <FaDollarSign />
           </IconContext.Provider>
           <div>
-            <h1>Feel free to make price discounts...</h1>
+            <h1 className='jumpIn--1'>Feel free to make price discounts...</h1>
             <p>
               We promise notifications to different users for the latest
               changes. Believe in us...
@@ -83,7 +83,7 @@ const MakeAnImpact = (props) => {
       </div>
 
       <div className="ready__container">
-        <h1>Are you ready to begin?</h1>
+        <h1 className='jumpIn'>Are you ready to begin?</h1>
         <Button
           clicked={() => props.history.push('/create-agency')}
           type="pink"

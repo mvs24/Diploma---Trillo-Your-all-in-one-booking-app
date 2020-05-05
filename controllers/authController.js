@@ -218,7 +218,10 @@ exports.updatePassword = asyncWrapper(async (req, res, next) => {
   const user = await User.findById(req.user.id);
 
   if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
-    return next(new AppError('Your current password is wrong.', 401));
+    return res.status(401).json({
+      status: "fail",
+      message: 'Your current password is wrong.'
+    })
   }
 
   user.password = req.body.password;
@@ -230,6 +233,13 @@ exports.updatePassword = asyncWrapper(async (req, res, next) => {
   user.password = undefined;
   res.status(200).json({
     status: 'success',
-    user,
+    token,
+    data: {
+      name: user.name,
+      lastname: user.lastname,
+      email: user.email,
+      photo: user.photo,
+      id: user._id,
+    },
   });
 });

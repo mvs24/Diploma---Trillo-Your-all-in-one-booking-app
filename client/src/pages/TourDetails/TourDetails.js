@@ -19,6 +19,7 @@ import Button from '../../shared/components/Button/Button';
 import { addToCart } from '../../store/actions/userActions';
 import { loadStripe } from '@stripe/stripe-js';
 import Input from '../../shared/components/Input/Input';
+import Textarea from '../../shared/components/Input/Textarea';
 
 const TourDetails = React.memo((props) => {
   const [tour, setTour] = useState(null);
@@ -34,6 +35,18 @@ const TourDetails = React.memo((props) => {
   const [controlled, setControlled] = useState();
   const [owner, setOwner] = useState();
   const [openDiscountModal, setOpenDiscountModal] = useState();
+  const [openNotificationPopup,setOpenNotificationPopup] = useState()
+   const [messageDiscount, setMessageDiscount] = useState({
+    configOptions: {
+      type: 'text',
+      placeholder:
+        'This message will go to all the users who has booked one of your tours as a notification! If you do not send a message we will provide a message for you. (Max: 35 characters)',
+    },
+    value: '',
+    valid: true,
+    touched: false,
+    validRequirements: {},
+  });
   const [priceDiscountInput, setPriceDiscountInput] = useState({
     configOptions: {
       type: 'number',
@@ -97,7 +110,7 @@ const TourDetails = React.memo((props) => {
     };
 
     getTour();
-  }, []);
+  }, [isAuthenticated]);
 
   let innerWidth = window.innerWidth;
   window.addEventListener('resize', () => {
@@ -110,6 +123,7 @@ const TourDetails = React.memo((props) => {
       setResPerPage(3);
     }
   });
+
   useEffect(() => {
     if (window.innerWidth < 1013 && window.innerWidth > 736) {
       setResPerPage(2);
@@ -146,11 +160,13 @@ const TourDetails = React.memo((props) => {
         setAdding(false);
         setAdded(true);
       } catch (err) {
+
         setAdding();
         setError(err.response.data.message);
       }
     } else {
       setError('You are not logged in! Please log in!');
+
     }
   };
 
@@ -247,21 +263,42 @@ const TourDetails = React.memo((props) => {
     setPriceDiscountInputValid(isFormValid);
   };
 
+    const priceDiscountMessageHandler = (e) => {
+    const updatedData = { ...messageDiscount };
+
+    updatedData.value = e.target.value;
+    updatedData.touched = true;
+    updatedData.valid = checkValidity(
+      updatedData.value,
+      updatedData.validRequirements
+    );
+
+    setMessageDiscount(updatedData);
+  };
+
   const submitPriceDiscountHandler = async () => {
     try {
       setLoading(true);
-      console.log(isAuthenticated);
 
       setProcessingDiscount(true);
 
+      let msg = 'We just made a price discount! Enjoy it!! ';
+      if (messageDiscount.value !== '') {
+        msg = messageDiscount.value
+      }
+
       const res = await axios.post(`/api/v1/tours/${tourId}/price-discount`, {
-        message: 'We just made a price discount! Enjoy it!! ',
+        message: msg,
         priceDiscount: priceDiscountInput.value,
       });
+
       setLoading(false);
+      setOpenNotificationPopup(true)
       setOpenDiscountModal();
       setProcessingDiscount();
     } catch (err) {
+      setLoading()
+      setProcessingDiscount()
       setError(err.response.data.message);
     }
   };
@@ -284,6 +321,19 @@ const TourDetails = React.memo((props) => {
     );
   }
 
+  const formatDescription = description => {
+    let descriptionArray = []
+    let sub = 0
+    for (let i = 0; i<description.length;i = i+10) {
+      sub += 10
+      descriptionArray.push(description.substr(sub, [i]))
+    }
+     console.log(descriptionArray)
+    return descriptionArray.join(`\n`)
+ 
+   
+  }
+
   return (
     <div className="tour__container">
       {error && (
@@ -291,6 +341,10 @@ const TourDetails = React.memo((props) => {
           {error}
         </ErrorModal> 
       )}
+      {openNotificationPopup && <Modal header='Notification Sent' show onCancel={() => setOpenNotificationPopup()}>
+          <h1 className='modal__heading'>Notification sent to the selected people.</h1>
+        <Button type='success' clicked={() => setOpenNotificationPopup()}>OK</Button>
+        </Modal>}
       <div className="tour__bcg">
         <img src={`http://localhost:5000/${tour.imageCover}`} />
       </div>
@@ -362,7 +416,7 @@ const TourDetails = React.memo((props) => {
         </div>
         <div className="tour__about tour__about-1">
           <h1>ABOUT THE {tour.name}</h1>
-          <p>{tour.description}</p>
+          <p className='tourDescription'>{tour.description}</p>
         </div>
       </section>
 
@@ -450,7 +504,7 @@ const TourDetails = React.memo((props) => {
               {!isBooked && bookProcessing}
             </div>
           ) : (
-            <Button clicked={() => setOpenDiscountModal(true)} type="success">
+            <Button className='makeAPriceDiscount__btn' clicked={() => setOpenDiscountModal(true)} type="success">
               MAKE A PRICE DISCOUNT
             </Button>
           )}
@@ -469,6 +523,14 @@ const TourDetails = React.memo((props) => {
                     configOptions={priceDiscountInput.configOptions}
                     onChange={(e) => inputHandler(e)}
                   />
+                  <Textarea
+            className="flight__text__discount"
+            value={messageDiscount.value}
+            valid={messageDiscount.valid}
+            touched={messageDiscount.touched}
+            configOptions={messageDiscount.configOptions}
+            onChange={(e) => priceDiscountMessageHandler(e)}
+          />
                   <Button
                     clicked={submitPriceDiscountHandler}
                     disabled={!priceDiscountInputValid}

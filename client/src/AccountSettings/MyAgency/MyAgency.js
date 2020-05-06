@@ -23,6 +23,7 @@ const MyAgency = (props) => {
   const [finishedTours, setFinishedTours] = useState();
   const [display, setDisplay] = useState('agency');
   const [shouldUpdate, setShouldUpdate] = useState();
+  const flightsRef = useRef()
   const tours = useRef();
   const editAgency = useRef();
   const agency = useRef();
@@ -53,8 +54,9 @@ const MyAgency = (props) => {
         setMyAgency(res.data.data);
         setLoading(false);
       } catch (err) {
+
         setLoading(false);
-        setError(err.response.data.message);
+        setError(err.response.data.message ? err.response.data.message : "Something went wrong");
       }
     };
 
@@ -168,8 +170,8 @@ const MyAgency = (props) => {
           My Agency
         </h1>
         {myAgency.category === 'flights' && (
-          <h1 onClick={flightsHandler} className="myAgency__heading">
-            My Flights ({myFlights.length})
+          <h1 ref={flightsRef} onClick={flightsHandler} className="myAgency__heading">
+            Future Flights ({myFlights.length})
           </h1>
         )}
         {myAgency.category === 'flights' && (
@@ -179,7 +181,7 @@ const MyAgency = (props) => {
         )}
         {myAgency.category === 'tours' && (
           <h1 onClick={toursHandler} className="myAgency__heading" ref={tours}>
-            My Tours ({myTours.length})
+            Future Tours ({myTours.length})
           </h1>
         )}
         {myAgency.category === 'tours' && (
@@ -200,12 +202,12 @@ const MyAgency = (props) => {
             onClick={addNewTourHandler}
             ref={addTour}
           >
-            Maybe a new Tour?
+            A new Tour?
           </h1>
         )}
         {myAgency.category === 'flights' && (
           <h1 onClick={addNewFlightHandler} className="myAgency__heading">
-            Maybe a new Flight?
+            A new Flight?
           </h1>
         )}
       </div>
@@ -261,7 +263,7 @@ const MyAgency = (props) => {
         <EditAgency updateAgency={updateAgency} agency={myAgency} />
       )}
       {myAgency.category === 'flights' && display === 'addNewFlight' && (
-        <AddNewFlight updateAgency={updateAgency} agency={myAgency} />
+        <AddNewFlight setDisplay={setDisplay} flightsRef={flightsRef}  updateAgency={updateAgency} agency={myAgency} />
       )}
       {myAgency.category === 'flights' && display === 'finishedFlights' && (
         <FinishedFlights agency={myAgency} />

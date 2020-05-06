@@ -112,7 +112,7 @@ const AddNewFlight = (props) => {
   const [fromLocation, setFromLocation] = useState({
     configOptions: {
       type: 'text',
-      placeholder: 'Coordinates (LATITUDE, LONGITUDE): (ex: -32.345,43.2345)',
+      placeholder: 'Coordinates (LATITUDE, LONGITUDE): (ex: -3.35,43.25)',
     },
     value: '',
     valid: false,
@@ -137,7 +137,7 @@ const AddNewFlight = (props) => {
   const [toLocation, setToLocation] = useState({
     configOptions: {
       type: 'text',
-      placeholder: 'Coordinates (LATITUDE, LONGITUDE): (ex: -32.345,43.2345)',
+      placeholder: 'Coordinates (LATITUDE, LONGITUDE): (ex: 2,-43.5)',
     },
     value: '',
     valid: false,
@@ -318,7 +318,13 @@ const AddNewFlight = (props) => {
       //
       const updatedFromLocation = { ...fromLocation };
 
-      if (e.target.value.indexOf(',') === -1) {
+      if (
+        e.target.value.indexOf(',') === -1 ||
+        e.target.value.split(',')[0] === '' ||
+        e.target.value.split(',')[1] === '' ||
+        !+e.target.value.split(',')[1] ||
+        !+e.target.value.split(',')[0]
+      ) {
         updatedFromLocation.valid = false;
       } else if (e.target.value.indexOf(',') > 0) {
         if (
@@ -335,11 +341,18 @@ const AddNewFlight = (props) => {
 
       updatedFromLocation.touched = true;
       updatedFromLocation.value = e.target.value;
+
       setFromLocation(updatedFromLocation);
     } else if (type === 'to') {
       const updatedToLocation = { ...toLocation };
 
-      if (e.target.value.indexOf(',') === -1) {
+      if (
+        e.target.value.indexOf(',') === -1 ||
+        e.target.value.split(',')[0] === '' ||
+        e.target.value.split(',')[1] === '' ||
+        !+e.target.value.split(',')[1] ||
+        !+e.target.value.split(',')[0]
+      ) {
         updatedToLocation.valid = false;
       } else if (e.target.value.indexOf(',') > 0) {
         if (
@@ -361,6 +374,10 @@ const AddNewFlight = (props) => {
   };
 
   const saveFromLocation = () => {
+    if (fromLocation.valid === false) {
+      setError('The values are wrong...Lat: [-90, 90] Lng: [-180, 180] ');
+      return;
+    }
     if (fromLocation.value.toString().indexOf(',') === -1) {
       setError('The values are wrong...Lat: [-90, 90] Lng: [-180, 180]');
       return;
@@ -385,6 +402,10 @@ const AddNewFlight = (props) => {
   };
 
   const saveToLocation = () => {
+    if (toLocation.valid === false) {
+      setError('The values are wrong...Lat: [-90, 90] Lng: [-180, 180]');
+      return;
+    }
     if (toLocation.value.toString().indexOf(',') === -1) {
       setError('The values are wrong...Lat: [-90, 90] Lng: [-180, 180]');
       return;
@@ -508,7 +529,18 @@ const AddNewFlight = (props) => {
         );
         setLoading(false);
         props.updateAgency();
+        const links = Array.from(document.querySelectorAll('.border'));
+        links.forEach((link) => link.classList.remove('border'));
+
+        props.setDisplay('flights');
+
+        props.flightsRef.current.classList.add('border');
+        // document.querySelector(`.${props.futureClass}`).classList.add('border')
       } catch (err) {
+        if (!err.response.data.message) {
+          err.response.data.message =
+            "Something went wrong. Control your flight's data!";
+        }
         setError(err.response.data.message);
         setLoading();
       }

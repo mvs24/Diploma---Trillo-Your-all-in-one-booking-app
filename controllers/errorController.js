@@ -2,6 +2,7 @@ const AppError = require('../utils/appError');
 
 const handleDuplicateError = (err) => {
   const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
+  console.log(err)
 
   const message = `Duplicate field value: ${value}. Please use another value!`;
   return new AppError(message, 400);
@@ -59,16 +60,18 @@ module.exports = (err, req, res, next) => {
 
   if (process.env.NODE_ENV === 'development') {
     sendErrorDev(err, res);
+    console.log(err)
   } else if (process.env.NODE_ENV === 'production') {
     let error = { ...err };
 
     if (error.code === 11000) error = handleDuplicateError(error);
-    else if (error.name === 'ValidationError')
+     if (error.name === 'ValidationError')
       error = handleValidationError(error);
-    else if (error.name === 'CastError') error = handleCastErrorDB(error);
-    else if (error.name === 'JsonWebTokenError') error = handleJWTError();
-    else if (error.name === 'TokenExpiredError')
+     if (error.name === 'CastError') error = handleCastErrorDB(error);
+     if (error.name === 'JsonWebTokenError') error = handleJWTError();
+     if (error.name === 'TokenExpiredError')
       error = handleJWTExpiredError();
+ 
 
     sendErrorProd(error, res);
   }

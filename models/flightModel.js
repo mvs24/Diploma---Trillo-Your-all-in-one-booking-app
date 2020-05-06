@@ -158,8 +158,8 @@ flightSchema.pre('save', function (next) {
     }
     if (this.returnDate.getTime() <= this.depart.getTime()) {
       return next(
-        new AppError('Please control the depart and return dates', 400)
-      );
+         new AppError('Please control the depart and return dates', 400)
+       )
     }
   }
 

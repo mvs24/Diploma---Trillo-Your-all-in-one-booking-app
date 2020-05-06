@@ -35,7 +35,7 @@ const AllFlights = React.memo((props) => {
   const [error, setError] = useState();
   const [loading, setLoading] = useState();
   const [end, setEnd] = useState(5);
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOption, setSelectedOption] = useState({value: "", label: "Sort By"});
   const [openRatings, setOpenRatings] = useState();
   const [checkedIn, setCheckedIn] = useState([]);
   const [radioValue, setRadioValue] = useState();
@@ -69,8 +69,8 @@ const AllFlights = React.memo((props) => {
     const getFlights = async () => {
       setLoading(true);
       let res;
-      res = await axios.get('/api/v1/flights');
-      const finishedRes = await axios.get(`/api/v1/flights/finishedFlights`);
+      res = await axios.get('/api/v1/flights?sort=-ratingsAverage');
+      const finishedRes = await axios.get(`/api/v1/flights/finishedFlights?sort=-ratingsAverage`);
       setFinishedFlights(finishedRes.data.data);
       setLoading();
       setFlights(res.data.data);
@@ -210,6 +210,15 @@ const AllFlights = React.memo((props) => {
         </IconContext.Provider>
       );
     }
+  }
+
+  let zeroStars = [];
+  for (let i = 0; i < 5; i++) {
+   zeroStars.push( <IconContext.Provider
+          value={{ className: 'blue__review tour__info--icon full star' }}
+        >
+          <IoIosStarOutline />
+        </IconContext.Provider>)
   }
 
   if (!finishedFlights) return <LoadingSpinner asOverlay />;

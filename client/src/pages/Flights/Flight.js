@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
+import moment from 'moment'
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
 import ErrorModal from '../../shared/components/UI/ErrorModal';
 import { IconContext } from 'react-icons';
@@ -39,7 +40,7 @@ const Flight = React.memo((props) => {
   const [flight, setFlight] = useState(props.flight);
   const [loading, setLoading] = useState();
   const [error, setError] = useState();
-  const [selectedOption, setSelectedOption] = useState();
+  const [selectedOption, setSelectedOption] = useState({value: null, label: "Number of tickets"});
   const [openConfirmTickets, setOpenConfirmTickets] = useState();
   const [processBooking, setProcessBooking] = useState();
   const [review, setReview] = useState();
@@ -102,11 +103,9 @@ const Flight = React.memo((props) => {
       getAgency();
     }
 
-    console.log('1');
   }, [flight]);
 
   useEffect(() => {
-    console.log(2);
     const getMyReviews = async () => {
       const res = await axios.get(`/api/v1/users/my/reviews/flights`);
       const flightIds = res.data.data.map((flight) => flight.flight);
@@ -488,6 +487,7 @@ const Flight = React.memo((props) => {
         >
           <div>
             <Select
+            className='selectTickets'
               value={selectedOption}
               onChange={handleChange}
               options={options}
@@ -518,19 +518,18 @@ const Flight = React.memo((props) => {
 
         <p>Type: {flight.variety}</p>
         <p>
-          <span> Depart: {flight.depart.split('T')[0]} </span>
-          {flight.time ? <strong>:{flight.time}</strong> : null}
+          <span> Depart: { moment(flight.depart).format('L')} </span>
         </p>
         <p>
           {returnDt ? (
-            <span>Return Date:{returnDt} </span>
+            <span>Return Date:{moment(flight.returnDate).format('L')} </span>
           ) : (
             <span>Return Date: ---</span>
           )}{' '}
         </p>
       </div>
       <div className="from__to">
-        <p>{flight.package}</p>
+        <p>Package: {flight.package}</p>
 
         <p>FROM: {flight.from}</p>
         <p>TO: {flight.to}</p>

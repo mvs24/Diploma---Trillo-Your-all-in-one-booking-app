@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import moment from 'moment'
 import ErrorModal from '../../shared/components/UI/ErrorModal';
 import { IconContext } from 'react-icons';
 import {
@@ -70,10 +71,14 @@ const ReviewItem = (props) => {
         <div className="review__details">
           {stars.map((star) => star)}
           <p className="review__paragraph">{props.review.review}</p>
+             <p className="review__paragraph"> Reviewed: {moment(props.review.createdAt).startOf('hour').fromNow()}</p>
+          
         </div>
       </div>
     </div>
   );
+
+
 
   if (props.resPerPage === 1 && props.index === 0) {
     reviewItem = (
@@ -98,6 +103,8 @@ const ReviewItem = (props) => {
             <div className="review__details">
               {stars.map((star) => star)}
               <p className="review__paragraph">{props.review.review}</p>
+             <p className="review__paragraph"> Reviewed: {moment(props.review.createdAt).startOf('hour').fromNow()}</p>
+
             </div>
           </div>
         </div>
@@ -148,6 +155,8 @@ const ReviewItem = (props) => {
             <div className="review__details">
               {stars.map((star) => star)}
               <p className="review__paragraph">{props.review.review}</p>
+             <p className="review__paragraph"> Reviewed: {moment(props.review.createdAt).startOf('hour').fromNow()}</p>
+
             </div>
           </div>
         </div>
@@ -188,8 +197,11 @@ const ReviewItem = (props) => {
               </h3>
             </div>
             <div className="review__details">
-              {stars.map((star) => star)}
+              {stars.map((star) => star)} 
+
+
               <p className="review__paragraph">{props.review.review}</p>
+             <p className="review__paragraph"> Reviewed: {moment(props.review.createdAt).startOf('hour').fromNow()}</p>
             </div>
           </div>
         </div>

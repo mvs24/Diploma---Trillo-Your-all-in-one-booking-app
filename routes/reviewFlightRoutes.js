@@ -21,12 +21,16 @@ router
   );
 //   .get(reviewFlightController.getAllReviewOnTour);
 
-router
+router 
   .route('/:id')
   .patch(
     authController.protect,
-    // authController.restrictTo('user'),
+    // authController.restrictTo('user'), 
     // controlCreator(ReviewFlight),
+    (req, res, next) => {
+      console.log(Date.now())
+    req.body.createdAt = Date.now() 
+    next()},
     filterBody(['flight', 'user']),
     reviewFlightController.updateReview
   )

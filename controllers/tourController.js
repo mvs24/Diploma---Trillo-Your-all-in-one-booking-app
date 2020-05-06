@@ -255,8 +255,15 @@ exports.discountTour = asyncWrapper(async (req, res, next) => {
       }
     }
   }
+  
 
   const priceDiscount = req.body.priceDiscount;
+if (priceDiscount > tour.price) {
+  return res.status(400).json({
+    status: "fail",
+    message: `Price Discount (${priceDiscount}) can not be below the regular price`
+  })
+}
   tour.priceDiscount = priceDiscount;
   tour.price = tour.price - priceDiscount;
   await tour.save();

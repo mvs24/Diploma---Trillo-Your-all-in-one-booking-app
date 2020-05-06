@@ -18,6 +18,10 @@
   );
   box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.4);
 }
+.descriptionAgncy {
+  width: 60%;
+  text-align: left;
+}
 .myAgency__links h1 {
   margin: 3rem 1.5rem;
   transition: all 0.4s ease;

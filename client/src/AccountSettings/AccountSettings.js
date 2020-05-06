@@ -293,6 +293,7 @@ const AccountSettings = (props) => {
     history.push('/');
   };
 
+
   if (!user) return <LoadingSpinner asOverlay />;
   if (error)
     return (
@@ -300,6 +301,13 @@ const AccountSettings = (props) => {
         {error}
       </ErrorModal>
     );
+ if (props.error) return (
+      <ErrorModal show onClear={() => props.deleteError()}>
+        {props.error}
+      </ErrorModal>
+    );
+
+
 
   return (
     <div className="settings__container">
@@ -315,7 +323,7 @@ const AccountSettings = (props) => {
           show
           onCancel={() => setOpenPasswordChangedModal()}
         >
-          <h2>Password changed successfully</h2>
+          <h2 className='modal__heading'>Password changed successfully</h2>
           <Button type="success" clicked={() => setOpenPasswordChangedModal()}>
             OK
           </Button>
@@ -328,13 +336,13 @@ const AccountSettings = (props) => {
       )}
       <div className="settings__info">
         <div className="user__links">
-          <li>
+          <li className="settings__link">
             <IconContext.Provider
               value={{ className: 'icon__white tour__info--icon' }}
             >
               <MdPeopleOutline />
             </IconContext.Provider>
-            <p className="">SETTINGS</p>
+            <p>SETTINGS</p>
           </li>
           <li onClick={goToBookings}>
             <IconContext.Provider

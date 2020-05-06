@@ -13,7 +13,7 @@ exports.getAllUsers = asyncWrapper(async (req, res, next) => {
     data: users,
   });
 });
-
+ 
 exports.getUser = factory.getOne(User);
 
 exports.deleteAllUsers = asyncWrapper(async (req, res, next) => {
@@ -42,6 +42,7 @@ exports.updateMe = asyncWrapper(async (req, res, next) => {
     new: true,
     runValidators: true,
   });
+
 
   if (!updatedUser) return next(new AppError('User does not exists', 404));
 
@@ -115,9 +116,11 @@ exports.getMyAgency = asyncWrapper(async (req, res, next) => {
   const agency = await Agency.findOne({ user: req.user.id });
 
   if (!agency)
-    return next(
-      new AppError('You do not have an agency! Start by creating one!', 404)
-    );
+    return res.status(404).json({
+      status: "success",
+      message: 'You do not have an agency! Start by creating one!'
+    })
+      
 
   res.status(200).json({
     status: 'success',

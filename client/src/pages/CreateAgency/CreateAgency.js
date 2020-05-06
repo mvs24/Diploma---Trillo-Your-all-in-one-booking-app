@@ -39,12 +39,13 @@ const MakeAnImpact = (props) => {
       validRequirements: {
         required: true,
         minlength: 2,
+        maxlength: 30
       },
     },
     description: {
       configOptions: {
         type: 'text',
-        placeholder: 'Write a description for your agency (Min: 20 characters)',
+        placeholder: 'Write a description for your agency (Min: 20 characters, Max: 100 characters)',
       },
       value: '',
       valid: false,
@@ -52,6 +53,7 @@ const MakeAnImpact = (props) => {
       validRequirements: {
         required: true,
         minlength: 20,
+        maxlength: 100
       },
     },
   });
@@ -69,7 +71,10 @@ const MakeAnImpact = (props) => {
       isValid = isValid && value.trim().length !== 0;
     }
     if (requirements.minlength) {
-      isValid = isValid && value.trim().length >= requirements.minlength;
+      isValid = isValid && value.length >= requirements.minlength;
+    }
+    if (requirements.maxlength) {
+      isValid = isValid && value.length <= requirements.maxlength;
     }
     if (requirements.isEmail) {
       isValid = isValid && /\S+@\S+\.\S+/.test(value);

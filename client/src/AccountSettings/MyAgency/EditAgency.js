@@ -11,6 +11,7 @@ import './EditAgency.css';
 
 const EditAgency = (props) => {
   const { agency } = props;
+  console.log(agency);
   const [agencyData, setAgencyData] = useState({
     name: {
       configOptions: {
@@ -23,6 +24,7 @@ const EditAgency = (props) => {
       validRequirements: {
         required: true,
         minlength: 2,
+        maxlength: 30,
       },
     },
     description: {
@@ -36,12 +38,13 @@ const EditAgency = (props) => {
       validRequirements: {
         required: true,
         minlength: 20,
+        maxlength: 150,
       },
     },
   });
   const [image, setImage] = useState({
-    value: null,
-    isValid: false,
+    value: agency.image,
+    isValid: true,
   });
   const [previewUrl, setPreviewUrl] = useState();
   const [formValid, setFormValid] = useState(true);
@@ -66,7 +69,6 @@ const EditAgency = (props) => {
         },
       };
     });
-    setImage({ value: image.value, isValid: true });
   }, []);
 
   const checkValidity = (value, requirements) => {
@@ -77,6 +79,9 @@ const EditAgency = (props) => {
     }
     if (requirements.minlength) {
       isValid = isValid && value.trim().length >= requirements.minlength;
+    }
+    if (requirements.maxlength) {
+      isValid = isValid && value.length <= requirements.maxlength;
     }
     if (requirements.isEmail) {
       isValid = isValid && /\S+@\S+\.\S+/.test(value);
@@ -157,6 +162,7 @@ const EditAgency = (props) => {
     const formData = new FormData();
     formData.set('name', agencyData.name.value);
     formData.set('description', agencyData.description.value);
+
     formData.append('image', image.value);
 
     try {

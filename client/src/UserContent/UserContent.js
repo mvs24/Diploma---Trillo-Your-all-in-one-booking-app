@@ -63,6 +63,14 @@ const UserContent = (props) => {
     }
   });
 
+  const formatName = name => {
+    if (name.length > 10) {
+      return name.substr(0, 7) + "..."
+    }
+
+    return name
+  }
+
   return (
     <>
       <section className="user__content">
@@ -100,7 +108,7 @@ const UserContent = (props) => {
             alt="user"
           />
           <h4>
-            {props.userData.name} {props.userData.lastname}
+            { formatName(props.userData.name) } { formatName(props.userData.lastname)}
           </h4>
         </div>
       </section>

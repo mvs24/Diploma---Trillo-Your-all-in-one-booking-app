@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
+import moment from 'moment'
 import { useHistory } from 'react-router-dom';
 import { markNotificationsAsRead } from '../../store/actions/userActions';
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
@@ -59,7 +60,8 @@ const MyNotifications = (props) => {
           <img src={`http://localhost:5000/${agency.image}`} />
           <p>{notification.message}</p>
           <p>
-            {splittedDate[0]} <strong>{splittedDate[1].split('.')[0]}</strong>
+             <strong>{moment(notification.createdAt).format('MMMM Do YYYY')}</strong>
+            
           </p>
         </div>
       ) : (
@@ -67,7 +69,7 @@ const MyNotifications = (props) => {
           <img src={`http://localhost:5000/${agency.image}`} />
           <p>{notification.message}</p>
           <p>
-            <strong>{splittedDate[1].split('.')[0]}</strong> {splittedDate[0]}
+             <strong>{moment(notification.createdAt).format('MMMM Do YYYY')}</strong>
           </p>
         </div>
       )}

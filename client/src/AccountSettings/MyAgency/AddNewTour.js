@@ -109,7 +109,8 @@ const AddNewTour = (props) => {
     description: {
       configOptions: {
         type: 'textarea',
-        placeholder: 'Write a description for your agency (Min: 20 characters)',
+        placeholder:
+          'Write a description for your agency (Min: 20 characters, Max: 150)',
       },
       value: '',
       valid: false,
@@ -117,6 +118,7 @@ const AddNewTour = (props) => {
       validRequirements: {
         required: true,
         minlength: 20,
+        maxlength: 150,
       },
     },
     nrStartDates: {
@@ -181,7 +183,10 @@ const AddNewTour = (props) => {
       isValid = isValid && value.trim().length !== 0;
     }
     if (requirements.minlength) {
-      isValid = isValid && value.trim().length >= requirements.minlength;
+      isValid = isValid && value.length >= requirements.minlength;
+    }
+    if (requirements.maxlength) {
+      isValid = isValid && value.length <= requirements.maxlength;
     }
     if (requirements.isEmail) {
       isValid = isValid && /\S+@\S+\.\S+/.test(value);
@@ -369,10 +374,19 @@ const AddNewTour = (props) => {
     if (isFormValid) {
       const [lat, lng] = document
         .querySelector('.coordinates')
-        .value.split(',');
+        .value.trim()
+        .split(',');
       const address = document.querySelector('.address').value;
 
-      console.log(lat, lng, address);
+      if (lat === '' || lng === '') {
+        setError('The values are not correct!!!');
+        return;
+      }
+      if (!+lat || !+lng) {
+        setError('The values are not correct!!!');
+        return;
+      }
+
       if (
         lat < -90 ||
         lat > 90 ||
@@ -446,13 +460,26 @@ const AddNewTour = (props) => {
 
     let isValid = true;
     locations.forEach((loc) => {
-      if (loc.value.indexOf(',') === -1) {
+      if (loc.value.trim().indexOf(',') === -1) {
         isValid = false;
         setError(
           'The format of location is wrong...Use something like this: 42.345,23.5674'
         );
       }
-      if (!loc.value.split(',')[1]) isValid = false;
+      if (!loc.value.trim().split(',')[1]) isValid = false;
+      if (
+        loc.value.trim().split(',')[1] === '' ||
+        loc.value.trim().split(',')[0] === ''
+      ) {
+        isValid = false;
+      }
+      if (
+        !+loc.value.trim().split(',')[1] ||
+        !+loc.value.trim().split(',')[0]
+      ) {
+        isValid = false;
+      }
+
       if (
         +loc.value.split(',')[0] < -90 ||
         +loc.value.split(',')[0] > 90 ||
@@ -480,7 +507,6 @@ const AddNewTour = (props) => {
 
     let isValidDay = true;
     days.forEach((day) => {
-      console.log(day.value);
       if (!day.value) isValidDay = false;
       if (+day.value < 0) {
         isValidDay = false;
@@ -532,7 +558,7 @@ const AddNewTour = (props) => {
         <input
           className="input- addressLocation"
           type="text"
-          placeholder={`Address (${i + 1})`}
+          placeholder={`Address (${i + 1}) (More than 2 characters)`}
         />
         <input
           className="input- dayLocation"
@@ -673,7 +699,7 @@ const AddNewTour = (props) => {
             <input
               className="input- address"
               type="text"
-              placeholder="Address"
+              placeholder="Address (More than 2 characters)"
             />
             <Button
               type="success"

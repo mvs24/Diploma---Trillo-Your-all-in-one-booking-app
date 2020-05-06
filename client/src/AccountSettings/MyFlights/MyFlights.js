@@ -13,7 +13,7 @@ const MyBookings = (props) => {
   const [loading, setLoading] = useState();
   const [error, setError] = useState();
   const start = 0;
-  const [end, setEnd] = useState(1);
+  const [end, setEnd] = useState(5);
   const { isAuthenticated } = props;
 
   useEffect(() => {
@@ -37,7 +37,7 @@ const MyBookings = (props) => {
   if (loading) return <LoadingSpinner asOverlay />;
 
   const showMoreHandler = () => {
-    setEnd((prev) => prev + 1);
+    setEnd((prev) => prev + 5);
   };
 
   if (myFlights.length === 0)

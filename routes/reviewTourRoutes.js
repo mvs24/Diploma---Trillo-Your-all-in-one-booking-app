@@ -30,7 +30,11 @@ router
   .patch(  authController.protect,
   authController.restrictTo('user'),
   controlCreator(ReviewTour),
+  (req, res, next) => {
+    req.body.createdAt = Date.now() 
+    next()},
   filterBody(['tour', 'user']),
+
   reviewTourController.updateReview)
   .delete(authController.protect,
   authController.restrictTo('user'),

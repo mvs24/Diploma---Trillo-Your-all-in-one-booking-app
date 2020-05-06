@@ -71,7 +71,7 @@ const ReviewItem = (props) => {
         <div className="review__details">
           {stars.map((star) => star)}
           <p className="review__paragraph">{props.review.review}</p>
-             <p className="review__paragraph"> Reviewed: {moment(props.review.createdAt).startOf('hour').fromNow()}</p>
+             <p className="review__paragraph"> Reviewed: {moment(props.review.createdAt).format("LLL")}</p>
           
         </div>
       </div>
@@ -103,7 +103,7 @@ const ReviewItem = (props) => {
             <div className="review__details">
               {stars.map((star) => star)}
               <p className="review__paragraph">{props.review.review}</p>
-             <p className="review__paragraph"> Reviewed: {moment(props.review.createdAt).startOf('hour').fromNow()}</p>
+             <p className="review__paragraph"> Reviewed: {moment(props.review.createdAt).format('LLL')}</p>
 
             </div>
           </div>
@@ -155,7 +155,7 @@ const ReviewItem = (props) => {
             <div className="review__details">
               {stars.map((star) => star)}
               <p className="review__paragraph">{props.review.review}</p>
-             <p className="review__paragraph"> Reviewed: {moment(props.review.createdAt).startOf('hour').fromNow()}</p>
+             <p className="review__paragraph"> Reviewed: {moment(props.review.createdAt).format("LLL")}</p>
 
             </div>
           </div>
@@ -201,7 +201,7 @@ const ReviewItem = (props) => {
 
 
               <p className="review__paragraph">{props.review.review}</p>
-             <p className="review__paragraph"> Reviewed: {moment(props.review.createdAt).startOf('hour').fromNow()}</p>
+             <p className="review__paragraph"> Reviewed: {moment(props.review.createdAt).format('LLL')}</p>
             </div>
           </div>
         </div>

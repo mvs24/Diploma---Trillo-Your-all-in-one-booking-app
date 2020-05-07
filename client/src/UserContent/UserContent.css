@@ -270,3 +270,9 @@
   top: -35%;
   right: -60%;
 }
+
+@media (max-width: 975px) {
+  .user__content {
+    display: none;
+  }
+}

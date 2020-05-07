@@ -614,7 +614,7 @@ const TourItem = React.memo((props) => {
             Finished
           </Button>
         ) : (
-          <Button clicked={detailsHandler} type="success">
+          <Button className='detailsButton' clicked={detailsHandler} type="success">
             Details
           </Button>
         )}

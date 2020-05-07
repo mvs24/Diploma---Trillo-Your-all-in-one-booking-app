@@ -73,6 +73,7 @@ const UserContent = (props) => {
 
   return (
     <>
+
       <section className="user__content">
         <div className="seperator">&nbsp;</div>
 

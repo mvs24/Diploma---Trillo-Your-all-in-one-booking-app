@@ -22,3 +22,12 @@
 .depart__flight label{
 	margin: .2rem 1.5rem;
 }
+
+@media (max-width: 550px) {
+	.flightForm input{ 
+		width: 75%;
+	 }
+	 .flightForm input:focus{ 
+		width: 85%;
+	 }
+}

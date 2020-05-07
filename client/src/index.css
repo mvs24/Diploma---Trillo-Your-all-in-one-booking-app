@@ -58,9 +58,17 @@ body {
   }
 }
 
-@media (max-width: 750px) {
+
+@media (max-width: 1000px) {
   html {
     font-size: 54.5%;
+  }
+}
+
+
+@media (max-width: 750px) {
+  html {
+    font-size: 52.5%;
   }
 }
 @media (max-width: 600px) {

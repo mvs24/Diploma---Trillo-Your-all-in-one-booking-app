@@ -5,6 +5,7 @@
   border-bottom: 2px solid #ccc;
   width: 100%;
 }
+
 .heading__trillo {
   font-size: 1.8rem;
   margin: 0 2.2rem 0 0.7rem;
@@ -12,20 +13,6 @@
   background-image: linear-gradient(to right bottom, #5643fa, #ffb900);
   color: transparent;
   background-clip: text;
-}
-
-@media (max-width: 900px) {
-  .searchForm {
-    order: 2;
-    flex-basis: 0 0 100%;
-    align-self: center;
-  }
-  .search {
-    padding: 1rem 5rem;
-  }
-  .header {
-    flex-wrap: wrap;
-  }
 }
 
 .forgot__heading {
@@ -177,3 +164,201 @@
   font-size: 1.5rem;
   cursor: pointer;
 }
+
+
+.navigation1 {
+    display: none;
+  }
+
+  @media (max-width: 1000px) {
+    .searchForm {
+      flex: 0 0 30%;
+    }
+  }
+
+@media (max-width: 975px) {
+  .navigation1 {
+    display: block;
+  }
+
+  .searchForm {
+    flex: 0 0 45%;
+  }
+
+
+.navigation__checkbox1 {
+   display: none;
+}
+ .navigation__button1 {
+   background-color: #fff;
+   height: 7rem;
+   width: 7rem;
+   position: fixed;
+   top: 1.5rem;
+   right: 3.5rem;
+   border-radius: 50%;
+   z-index: 2000;
+   box-shadow: 0 1rem 3rem rgba(0, 0, 0, .1);
+   text-align: center;
+   cursor: pointer;
+}
+ .navigation__background1 {
+   height: 6rem;
+   width: 6rem;
+   border-radius: 50%;
+   position: fixed;
+   top: 2rem;
+   right: 4rem;
+   background-image: radial-gradient(#7ed56f, #28b485);
+   z-index: 1000;
+   transition: transform 0.8s cubic-bezier(0.86, 0, 0.07, 1);
+}
+ .navigation__nav1 {
+   height: 100vh;
+   position: fixed;
+   top: 0;
+   left: 0;
+   z-index: 1500;
+   opacity: 0;
+   width: 0;
+   transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+   visibility: hidden;
+}
+ .navigation__list1 {
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   list-style: none;
+   text-align: center;
+   width: 100%;
+}
+ .navigation__item1 {
+  margin: 1rem;
+}
+ .navigation__link1:link, .navigation__link1:visited {
+   display: inline-block;
+   font-size: 3rem;
+   font-weight: 300;
+   padding: 1rem 2rem;
+   color: #fff;
+   text-decoration: none;
+   text-transform: uppercase;
+   background-image: linear-gradient(120deg, transparent 0%, transparent 50%, #fff 50%);
+   background-size: 220%;
+   transition: all 0.4s;
+}
+ .navigation__link1:link span, .navigation__link1:visited span {
+   margin-right: 1.5rem;
+   display: inline-block;
+}
+ .navigation__link1:hover, .navigation__link1:active {
+   background-position: 100%;
+   color: #55c57a;
+   transform: translateX(1rem);
+}
+ .navigation__checkbox1:checked ~ .navigation__background1 {
+   transform: scale(80);
+
+}
+ .navigation__checkbox1:checked ~ .navigation__nav1 {
+   opacity: 1;
+   width: 100%;
+   visibility: visible;
+}
+ .navigation__icon1 {
+   position: relative;
+   margin-top: 3.5rem;
+}
+ .navigation__icon1, .navigation__icon1::before, .navigation__icon1::after {
+   width: 3rem;
+   height: 2px;
+   background-color: #333;
+   display: inline-block;
+}
+ .navigation__icon1::before, .navigation__icon1::after {
+   content: "";
+   position: absolute;
+   left: 0;
+   transition: all 0.2s;
+}
+ .navigation__icon1::before {
+   top: -0.8rem;
+}
+ .navigation__icon1::after {
+   top: 0.8rem;
+}
+ .navigation__button1:hover .navigation__icon1::before {
+   top: -1rem;
+}
+ .navigation__button1:hover .navigation__icon1::after {
+   top: 1rem;
+}
+ .navigation__checkbox1:checked + .navigation__button1 .navigation__icon1 {
+   background-color: transparent;
+}
+ .navigation__checkbox1:checked + .navigation__button1 .navigation__icon1::before {
+   top: 0;
+   transform: rotate(135deg);
+}
+ .navigation__checkbox1:checked + .navigation__button1 .navigation__icon1::after {
+   top: 0;
+   transform: rotate(-135deg);
+}
+
+.flexLink {
+  display: flex;
+  align-items: center;
+}
+.flexLink span {
+  margin: 0 .4rem;
+}
+
+
+.userProfile {
+  display: flex;
+  align-items: center;
+}
+.impact {
+  display: none;
+ }
+ 
+
+}
+
+
+@media (max-width: 660px) {
+ .heading__flights {
+  display: none;
+ }
+
+ 
+ .navigation__button1 {
+   background-color: #fff;
+   height: 7rem;
+   width: 7rem;
+   position: fixed;
+   top: 4.5rem;
+   right: 3.5rem;
+   border-radius: 50%;
+   z-index: 2000;
+   box-shadow: 0 1rem 3rem rgba(0, 0, 0, .1);
+   text-align: center;
+   cursor: pointer;
+}
+ .navigation__background1 {
+   height: 6rem;
+   width: 6rem;
+   border-radius: 50%;
+   position: fixed;
+   top: 5rem;
+   right: 4rem;
+   background-image: radial-gradient(#7ed56f, #28b485);
+   z-index: 1000;
+   transition: transform 0.8s cubic-bezier(0.86, 0, 0.07, 1);
+}
+
+
+ 
+}
+

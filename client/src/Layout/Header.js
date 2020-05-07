@@ -4,9 +4,17 @@ import { connect } from 'react-redux';
 import Logo from '../assets/logo.png';
 import './Header.css';
 import { IconContext } from 'react-icons';
-import { IoIosApps, IoIosSearch, IoIosAirplane } from 'react-icons/io';
+import {
+  IoIosApps,
+  IoIosSearch,
+  IoIosAirplane,
+  IoMdNotificationsOutline,
+} from 'react-icons/io';
+import { AiOutlineArrowRight } from 'react-icons/ai';
+
 import { MdHotel } from 'react-icons/md';
 import { FaMapMarkedAlt } from 'react-icons/fa';
+
 import Button from '../shared/components/Button/Button';
 import Modal from '../shared/components/UI/Modal';
 import Input from '../shared/components/Input/Input';
@@ -535,6 +543,20 @@ const Header = React.memo((props) => {
     );
   }
 
+  let unReadLength = 0;
+  if (props.isAuthenticated && props.notifications) {
+    props.notifications.forEach((el) => {
+      if (el.read === false) {
+        unReadLength++;
+      }
+    });
+  }
+
+  let wishLength;
+  if (props.isAuthenticated && props.wishlist) {
+    wishLength = props.wishlist.results;
+  }
+
   return (
     <React.Fragment>
       {loading && <LoadingSpinner asOverlay />}
@@ -642,6 +664,151 @@ const Header = React.memo((props) => {
           {props.error && <h2 className="errorText">{props.error}</h2>}
         </Modal>
       )}
+
+      {isAuthenticated ? (
+        <div className="navigation1">
+          <input
+            type="checkbox"
+            className="navigation__checkbox1"
+            id="navi-toggle"
+          />
+
+          <label for="navi-toggle" className="navigation__button1">
+            <span className="navigation__icon1">&nbsp;</span>
+          </label>
+
+          <div className="navigation__background1">&nbsp;</div>
+
+          <nav className="navigation__nav1">
+            <ul className="navigation__list1">
+              <li className="navigation__item1">
+                <Link
+                  onClick={() => {
+                    document.querySelector('.navigation__checkbox1').click();
+                  }}
+                  className="navigation__link1"
+                >
+                  {myAgency || props.agencyCreated ? (
+                    <span onClick={() => props.history.push('/my-agency')}>
+                      My Agency
+                    </span>
+                  ) : (
+                    <span onClick={makeImpactHandler}>Make an impact</span>
+                  )}
+                </Link>
+              </li>
+              <li className="navigation__item1">
+                <Link
+                  onClick={() => {
+                    document.querySelector('.navigation__checkbox1').click();
+                  }}
+                  to="/categories/flights"
+                  className="navigation__link1"
+                >
+                  Discover flights
+                </Link>
+              </li>
+
+              <li className="navigation__item1">
+                <Link
+                  onClick={() => {
+                    document.querySelector('.navigation__checkbox1').click();
+                  }}
+                  to="/my-bookings"
+                  className="navigation__link1"
+                >
+                  My Bookings
+                </Link>
+              </li>
+
+              <li className="navigation__item1">
+                <Link
+                  onClick={() => {
+                    document.querySelector('.navigation__checkbox1').click();
+                  }}
+                  to="/my-wishlist"
+                  className="navigation__link1"
+                >
+                  <div className="flexLink">
+                    <div className="flexLink">
+                      <IconContext.Provider value={{ className: 'flexLink' }}>
+                        <FiHeart />
+                        <span>{wishLength > 99 ? '99+' : wishLength}</span>
+                      </IconContext.Provider>
+                    </div>
+                    <span>my wishlist</span>
+                  </div>
+                </Link>
+              </li>
+              <li className="navigation__item1">
+                <Link
+                  onClick={() => {
+                    document.querySelector('.navigation__checkbox1').click();
+                  }}
+                  to="/my-cart"
+                  className="navigation__link1"
+                >
+                  <div className="flexLink">
+                    <div className="flexLink">
+                      <IconContext.Provider value={{ className: 'flexLink' }}>
+                        <FiShoppingCart />
+                        <span>
+                          {props.cartTour && props.cartTour.length > 99
+                            ? '99+'
+                            : props.cartTour.length}
+                        </span>
+                      </IconContext.Provider>
+                    </div>
+                    <span>my Shopping cart</span>
+                  </div>
+                </Link>
+              </li>
+              <li className="navigation__item1">
+                <Link
+                  onClick={() => {
+                    document.querySelector('.navigation__checkbox1').click();
+                  }}
+                  to="/my-notifications"
+                  className="navigation__link1"
+                >
+                  <div className="flexLink">
+                    <div className="flexLink">
+                      <IconContext.Provider value={{ className: 'flexLink' }}>
+                        <IoMdNotificationsOutline />
+                        <span>{unReadLength > 99 ? '99+' : unReadLength}</span>
+                      </IconContext.Provider>
+                    </div>
+                    <span>notifications</span>
+                  </div>
+                </Link>
+              </li>
+              <li className="navigation__item1">
+                <Link
+                  onClick={() => {
+                    document.querySelector('.navigation__checkbox1').click();
+                  }}
+                  to="/me"
+                  className="navigation__link1"
+                >
+                  <div className="flexLink">
+                    <div className="user__profile">
+                      {' '}
+                      <img
+                        src={`http://localhost:5000/${props.userData.photo}`}
+                        alt="user"
+                      />
+                    </div>
+                    <span>
+                      {props.userData.name} {props.userData.lastname}
+                    </span>
+                  </div>{' '}
+                </Link>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      ) : null}
+
       <header className="header">
         {props.error && <ErrorModal>{props.error}</ErrorModal>}
         <img
@@ -658,6 +825,7 @@ const Header = React.memo((props) => {
         >
           Trillo
         </h2>
+
         <h3
           className="heading__flights"
           onClick={() => props.history.push('/categories/flights')}

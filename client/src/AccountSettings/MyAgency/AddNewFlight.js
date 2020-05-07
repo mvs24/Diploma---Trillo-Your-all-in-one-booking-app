@@ -641,7 +641,7 @@ const AddNewFlight = (props) => {
         )}
         {flightLocationContent}
         <h1>Add a new Flight!</h1>
-        <div>
+        <div className='flightForm'>
           {flightFormData.map((el) => el)}
           <div style={{ margin: '.3rem' }}>&nbsp;</div>
           <Select

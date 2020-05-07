@@ -88,18 +88,23 @@
   color: transparent;
   background-clip: text;
   display: block;
-  width: 100%;
+  width: 100%; 
   text-align: center;
+}
+.quick__facts ul {
+  text-align: center;
+ 
 }
 
 .quick__facts li {
   list-style: none;
-
+  text-align: center;
   display: flex;
   align-items: center;
   margin: 2.5rem 0.4rem;
-  padding: 0 2rem;
+
   font-size: 1.6rem;
+  margin-left: 25%;
 }
 
 .second {
@@ -147,14 +152,15 @@
   background-clip: text;
   display: block;
   width: 100%;
-  margin: -3rem.5rem 0 2rem 0;
+  text-align: center;
 }
 
 .tour__about p {
   font-size: 1.4rem;
   line-height: 1.7;
   letter-spacing: 1.2px;
-  width: 70%;
+  width: 100%;
+  text-align: center;
 }
 
 .images__container {
@@ -180,16 +186,6 @@
   transform: skewY(-5deg);
 }
 
-@media (max-width: 865px) {
-  .tour__about p {
-    font-size: 1.3rem;
-    width: 50%;
-  }
-  .tour__about h1,
-  .quick__facts h1 {
-    font-size: 2rem;
-  }
-}
 
 .reviews {
   display: grid;
@@ -321,59 +317,162 @@
   transform: skewY(4deg);
 }
 @media (max-width: 1013px) {
-  .review__container {
-    width: 100%;
-    padding: 1rem;
-  }
   .review__info {
-    padding: 0;
+    text-align: center;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+  } 
+
+  .agency__info--polygon {
+    margin-left:  auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  } 
+  .agency__info--polygon p{
+    width: 70%;
   }
 }
 @media (max-width: 1050px) {
   .bookTour__info--1 h1 {
     font-size: 2rem;
   }
-}
-@media (max-width: 800px) {
-  .tour__about p {
-    margin: 0;
-    font-size: 1.3rem;
-    width: 120%;
-    margin: 1rem -6rem;
-  }
-}
-@media (max-width: 750px) {
-  .tour__info {
-    grid-template-columns: 1fr;
+  .tour__about h1,
+  .quick__facts h1 {
+    font-size: 2rem;
   }
 
-  .tour__about-1 {
-    /*padding: 5rem 10rem 10rem 10rem;*/
-    transform: translateY(-4rem);
-    transform: skewY(-4deg);
+  .tour__detail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 1rem;
   }
-  .tour__about-1 > * {
-    transform: skewY(4deg);
-  }
-  .tour__about p {
-    width: 80%;
-  }
-  .tour__about h1 {
-    margin-top: 1rem;
-  }
-  .quick__facts {
-    padding: 20rem 10rem;
-  }
-  .quick__facts h1 {
-    margin: 3rem 0;
-    font-size: 2rem;
+}
+
+
+@media (max-width: 950px) {
+  .bookTour__info {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
   }
+  /*.quick__facts-1 h1 {
+    margin-left: 2rem;
+  }*/
+ /* .quick__facts-1 ul {
+    width: 130%;
+    height: 130%;
+  }*/
+  .bookTour__info--1 {
+    margin: 2rem;
+  }
+  .bookTour__buttons {
+    margin-right: 30%;
+  }
 }
 
-@media (max-width: 700px) {
+
+@media (max-width: 865px) {
+  .tour__about h1,
+  .quick__facts h1 {
+    font-size: 2rem;
+  }
+}
+
+
+@media (max-width: 750px) {
+  .tour__info-1{
+    display: flex;
+    flex-direction: column;
+  }
+  .quick__facts-1 {
+    margin-top: -20rem;
+    padding: 23rem;
+  }
+  .tour__about-1{
+    padding: 15rem;
+    padding-bottom: -20rem;
+    
+    margin-bottom: 5rem;
+  }
+ 
+  .agency__info {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+  }
+  .quick__facts2 {
+    margin-top: -20rem;
+    padding: 0;
+  }
+  .quick__facts2 h1 {
+    margin-top: -5rem;
+  }
+  .agency__info--polygon{
+   width: 100%;
+  }
+  .agency__info--polygon h1{
+    margin-top: -20rem;
+  }
+}
+
+@media (max-width: 625px) {
+  .review__container h1 {
+    font-size: 1.6rem;
+  }
   .review__info {
-    width: 100%;
+    width: 120%;
+  }
+  .review__info p {
+    font-size: 1.4rem;
+  }
+  .review__span {
+    margin-left: 1rem;
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 575px) {
+  .quick__facts-1 ul  {
+     width: 200%;
+
+  }
+
+  .quick__facts-1 {
+    padding: 20rem;
+    padding-right: 25rem;
+  }
+  .quick__facts-1 h1 {
+    width: 200%;
+  }
+  .quick__facts-1 ul li {
+    width: 140%;
+  }
+
+  .review__container h1 {
+    margin-left: 5rem;
+  }
+  /*.single__review {*/
+    /*display: flex;
+    flex-direction: column;
+    align-items: center;
+  /*}*/
+
+  .review__info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  ..quick__facts-1 {
+    margin-left: 5rem;
+  }
+  .bookTour__info {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -381,52 +480,39 @@
   }
 }
 
-@media (max-width: 450px) {
-  .tour__about-1 {
-    /*padding: 5rem 10rem 10rem 10rem;*/
-    padding-bottom: -10rem;
-    padding-top: 4rem;
-    transform: translateY(-4rem);
-    transform: skewY(-4deg);
-  }
-  .bookTour__info--1 p {
-    font-size: 1.3rem;
-  }
-  .bookTour__container {
-    padding: 6rem;
-    font-size: 1.5rem;
-  }
-  .agency__info--polygon {
-    margin: -3rem;
-    padding-bottom: 4rem;
-  }
-  .bookTour__info--1 h1 {
-    font-size: 1.6rem;
-  }
-  .agency__info--polygon > * {
-    transform: translateY(-7rem);
-  }
+@media (max-width: 430px) {
   .quick__facts-1 {
-    padding: 20rem 12rem;
-    margin-top: -18rem;
+    padding: 20rem;
+    padding-right: 25rem;
   }
   .quick__facts-1 h1 {
-    margin: 3rem 0;
-    font-size: 2rem;
-    text-align: center;
+    width: 200%;
+  }
+  .quick__facts-1 ul li {
+    width: 140%;
+  }
+   .quick__facts2 {
+    margin-top: -15rem;
+    margin-bottom: 5rem;
+    padding: 4rem;
+  }
+  .quick__facts2 h1 {
+    margin-top: -5rem;
+  }
+  .agency__info--polygon{
+   width: 100%;
+  }
+  .agency__info--polygon h1{
+    margin-top: -15rem;
+  }
+  .tourDescription {
+    width: 110%;
   }
 }
 
-@media (max-width: 950px) {
+@media (max-width: 320px) {
   .bookTour__info {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-  .bookTour__info--1 {
-    margin: 2rem;
-  }
-  .bookTour__buttons {
-    margin-right: 30%;
+    width: 120%;
+
   }
 }

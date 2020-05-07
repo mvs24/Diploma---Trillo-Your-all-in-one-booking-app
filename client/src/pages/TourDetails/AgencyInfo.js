@@ -40,7 +40,7 @@ const AgencyInfo = (props) => {
           {error}
         </ErrorModal>
       )}
-      <div className="quick__facts">
+      <div className="quick__facts quick__facts2">
         <h1 style={{ fontSize: '2rem' }}>
           PART OF {agency.name.toUpperCase()} AGENCY
         </h1>

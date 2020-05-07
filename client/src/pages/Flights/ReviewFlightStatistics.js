@@ -172,7 +172,7 @@ const ReviewFlightStatistics = (props) => {
             }
 
             return (
-              <div key={i} className="single__review ">
+              <div key={i} className="single__review sReview2">
                 <div
                   className="bck"
                   style={{
@@ -181,7 +181,7 @@ const ReviewFlightStatistics = (props) => {
                 >
                   &nbsp;
                 </div>
-                {stars}
+                <div className='reviewStars'>{stars}</div>
                 <span className="review__span">
                   {review.percentage.toFixed(2)}%
                 </span>

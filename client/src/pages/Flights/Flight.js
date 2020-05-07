@@ -506,7 +506,7 @@ const Flight = React.memo((props) => {
       <div className="flight__info">
         <p>Agency: {agency.name}</p>
         <p className="flight__rating__container">
-          {' '}
+  
           <span>Rating: </span>
           <span>
             {' '}
@@ -555,12 +555,7 @@ const Flight = React.memo((props) => {
         )}
       </div>
       <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          marginTop: '1.5rem',
-        }}
+        className='flight__buttons'
       >
         <Button type="success" clicked={visitAgencyHandler}>
           VISIT AGENCY

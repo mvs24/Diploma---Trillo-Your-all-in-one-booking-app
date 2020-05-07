@@ -59,3 +59,12 @@
   background-clip: text;
   display: block;
 }
+
+@media (max-width: 550px) {
+ 
+  .agency__info--1 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(20rem, max-content) );
+    grid-column: 1 / -1;
+  }
+}

@@ -54,3 +54,19 @@
   margin: 4rem 10rem;
   margin-left: auto;
 }
+
+
+@media (max-width: 550px) {
+  .input__data input {
+    width: 85%;
+  }
+  .input__data input:focus {
+    width: 100%;
+  }
+  .input__data textarea {
+    width: 85%;
+  }
+  .edit__agency--form--img {
+    flex-direction: column;
+  }
+}

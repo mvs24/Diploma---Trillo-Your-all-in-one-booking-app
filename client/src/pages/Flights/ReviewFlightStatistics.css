@@ -14,3 +14,21 @@
   display: block;
   text-align: center;
 }
+
+@media (max-width: 400px) {
+  .blue__reviews {
+    width: 100%;
+  }
+  .blue__heading {
+    font-size: 1.4rem;
+    width: 130%;
+  }
+  .single__review{
+    display: grid;
+
+  }
+  .reviewStars {
+    display: flex;
+    align-items: center;
+  }
+}

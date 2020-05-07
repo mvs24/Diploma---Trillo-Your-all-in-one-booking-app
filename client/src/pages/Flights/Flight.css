@@ -71,3 +71,37 @@
   height: 10rem;
   margin: 1rem 1rem;
 }
+.flight__buttons{
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+         margin-top: 1.5rem;
+        }
+
+@media (max-width: 950px ){
+  .flight__container {
+    padding: 0;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  }
+  .flight__info p, .from__to p {
+    font-size: 1.6rem;
+  }
+  .flight__info, .from__to, .flight__buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .flight__buttons img {
+    order: -1;
+  }
+  .flight__rating__container {
+   display: flex;
+   align-items: center;
+   text-align: center;
+      margin-left: 100%;
+     /*padding-left: 20%;*/
+  }
+}

@@ -17,3 +17,10 @@
   margin: 0 2rem;
   cursor: pointer;
 }
+
+@media (max-width: 600px) {
+  .footer {
+    display: grid;
+    grid-template-rows: repeat(2, 1fr);
+  }
+}

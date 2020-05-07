@@ -248,6 +248,7 @@ const Flights = (props) => {
                   <IoIosAirplane />
                 </IconContext.Provider>
               </div>
+
               <Input
                 value={flightsInput['to'].value}
                 valid={flightsInput['to'].valid}
@@ -256,7 +257,10 @@ const Flights = (props) => {
                 onChange={(e) => inputHandler(e, 'to')}
               />
             </div>
-            <div className="input__container">
+            <div className="input__container inputDepartDate">
+            <label>
+              Depart
+            </label>
               <Input
                 value={flightsInput['depart'].value}
                 valid={flightsInput['depart'].valid}
@@ -271,7 +275,8 @@ const Flights = (props) => {
                   <MdDateRange />
                 </IconContext.Provider>
               </div>
-              {selectedWay === 'roundTrip' ? (
+              {selectedWay === 'roundTrip' ? (<div className='labelReturnDate'>
+                <label>Return Date</label>
                 <Input
                   value={flightsInput['returnDate'].value}
                   valid={flightsInput['returnDate'].valid}
@@ -279,6 +284,7 @@ const Flights = (props) => {
                   configOptions={flightsInput['returnDate'].configOptions}
                   onChange={(e) => inputHandler(e, 'returnDate')}
                 />
+                </div>
               ) : null}
             </div>
             <div className="flights__btns">

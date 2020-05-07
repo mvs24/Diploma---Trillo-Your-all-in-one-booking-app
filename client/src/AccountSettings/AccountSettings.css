@@ -2,6 +2,7 @@
   background: #f4f2f2;
   padding: 7rem 3rem;
   min-height: 100vh;
+  width: 100%;
 }
 .settings__info {
   display: flex;
@@ -43,7 +44,7 @@
   margin-right: 1.2rem;
 }
 .user__info {
-  flex: 1;
+  flex: 0 0 70%;
   align-self: stretch;
   display: flex;
   flex-direction: column;
@@ -178,5 +179,14 @@
 @media (max-width: 600px) {
   .settings__info {
     flex-direction: column;
+  }
+}
+
+@media (max-width: 550px) {
+  .user__info--fields input, .password__fields input {
+    width: 85%;
+  }
+  .user__info--fields input:focus, .password__fields input:focus {
+    width: 95%;
   }
 }

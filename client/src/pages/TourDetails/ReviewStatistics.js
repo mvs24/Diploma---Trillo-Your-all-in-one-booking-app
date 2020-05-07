@@ -123,8 +123,8 @@ const ReviewStatistics = (props) => {
                   }}
                 >
                   &nbsp;
-                </div>
-                {stars}
+                </div> 
+                 <div className='reviewStars'>{stars}</div>
                 <span className="review__span">
                   {review.percentage.toFixed(2)}%
                 </span>

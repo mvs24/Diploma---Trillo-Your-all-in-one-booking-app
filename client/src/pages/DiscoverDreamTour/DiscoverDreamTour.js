@@ -52,7 +52,7 @@ const DiscoverDreamTour = React.memo((props) => {
     value: null,
     label: 'Sort By',
   });
-  const [selectedDistanceOption, setSelectedDistanceOption] = useState();
+  const [selectedDistanceOption, setSelectedDistanceOption] = useState({value: null, label: "Tours within your distance"});
   const [checkedIn, setCheckedIn] = useState([]);
   const [radioValue, setRadioValue] = useState();
   const [openToursWithinModal, setOpenToursWithinModal] = useState();
@@ -631,6 +631,7 @@ const DiscoverDreamTour = React.memo((props) => {
                 value={selectedDistanceOption}
                 onChange={handleDistanceChange}
                 options={distanceOptions}
+                className='selectTickets'
               />
               <Button
                 className="discover__button discover__button--confirm"

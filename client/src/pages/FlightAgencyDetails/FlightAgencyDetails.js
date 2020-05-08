@@ -7,6 +7,7 @@ import Button from '../../shared/components/Button/Button';
 import Agency from '../../components/Agency/Agency';
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
 import Flight from '../../pages/Flights/Flight';
+import './FlightAgencyDetails.css'
 
 const FlightAgencyDetails = (props) => {
   const [agency, setAgency] = useState();
@@ -16,6 +17,7 @@ const FlightAgencyDetails = (props) => {
   const [myFlightsIds, setMyFlightsIds] = useState();
   const start = 0;
   const [end, setEnd] = useState(4);
+  const [endFinished, setEndFinished] = useState(1)
   const { isAuthenticated } = props;
 
   useEffect(() => {
@@ -77,6 +79,14 @@ const FlightAgencyDetails = (props) => {
     setEnd((prev) => prev + 4);
   };
 
+  const showMoreFinishedHandler = () => {
+    setEndFinished((prev) => prev + 1);
+  };
+
+
+  let futureFlights = agency.flights.filter(el => new Date(el.depart) > Date.now())
+  let finishedFlights = agency.flights.filter(el => new Date(el.depart) <= Date.now())
+
   return (
     <>
       {loading && <LoadingSpinner asOverlay />}
@@ -88,7 +98,7 @@ const FlightAgencyDetails = (props) => {
       <div className="agency__details--container">
         <Agency agency={agency} flight />
         <div className="flightsAgencyCnt">
-          {agency.flights.slice(start, end).map((flight) => (
+          {futureFlights.slice(start, end).map((flight) => (
             <Flight
               booked={isAuthenticated && myFlightsIds.includes(flight._id)}
               white
@@ -98,12 +108,38 @@ const FlightAgencyDetails = (props) => {
           <div className="searchBtn--grid">
             <Button
               type="pink"
-              disabled={end >= agency.flights.length}
+              disabled={end >= futureFlights.length}
               clicked={showMoreHandler}
             >
               Show More
             </Button>
           </div>
+        </div>
+        <div> 
+         <h1 className="my__wishlist--heading">FINISHED FLIGHTS ({finishedFlights.length})</h1>
+          <div className="flightsAgencyCnt">
+          {finishedFlights.slice(start, endFinished).map((flight) => (
+            <Flight
+              booked={isAuthenticated && myFlightsIds.includes(flight._id)}
+              white
+              finished
+              flight={flight}
+            />
+          ))}
+          <div className="searchBtn--grid">
+            <Button
+              type="pink"
+              disabled={endFinished >= finishedFlights.length}
+              clicked={showMoreFinishedHandler}
+            >
+              Show More Finished Flights
+            </Button>
+          </div>
+        </div>
+
+
+
+
         </div>
       </div>
     </>

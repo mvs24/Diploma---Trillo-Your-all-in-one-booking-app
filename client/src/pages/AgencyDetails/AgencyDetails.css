@@ -57,9 +57,8 @@
 }
 
 .agency__tours {
-  background: #f4f2f2;
   text-align: center;
-  padding: 8rem 4rem;
+padding: 3rem;
 }
 .agency__tours h1 {
   color: #ffb900;
@@ -136,5 +135,17 @@
   }
   .agency__name {
     flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 500px) {
+  .agency__details--info {
+    width: 70vw;
+  }
+}
+
+@media (max-width: 400px) {
+  .agency__details--info {
+    width: 80vw;
   }
 }

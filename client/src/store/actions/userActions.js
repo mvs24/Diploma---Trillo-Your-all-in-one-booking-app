@@ -160,7 +160,7 @@ export const addToWishlist = (tourId) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: ADD_TO_WISHLIST_ERROR,
-      errormsg: err.response.data.message,
+      errormsg: err.response.data.message ?  err.response.data.message : "You need to be logged in!",
     });
   }
 };

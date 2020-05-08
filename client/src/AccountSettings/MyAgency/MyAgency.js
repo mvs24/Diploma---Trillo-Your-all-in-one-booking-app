@@ -179,7 +179,7 @@ const MyAgency = (props) => {
             Finished Flights
           </h1>
         )}
-        {myAgency.category === 'tours' && (
+        {myAgency.category === 'tours' && ( 
           <h1 onClick={toursHandler} className="myAgency__heading" ref={tours}>
             Future Tours ({myTours.length})
           </h1>
@@ -213,7 +213,8 @@ const MyAgency = (props) => {
       </div>
       {myAgency.category === 'flights' && display === 'flights' && (
         <>
-          <div className="my__agencyFlights">
+         {myFlights.length === 0 ? <div className="my__agencyFlights"> <h1 className='finishedToursHeading1'>Future Flights ({myFlights.length})</h1></div>  :
+          ( <div className="my__agencyFlights">
             {myFlights.slice(start, endFlight).map((flight) => (
               <Flight updateAgency={updateAgency} owner flight={flight} />
             ))}
@@ -227,7 +228,8 @@ const MyAgency = (props) => {
                 Show More
               </Button>
             </div>
-          </div>
+          </div>)
+          }
         </>
       )}
       {display === 'agency' && myAgency.category === 'tours' && (
@@ -237,27 +239,26 @@ const MyAgency = (props) => {
         <Agency flight changeBcg agency={myAgency} />
       )}
       {myAgency.category === 'tours' && display === 'tours' && (
-        <div className="my__tours">
-          <div className="tours__grid">
-            {myTours.length > 0 ? (
-              myTours.slice(start, end).map((tour) => <TourItem tour={tour} />)
-            ) : (
-              <div>
-                <h1 className=" noTourFoundHeading">No Tour found!</h1>
-              </div>
-            )}
-          </div>
-          <div className="searchBtn--grid">
-            {' '}
-            <Button
+       
+        <>
+         <div className='my__tours__1'>
+        <h1 className='finishedToursHeading1'>Future Tours ({myTours.length})</h1>
+        <div className='finishedToursGrid'>
+          {myTours.slice(start, end).map(tour => {
+            return <TourItem tour={tour} />
+          })} 
+        </div>
+        <div className='showMoreFinishedToursBtn'>
+        <Button
               type="pink"
               disabled={end >= myTours.length}
               clicked={showMoreHandler}
             >
               Show More
             </Button>
-          </div>
         </div>
+      </div>
+  </>
       )}
       {display === 'edit' && (
         <EditAgency updateAgency={updateAgency} agency={myAgency} />

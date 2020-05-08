@@ -38,15 +38,13 @@ const FinishedFlights = ({ agency }) => {
   if (!finishedFlights) return <LoadingSpinner asOverlay />;
   if (finishedFlights.length === 0)
     return (
-      <div className="edit__agency--container">
-        No finished Flights found! Keep going!
-      </div>
+      <div className="my__agencyFlights"> <h1 className='finishedToursHeading1'>No Finished Flights found</h1></div> 
     );
 
   return (
     <div className="my__agencyFlights">
       <h1 className="my__wishlist--heading">
-        FINISHED FLIGHTS ({finishedFlights.length})
+        FINISHED FLIGHTS ({finishedFlights.length}) 
       </h1>
       {finishedFlights.slice(start, end).map((flight) => (
         <Flight key={flight._id} flight={flight} />

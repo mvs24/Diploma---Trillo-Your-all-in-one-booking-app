@@ -32,7 +32,11 @@
   );
   color: transparent;
   background-clip: text;
-  margin-bottom: 1rem;
+  margin: 2rem;
+}
+.filter {
+  display: flex;
+  align-items: center;
 }
 
 .filter__item--category {

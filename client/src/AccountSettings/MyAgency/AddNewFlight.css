@@ -1,33 +1,33 @@
 .btnLocation {
-	text-align: center;
-	margin: 2rem;
+  text-align: center;
+  margin: 2rem;
 }
 
-.select2{
-	width: 50%;
-	margin: 1rem;
-	font-size: 1.6rem;
+.select2 {
+  width: 50%;
+  margin: 1rem;
+  font-size: 1.6rem;
 }
-.save__flight{
-	align-self: flex-end;
-	margin: 2rem;
+.save__flight {
+  align-self: flex-end;
+  margin: 2rem;
 }
 
 .depart__flight {
-	display: flex;
-	flex-direction: column;
-	font-size: 1.5rem;
-	justify-content: center;
+  display: flex;
+  flex-direction: column;
+  font-size: 1.5rem;
+  justify-content: center;
 }
-.depart__flight label{
-	margin: .2rem 1.5rem;
+.depart__flight label {
+  margin: 0.2rem 1.5rem;
 }
 
 @media (max-width: 550px) {
-	.flightForm input{ 
-		width: 75%;
-	 }
-	 .flightForm input:focus{ 
-		width: 85%;
-	 }
+  .flightForm input {
+    width: 75%;
+  }
+  .flightForm input:focus {
+    width: 85%;
+  }
 }

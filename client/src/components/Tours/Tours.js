@@ -5,6 +5,7 @@ import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
 import './Tours.css';
 import TourItem from '../TourItem/TourItem';
 import ErrorModal from '../../shared/components/UI/ErrorModal';
+import Button from '../../shared/components/Button/Button'
 
 const Tours = React.memo((props) => {
   const [mostPopularTours, setMostPopularTours] = useState([]);
@@ -17,6 +18,8 @@ const Tours = React.memo((props) => {
   const [topToursLoaded, setTopToursLoaded] = useState(false);
   const topToursRef = useRef(null);
   const mostPopularToursRef = useRef();
+  const startFinished = 0;
+  const [endFinished, setEndFinished] = useState(3);
 
   const changeUIForTopTours = () => {
     setActiveLink('top');
@@ -91,6 +94,12 @@ const Tours = React.memo((props) => {
     getFinishedTours()
   }, [])
 
+
+  const showMoreHandler = () => {
+    setEndFinished((prev) => prev + 3);
+  };
+
+
   let topToursContent =
     activeLink === 'top'
       ? topTours.map((tour) => <TourItem key={tour._id} tour={tour} />)
@@ -120,8 +129,19 @@ const Tours = React.memo((props) => {
         {finishedTours ? <div >
             <h1 className='finished__heading'>FINISHED TOURS: ({finishedTours.length})</h1>
             <div className='finished__tours__container'>
-            {finishedTours.map(tour => <TourItem key={tour._id} tour={tour} />)}
-          </div> </div> :null} 
+            {finishedTours.slice(startFinished, endFinished).map(tour => <TourItem finished key={tour._id} tour={tour} />)}
+         
+          </div>
+           <div className='finishedToursButton'>  <Button
+          type="pink"
+          disabled={endFinished >= finishedTours.length}
+          clicked={showMoreHandler}
+          
+        >
+          Show More
+        </Button>
+        </div>
+           </div> :null} 
         
       </div>
     </div>

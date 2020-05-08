@@ -3,6 +3,7 @@ const factory = require('./factoryHandler');
 const asyncWrapper = require('../utils/asyncWrapper');
 const AppError = require('../utils/appError');
 const Agency = require('../models/agencyModel');
+const Email = require('../utils/email');
 
 exports.getAllUsers = asyncWrapper(async (req, res, next) => {
   const users = await User.find();
@@ -127,3 +128,23 @@ exports.getMyAgency = asyncWrapper(async (req, res, next) => {
     data: agency,
   });
 });
+
+exports.contactMe = asyncWrapper(async(req, res, next) => {
+  try {
+      let user = {
+            to: "Marius Vasili", 
+            email: "Marius.Vasili@fti.edu.al"
+          }
+          await new Email(user, null, req.body.email).contactUs(req.body.message + "   Email: "+req.body.email);
+
+
+          res.status(200).json({
+            status: "success",
+            message: "Email sent"
+          })
+  } catch(err) {
+      console.log(err)
+  }
+    
+})
+ 

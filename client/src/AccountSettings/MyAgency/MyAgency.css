@@ -146,11 +146,19 @@
     margin: 0 2rem;
   }
 }
-
+ 
 
 @media (max-width: 650px) {
   .myAgency__links {
     display: flex;
     flex-direction: column;
+
+  }
+}
+
+@media (max-width: 850px) {
+  .myAgency__links {
+    font-size: 1rem;
+    
   }
 }

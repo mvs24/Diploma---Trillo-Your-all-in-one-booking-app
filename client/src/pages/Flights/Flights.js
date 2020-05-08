@@ -144,28 +144,39 @@ const Flights = (props) => {
         isValid = false;
       }
     }
-    if (!selectedOption) isValid = false;
+    if (!selectedOption.value) isValid = false;
 
     if (!isValid) {
       setError('Control your data... Something is wrong!');
       return;
     }
 
-    const data = {
-      variety: oneWay.checked ? 'One-Way' : 'Round-Trip',
+    let data = {
+      variety: oneWay.current.checked ? 'One-Way' : 'Round-Trip',
       from: flightsInput.from.value,
       to: flightsInput.to.value,
       depart: flightsInput.depart.value,
       package: selectedOption.value,
-      returnDate: flightsInput.returnDate
-        ? flightsInput.returnDate.value
-        : null,
     };
 
-    await props.getRequestedFlights(data);
-    props.history.push(
+
+    if (data.variety === 'Round-Trip') {
+      data.returnDate = flightsInput.returnDate.value
+    }
+
+    // await props.getRequestedFlights(data);
+
+    if (data.returnDate) {
+      props.history.push(
       `/requested/flights?variety=${data.variety}&from=${data.from}&to=${data.to}&depart=${data.depart}&package=${data.package}&returnDate=${data.returnDate}`
     );
+    } else {
+       props.history.push(
+      `/requested/flights?variety=${data.variety}&from=${data.from}&to=${data.to}&depart=${data.depart}&package=${data.package}`
+    );
+    }
+
+    
   };
 
   const checkBoxHandler = (e) => {
@@ -257,10 +268,15 @@ const Flights = (props) => {
                 onChange={(e) => inputHandler(e, 'to')}
               />
             </div>
-            <div className="input__container inputDepartDate">
-            <label>
-              Depart
-            </label>
+
+           
+
+
+          <div className="input__container">
+              <>
+               <label className='dep__label'>
+                  Depart
+                </label>
               <Input
                 value={flightsInput['depart'].value}
                 valid={flightsInput['depart'].valid}
@@ -268,15 +284,20 @@ const Flights = (props) => {
                 configOptions={flightsInput['depart'].configOptions}
                 onChange={(e) => inputHandler(e, 'depart')}
               />
-              <div className="icons__container">
+              </>
+               <div className="icons__container">
                 <IconContext.Provider
                   value={{ className: ' icon__blue tour__detail--icon' }}
                 >
                   <MdDateRange />
                 </IconContext.Provider>
               </div>
-              {selectedWay === 'roundTrip' ? (<div className='labelReturnDate'>
-                <label>Return Date</label>
+
+             {selectedWay === 'roundTrip' ? (
+                <>
+                <label className='ret__label'>
+                  Return Date
+                </label>
                 <Input
                   value={flightsInput['returnDate'].value}
                   valid={flightsInput['returnDate'].valid}
@@ -284,9 +305,31 @@ const Flights = (props) => {
                   configOptions={flightsInput['returnDate'].configOptions}
                   onChange={(e) => inputHandler(e, 'returnDate')}
                 />
-                </div>
+                </>
               ) : null}
             </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             <div className="flights__btns">
               <Button type="blue">Search</Button>
               <Button

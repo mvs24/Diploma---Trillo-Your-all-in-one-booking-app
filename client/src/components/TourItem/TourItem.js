@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import moment from 'moment'
 import { useHistory } from 'react-router-dom';
 import Button from '../../shared/components/Button/Button';
 import { IconContext } from 'react-icons';
@@ -510,6 +511,9 @@ const TourItem = React.memo((props) => {
     }
   };
 
+let filteredDates = tour.startDates.filter(el => new Date(el) > Date.now())
+
+
   return (
     <>
       {loading && <LoadingSpinner asOverlay />}
@@ -585,7 +589,7 @@ const TourItem = React.memo((props) => {
           <IconContext.Provider value={{ className: ' icon__green' }}>
             <MdDateRange />
           </IconContext.Provider>
-          <p>{tour.startDates[0].split('T')[0]}</p>
+         {props.finished ? <p>Finished</p> :  <p>{moment(filteredDates[0]).format("MMM Do YYYY") }</p>}
         </div>
         <div className="tour__location">
           <IconContext.Provider value={{ className: ' icon__green' }}>

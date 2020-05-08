@@ -104,4 +104,20 @@
       margin-left: 100%;
      /*padding-left: 20%;*/
   }
+  .myFlightReviewCnt {
+    display: flex;
+  }
+   .review__flight {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    margin: 2rem;
+  }
+  .review__flight h5 {
+    display: block;
+    width: 100%;
+    font-size: 1.1rem;
+  }
 }
+

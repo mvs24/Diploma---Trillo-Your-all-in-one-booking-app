@@ -5,6 +5,8 @@ import qs from 'qs';
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
 import ErrorModal from '../../shared/components/UI/ErrorModal';
 import axios from 'axios';
+import Button from '../../shared/components/Button/Button';
+
 
 const RequestedFlights = (props) => {
   const [requestedFlights, setRequestedFlights] = useState();
@@ -12,6 +14,8 @@ const RequestedFlights = (props) => {
   const [error, setError] = useState();
   const [myFlights, setMyFlights] = useState();
   const [myFlightsIds, setMyFlightsIds] = useState();
+  const start  =0;
+  const [end, setEnd] = useState(4);
   const { isAuthenticated } = props;
 
   useEffect(() => {
@@ -47,7 +51,8 @@ const RequestedFlights = (props) => {
         const data = qs.parse(props.location.search.split('?')[1]);
         let str = '';
 
-        if (data.returnDate == 'null') {
+
+        if (!data.returnDate) {
           str = `/api/v1/flights/searchedFlights?variety=${data.variety}&from=${data.from}&to=${data.to}&depart=${data.depart}&package=${data.package}`;
         } else {
           str = `/api/v1/flights/searchedFlights?variety=${data.variety}&from=${data.from}&to=${data.to}&depart=${data.depart}&package=${data.package}&returnDate=${data.returnDate}`;
@@ -64,6 +69,11 @@ const RequestedFlights = (props) => {
     getRequestedFlights();
   }, []);
 
+    const showMoreHandler = () => {
+    setEnd((prev) => prev + 4);
+  };
+
+
   if (loading) return <LoadingSpinner asOverlay />;
   if (!requestedFlights) return <h1>No flights found...</h1>;
   if (isAuthenticated) {
@@ -78,17 +88,25 @@ const RequestedFlights = (props) => {
       {loading && <LoadingSpinner asOverlay />}
       {error && (
         <ErrorModal show onClear={() => setError()}>
-          {error}
+          {error ? error : "Something went wrong!"}
         </ErrorModal>
       )}
-      <div className="flight__filters">Filters</div>
       <div className="all__flights">
-        {requestedFlights.map((flight) => (
+        {requestedFlights.slice(start, end).map((flight) => (
           <Flight
             booked={isAuthenticated ? myFlightsIds.includes(flight._id) : false}
             flight={flight}
           />
         ))}
+        <div className='finishedToursButton'>
+        <Button
+          type="blue"
+          disabled={end >= requestedFlights.length}
+          clicked={showMoreHandler}
+        >
+          Show More
+        </Button>
+        </div>
       </div>
     </div>
   );

@@ -62,12 +62,12 @@ const flightSchema = new mongoose.Schema(
     },
     priceDiscount: {
       type: Number,
-      validate: {
-        validator: function (val) {
-          return val < this.pricePerPerson;
-        },
-        message: 'Discount price ({VALUE}) should be below regular price',
-      },
+      // validate: {
+      //   validator: function (val) {
+      //     return val < this.pricePerPerson;
+      //   },
+      //   message: 'Discount price ({VALUE}) should be below regular price',
+      // },
     },
     priceDiscountMessage: {
       type: String,

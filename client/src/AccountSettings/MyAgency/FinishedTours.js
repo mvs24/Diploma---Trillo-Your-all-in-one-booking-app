@@ -8,6 +8,7 @@ import Textarea from '../../shared/components/Input/Textarea';
 import Button from '../../shared/components/Button/Button';
 import TourItem from '../../components/TourItem/TourItem';
 import './EditAgency.css';
+import './FinishedTours.css'
 
 const FinishedTours = ({ agency }) => {
   const [finishedTours, setFinishedTours] = useState();
@@ -15,7 +16,7 @@ const FinishedTours = ({ agency }) => {
   const [loading, setLoading] = useState(false);
   const history = useHistory();
   const start = 0;
-  const [end, setEnd] = useState(5);
+  const [end, setEnd] = useState(6);
 
   useEffect(() => {
     const getFinishedTours = async () => {
@@ -36,7 +37,7 @@ const FinishedTours = ({ agency }) => {
   }, []);
 
   const showMoreHandler = () => {
-    setEnd((prev) => prev + 5);
+    setEnd((prev) => prev + 6);
   };
 
   if (!finishedTours) return <LoadingSpinner asOverlay />;
@@ -52,26 +53,26 @@ const FinishedTours = ({ agency }) => {
     );
 
   return (
-    <div className="my__tours">
-      <h1 className="my__wishlist--heading my__wishlist--heading-grid">
-        FINISHED TOURS ({finishedTours.length})
-      </h1>
+  
 
-      <div className="tours__grid">
-        {finishedTours.map((tour) => (
-          <TourItem key={tour._id} finished tour={tour} />
-        ))}
-      </div>
-      <div className="searchBtn--grid">
+      <div className='my__tours__1'>
+        <h1 className='finishedToursHeading1'>Finished Tours ({finishedTours.length})</h1>
+        <div className='finishedToursGrid'>
+          {finishedTours.slice(start, end).map(tour => {
+            return <TourItem finished tour={tour} />
+          })} 
+        </div>
+        <div className='showMoreFinishedToursBtn'>
         <Button
-          type="pink"
-          disabled={end >= finishedTours.length}
-          clicked={showMoreHandler}
-        >
-          Show More
-        </Button>
+              type="pink"
+              disabled={end >= finishedTours.length}
+              clicked={showMoreHandler}
+            >
+              Show More
+            </Button>
+        </div>
       </div>
-    </div>
+ 
   );
 };
 

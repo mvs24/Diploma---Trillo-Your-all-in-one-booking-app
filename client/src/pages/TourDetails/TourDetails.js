@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import './TourDetails.css';
 import axios from 'axios';
+import moment from 'moment'
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
 import ErrorModal from '../../shared/components/UI/ErrorModal';
 import Modal from '../../shared/components/UI/Modal';
@@ -188,7 +189,7 @@ const TourDetails = React.memo((props) => {
       setProcessBooking(true);
     } catch (err) {
       setProcessBooking();
-      setError(err.response.data.message);
+      setError(err.response.data.message ? err.response.data.message : "Something went wrong! Be sure you are logged in first!");
     }
   };
 
@@ -334,6 +335,16 @@ const TourDetails = React.memo((props) => {
    
   }
 
+let filteredDates = tour.startDates.filter(el => new Date(el) > Date.now())
+
+ const compare = (a, b) => {
+    if (new Date(a.createdAt).getTime() < new Date(b.createdAt).getTime())
+      return -1;
+    else return 1;
+  };
+
+const newDates = filteredDates.sort(compare)
+
   return (
     <div className="tour__container">
       {error && (
@@ -376,13 +387,13 @@ const TourDetails = React.memo((props) => {
 
           <ul>
             <li>
-              <IconContext.Provider
+               <IconContext.Provider
                 value={{ className: 'icon__green tour__info--icon' }}
               >
                 <MdDateRange />
               </IconContext.Provider>
               <p className="second">Next Date</p>
-              <p className="data">{tour.startDates[0].split('T')[0]}</p>
+             {finishedTours.includes(tour._id) ? <p className="data">Finished</p> : <p className="data">{moment(newDates[0]).format("MMM Do YYYY") }</p> } 
             </li>
 
             <li>

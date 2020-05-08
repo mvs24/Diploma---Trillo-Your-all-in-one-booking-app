@@ -1,0 +1,23 @@
+.contactForm {
+	width: 60%;
+	margin: 3rem auto;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+.contactHeading {
+	margin: 1rem auto;
+	text-align: center; 
+	font-size: 2.8rem;
+  text-transform: uppercase;
+  background-image: linear-gradient(to right bottom, #5643fa, #ffb900);
+  color: transparent;
+  background-clip: text;
+  width: 100%;
+}
+@media (max-width: 600px) {
+	.contactForm {
+		width: 90%;
+	}
+}

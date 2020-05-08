@@ -137,6 +137,12 @@ exports.makePriceDiscount = asyncWrapper(async (req, res, next) => {
   }
 
   const priceDiscount = req.body.priceDiscount;
+  if (priceDiscount >= flight.pricePerPerson) {
+    return res.status(400).json({
+      status: "fail",
+      message: `Discount price (${priceDiscount}) should be below regular price`
+    })
+  }
   flight.priceDiscount = priceDiscount;
   flight.pricePerPerson -= priceDiscount;
   flight.priceDiscountMessage = msg;

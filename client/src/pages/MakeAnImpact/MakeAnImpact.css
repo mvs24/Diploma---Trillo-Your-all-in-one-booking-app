@@ -113,4 +113,11 @@
   .create__container {
     flex-direction: column;
   }
+
+  .jumpIn {
+    font-size: 1.5rem;
+  }
+  .jumpIn--1 {
+    font-size: 1.5rem;
+  }
 }

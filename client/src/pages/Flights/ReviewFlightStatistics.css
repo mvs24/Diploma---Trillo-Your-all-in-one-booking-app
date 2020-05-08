@@ -32,3 +32,9 @@
     align-items: center;
   }
 }
+
+@media (max-width: 500px) {
+  .finishedHeading--1 {
+    font-size: 1.5rem;
+  }
+}

@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { setHeaders, setCurrentUser } from './store/actions/userActions';
 import Layout from './Layout/Layout';
-import Tours from './pages/Tours/Tours';
 import Home from './pages/Home/Home';
 import TourDetails from './pages/TourDetails/TourDetails';
 import SuccessBooking from './components/SuccessBooking/SuccessBooking';
@@ -29,6 +28,7 @@ import AllFlights from './pages/AllFlights/AllFlights';
 import PrivateRoute from './utils/PrivateRoute';
 import NotFound from './pages/NotFound/NotFound';
 import Footer from './components/Footer/Footer'
+import ContactUs from './pages/ContactUs/ContactUs'
 import AboutUs from './pages/AboutUs/AboutUs'
 
 
@@ -47,41 +47,41 @@ function App(props) {
 
       <Layout>
         <Switch>
-          <Route path="/tours/:tourId" exact component={TourDetails} />
-          <Route path="/categories/tours" exact component={Tours} />
-          <Route path="/" exact component={Home} />
-          <PrivateRoute path="/me" exact component={AccountSettings} />
-          <PrivateRoute path="/my-bookings" exact component={MyBookings} />
-          <Route path="/agencies/:agencyId" exact component={AgencyDetails} />
+          <Route path="/tours/:tourId" exact component={TourDetails} />  //ok
+          <Route path="/" exact component={Home} />  //ok
+          <PrivateRoute path="/me" exact component={AccountSettings} />  //ok
+          <PrivateRoute path="/my-bookings" exact component={MyBookings} />  //ok
+          <Route path="/agencies/:agencyId" exact component={AgencyDetails} />  //ok
           <PrivateRoute
             path="/my-notifications"
             exact
             component={MyNotifications}
-          />
-          <Route
+          />  //ok
+          <Route 
             path="/discover-dream-tour"
             exact
             component={DiscoverDreamTour}
-          />
-          <PrivateRoute path="/my-wishlist" exact component={MyWishlist} />
-          <PrivateRoute path="/my-cart" exact component={MyCart} />
-          <PrivateRoute path="/my-reviews" exact component={MyReviews} />
-          <Route path="/search/:searchInput" exact component={Search} />
-          <Route path="/make-an-impact" exact component={MakeAnImpact} />
-          <Route path="/create-agency" exact component={CreateAgency} />
-          <Route path="/my-agency" exact component={MyAgency} />
-          <Route path="/categories/flights" exact component={Flights} />
-          <Route path="/requested/flights" exact component={RequestedFlights} />
-          <PrivateRoute path="/my-flights" exact component={MyFlights} />
+          />   //ok
+          <PrivateRoute path="/my-wishlist" exact component={MyWishlist} />  //ok
+          <PrivateRoute path="/my-cart" exact component={MyCart} />  //ok
+          <PrivateRoute path="/my-reviews" exact component={MyReviews} />  //ok
+          <Route path="/search/:searchInput" exact component={Search} /> //ok
+          <Route path="/make-an-impact" exact component={MakeAnImpact} /> //ok
+          <Route path="/create-agency" exact component={CreateAgency} /> //ok
+          <Route path="/my-agency" exact component={MyAgency} /> //ok
+          <Route path="/categories/flights" exact component={Flights} />  //ok
+          <Route path="/requested/flights" exact component={RequestedFlights} />  //ok
+          <PrivateRoute path="/my-flights" exact component={MyFlights} />  //ok
           <Route
             path="/flights/agency/:agencyId"
             exact
             component={FlightAgencyDetails}
-          />
-          <Route path="/flights/:flightId" exact component={FlightDetails} />
-          <Route path="/all-flights" exact component={AllFlights} />
-          <Route path="/about-us" exact component={AboutUs} />
-          <Route component={NotFound} />
+          />  //ok
+          <Route path="/flights/:flightId" exact component={FlightDetails} /> //ok
+          <Route path="/all-flights" exact component={AllFlights} />  //ok
+          <Route path="/about-us" exact component={AboutUs} /> //ok 
+          <Route path='/contact-us' exact component={ContactUs} /> //ok
+          <Route component={NotFound} />  //ok
         </Switch>
     
       </Layout>

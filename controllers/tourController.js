@@ -114,6 +114,16 @@ exports.createTour = asyncWrapper(async (req, res, next) => {
   req.body.coordinates = undefined;
   req.body.address = undefined;
 
+  for (let i = 0; i<req.body.startDates.length-1;i++) {
+    if (new Date(req.body.startDates[i]) > new Date(req.body.startDates[i+1])){
+      return res.status(400).json({
+        status: "fail",
+        message: "Start Dates should be in the asc order! Try again!"
+      })
+    }
+  }
+ 
+
   if (req.file) {
     req.body.imageCover = `public/img/tours/tour-${uniqid()}-cover.jpeg`;
     await sharp(req.file.buffer)

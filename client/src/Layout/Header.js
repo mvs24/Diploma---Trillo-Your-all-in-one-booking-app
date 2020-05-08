@@ -522,14 +522,14 @@ const Header = React.memo((props) => {
   };
 
   let userContent = (
-    <>
+    <div className='logInSignUpBtns'>
       <Button type="success" clicked={openLoginModal}>
         Log In
       </Button>
       <Button type="neutral" clicked={openSignupModal}>
         Sign Up
       </Button>
-    </>
+    </div>
   );
 
   if (props.isAuthenticated) {
@@ -639,7 +639,7 @@ const Header = React.memo((props) => {
             Forgot your password? Click here to get the code.
           </h1>
 
-          {props.error && <h2 className="errorText">{props.error}</h2>}
+         
         </Modal>
       )}
 
@@ -661,7 +661,6 @@ const Header = React.memo((props) => {
         >
           {signupForm.map((el) => el)}
 
-          {props.error && <h2 className="errorText">{props.error}</h2>}
         </Modal>
       )}
 
@@ -807,7 +806,91 @@ const Header = React.memo((props) => {
             </ul>
           </nav>
         </div>
-      ) : null}
+      ) : (
+
+
+
+
+<div className="navigation1">
+          <input
+            type="checkbox"
+            className="navigation__checkbox1"
+            id="navi-toggle"
+          />
+
+          <label for="navi-toggle" className="navigation__button1">
+            <span className="navigation__icon1">&nbsp;</span>
+          </label>
+
+          <div className="navigation__background1">&nbsp;</div>
+
+          <nav className="navigation__nav1">
+            <ul className="navigation__list1">
+              
+              <li className="navigation__item1">
+                <Link
+                  onClick={() => {
+                    document.querySelector('.navigation__checkbox1').click();
+                    setOpenLogin(true)
+                  }}
+                  className="navigation__link1"
+                >
+                 <span>01</span> Log In
+                </Link>
+              </li>
+
+              <li className="navigation__item1">
+                <Link
+                  onClick={() => {
+                    document.querySelector('.navigation__checkbox1').click();
+                    setOpenSignup(true)
+                  }}
+                 
+                  className="navigation__link1"
+                >
+                  <span>02</span> Sign Up
+                </Link>
+              </li>
+
+               <li className="navigation__item1">
+                <Link
+                  onClick={() => {
+                    document.querySelector('.navigation__checkbox1').click();
+                  }}
+                  to="/categories/flights"
+                  className="navigation__link1"
+                >
+                  Discover flights
+                </Link>
+              </li>
+
+
+            </ul>
+          </nav>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      )}
 
       <header className="header">
         {props.error && <ErrorModal>{props.error}</ErrorModal>}

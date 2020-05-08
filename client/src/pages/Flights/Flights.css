@@ -99,10 +99,38 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+}
 
+.inputDepartDate label {
+  margin: 0 auto;
+  text-align: center;
+}
+.labelReturnDate {
+  display: flex;
+  align-items: center;
+}
+
+.dep__label {
+  font-size: 1.6rem;
+  margin: 0 1rem;
+}
+.ret__label{
+  font-size: 1.3rem;
+  margin: 0 2rem;
 }
 .labelReturnDate label {
   font-size: 1.6rem;
+}
+.labelReturnDate input {
+  width: 100%;
+
+}
+.depart1{
+  width: 40%;
+}
+.return1  {
+  width: 100%;
 }
 
 .inputDepartDate label {
@@ -110,6 +138,7 @@
   margin: 0 auto;
   margin-top: -1rem;
 }
+
 
 @media (max-width: 784px) {
   .flights__form{
@@ -141,6 +170,15 @@
     .select__class {
     padding-top: 1rem;
   }
+   .input__container  {
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+  }
+  .icons__container {
+    display: flex;
+    justify-content: space-around;
+  }
+
 }
 
 @media (max-width: 600px) {
@@ -160,5 +198,17 @@
     display: flex;
     justify-content: space-around;
   }
+
+  .depart1{
+    width: 100%;
+  }
    
+}
+@media (max-width: 400px) {
+  .select__class {
+    width: 110%;
+    padding: 0;
+    margin: 0;
+    font-size: 1.3rem;
+  }
 }

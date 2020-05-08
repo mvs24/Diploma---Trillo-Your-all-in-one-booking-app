@@ -14,6 +14,10 @@
 .active {
   border-bottom: 1px solid #ccc;
 }
+.finishedToursButton {
+  margin: 5rem auto;
+  text-align: center;
+}
 
 .topToursContent {
   margin: 0 2vw;

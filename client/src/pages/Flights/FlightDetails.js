@@ -23,7 +23,7 @@ for (let i = 1; i <= 5; i++) {
 const FlightDetails = React.memo((props) => {
   const [flight, setFlight] = useState();
   const [myFlights, setMyFlights] = useState();
-  const [selectedOption, setSelectedOption] = useState();
+  const [selectedOption, setSelectedOption] = useState({value: null, label: "Number of tickets"});
   const [agency, setAgency] = useState();
   const [loading, setLoading] = useState(true);
   const [openConfirmTickets, setOpenConfirmTickets] = useState();
@@ -31,6 +31,8 @@ const FlightDetails = React.memo((props) => {
   const [booked, setBooked] = useState();
   const [page, setPage] = useState('info');
   const [error, setError] = useState();
+  const [openNotificationSent,setOpenNotificationSent] = useState()
+
   const [finishedFlights, setFinishedFlights] = useState();
   const [inputPriceDiscount, setInputPriceDiscount] = useState({
     configOptions: {
@@ -159,6 +161,7 @@ const FlightDetails = React.memo((props) => {
       setFlight(res.data.data);
       setOpenPriceDiscountModal();
       setLoading();
+      setOpenNotificationSent(true)
     } catch (err) {
       setLoading();
       setError(err.response.data.message);
@@ -195,6 +198,7 @@ const FlightDetails = React.memo((props) => {
 
   const bookFlight = async () => {
     const nrTickes = selectedOption.value;
+    if (!nrTickes) setError("Please confirm number of tickets!")
     try {
       if (props.isAuthenticated) {
         setProcessBooking(true);
@@ -211,7 +215,9 @@ const FlightDetails = React.memo((props) => {
       setProcessBooking(true);
     } catch (err) {
       setProcessBooking();
-      setError(err.response.data.message);
+      setError(err.response.data.message ? err.response.data.message : "Something went wrong! Be sure you are logged in first!");
+     
+
     }
   };
 
@@ -231,7 +237,10 @@ const FlightDetails = React.memo((props) => {
     setPage(link);
   };
 
-  if (loading) return <LoadingSpinner asOverlay />;
+  if (loading) return <LoadingSpinner asOverlay />
+    if (error) return  <ErrorModal show onClear={() => setError()}>
+          {error}
+        </ErrorModal>
   if (!flight || !agency) return <h1>No flight found with that ID...</h1>;
 
   return (
@@ -241,6 +250,10 @@ const FlightDetails = React.memo((props) => {
           {error}
         </ErrorModal>
       )}
+       {openNotificationSent && <Modal header='Notification Sent' show onCancel={() => setOpenNotificationSent()}>
+          <h1 className='modal__heading'>Notification sent to the selected people.</h1>
+        <Button type='success' clicked={() => setOpenNotificationSent()}>OK</Button>
+        </Modal>}
       {openPriceDiscountModal && (
         <Modal
           onCancel={() => setOpenPriceDiscountModal()}
@@ -278,6 +291,7 @@ const FlightDetails = React.memo((props) => {
               value={selectedOption}
               onChange={handleChange}
               options={options}
+              className='selectTickets'
             />
             <Button
               disabled={processBooking}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import Nature from '../../assets/tour-3-6.jpg';
+// import Nature from '../../assets/tour-3-6.jpg';
 import './AboutUs.css';
 // import Logo from '../../assets/logo.png';
 
@@ -18,13 +18,7 @@ export default (props) => {
       </div>
       <div className="center__about">
         <div className="aboutLogo">
-          <img
-            onClick={() => history.push('/')}
-            style={{ cursor: 'pointer' }}
-            className="logo"
-            src={Logo}
-            alt="Logo"
-          />
+          
           <h2 onClick={() => history.push('/')} className="heading__trillo">
             Trillo
           </h2>

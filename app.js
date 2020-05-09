@@ -52,20 +52,20 @@ app.use(mongoSanitize());
 app.use(xss());
 //***************//////////
 
-app.use(
-  '/public/img/tours',
-  express.static(path.join('public', 'img', 'tours'))
-);
-app.use(
-  '/public/img/users',
-  express.static(path.join('public', 'img', 'users'))
-);
-app.use(
-  '/public/img/agencies',
-  express.static(path.join('public', 'img', 'agencies'))
-);
+// app.use(
+//   '/public/img/tours',
+//   express.static(path.join('public', 'img', 'tours'))
+// );
+// app.use(
+//   '/public/img/users',
+//   express.static(path.join('public', 'img', 'users'))
+// );
+// app.use(
+//   '/public/img/agencies',
+//   express.static(path.join('public', 'img', 'agencies'))
+// );
 
-// app.use(express.static(path.join('client/build')))
+app.use(express.static(path.join('client/build')));
 
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/agencies', agencyRouter);

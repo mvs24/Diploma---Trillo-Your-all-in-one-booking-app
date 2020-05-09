@@ -65,7 +65,7 @@ app.use(
   express.static(path.join('public', 'img', 'agencies'))
 );
 
-app.use(express.static(path.join('client/build')));
+app.use(express.static(path.join(__dirname, 'client/build')));
 
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/agencies', agencyRouter);
@@ -80,8 +80,9 @@ app.use('/api/v1/cart/tours', cartTourRouter);
 app.use('/api/v1/flights', flightRouter);
 
 app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-  }); 
+  res.sendFile(path.join(__dirname+'/client/build/index.html'));
+});
+
 
 // if (process.NODE_ENV === 'production') {
 //   app.use(express.static('client/build'));

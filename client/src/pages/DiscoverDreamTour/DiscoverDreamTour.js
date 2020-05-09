@@ -44,7 +44,7 @@ const distanceOptions = [
 
 const DiscoverDreamTour = React.memo((props) => {
   const [allTours, setAllTours] = useState(null);
-  const [loading, setLoading] = useState();
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
   const [openCategory, setOpenCategory] = useState();
   const [openRatings, setOpenRatings] = useState();
@@ -52,19 +52,20 @@ const DiscoverDreamTour = React.memo((props) => {
     value: null,
     label: 'Sort By',
   });
-  const [selectedDistanceOption, setSelectedDistanceOption] = useState({value: null, label: "Tours within your distance"});
+  const [selectedDistanceOption, setSelectedDistanceOption] = useState({
+    value: null,
+    label: 'Tours within your distance',
+  });
   const [checkedIn, setCheckedIn] = useState([]);
   const [radioValue, setRadioValue] = useState();
   const [openToursWithinModal, setOpenToursWithinModal] = useState();
   const [userLocation, setUserLocation] = useState();
   const [disableBtn, setDisableBtn] = useState(true);
-  const [reRender, setRerender] = useState();
   const [cancelBtn, setCancelBtn] = useState(false);
-  const [shouldUpdate, setShouldUpdate] = useState();
   const [shouldUpdate2, setShouldUpdate2] = useState();
 
   const [page, setPage] = useState(1);
-  const [resPerPage, setResPerPage] = useState(4);
+  const resPerPage = 4;
 
   const [startPage, setStartPage] = useState(0);
   const [endPage, setEndPage] = useState(4);
@@ -147,11 +148,6 @@ const DiscoverDreamTour = React.memo((props) => {
     setStartPage(page * 1 - 1);
     setEndPage(page * 1 + 3);
   }, []);
-
-  // useEffect(() => {
-  //   setPage(props.location.search.split('=')[1] || 1);
-  //   setShouldUpdate((prev) => !prev);
-  // }, [location]);
 
   const getRating = () => {
     let rating;
@@ -244,7 +240,6 @@ const DiscoverDreamTour = React.memo((props) => {
     setSelectedDistanceOption(selectedDistanceOption);
     if (!selectedDistanceOption) setDisableBtn(true);
     else setDisableBtn(false);
-    const distanceOption = selectedDistanceOption.value;
   };
 
   const openCategoryHandler = () => {
@@ -256,7 +251,6 @@ const DiscoverDreamTour = React.memo((props) => {
   };
 
   const checkboxHandler = async (e) => {
-    const difficulty = e.target.value;
     const rating = getRating();
     let checkedInputs = getCheckedInputs();
     let option;
@@ -405,8 +399,9 @@ const DiscoverDreamTour = React.memo((props) => {
     setCancelBtn(true);
   };
 
+  if (loading) return <LoadingSpinner asOverlay />;
   if (isAuthenticated && !myWishlistIds) return <LoadingSpinner asOverlay />;
-  if (!allTours) return <LoadingSpinner asOverlay />;
+  if (allTours && allTours.length === 0) return <h1>No Tour found!</h1>;
 
   const goToPrevPage = () => {
     if (props.location.search.split('=')[1] > 1) {
@@ -617,7 +612,7 @@ const DiscoverDreamTour = React.memo((props) => {
         {loading && <LoadingSpinner asOverlay />}
         {error && (
           <ErrorModal show onClear={() => setError(false)}>
-            {error}
+            {error ? error : 'Something went wrong'}
           </ErrorModal>
         )}
         {openToursWithinModal && (
@@ -631,7 +626,7 @@ const DiscoverDreamTour = React.memo((props) => {
                 value={selectedDistanceOption}
                 onChange={handleDistanceChange}
                 options={distanceOptions}
-                className='selectTickets'
+                className="selectTickets"
               />
               <Button
                 className="discover__button discover__button--confirm"

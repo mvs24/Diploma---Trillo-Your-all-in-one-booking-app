@@ -5,14 +5,14 @@ import './InlineButton.css';
 const InlineButton = (props) => {
   const classNames = ['btn__inline', props.className];
   if (props.disabled) {
-    classNames.push('disabled')
+    classNames.push('disabled');
   }
   return (
     <a
       className={classNames.join(' ')}
       onClick={props.disabled ? () => {} : props.clicked}
     >
-     {props.children}
+      {props.children}
     </a>
   );
 };

@@ -14,7 +14,7 @@ exports.getAllUsers = asyncWrapper(async (req, res, next) => {
     data: users,
   });
 });
- 
+
 exports.getUser = factory.getOne(User);
 
 exports.deleteAllUsers = asyncWrapper(async (req, res, next) => {
@@ -44,7 +44,6 @@ exports.updateMe = asyncWrapper(async (req, res, next) => {
     runValidators: true,
   });
 
-
   if (!updatedUser) return next(new AppError('User does not exists', 404));
 
   res.status(200).json({
@@ -56,8 +55,6 @@ exports.updateMe = asyncWrapper(async (req, res, next) => {
 exports.getUnReadNotifications = asyncWrapper(async (req, res, next) => {
   const { id } = req.user;
   const user = await User.findById(id);
-
-  console.log(user.notifications);
 
   const unReadNotifications = user.notifications.filter(
     (not) => not.read === false
@@ -118,10 +115,9 @@ exports.getMyAgency = asyncWrapper(async (req, res, next) => {
 
   if (!agency)
     return res.status(404).json({
-      status: "success",
-      message: 'You do not have an agency! Start by creating one!'
-    })
-      
+      status: 'success',
+      message: 'You do not have an agency! Start by creating one!',
+    });
 
   res.status(200).json({
     status: 'success',
@@ -129,22 +125,21 @@ exports.getMyAgency = asyncWrapper(async (req, res, next) => {
   });
 });
 
-exports.contactMe = asyncWrapper(async(req, res, next) => {
+exports.contactMe = asyncWrapper(async (req, res, next) => {
   try {
-      let user = {
-            to: "Marius Vasili", 
-            email: "Marius.Vasili@fti.edu.al"
-          }
-          await new Email(user, null, req.body.email).contactUs(req.body.message + "   Email: "+req.body.email);
+    let user = {
+      to: 'Marius Vasili',
+      email: 'Marius.Vasili@fti.edu.al',
+    };
+    await new Email(user, null, req.body.email).contactUs(
+      req.body.message + '   Email: ' + req.body.email
+    );
 
-
-          res.status(200).json({
-            status: "success",
-            message: "Email sent"
-          })
-  } catch(err) {
-      console.log(err)
+    res.status(200).json({
+      status: 'success',
+      message: 'Email sent',
+    });
+  } catch (err) {
+    console.log(err);
   }
-    
-})
- 
+});

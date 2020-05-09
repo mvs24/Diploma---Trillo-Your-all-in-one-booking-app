@@ -5,7 +5,7 @@ import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
 import './Tours.css';
 import TourItem from '../TourItem/TourItem';
 import ErrorModal from '../../shared/components/UI/ErrorModal';
-import Button from '../../shared/components/Button/Button'
+import Button from '../../shared/components/Button/Button';
 
 const Tours = React.memo((props) => {
   const [mostPopularTours, setMostPopularTours] = useState([]);
@@ -13,7 +13,7 @@ const Tours = React.memo((props) => {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [activeLink, setActiveLink] = useState('top');
-  const [finishedTours, setFinishedTours] = useState()
+  const [finishedTours, setFinishedTours] = useState();
   const [mostPopularToursLoaded, setMostPopularToursLoaded] = useState(false);
   const [topToursLoaded, setTopToursLoaded] = useState(false);
   const topToursRef = useRef(null);
@@ -59,10 +59,8 @@ const Tours = React.memo((props) => {
       changeUIForMostPopularTours();
       try {
         setLoading(true);
-        const tours = await axios.get(
-          `/api/v1/tours/mostPopular`
-        );
-        console.log(tours.data.data)
+        const tours = await axios.get(`/api/v1/tours/mostPopular`);
+
         setMostPopularTours(tours.data.data);
         setLoading(false);
       } catch (err) {
@@ -76,29 +74,25 @@ const Tours = React.memo((props) => {
     getTopFiveTours();
   }, []);
 
-  useEffect(() => { 
+  useEffect(() => {
     const getFinishedTours = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(
-          `/api/v1/tours/finishedTours`
-        );
+        const res = await axios.get(`/api/v1/tours/finishedTours`);
         setFinishedTours(res.data.data);
         setLoading(false);
       } catch (err) {
         setLoading(false);
         setError(err.response.data.message);
       }
-    }
+    };
 
-    getFinishedTours()
-  }, [])
-
+    getFinishedTours();
+  }, []);
 
   const showMoreHandler = () => {
     setEndFinished((prev) => prev + 3);
   };
-
 
   let topToursContent =
     activeLink === 'top'
@@ -108,7 +102,7 @@ const Tours = React.memo((props) => {
     <div className="tours">
       {error && (
         <ErrorModal show onClear={() => setError(null)}>
-          {error}
+          {error ? error : 'Something went wrong'}
         </ErrorModal>
       )}
       <div className="types">
@@ -125,24 +119,29 @@ const Tours = React.memo((props) => {
       </div>
       {loading && <LoadingSpinner />}
       <div className="topToursContent">{topToursContent} </div>
-      <div className='finishedTours'>
-        {finishedTours ? <div >
-            <h1 className='finished__heading'>FINISHED TOURS: ({finishedTours.length})</h1>
-            <div className='finished__tours__container'>
-            {finishedTours.slice(startFinished, endFinished).map(tour => <TourItem finished key={tour._id} tour={tour} />)}
-         
+      <div className="finishedTours">
+        {finishedTours ? (
+          <div>
+            <h1 className="finished__heading">
+              FINISHED TOURS: ({finishedTours.length})
+            </h1>
+            <div className="finished__tours__container">
+              {finishedTours.slice(startFinished, endFinished).map((tour) => (
+                <TourItem finished key={tour._id} tour={tour} />
+              ))}
+            </div>
+            <div className="finishedToursButton">
+              {' '}
+              <Button
+                type="pink"
+                disabled={endFinished >= finishedTours.length}
+                clicked={showMoreHandler}
+              >
+                Show More
+              </Button>
+            </div>
           </div>
-           <div className='finishedToursButton'>  <Button
-          type="pink"
-          disabled={endFinished >= finishedTours.length}
-          clicked={showMoreHandler}
-          
-        >
-          Show More
-        </Button>
-        </div>
-           </div> :null} 
-        
+        ) : null}
       </div>
     </div>
   );

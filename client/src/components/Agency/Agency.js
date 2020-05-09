@@ -1,9 +1,9 @@
-import React from 'react'
+import React from 'react';
 
 export default (props) => {
   const { agency, flight } = props;
   if (!agency) return null;
-  let image = `http://localhost:5000/${agency.image}`;
+  let image = `${process.env.REACT_APP_BACKEND_ASSET}/${agency.image}`;
 
   return (
     <div

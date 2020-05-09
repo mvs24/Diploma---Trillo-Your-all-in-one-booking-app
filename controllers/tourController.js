@@ -28,7 +28,7 @@ const getToursBy = (sortBy) =>
     res.status(200).json({
       status: 'success',
       results: wantedTours.length,
-      data: wantedTours, 
+      data: wantedTours,
     });
   });
 
@@ -82,7 +82,6 @@ const getTours = (type) =>
   });
 
 // /agencies/:agencyId/tours
-
 exports.getTour = factory.getOne(Tour);
 
 const multerStorage = multer.memoryStorage();
@@ -114,15 +113,16 @@ exports.createTour = asyncWrapper(async (req, res, next) => {
   req.body.coordinates = undefined;
   req.body.address = undefined;
 
-  for (let i = 0; i<req.body.startDates.length-1;i++) {
-    if (new Date(req.body.startDates[i]) > new Date(req.body.startDates[i+1])){
+  for (let i = 0; i < req.body.startDates.length - 1; i++) {
+    if (
+      new Date(req.body.startDates[i]) > new Date(req.body.startDates[i + 1])
+    ) {
       return res.status(400).json({
-        status: "fail",
-        message: "Start Dates should be in the asc order! Try again!"
-      })
+        status: 'fail',
+        message: 'Start Dates should be in the asc order! Try again!',
+      });
     }
   }
- 
 
   if (req.file) {
     req.body.imageCover = `public/img/tours/tour-${uniqid()}-cover.jpeg`;
@@ -171,7 +171,6 @@ exports.getReviewStats = asyncWrapper(async (req, res, next) => {
   const tour = await Tour.findById(req.params.tourId);
   const totalReviews = tour.ratingsQuantity;
   const avgRating = tour.ratingsAverage;
-  const tourId = mongoose.Types.ObjectId(req.params.tourId);
 
   const stats = await Tour.aggregate([
     {
@@ -227,7 +226,7 @@ exports.discountTour = asyncWrapper(async (req, res, next) => {
   const tour = await Tour.findById(req.params.id);
   const agency = await Agency.findById(tour.agency.toString());
 
-  if (!tour)  return next(new AppError('No tour found with that id', 400));
+  if (!tour) return next(new AppError('No tour found with that id', 400));
 
   if (!req.body.priceDiscount)
     return next(new AppError('Please specify a price discount', 400));
@@ -265,15 +264,14 @@ exports.discountTour = asyncWrapper(async (req, res, next) => {
       }
     }
   }
-  
 
   const priceDiscount = req.body.priceDiscount;
-if (priceDiscount > tour.price) {
-  return res.status(400).json({
-    status: "fail",
-    message: `Price Discount (${priceDiscount}) can not be below the regular price`
-  })
-}
+  if (priceDiscount > tour.price) {
+    return res.status(400).json({
+      status: 'fail',
+      message: `Price Discount (${priceDiscount}) can not be below the regular price`,
+    });
+  }
   tour.priceDiscount = priceDiscount;
   tour.price = tour.price - priceDiscount;
   await tour.save();
@@ -309,8 +307,6 @@ exports.getByCategory = asyncWrapper(async (req, res, next) => {
   });
 });
 
-// /tours-within/:distance/center/:latlng/unit/:unit
-// /tours-within/233/center/34.111745,-118.113491/unit/mi
 exports.getToursWithin = asyncWrapper(async (req, res, next) => {
   const { distance, latlng, unit } = req.params;
   const [lat, lng] = latlng.split(',');

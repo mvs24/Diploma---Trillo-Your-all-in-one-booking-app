@@ -6,7 +6,6 @@ const Email = require('../utils/email');
 const AppError = require('../utils/appError');
 const User = require('../models/userModel');
 const asyncWrapper = require('../utils/asyncWrapper');
-// const sendEmail = require('../utils/email');
 
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -27,16 +26,13 @@ exports.signup = asyncWrapper(async (req, res, next) => {
     photo: req.body.photo,
   });
   try {
-    const url = `http://localhost:3000/me`; // modify in production
+    const url = `${req.protocol}://${req.get('host')}/me`; // modify in production
     await new Email(user, url).sendWelcome();
-  } catch (err) {
-    console.log(err);
-  }
+  } catch (err) {}
 
   const token = signToken(user._id);
 
   const userPhoto = user.photo;
-  console.log(userPhoto);
 
   res.status(201).json({
     status: 'success',
@@ -53,8 +49,6 @@ exports.login = asyncWrapper(async (req, res, next) => {
       status: 'fail',
       message: 'Complete all the fields',
     });
-
-    // return next(new AppError('Complete all the fields!', 400));
   }
 
   const user = await User.findOne({ email });
@@ -105,14 +99,14 @@ exports.protect = asyncWrapper(async (req, res, next) => {
     );
   }
 
-  if (currentUser.changedPasswordAfter(decoded.iat)) {
-    return next(
-      new AppError(
-        'Password changed after the token was released. Please log in again!',
-        400
-      )
-    );
-  }
+  // if (currentUser.changedPasswordAfter(decoded.iat)) {
+  //   return next(
+  //     new AppError(
+  //       'Password changed after the token was released. Please log in again!',
+  //       400
+  //     )
+  //   );
+  // }
 
   req.user = currentUser;
 
@@ -146,7 +140,6 @@ exports.forgotPassword = asyncWrapper(async (req, res, next) => {
   // )}/api/v1/users/resetPassword/${resetToken}`;
 
   const message = `Forgot your password?\n Copy your code: ${resetToken}`;
-  // console.log(message)
 
   try {
     await new Email(user, message).sendPasswordReset();
@@ -219,9 +212,9 @@ exports.updatePassword = asyncWrapper(async (req, res, next) => {
 
   if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
     return res.status(401).json({
-      status: "fail",
-      message: 'Your current password is wrong.'
-    })
+      status: 'fail',
+      message: 'Your current password is wrong.',
+    });
   }
 
   user.password = req.body.password;
@@ -229,7 +222,7 @@ exports.updatePassword = asyncWrapper(async (req, res, next) => {
   await user.save();
 
   const token = signToken(user._id);
-  // 4) Log user in, send JWT
+
   user.password = undefined;
   res.status(200).json({
     status: 'success',

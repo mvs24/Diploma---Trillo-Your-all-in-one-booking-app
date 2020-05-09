@@ -11,7 +11,7 @@ exports.updateAgency = factory.updateOne(Agency);
 exports.getAgencyStatistics = asyncWrapper(async (req, res, next) => {
   const agencyStatistics = await Agency.aggregate([
     {
-      $match: { ratingsQuantity: { $ne: 0 } }
+      $match: { ratingsQuantity: { $ne: 0 } },
     },
     {
       $group: {
@@ -19,15 +19,14 @@ exports.getAgencyStatistics = asyncWrapper(async (req, res, next) => {
         avg: { $avg: '$ratingsAverage' },
         nAgencies: { $sum: 1 },
         maxRating: { $max: '$ratingsAverage' },
-        minRating: { $min: '$ratingsAverage' }
-      }
-    }
+        minRating: { $min: '$ratingsAverage' },
+      },
+    },
   ]);
-
 
   res.status(200).json({
     status: 'success',
-    data: agencyStatistics
+    data: agencyStatistics,
   });
 });
 
@@ -37,32 +36,31 @@ exports.getMostPopularAgencies = asyncWrapper(async (req, res, next) => {
       $group: {
         _id: '$numOptionsBought',
         name: { $push: '$name' },
-        agencyId: { $push: '$_id' }
-      }
+        agencyId: { $push: '$_id' },
+      },
     },
     {
-      $addFields: { number: '$_id' }
+      $addFields: { number: '$_id' },
     },
     {
-      $sort: { _id: -1 }
-    }
+      $sort: { _id: -1 },
+    },
   ]);
 
   let names = [];
   let ids = [];
 
-  mostPopularAgencies.forEach(el => {
-    el.name.forEach(name => {
+  mostPopularAgencies.forEach((el) => {
+    el.name.forEach((name) => {
       names.push({ name, number: el.number });
     });
-    el.agencyId.forEach(id => {
+    el.agencyId.forEach((id) => {
       ids.push(id);
     });
   });
 
-
   res.status(200).json({
     status: 'success',
-    data: mostPopularAgencies
+    data: mostPopularAgencies,
   });
 });

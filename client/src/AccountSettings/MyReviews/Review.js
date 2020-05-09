@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
 import ErrorModal from '../../shared/components/UI/ErrorModal';
-import axios from 'axios';
 import TourItem from '../../components/TourItem/TourItem';
-
 import '../MyWishlist/MyWishlist.css';
 
 const Review = (props) => {
@@ -33,7 +33,7 @@ const Review = (props) => {
       {loading && <LoadingSpinner asOverlay />}
       {error && (
         <ErrorModal show onClear={() => setError()}>
-          {error}
+          {error ? error : 'Something went wrong'}
         </ErrorModal>
       )}
       <TourItem

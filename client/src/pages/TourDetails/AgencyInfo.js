@@ -37,7 +37,7 @@ const AgencyInfo = (props) => {
     <section className="tour__info agency__info">
       {error && (
         <ErrorModal show onClear={() => setError(false)}>
-          {error}
+          {error ? error : 'Something went wrong'}
         </ErrorModal>
       )}
       <div className="quick__facts quick__facts2">
@@ -48,7 +48,7 @@ const AgencyInfo = (props) => {
           <li>
             <img
               className="agency__image"
-              src={`http://localhost:5000/${agency.image}`}
+              src={`${process.env.REACT_APP_BACKEND_ASSET}/${agency.image}`}
             />
           </li>
           <li>

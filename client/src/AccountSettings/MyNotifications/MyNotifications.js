@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { connect } from 'react-redux';
-import { animateScroll } from 'react-scroll';
+
 import { markNotificationsAsRead } from '../../store/actions/userActions';
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
 import Button from '../../shared/components/Button/Button';

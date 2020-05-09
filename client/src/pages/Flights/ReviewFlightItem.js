@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import moment from 'moment'
+import moment from 'moment';
 import ErrorModal from '../../shared/components/UI/ErrorModal';
 import { IconContext } from 'react-icons';
 import {
@@ -57,7 +57,7 @@ const ReviewItem = (props) => {
     <div className="entire__review flight__review__item">
       {error && (
         <ErrorModal show onClear={() => setError(false)}>
-          {error}
+          {error ? error : 'Something went wrong'}
         </ErrorModal>
       )}
       <div className="review__info--2">
@@ -75,7 +75,7 @@ const ReviewItem = (props) => {
           </button>
         ) : null}
         <div className="user__info--2">
-          <img src={`http://localhost:5000/${user.photo}`} alt="user photo" />
+          <img src={`${process.env.REACT_APP_BACKEND_ASSET}/${user.photo}`} alt="user photo" />
           <h3 className="username">
             {user.name} {user.lastname}
           </h3>
@@ -97,7 +97,9 @@ const ReviewItem = (props) => {
         <div className="review__details">
           {stars.map((star) => star)}
           <p className="review__paragraph">{props.review.review}</p>
-          <p className="review__paragraph">Reviewed: {moment(props.review.createdAt).format('LLL')}</p>
+          <p className="review__paragraph">
+            Reviewed: {moment(props.review.createdAt).format('LLL')}
+          </p>
         </div>
       </div>
     </div>

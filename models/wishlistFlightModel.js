@@ -5,20 +5,20 @@ const Flight = require('./flightModel');
 const wishlistFlightSchema = new mongoose.Schema({
   flight: {
     type: mongoose.Schema.ObjectId,
-    ref: 'Flight'
+    ref: 'Flight',
   },
   user: {
     type: mongoose.Schema.ObjectId,
-    ref: 'User'
+    ref: 'User',
   },
   totalPrice: Number,
   numPersons: {
     type: Number,
-    default: 1
-  }
+    default: 1,
+  },
 });
 
-wishlistFlightSchema.pre('save', async function(next) {
+wishlistFlightSchema.pre('save', async function (next) {
   const flight = await Flight.findById(this.flight);
   const pricePerPerson = flight.pricePerPerson;
 

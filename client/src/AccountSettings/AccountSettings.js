@@ -248,7 +248,7 @@ const AccountSettings = (props) => {
     try {
       setLoading(true);
       const res = await axios.post('/api/v1/users/updatePassword', data);
-      // props.changePassword()
+
       setLoading(false);
       setOpenPasswordChangedModal(true);
       setPasswordData((prev) => {
@@ -293,46 +293,35 @@ const AccountSettings = (props) => {
     history.push('/');
   };
 
-
   if (!user) return <LoadingSpinner asOverlay />;
   if (error)
     return (
       <ErrorModal show onClear={() => setError(false)}>
-        {error}
+        {error ? error : 'Something went wrong'}
       </ErrorModal>
     );
- if (props.error) return (
+  if (props.error)
+    return (
       <ErrorModal show onClear={() => props.deleteError()}>
-        {props.error}
+        {props.error ? props.error : 'Something went wrong'}
       </ErrorModal>
     );
-
-
 
   return (
     <div className="settings__container">
       {loading && <LoadingSpinner asOverlay />}
-      {error && (
-        <ErrorModal show onClear={() => setError(false)}>
-          {error}
-        </ErrorModal>
-      )}
+
       {openPasswordChangedModal && (
         <Modal
           header="Success"
           show
           onCancel={() => setOpenPasswordChangedModal()}
         >
-          <h2 className='modal__heading'>Password changed successfully</h2>
+          <h2 className="modal__heading">Password changed successfully</h2>
           <Button type="success" clicked={() => setOpenPasswordChangedModal()}>
             OK
           </Button>
         </Modal>
-      )}
-      {props.error && (
-        <ErrorModal show onClear={props.deleteError}>
-          {props.error}
-        </ErrorModal>
       )}
       <div className="settings__info">
         <div className="user__links">
@@ -449,7 +438,7 @@ const AccountSettings = (props) => {
             ) : (
               <img
                 className="user__photo--image"
-                src={`http://localhost:5000/${user.photo}`}
+                src={`${process.env.REACT_APP_BACKEND_ASSET}/${user.photo}`}
               />
             )}
             <ImageUpload onInput={inputImageHandler} />

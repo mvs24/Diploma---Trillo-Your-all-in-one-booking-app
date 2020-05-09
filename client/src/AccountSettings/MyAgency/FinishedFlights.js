@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import ErrorModal from '../../shared/components/UI/ErrorModal';
+
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
+import ErrorModal from '../../shared/components/UI/ErrorModal';
 import Button from '../../shared/components/Button/Button';
-import './EditAgency.css';
 import Flight from '../../pages/Flights/Flight';
+import './EditAgency.css';
 
 const FinishedFlights = ({ agency }) => {
   const [finishedFlights, setFinishedFlights] = useState();
@@ -38,13 +39,22 @@ const FinishedFlights = ({ agency }) => {
   if (!finishedFlights) return <LoadingSpinner asOverlay />;
   if (finishedFlights.length === 0)
     return (
-      <div className="my__agencyFlights"> <h1 className='finishedToursHeading1'>No Finished Flights found</h1></div> 
+      <div className="my__agencyFlights">
+        {' '}
+        <h1 className="finishedToursHeading1">No Finished Flights found</h1>
+      </div>
     );
 
   return (
     <div className="my__agencyFlights">
+      {loading && <LoadingSpinner asOverlay />}
+      {error && (
+        <ErrorModal show onClear={() => setError()}>
+          {error ? error : 'Something went wrong'}
+        </ErrorModal>
+      )}
       <h1 className="my__wishlist--heading">
-        FINISHED FLIGHTS ({finishedFlights.length}) 
+        FINISHED FLIGHTS ({finishedFlights.length})
       </h1>
       {finishedFlights.slice(start, end).map((flight) => (
         <Flight key={flight._id} flight={flight} />

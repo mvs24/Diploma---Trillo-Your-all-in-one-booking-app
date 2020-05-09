@@ -1,7 +1,5 @@
 import React, { useState, useRef } from 'react';
 import { connect } from 'react-redux';
-import SeaImg from '../../assets/flight.webp';
-import AirplaneImg from '../../assets/air.png';
 import './Flights.css';
 import Input from '../../shared/components/Input/Input';
 import Button from '../../shared/components/Button/Button';
@@ -9,7 +7,6 @@ import Select from 'react-select';
 import { IconContext } from 'react-icons';
 import { IoIosAirplane } from 'react-icons/io';
 import { MdDateRange } from 'react-icons/md';
-import axios from 'axios';
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
 import ErrorModal from '../../shared/components/UI/ErrorModal';
 import {
@@ -23,11 +20,6 @@ const options = [
 ];
 
 const Flights = (props) => {
-  // <div className="sea__airplane__container">
-  //   <img className="seaImg" src={SeaImg} />
-  //   <img src={AirplaneImg} className="airplaneImg" />
-  // </div>
-
   const oneWay = useRef();
   const roundTrip = useRef();
   const [flightsInput, setFlightsInput] = useState({
@@ -85,7 +77,6 @@ const Flights = (props) => {
     value: null,
     label: 'Package',
   });
-  const [variety, setVariety] = useState();
   const [error, setError] = useState();
   const [selectedWay, setSelectedWay] = useState('roundTrip');
 
@@ -159,24 +150,19 @@ const Flights = (props) => {
       package: selectedOption.value,
     };
 
-
     if (data.variety === 'Round-Trip') {
-      data.returnDate = flightsInput.returnDate.value
+      data.returnDate = flightsInput.returnDate.value;
     }
-
-    // await props.getRequestedFlights(data);
 
     if (data.returnDate) {
       props.history.push(
-      `/requested/flights?variety=${data.variety}&from=${data.from}&to=${data.to}&depart=${data.depart}&package=${data.package}&returnDate=${data.returnDate}`
-    );
+        `/requested/flights?variety=${data.variety}&from=${data.from}&to=${data.to}&depart=${data.depart}&package=${data.package}&returnDate=${data.returnDate}`
+      );
     } else {
-       props.history.push(
-      `/requested/flights?variety=${data.variety}&from=${data.from}&to=${data.to}&depart=${data.depart}&package=${data.package}`
-    );
+      props.history.push(
+        `/requested/flights?variety=${data.variety}&from=${data.from}&to=${data.to}&depart=${data.depart}&package=${data.package}`
+      );
     }
-
-    
   };
 
   const checkBoxHandler = (e) => {
@@ -192,7 +178,7 @@ const Flights = (props) => {
       {props.loadingFlights && <LoadingSpinner asOverlay />}
       {error && (
         <ErrorModal show onClear={() => setError()}>
-          {error}
+          {error ? error : 'Something went wrong'}
         </ErrorModal>
       )}
       {props.error && (
@@ -269,23 +255,18 @@ const Flights = (props) => {
               />
             </div>
 
-           
-
-
-          <div className="input__container">
+            <div className="input__container">
               <>
-               <label className='dep__label'>
-                  Depart
-                </label>
-              <Input
-                value={flightsInput['depart'].value}
-                valid={flightsInput['depart'].valid}
-                touched={flightsInput['depart'].touched}
-                configOptions={flightsInput['depart'].configOptions}
-                onChange={(e) => inputHandler(e, 'depart')}
-              />
+                <label className="dep__label">Depart</label>
+                <Input
+                  value={flightsInput['depart'].value}
+                  valid={flightsInput['depart'].valid}
+                  touched={flightsInput['depart'].touched}
+                  configOptions={flightsInput['depart'].configOptions}
+                  onChange={(e) => inputHandler(e, 'depart')}
+                />
               </>
-               <div className="icons__container">
+              <div className="icons__container">
                 <IconContext.Provider
                   value={{ className: ' icon__blue tour__detail--icon' }}
                 >
@@ -293,42 +274,19 @@ const Flights = (props) => {
                 </IconContext.Provider>
               </div>
 
-             {selectedWay === 'roundTrip' ? (
+              {selectedWay === 'roundTrip' ? (
                 <>
-                <label className='ret__label'>
-                  Return Date
-                </label>
-                <Input
-                  value={flightsInput['returnDate'].value}
-                  valid={flightsInput['returnDate'].valid}
-                  touched={flightsInput['returnDate'].touched}
-                  configOptions={flightsInput['returnDate'].configOptions}
-                  onChange={(e) => inputHandler(e, 'returnDate')}
-                />
+                  <label className="ret__label">Return Date</label>
+                  <Input
+                    value={flightsInput['returnDate'].value}
+                    valid={flightsInput['returnDate'].valid}
+                    touched={flightsInput['returnDate'].touched}
+                    configOptions={flightsInput['returnDate'].configOptions}
+                    onChange={(e) => inputHandler(e, 'returnDate')}
+                  />
                 </>
               ) : null}
             </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
             <div className="flights__btns">
               <Button type="blue">Search</Button>

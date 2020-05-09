@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
 import ErrorModal from '../../shared/components/UI/ErrorModal';
 import axios from 'axios';
 import TourItem from '../../components/TourItem/TourItem';
-
 import '../MyWishlist/MyWishlist.css';
 
 const CartItem = (props) => {
   const [tour, setTour] = useState();
-  const [isLiked, setIsLiked] = useState();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
   const [shouldTour, setShouldTour] = useState();
@@ -50,7 +49,7 @@ const CartItem = (props) => {
       {loading && <LoadingSpinner asOverlay />}
       {error && (
         <ErrorModal show onClear={() => setError()}>
-          {error}
+          {error ? error : 'Something went wrong'}
         </ErrorModal>
       )}
       <TourItem

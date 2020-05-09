@@ -6,7 +6,6 @@ import ErrorModal from '../../shared/components/UI/ErrorModal';
 import Select from 'react-select';
 import Modal from '../../shared/components/UI/Modal';
 import { loadStripe } from '@stripe/stripe-js';
-import Flight from './Flight';
 import './FlightDetails.css';
 import Button from '../../shared/components/Button/Button';
 import ReviewFlightStatistics from './ReviewFlightStatistics';
@@ -23,7 +22,10 @@ for (let i = 1; i <= 5; i++) {
 const FlightDetails = React.memo((props) => {
   const [flight, setFlight] = useState();
   const [myFlights, setMyFlights] = useState();
-  const [selectedOption, setSelectedOption] = useState({value: null, label: "Number of tickets"});
+  const [selectedOption, setSelectedOption] = useState({
+    value: null,
+    label: 'Number of tickets',
+  });
   const [agency, setAgency] = useState();
   const [loading, setLoading] = useState(true);
   const [openConfirmTickets, setOpenConfirmTickets] = useState();
@@ -31,7 +33,7 @@ const FlightDetails = React.memo((props) => {
   const [booked, setBooked] = useState();
   const [page, setPage] = useState('info');
   const [error, setError] = useState();
-  const [openNotificationSent,setOpenNotificationSent] = useState()
+  const [openNotificationSent, setOpenNotificationSent] = useState();
 
   const [finishedFlights, setFinishedFlights] = useState();
   const [inputPriceDiscount, setInputPriceDiscount] = useState({
@@ -161,7 +163,7 @@ const FlightDetails = React.memo((props) => {
       setFlight(res.data.data);
       setOpenPriceDiscountModal();
       setLoading();
-      setOpenNotificationSent(true)
+      setOpenNotificationSent(true);
     } catch (err) {
       setLoading();
       setError(err.response.data.message);
@@ -178,7 +180,7 @@ const FlightDetails = React.memo((props) => {
           setLoading();
         }}
       >
-        {error}
+        {error ? error : 'Something went wrong'}
       </ErrorModal>
     );
 
@@ -198,7 +200,7 @@ const FlightDetails = React.memo((props) => {
 
   const bookFlight = async () => {
     const nrTickes = selectedOption.value;
-    if (!nrTickes) setError("Please confirm number of tickets!")
+    if (!nrTickes) setError('Please confirm number of tickets!');
     try {
       if (props.isAuthenticated) {
         setProcessBooking(true);
@@ -215,9 +217,11 @@ const FlightDetails = React.memo((props) => {
       setProcessBooking(true);
     } catch (err) {
       setProcessBooking();
-      setError(err.response.data.message ? err.response.data.message : "Something went wrong! Be sure you are logged in first!");
-     
-
+      setError(
+        err.response.data.message
+          ? err.response.data.message
+          : 'Something went wrong! Be sure you are logged in first!'
+      );
     }
   };
 
@@ -237,23 +241,31 @@ const FlightDetails = React.memo((props) => {
     setPage(link);
   };
 
-  if (loading) return <LoadingSpinner asOverlay />
-    if (error) return  <ErrorModal show onClear={() => setError()}>
-          {error}
-        </ErrorModal>
+  if (loading) return <LoadingSpinner asOverlay />;
+  if (error)
+    return (
+      <ErrorModal show onClear={() => setError()}>
+        {error ? error : 'Something went wrong'}
+      </ErrorModal>
+    );
   if (!flight || !agency) return <h1>No flight found with that ID...</h1>;
 
   return (
     <div className="flightDetails__container">
-      {error && (
-        <ErrorModal show onClear={() => setError()}>
-          {error}
-        </ErrorModal>
+      {openNotificationSent && (
+        <Modal
+          header="Notification Sent"
+          show
+          onCancel={() => setOpenNotificationSent()}
+        >
+          <h1 className="modal__heading">
+            Notification sent to the selected people.
+          </h1>
+          <Button type="success" clicked={() => setOpenNotificationSent()}>
+            OK
+          </Button>
+        </Modal>
       )}
-       {openNotificationSent && <Modal header='Notification Sent' show onCancel={() => setOpenNotificationSent()}>
-          <h1 className='modal__heading'>Notification sent to the selected people.</h1>
-        <Button type='success' clicked={() => setOpenNotificationSent()}>OK</Button>
-        </Modal>}
       {openPriceDiscountModal && (
         <Modal
           onCancel={() => setOpenPriceDiscountModal()}
@@ -291,7 +303,7 @@ const FlightDetails = React.memo((props) => {
               value={selectedOption}
               onChange={handleChange}
               options={options}
-              className='selectTickets'
+              className="selectTickets"
             />
             <Button
               disabled={processBooking}
@@ -321,7 +333,9 @@ const FlightDetails = React.memo((props) => {
           <div className="info__container">
             <div className="agency__info--1">
               <h2>Agency: {agency.name}</h2>
-              <img src={`http://localhost:5000/${agency.image}`} />
+              <img
+                src={`${process.env.REACT_APP_BACKEND_ASSET}/${agency.image}`}
+              />
               <Button
                 type="success"
                 clicked={() =>

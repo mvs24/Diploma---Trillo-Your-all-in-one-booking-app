@@ -15,6 +15,6 @@ exports.getFlightsForUser = asyncWrapper(async (req, res, next) => {
     status: 'success',
     results: flights.length,
     totalPrice,
-    data: flights
+    data: flights,
   });
 });

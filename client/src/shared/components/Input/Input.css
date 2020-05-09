@@ -15,9 +15,7 @@
 }
 .textarea:hover {
   background: #f0eeee;
-
 }
-
 
 .input:focus {
   outline: none;
@@ -38,7 +36,7 @@
   border: 1px solid #ff7730;
 }
 
-.textarea{
+.textarea {
   background: #f4f2f2;
   outline: none;
   transition: all 0.5s ease;
@@ -48,7 +46,6 @@
   margin: 1.5rem;
   height: 6rem;
   border: 1px solid transparent;
-
 }
 
 .review__form {

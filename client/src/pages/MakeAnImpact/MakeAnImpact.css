@@ -86,7 +86,7 @@
 }
 .jumpIn {
   text-align: center;
-  font-size: 2rem; 
+  font-size: 2rem;
   text-transform: uppercase;
   background-image: linear-gradient(to right bottom, #5643fa, #ffb900);
   color: transparent;
@@ -95,8 +95,7 @@
   width: 100%;
 }
 .jumpIn--1 {
-
-  font-size: 1.8rem; 
+  font-size: 1.8rem;
   text-transform: uppercase;
   background-image: linear-gradient(to right bottom, #5643fa, #ffb900);
   color: transparent;

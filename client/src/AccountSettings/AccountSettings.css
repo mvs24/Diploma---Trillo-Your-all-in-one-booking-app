@@ -168,7 +168,7 @@
   }
 }
 .settings__link {
-   transform: translateX(1rem);
+  transform: translateX(1rem);
 }
 @media (max-width: 42em) {
   .save__btn {
@@ -183,10 +183,12 @@
 }
 
 @media (max-width: 550px) {
-  .user__info--fields input, .password__fields input {
+  .user__info--fields input,
+  .password__fields input {
     width: 85%;
   }
-  .user__info--fields input:focus, .password__fields input:focus {
+  .user__info--fields input:focus,
+  .password__fields input:focus {
     width: 95%;
   }
 }

@@ -55,7 +55,6 @@
   margin-left: auto;
 }
 
-
 @media (max-width: 550px) {
   .input__data input {
     width: 85%;

@@ -5,11 +5,11 @@ const userController = require('../controllers/userController');
 const bookingTourController = require('../controllers/bookingTourController');
 const reviewTourController = require('../controllers/reviewTourController');
 const reviewFlightController = require('../controllers/reviewFlightController');
-const filterBody = require('../globalMiddlewares/filterBody');
+// const filterBody = require('../globalMiddlewares/filterBody');
 const fileUpload = require('../globalMiddlewares/file-upload');
 const router = express.Router();
 
-router.route('/contact-us').post(userController.contactMe)
+router.route('/contact-us').post(userController.contactMe);
 
 router.get(
   '/loggedInUser',

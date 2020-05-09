@@ -10,46 +10,46 @@ const reviewTourSchema = new mongoose.Schema(
       type: Number,
       min: 1,
       max: 5,
-      required: [true, 'A review must have a rating']
+      required: [true, 'A review must have a rating'],
     },
     user: {
       type: mongoose.Schema.ObjectId,
-      ref: 'User'
+      ref: 'User',
     },
     tour: {
       type: mongoose.Schema.ObjectId,
-      ref: 'Tour'
+      ref: 'Tour',
     },
     createdAt: {
       type: Date,
-      default: Date.now()
-    }
+      default: Date.now(),
+    },
   },
   {
     toJSON: { virtuals: true },
-    toObject: { virtuals: true }
+    toObject: { virtuals: true },
   }
 );
 
 reviewTourSchema.index({ tour: 1, user: 1 }, { unique: true });
 
-const updateAgency = async document => {
+const updateAgency = async (document) => {
   const tour = await Tour.findById(document.tour);
 
   const toursOnAgency = await Tour.aggregate([
     {
-      $match: { agency: tour.agency }
+      $match: { agency: tour.agency },
     },
     {
-      $match: { ratingsQuantity: { $ne: 0 } }
+      $match: { ratingsQuantity: { $ne: 0 } },
     },
     {
       $group: {
         _id: '$agency',
         avgRating: { $avg: '$ratingsAverage' },
-        nRating: { $sum: 1 }
-      }
-    }
+        nRating: { $sum: 1 },
+      },
+    },
   ]);
 
   let ratingsQuantity = 0;
@@ -62,22 +62,22 @@ const updateAgency = async document => {
 
   await Agency.findByIdAndUpdate(toursOnAgency[0]._id, {
     ratingsAverage,
-    ratingsQuantity
+    ratingsQuantity,
   });
 };
 
-reviewTourSchema.statics.calcRatingsOnTour = async function(tourId) {
+reviewTourSchema.statics.calcRatingsOnTour = async function (tourId) {
   const stats = await this.aggregate([
     {
-      $match: { tour: tourId }
+      $match: { tour: tourId },
     },
     {
       $group: {
         _id: '$tour',
         nRating: { $sum: 1 },
-        avgRating: { $avg: '$rating' }
-      }
-    }
+        avgRating: { $avg: '$rating' },
+      },
+    },
   ]);
 
   let ratingsAverage = 0.0;
@@ -90,11 +90,11 @@ reviewTourSchema.statics.calcRatingsOnTour = async function(tourId) {
 
   await Tour.findByIdAndUpdate(tourId, {
     ratingsQuantity,
-    ratingsAverage
+    ratingsAverage,
   });
 };
 
-reviewTourSchema.post('save', async function(doc, next) {
+reviewTourSchema.post('save', async function (doc, next) {
   await doc.constructor.calcRatingsOnTour(doc.tour);
 
   await updateAgency(doc);
@@ -102,7 +102,7 @@ reviewTourSchema.post('save', async function(doc, next) {
   next();
 });
 
-reviewTourSchema.post(/^findOneAnd/, async function(doc, next) {
+reviewTourSchema.post(/^findOneAnd/, async function (doc, next) {
   await doc.constructor.calcRatingsOnTour(doc.tour);
 
   await updateAgency(doc);

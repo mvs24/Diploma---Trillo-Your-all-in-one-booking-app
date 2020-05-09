@@ -1,17 +1,14 @@
 import React, { useState } from 'react';
 import Select from 'react-select';
 import axios from 'axios';
-import Textarea from '../../shared/components/Input/Textarea';
+
 import Input from '../../shared/components/Input/Input';
 import Button from '../../shared/components/Button/Button';
 import ErrorModal from '../../shared/components/UI/ErrorModal';
 import Modal from '../../shared/components/UI/Modal';
-import './AddNewTour.css';
-import PlaceInput from './PlaceInput';
-import ImageUpload from '../../shared/components/ImageUpload/ImageUpload';
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
 import InlineButton from '../../shared/components/InlineButton/InlineButton';
-
+import './AddNewTour.css';
 import './AddNewFlight.css';
 
 const packageOptions = [
@@ -164,7 +161,6 @@ const AddNewFlight = (props) => {
     label: 'Flight Package',
   });
   const [variety, setVariety] = useState({ value: 'type', label: 'Type' });
-  const [formValid, setFormValid] = useState();
   const [flightLocationModal, setFlightLocationModal] = useState();
   const [flightType, setFlightType] = useState();
   const [returnDate, setReturnDate] = useState();
@@ -188,8 +184,6 @@ const AddNewFlight = (props) => {
     toAddressLocationControlled,
     setToAddressLocationControlled,
   ] = useState();
-
-  const [overallFormIsValid, setOverallFormIsValid] = useState();
 
   const checkValidity = (value, requirements) => {
     let isValid = true;
@@ -315,7 +309,6 @@ const AddNewFlight = (props) => {
 
   const inputLocationHandler = (e, type) => {
     if (type === 'from') {
-      //
       const updatedFromLocation = { ...fromLocation };
 
       if (
@@ -390,7 +383,6 @@ const AddNewFlight = (props) => {
       ) {
         setError('The values are wrong...Lat: [-90, 90] Lng: [-180, 180]');
       } else {
-        //correct
         if (fromAddress.valid) {
           setFlightLocationModal();
           setFromAddressLocationControlled(true);
@@ -418,7 +410,6 @@ const AddNewFlight = (props) => {
       ) {
         setError('The values are wrong...Lat: [-90, 90] Lng: [-180, 180]');
       } else {
-        //correct
         if (toAddress.valid) {
           setFlightLocationModal();
           setToAddressLocationControlled(true);
@@ -535,7 +526,6 @@ const AddNewFlight = (props) => {
         props.setDisplay('flights');
 
         props.flightsRef.current.classList.add('border');
-        // document.querySelector(`.${props.futureClass}`).classList.add('border')
       } catch (err) {
         if (!err.response.data.message) {
           err.response.data.message =
@@ -636,7 +626,7 @@ const AddNewFlight = (props) => {
               setError(null);
             }}
           >
-            {error}
+            {error ? error : 'Something went wrong'}
           </ErrorModal>
         )}
         {flightLocationContent}

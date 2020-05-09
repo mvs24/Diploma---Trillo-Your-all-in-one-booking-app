@@ -12,6 +12,6 @@ exports.getMyReviews = asyncWrapper(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     results: myReviews.length,
-    data: myReviews,
+    data: myReviews, 
   });
 });

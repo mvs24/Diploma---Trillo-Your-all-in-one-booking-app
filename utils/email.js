@@ -7,14 +7,14 @@ module.exports = class Email {
     this.to = user.email;
     this.firstName = user.name;
     this.url = url;
-    this.from = from
+    this.from = from;
   }
 
   newTransport() {
     if (process.env.NODE_ENV === 'production') {
       return nodemailer.createTransport({
         service: 'gmail',
-        auth: { 
+        auth: {
           user: process.env.EMAIL,
           pass: process.env.PASSWORD,
         },
@@ -24,7 +24,7 @@ module.exports = class Email {
     return nodemailer.createTransport({
       host: process.env.EMAIL_HOST,
       port: process.env.EMAIL_PORT,
-      auth: { 
+      auth: {
         user: process.env.EMAIL_USERNAME,
         pass: process.env.EMAIL_PASSWORD,
       },
@@ -58,7 +58,7 @@ module.exports = class Email {
   }
 
   async contactUs(contactMessage) {
-    await this.send("contact", contactMessage)
+    await this.send('contact', contactMessage);
   }
 
   async sendPasswordReset() {

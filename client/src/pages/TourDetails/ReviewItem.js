@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import moment from 'moment'
+import moment from 'moment';
 import ErrorModal from '../../shared/components/UI/ErrorModal';
 import { IconContext } from 'react-icons';
 import {
@@ -63,7 +63,10 @@ const ReviewItem = (props) => {
       )}
       <div className="review__info--2">
         <div className="user__info--2">
-          <img src={`http://localhost:5000/${user.photo}`} alt="user photo" />
+          <img
+            src={`${process.env.REACT_APP_BACKEND_ASSET}/${user.photo}`}
+            alt="user photo"
+          />
           <h3 className="username">
             {user.name} {user.lastname}
           </h3>
@@ -71,14 +74,14 @@ const ReviewItem = (props) => {
         <div className="review__details">
           {stars.map((star) => star)}
           <p className="review__paragraph">{props.review.review}</p>
-             <p className="review__paragraph"> Reviewed: {moment(props.review.createdAt).format("LLL")}</p>
-          
+          <p className="review__paragraph">
+            {' '}
+            Reviewed: {moment(props.review.createdAt).format('LLL')}
+          </p>
         </div>
       </div>
     </div>
   );
-
-
 
   if (props.resPerPage === 1 && props.index === 0) {
     reviewItem = (
@@ -93,7 +96,7 @@ const ReviewItem = (props) => {
           <div className="review__info--2">
             <div className="user__info--2">
               <img
-                src={`http://localhost:5000/${user.photo}`}
+                src={`${process.env.REACT_APP_BACKEND_ASSET}/${user.photo}`}
                 alt="user photo"
               />
               <h3 className="username">
@@ -103,8 +106,10 @@ const ReviewItem = (props) => {
             <div className="review__details">
               {stars.map((star) => star)}
               <p className="review__paragraph">{props.review.review}</p>
-             <p className="review__paragraph"> Reviewed: {moment(props.review.createdAt).format('LLL')}</p>
-
+              <p className="review__paragraph">
+                {' '}
+                Reviewed: {moment(props.review.createdAt).format('LLL')}
+              </p>
             </div>
           </div>
         </div>
@@ -145,7 +150,7 @@ const ReviewItem = (props) => {
           <div className="review__info--2">
             <div className="user__info--2">
               <img
-                src={`http://localhost:5000/${user.photo}`}
+                src={`${process.env.REACT_APP_BACKEND_ASSET}/${user.photo}`}
                 alt="user photo"
               />
               <h3 className="username">
@@ -155,8 +160,10 @@ const ReviewItem = (props) => {
             <div className="review__details">
               {stars.map((star) => star)}
               <p className="review__paragraph">{props.review.review}</p>
-             <p className="review__paragraph"> Reviewed: {moment(props.review.createdAt).format("LLL")}</p>
-
+              <p className="review__paragraph">
+                {' '}
+                Reviewed: {moment(props.review.createdAt).format('LLL')}
+              </p>
             </div>
           </div>
         </div>
@@ -189,7 +196,7 @@ const ReviewItem = (props) => {
           <div className="review__info--2">
             <div className="user__info--2">
               <img
-                src={`http://localhost:5000/${user.photo}`}
+                src={`${process.env.REACT_APP_BACKEND_ASSET}/${user.photo}`}
                 alt="user photo"
               />
               <h3 className="username">
@@ -197,11 +204,13 @@ const ReviewItem = (props) => {
               </h3>
             </div>
             <div className="review__details">
-              {stars.map((star) => star)} 
-
+              {stars.map((star) => star)}
 
               <p className="review__paragraph">{props.review.review}</p>
-             <p className="review__paragraph"> Reviewed: {moment(props.review.createdAt).format('LLL')}</p>
+              <p className="review__paragraph">
+                {' '}
+                Reviewed: {moment(props.review.createdAt).format('LLL')}
+              </p>
             </div>
           </div>
         </div>

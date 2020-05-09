@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
     trim: true,
     minlength: [2, 'A user must have more than 2 characters'],
   },
-  photo: String,
+  photo: String, 
   email: {
     type: String,
     unique: true,

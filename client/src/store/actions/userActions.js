@@ -90,7 +90,7 @@ export const loginUser = (userData) => async (dispatch) => {
     });
     return false;
   }
-}; 
+};
 
 // export const changePassword = () => async dispatch => {
 //   try {
@@ -100,7 +100,6 @@ export const loginUser = (userData) => async (dispatch) => {
 //      setHeaders(response.data.token);
 //     localStorage.setItem('jwt', response.data.token);
 
- 
 //     dispatch({ type: SET_CURRENT_USER, payload: response.data.data });
 //     return true;
 //   } catch (err) {
@@ -111,8 +110,6 @@ export const loginUser = (userData) => async (dispatch) => {
 //     return false;
 //   }
 // }
-
-
 
 export const setCurrentUser = () => async (dispatch) => {
   try {
@@ -160,7 +157,9 @@ export const addToWishlist = (tourId) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: ADD_TO_WISHLIST_ERROR,
-      errormsg: err.response.data.message ?  err.response.data.message : "You need to be logged in!",
+      errormsg: err.response.data.message
+        ? err.response.data.message
+        : 'You need to be logged in!',
     });
   }
 };

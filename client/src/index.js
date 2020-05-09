@@ -7,17 +7,14 @@ import App from './App';
 import './index.css';
 import userReducer from './store/reducers/userReducer';
 import flightsReducer from './store/reducers/flightsReducer';
-// import * as serviceWorker from './serviceWorker';
 
 const rootReducer = combineReducers({
   user: userReducer,
   flights: flightsReducer,
 });
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const store = createStore(
-  rootReducer,
-  composeEnhancers(applyMiddleware(thunk))
-);
+
+// const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const store = createStore(rootReducer, compose(applyMiddleware(thunk)));
 
 ReactDOM.render(
   <React.StrictMode>
@@ -27,8 +24,3 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 );
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-// serviceWorker.unregister();

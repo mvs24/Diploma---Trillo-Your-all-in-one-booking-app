@@ -7,10 +7,10 @@ const reviewTourRouter = require('../routes/reviewTourRoutes');
 const setAgencyUserId = require('../globalMiddlewares/setAgencyUserId');
 const controlTourCreator = require('../globalMiddlewares/controlTourCreator');
 const filterBody = require('../globalMiddlewares/filterBody');
-const fileUpload = require('../globalMiddlewares/file-upload-tours');
+// const fileUpload = require('../globalMiddlewares/file-upload-tours');
 const controlCategory = require('../globalMiddlewares/controlCategory');
-const sharp = require('sharp')
-const uniqid = require('uniqid')
+const sharp = require('sharp');
+const uniqid = require('uniqid');
 
 const router = express.Router({ mergeParams: true });
 
@@ -30,7 +30,7 @@ router
     setAgencyUserId,
     controlCategory('tours'),
     tourController.createTour
-  )  
+  )
 
   .get(tourController.getAllTours); //get all future tour / get all future tours for specific agency
 router.get('/search', tourController.searchForTours);
@@ -50,25 +50,25 @@ router
     authController.restrictTo('admin', 'agencyCreator', 'user'),
     filterBody(['user', 'agency', 'ratingsAverage', 'ratingsQuantity']),
     async (req, res, next) => {
-      let images = []
+      let images = [];
       if (req.files) {
-          await Promise.all(
-            req.files.map(async (file, i) => {
-                const filename = `public/img/tours/tour-${uniqid()}-${i + 1}.jpeg`;
+        await Promise.all(
+          req.files.map(async (file, i) => {
+            const filename = `public/img/tours/tour-${uniqid()}-${i + 1}.jpeg`;
 
-                await sharp(file.buffer)
-                .resize(2000, 1333)
-                .toFormat('jpeg')
-                .jpeg({ quality: 90 })
-                .toFile(`${filename}`);
+            await sharp(file.buffer)
+              .resize(2000, 1333)
+              .toFormat('jpeg')
+              .jpeg({ quality: 90 })
+              .toFile(`${filename}`);
 
-                images.push(filename); 
-            })
-          )
-          req.body.images = [...images]
+            images.push(filename);
+          })
+        );
+        req.body.images = [...images];
       }
-     
-      next()
+
+      next();
     },
     async (req, res, next) => {
       const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {

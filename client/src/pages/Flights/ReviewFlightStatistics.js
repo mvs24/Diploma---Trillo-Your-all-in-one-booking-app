@@ -22,7 +22,7 @@ const ReviewFlightStatistics = (props) => {
   const [end, setEnd] = useState(3);
   const [resPerPage, setResPerPage] = useState(3);
 
-  let innerWidth = window.innerWidth;
+  let innerWidth;
   window.addEventListener('resize', () => {
     innerWidth = window.innerWidth;
     if (window.innerWidth < 1271 && window.innerWidth > 881) {
@@ -136,7 +136,11 @@ const ReviewFlightStatistics = (props) => {
   return (
     <div className="review__container blue__reviews">
       {loading && <LoadingSpinner asOverlay />}
-      {error && <ErrorModal show onClear={() => setError(false)} />}
+      {error && (
+        <ErrorModal show onClear={() => setError(false)}>
+          {error ? error : 'Something went wrong'}
+        </ErrorModal>
+      )}
       <h2 className="blue__heading">Feedback</h2>
       <div className="review__info">
         <div className="review__info--left">
@@ -181,7 +185,7 @@ const ReviewFlightStatistics = (props) => {
                 >
                   &nbsp;
                 </div>
-                <div className='reviewStars'>{stars}</div>
+                <div className="reviewStars">{stars}</div>
                 <span className="review__span">
                   {review.percentage.toFixed(2)}%
                 </span>

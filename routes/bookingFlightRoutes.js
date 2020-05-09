@@ -9,6 +9,7 @@ const router = express.Router();
 router
   .route('/control/numGroupSize')
   .get(bookingFlightController.controlNumberGroupSize);
+
 router.post(
   '/checkout-session/:flightId',
   authController.protect,

@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-// const slugify = require('slugify');
 
 const AppError = require('../utils/appError');
 const Agency = require('./agencyModel');
@@ -47,7 +46,7 @@ const tourSchema = new mongoose.Schema(
       required: [true, 'A tour must have a price'],
     },
     priceDiscount: {
-      type: Number
+      type: Number,
       // validate: {
       //   validator: function (val) {
       //     return val < this.price;
@@ -57,7 +56,6 @@ const tourSchema = new mongoose.Schema(
     },
     summary: {
       type: String,
-
     },
     description: {
       type: String,

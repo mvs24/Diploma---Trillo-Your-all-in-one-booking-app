@@ -4,15 +4,14 @@ import Footer from '../components/Footer/Footer';
 
 const Layout = (props) => {
   return (
-  	<>
-  	
-    <div className="layout">
-      <Header />
-      {props.children}
-      <div>
-        <Footer />
+    <>
+      <div className="layout">
+        <Header />
+        {props.children}
+        <div>
+          <Footer />
+        </div>
       </div>
-    </div>
     </>
   );
 };

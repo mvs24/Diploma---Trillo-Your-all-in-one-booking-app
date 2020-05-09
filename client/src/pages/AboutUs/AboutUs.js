@@ -6,6 +6,7 @@ import Logo from '../../assets/logo.png';
 
 export default (props) => {
   const history = useHistory();
+
   return (
     <div className="about__container">
       <div className="aboutImg__container">

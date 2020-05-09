@@ -93,8 +93,8 @@
   }
 }
 @media (max-width: 600px) {
-  .center__not__item{
-   display: grid;
-   grid-template-columns: repeat(2, 1fr);
+  .center__not__item {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
   }
 }

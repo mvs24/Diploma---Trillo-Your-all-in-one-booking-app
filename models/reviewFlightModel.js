@@ -10,46 +10,46 @@ const reviewFlightSchema = new mongoose.Schema(
       type: Number,
       min: 1,
       max: 5,
-      required: [true, 'A review must have a rating']
+      required: [true, 'A review must have a rating'],
     },
     user: {
       type: mongoose.Schema.ObjectId,
-      ref: 'User'
+      ref: 'User',
     },
     flight: {
       type: mongoose.Schema.ObjectId,
-      ref: 'Flight'
+      ref: 'Flight',
     },
     createdAt: {
       type: Date,
-      default: Date.now()
-    }
+      default: Date.now(),
+    },
   },
   {
     toJSON: { virtuals: true },
-    toObject: { virtuals: true }
+    toObject: { virtuals: true },
   }
 );
 
 reviewFlightSchema.index({ flight: 1, user: 1 }, { unique: true });
 
-const updateAgency = async document => {
+const updateAgency = async (document) => {
   const flight = await Flight.findById(document.flight);
 
   const flightsOnAgency = await Flight.aggregate([
     {
-      $match: { agency: flight.agency }
+      $match: { agency: flight.agency },
     },
     {
-      $match: { ratingsQuantity: { $ne: 0 } }
+      $match: { ratingsQuantity: { $ne: 0 } },
     },
     {
       $group: {
         _id: '$agency',
         avgRating: { $avg: '$ratingsAverage' },
-        nRating: { $sum: 1 }
-      }
-    }
+        nRating: { $sum: 1 },
+      },
+    },
   ]);
 
   let ratingsQuantity = 0;
@@ -62,22 +62,22 @@ const updateAgency = async document => {
 
   await Agency.findByIdAndUpdate(flightsOnAgency[0]._id, {
     ratingsAverage,
-    ratingsQuantity
+    ratingsQuantity,
   });
 };
 
-reviewFlightSchema.statics.calcRatingsOnFlight = async function(flightId) {
+reviewFlightSchema.statics.calcRatingsOnFlight = async function (flightId) {
   const stats = await this.aggregate([
     {
-      $match: { flight: flightId }
+      $match: { flight: flightId },
     },
     {
       $group: {
         _id: '$flight',
         nRating: { $sum: 1 },
-        avgRating: { $avg: '$rating' }
-      }
-    }
+        avgRating: { $avg: '$rating' },
+      },
+    },
   ]);
 
   let ratingsAverage = 0.0;
@@ -90,11 +90,11 @@ reviewFlightSchema.statics.calcRatingsOnFlight = async function(flightId) {
 
   await Flight.findByIdAndUpdate(flightId, {
     ratingsQuantity,
-    ratingsAverage
+    ratingsAverage,
   });
 };
 
-reviewFlightSchema.post('save', async function(doc, next) {
+reviewFlightSchema.post('save', async function (doc, next) {
   await doc.constructor.calcRatingsOnFlight(doc.flight);
 
   await updateAgency(doc);
@@ -102,7 +102,7 @@ reviewFlightSchema.post('save', async function(doc, next) {
   next();
 });
 
-reviewFlightSchema.post(/^findOneAnd/, async function(doc, next) {
+reviewFlightSchema.post(/^findOneAnd/, async function (doc, next) {
   await doc.constructor.calcRatingsOnFlight(doc.flight);
 
   await updateAgency(doc);

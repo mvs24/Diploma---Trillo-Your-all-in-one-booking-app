@@ -139,9 +139,9 @@ exports.makePriceDiscount = asyncWrapper(async (req, res, next) => {
   const priceDiscount = req.body.priceDiscount;
   if (priceDiscount >= flight.pricePerPerson) {
     return res.status(400).json({
-      status: "fail",
-      message: `Discount price (${priceDiscount}) should be below regular price`
-    })
+      status: 'fail',
+      message: `Discount price (${priceDiscount}) should be below regular price`,
+    });
   }
   flight.priceDiscount = priceDiscount;
   flight.pricePerPerson -= priceDiscount;
@@ -166,7 +166,6 @@ exports.getReviewStats = asyncWrapper(async (req, res, next) => {
   const flight = await Flight.findById(req.params.flightId);
   const totalReviews = flight.ratingsQuantity;
   const avgRating = flight.ratingsAverage;
-  const flightId = mongoose.Types.ObjectId(req.params.flightId);
 
   const stats = await Flight.aggregate([
     {

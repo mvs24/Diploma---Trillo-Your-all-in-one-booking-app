@@ -5,16 +5,12 @@ import Logo from '../assets/logo.png';
 import './Header.css';
 import { IconContext } from 'react-icons';
 import {
-  IoIosApps,
   IoIosSearch,
   IoIosAirplane,
   IoMdNotificationsOutline,
 } from 'react-icons/io';
-import { AiOutlineArrowRight } from 'react-icons/ai';
-
 import { MdHotel } from 'react-icons/md';
 import { FaMapMarkedAlt } from 'react-icons/fa';
-
 import Button from '../shared/components/Button/Button';
 import Modal from '../shared/components/UI/Modal';
 import Input from '../shared/components/Input/Input';
@@ -33,7 +29,6 @@ import {
 import LoadingSpinner from '../shared/components/UI/LoadingSpinner';
 import UserContent from '../UserContent/UserContent';
 import ErrorModal from '../shared/components/UI/ErrorModal';
-import { IoIosArrowDown } from 'react-icons/io';
 import { FiHeart, FiShoppingCart } from 'react-icons/fi';
 import axios from 'axios';
 
@@ -212,7 +207,6 @@ const Header = React.memo((props) => {
   useEffect(() => {
     const getMyAgency = async () => {
       try {
-        let tourFlightRes;
         setLoading(true);
         const res = await axios.get(`/api/v1/users/my/agency`);
 
@@ -510,8 +504,8 @@ const Header = React.memo((props) => {
       );
       setLoading(false);
 
-      setHeaders(res.data.token);
-      await props.setCurrentUser();
+      // props.setHeaders(res.data.token);
+      // await props.setCurrentUser();
       setOpenResetModal();
 
       setResetError();
@@ -522,7 +516,7 @@ const Header = React.memo((props) => {
   };
 
   let userContent = (
-    <div className='logInSignUpBtns'>
+    <div className="logInSignUpBtns">
       <Button type="success" clicked={openLoginModal}>
         Log In
       </Button>
@@ -562,7 +556,7 @@ const Header = React.memo((props) => {
       {loading && <LoadingSpinner asOverlay />}
       {error && (
         <ErrorModal show onClear={() => setError()}>
-          {error}
+          {error ? error : 'Something went wrong'}
         </ErrorModal>
       )}
       {props.loading && <LoadingSpinner asOverlay />}
@@ -638,8 +632,6 @@ const Header = React.memo((props) => {
           <h1 className="forgot__heading" onClick={forgotHandler}>
             Forgot your password? Click here to get the code.
           </h1>
-
-         
         </Modal>
       )}
 
@@ -660,7 +652,6 @@ const Header = React.memo((props) => {
           headerClass="green"
         >
           {signupForm.map((el) => el)}
-
         </Modal>
       )}
 
@@ -793,7 +784,7 @@ const Header = React.memo((props) => {
                     <div className="user__profile">
                       {' '}
                       <img
-                        src={`http://localhost:5000/${props.userData.photo}`}
+                        src={`${process.env.REACT_APP_BACKEND_ASSET}/${props.userData.photo}`}
                         alt="user"
                       />
                     </div>
@@ -807,11 +798,7 @@ const Header = React.memo((props) => {
           </nav>
         </div>
       ) : (
-
-
-
-
-<div className="navigation1">
+        <div className="navigation1">
           <input
             type="checkbox"
             className="navigation__checkbox1"
@@ -826,16 +813,15 @@ const Header = React.memo((props) => {
 
           <nav className="navigation__nav1">
             <ul className="navigation__list1">
-              
               <li className="navigation__item1">
                 <Link
                   onClick={() => {
                     document.querySelector('.navigation__checkbox1').click();
-                    setOpenLogin(true)
+                    setOpenLogin(true);
                   }}
                   className="navigation__link1"
                 >
-                 <span>01</span> Log In
+                  <span>01</span> Log In
                 </Link>
               </li>
 
@@ -843,16 +829,15 @@ const Header = React.memo((props) => {
                 <Link
                   onClick={() => {
                     document.querySelector('.navigation__checkbox1').click();
-                    setOpenSignup(true)
+                    setOpenSignup(true);
                   }}
-                 
                   className="navigation__link1"
                 >
                   <span>02</span> Sign Up
                 </Link>
               </li>
 
-               <li className="navigation__item1">
+              <li className="navigation__item1">
                 <Link
                   onClick={() => {
                     document.querySelector('.navigation__checkbox1').click();
@@ -863,37 +848,17 @@ const Header = React.memo((props) => {
                   Discover flights
                 </Link>
               </li>
-
-
             </ul>
           </nav>
         </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       )}
 
       <header className="header">
-        {props.error && <ErrorModal>{props.error}</ErrorModal>}
+        {props.error && (
+          <ErrorModal show onClear={() => props.deleteError()}>
+            {props.error}
+          </ErrorModal>
+        )}
         <img
           style={{ cursor: 'pointer' }}
           onClick={() => props.history.push('/')}
@@ -978,4 +943,5 @@ export default connect(mapStateToProps, {
   getMyNotifications,
   getUnReadNotifications,
   setCurrentUser,
+  setHeaders,
 })(withRouter(Header));

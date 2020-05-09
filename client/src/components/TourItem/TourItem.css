@@ -91,7 +91,6 @@
   cursor: pointer;
 }
 
-
 .review__center {
   display: flex;
   align-items: center;
@@ -119,6 +118,6 @@
   align-items: center;
   justify-content: center;
 }
-.detailsButton {  
+.detailsButton {
   z-index: 2;
 }

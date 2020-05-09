@@ -26,7 +26,7 @@ exports.getOne = (Model) =>
     const doc = await Model.findById(req.params.id);
 
     if (!doc) {
-      return next(new AppError('This document does not exists', 404))
+      return next(new AppError('This document does not exists', 404));
     }
 
     if (doc.password) doc.password = undefined;
@@ -51,7 +51,7 @@ exports.deleteOne = (Model) =>
 exports.createOne = (Model) =>
   asyncWrapper(async (req, res, next) => {
     if (req.filter) req.body = req.filter;
-    console.log(req.body)
+
     const doc = await Model.create(req.body);
 
     res.status(201).json({

@@ -7,7 +7,7 @@ import Button from '../../shared/components/Button/Button';
 import Agency from '../../components/Agency/Agency';
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
 import Flight from '../../pages/Flights/Flight';
-import './FlightAgencyDetails.css'
+import './FlightAgencyDetails.css';
 
 const FlightAgencyDetails = (props) => {
   const [agency, setAgency] = useState();
@@ -17,7 +17,7 @@ const FlightAgencyDetails = (props) => {
   const [myFlightsIds, setMyFlightsIds] = useState();
   const start = 0;
   const [end, setEnd] = useState(4);
-  const [endFinished, setEndFinished] = useState(1)
+  const [endFinished, setEndFinished] = useState(1);
   const { isAuthenticated } = props;
 
   useEffect(() => {
@@ -68,7 +68,7 @@ const FlightAgencyDetails = (props) => {
   if (error)
     return (
       <ErrorModal show onClear={() => setError(false)}>
-        {error}
+        {error ? error : 'Something went wrong'}
       </ErrorModal>
     );
 
@@ -83,16 +83,19 @@ const FlightAgencyDetails = (props) => {
     setEndFinished((prev) => prev + 1);
   };
 
-
-  let futureFlights = agency.flights.filter(el => new Date(el.depart) > Date.now())
-  let finishedFlights = agency.flights.filter(el => new Date(el.depart) <= Date.now())
+  let futureFlights = agency.flights.filter(
+    (el) => new Date(el.depart) > Date.now()
+  );
+  let finishedFlights = agency.flights.filter(
+    (el) => new Date(el.depart) <= Date.now()
+  );
 
   return (
     <>
       {loading && <LoadingSpinner asOverlay />}
       {error && (
         <ErrorModal show onClear={() => setError(false)}>
-          {error}
+          {error ? error : 'Something went wrong'}
         </ErrorModal>
       )}
       <div className="agency__details--container">
@@ -115,31 +118,29 @@ const FlightAgencyDetails = (props) => {
             </Button>
           </div>
         </div>
-        <div> 
-         <h1 className="my__wishlist--heading">FINISHED FLIGHTS ({finishedFlights.length})</h1>
+        <div>
+          <h1 className="my__wishlist--heading">
+            FINISHED FLIGHTS ({finishedFlights.length})
+          </h1>
           <div className="flightsAgencyCnt">
-          {finishedFlights.slice(start, endFinished).map((flight) => (
-            <Flight
-              booked={isAuthenticated && myFlightsIds.includes(flight._id)}
-              white
-              finished
-              flight={flight}
-            />
-          ))}
-          <div className="searchBtn--grid">
-            <Button
-              type="pink"
-              disabled={endFinished >= finishedFlights.length}
-              clicked={showMoreFinishedHandler}
-            >
-              Show More Finished Flights
-            </Button>
+            {finishedFlights.slice(start, endFinished).map((flight) => (
+              <Flight
+                booked={isAuthenticated && myFlightsIds.includes(flight._id)}
+                white
+                finished
+                flight={flight}
+              />
+            ))}
+            <div className="searchBtn--grid">
+              <Button
+                type="pink"
+                disabled={endFinished >= finishedFlights.length}
+                clicked={showMoreFinishedHandler}
+              >
+                Show More Finished Flights
+              </Button>
+            </div>
           </div>
-        </div>
-
-
-
-
         </div>
       </div>
     </>

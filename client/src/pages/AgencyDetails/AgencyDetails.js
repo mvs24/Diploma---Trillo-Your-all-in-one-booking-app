@@ -15,7 +15,7 @@ const AgencyDetails = (props) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [page, setPage] = useState(1);
-  const [resPerPage, setResPerPage] = useState(3);
+  const resPerPage = 3;
   const [shouldUpdate, setShouldUpdate] = useState();
   const [finishedTours, setFinishedTours] = useState([]);
   const [myWishlistIds, setMyWishlistIds] = useState();
@@ -112,7 +112,7 @@ const AgencyDetails = (props) => {
   if (error)
     return (
       <ErrorModal show onClear={() => setError(false)}>
-        {error}
+        {error ? error : 'Something went wrong'}
       </ErrorModal>
     );
   if (isAuthenticated && !myWishlistIds) return <LoadingSpinner asOverlay />;

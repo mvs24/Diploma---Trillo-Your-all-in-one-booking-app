@@ -2,10 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { IconContext } from 'react-icons';
-import { IoIosArrowDown, IoMdNotificationsOutline } from 'react-icons/io';
+import { IoMdNotificationsOutline } from 'react-icons/io';
 import { FiHeart, FiShoppingCart } from 'react-icons/fi';
 import LoadingSpinner from '../shared/components/UI/LoadingSpinner';
-import Button from '../shared/components/Button/Button';
 
 import './UserContent.css';
 
@@ -63,17 +62,16 @@ const UserContent = (props) => {
     }
   });
 
-  const formatName = name => {
+  const formatName = (name) => {
     if (name.length > 10) {
-      return name.substr(0, 7) + "..."
+      return name.substr(0, 7) + '...';
     }
 
-    return name
-  }
+    return name;
+  };
 
   return (
     <>
-
       <section className="user__content">
         <div className="seperator">&nbsp;</div>
 
@@ -105,11 +103,13 @@ const UserContent = (props) => {
 
         <div onClick={myProfileHandler} className="user__profile">
           <img
-            src={`http://localhost:5000/${props.userData.photo}`}
+            src={`${process.env.REACT_APP_BACKEND_ASSET}/${props.userData.photo}`}
             alt="user"
           />
+
           <h4>
-            { formatName(props.userData.name) } { formatName(props.userData.lastname)}
+            {formatName(props.userData.name)}{' '}
+            {formatName(props.userData.lastname)}
           </h4>
         </div>
       </section>

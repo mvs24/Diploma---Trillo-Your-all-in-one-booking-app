@@ -7,14 +7,13 @@ import ErrorModal from '../../shared/components/UI/ErrorModal';
 import axios from 'axios';
 import Button from '../../shared/components/Button/Button';
 
-
 const RequestedFlights = (props) => {
   const [requestedFlights, setRequestedFlights] = useState();
   const [loading, setLoading] = useState();
   const [error, setError] = useState();
   const [myFlights, setMyFlights] = useState();
   const [myFlightsIds, setMyFlightsIds] = useState();
-  const start  =0;
+  const start = 0;
   const [end, setEnd] = useState(4);
   const { isAuthenticated } = props;
 
@@ -51,7 +50,6 @@ const RequestedFlights = (props) => {
         const data = qs.parse(props.location.search.split('?')[1]);
         let str = '';
 
-
         if (!data.returnDate) {
           str = `/api/v1/flights/searchedFlights?variety=${data.variety}&from=${data.from}&to=${data.to}&depart=${data.depart}&package=${data.package}`;
         } else {
@@ -69,10 +67,9 @@ const RequestedFlights = (props) => {
     getRequestedFlights();
   }, []);
 
-    const showMoreHandler = () => {
+  const showMoreHandler = () => {
     setEnd((prev) => prev + 4);
   };
-
 
   if (loading) return <LoadingSpinner asOverlay />;
   if (!requestedFlights) return <h1>No flights found...</h1>;
@@ -88,7 +85,7 @@ const RequestedFlights = (props) => {
       {loading && <LoadingSpinner asOverlay />}
       {error && (
         <ErrorModal show onClear={() => setError()}>
-          {error ? error : "Something went wrong!"}
+          {error ? error : 'Something went wrong!'}
         </ErrorModal>
       )}
       <div className="all__flights">
@@ -98,14 +95,14 @@ const RequestedFlights = (props) => {
             flight={flight}
           />
         ))}
-        <div className='finishedToursButton'>
-        <Button
-          type="blue"
-          disabled={end >= requestedFlights.length}
-          clicked={showMoreHandler}
-        >
-          Show More
-        </Button>
+        <div className="finishedToursButton">
+          <Button
+            type="blue"
+            disabled={end >= requestedFlights.length}
+            clicked={showMoreHandler}
+          >
+            Show More
+          </Button>
         </div>
       </div>
     </div>

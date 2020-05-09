@@ -7,22 +7,22 @@ const AppError = require('../utils/appError');
 const bookingTourSchema = new mongoose.Schema({
   tour: {
     type: mongoose.Schema.ObjectId,
-    ref: 'Tour'
+    ref: 'Tour',
   },
   user: {
     type: mongoose.Schema.ObjectId,
-    ref: 'User'
+    ref: 'User',
   },
   price: Number,
   createdAt: {
     type: Date,
-    default: Date.now()
-  }
+    default: Date.now(),
+  },
 });
 
 bookingTourSchema.index({ user: 1, tour: 1 }, { unique: true });
 
-bookingTourSchema.post('save', async function(doc, next) {
+bookingTourSchema.post('save', async function (doc, next) {
   const tour = await Tour.findById(doc.tour);
 
   if (!tour) return next(new AppError('No tour found with that id', 404));
@@ -35,7 +35,7 @@ bookingTourSchema.post('save', async function(doc, next) {
   const currentNumOptionsBought = agency.numOptionsBought;
 
   await Agency.findByIdAndUpdate(agency.id, {
-    numOptionsBought: currentNumOptionsBought + 1
+    numOptionsBought: currentNumOptionsBought + 1,
   });
 
   next();

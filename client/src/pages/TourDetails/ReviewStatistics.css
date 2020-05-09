@@ -65,8 +65,7 @@
   .review__container {
     width: 100%;
   }
-  .review__info {
-  }
+
   .review__info--right,
   .review__info--left {
     margin: 1rem;
@@ -77,8 +76,7 @@
   .review__container {
     width: 100%;
   }
-  .review__info {
-  }
+
   .review__info--right,
   .review__info--left {
     margin: 0.4rem;

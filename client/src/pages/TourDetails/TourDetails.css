@@ -15,9 +15,8 @@
 .makeAPriceDiscount__btn {
   font-size: 1.3rem;
   padding: 1rem 4rem;
-  margin-right: .2rem;
+  margin-right: 0.2rem;
 }
-
 
 .heading {
   font-size: 3.8rem;
@@ -26,7 +25,7 @@
   text-align: center;
   color: #fff;
   position: absolute;
-  top: 40%; 
+  top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 25%;
@@ -39,7 +38,7 @@
   box-decoration-break: clone;
   position: relative;
   background-image: linear-gradient(
-    to right bottom, 
+    to right bottom,
     rgb(85, 197, 122, 0.9),
     rgb(126, 213, 111)
   );
@@ -62,8 +61,6 @@
 }
 
 .tour__info {
-  /* padding: 10rem; */
-  /* margin-top: 10rem; */
   clip-path: polygon(0, 100% 0, 100% 90%, 0 100%);
   display: grid;
   grid-template-columns: minmax(50%, min-content) 1fr;
@@ -88,12 +85,11 @@
   color: transparent;
   background-clip: text;
   display: block;
-  width: 100%; 
+  width: 100%;
   text-align: center;
 }
 .quick__facts ul {
   text-align: center;
- 
 }
 
 .quick__facts li {
@@ -128,11 +124,7 @@
   margin: 1rem;
   text-align: center;
   text-transform: uppercase;
-  background-image: linear-gradient(
-    to right bottom,
-   #eb2f64,
-    #FF3366
-  );
+  background-image: linear-gradient(to right bottom, #eb2f64, #ff3366);
   color: transparent;
   background-clip: text;
   display: block;
@@ -185,7 +177,6 @@
 .map__container {
   transform: skewY(-5deg);
 }
-
 
 .reviews {
   display: grid;
@@ -316,24 +307,17 @@
   width: 100%;
   transform: skewY(4deg);
 }
- .agency__info--polygon {
- /*   margin-left:  auto;*/
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-   
-  } 
+.agency__info--polygon {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
 @media (max-width: 1013px) {
   .review__info {
     text-align: center;
     margin: 0 auto;
     display: flex;
     justify-content: space-around;
-  } 
-
- 
-  .agency__info--polygon p{
-    /*width: 70%;*/
   }
 }
 @media (max-width: 1050px) {
@@ -353,7 +337,6 @@
   }
 }
 
-
 @media (max-width: 950px) {
   .bookTour__info {
     flex-direction: column;
@@ -361,13 +344,7 @@
     justify-content: center;
     text-align: center;
   }
-  /*.quick__facts-1 h1 {
-    margin-left: 2rem;
-  }*/
- /* .quick__facts-1 ul {
-    width: 130%;
-    height: 130%;
-  }*/
+
   .bookTour__info--1 {
     margin: 2rem;
   }
@@ -376,7 +353,6 @@
   }
 }
 
-
 @media (max-width: 865px) {
   .tour__about h1,
   .quick__facts h1 {
@@ -384,9 +360,8 @@
   }
 }
 
-
 @media (max-width: 750px) {
-  .tour__info-1{
+  .tour__info-1 {
     display: flex;
     flex-direction: column;
   }
@@ -394,13 +369,13 @@
     margin-top: -20rem;
     padding: 23rem;
   }
-  .tour__about-1{
+  .tour__about-1 {
     padding: 15rem;
     padding-bottom: -20rem;
-    
+
     margin-bottom: 5rem;
   }
- 
+
   .agency__info {
     display: flex;
     flex-direction: column;
@@ -414,15 +389,15 @@
   .quick__facts2 h1 {
     margin-top: -5rem;
   }
-  .agency__info--polygon{
-   width: 100%;
+  .agency__info--polygon {
+    width: 100%;
   }
-  .agency__info--polygon h1{
+  .agency__info--polygon h1 {
     margin-top: -20rem;
   }
 }
 @media (max-width: 700px) {
-   .review__info {
+  .review__info {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -440,7 +415,6 @@
     font-size: 1.4rem;
   }
 
-
   .review__span {
     margin-left: 1rem;
     font-size: 1.2rem;
@@ -448,9 +422,8 @@
 }
 
 @media (max-width: 575px) {
-  .quick__facts-1 ul  {
-     width: 200%;
-
+  .quick__facts-1 ul {
+    width: 200%;
   }
 
   .quick__facts-1 {
@@ -467,11 +440,6 @@
   .review__container h1 {
     margin-left: 5rem;
   }
-  /*.single__review {*/
-    /*display: flex;
-    flex-direction: column;
-    align-items: center;
-  /*}*/
 
   .review__info {
     display: flex;
@@ -479,7 +447,7 @@
     align-items: center;
   }
 
-  ..quick__facts-1 {
+  .quick__facts-1 {
     margin-left: 5rem;
   }
   .bookTour__info {
@@ -501,7 +469,7 @@
   .quick__facts-1 ul li {
     width: 140%;
   }
-   .quick__facts2 {
+  .quick__facts2 {
     margin-top: -15rem;
     margin-bottom: 5rem;
     padding: 4rem;
@@ -509,10 +477,10 @@
   .quick__facts2 h1 {
     margin-top: -5rem;
   }
-  .agency__info--polygon{
-   width: 100%;
+  .agency__info--polygon {
+    width: 100%;
   }
-  .agency__info--polygon h1{
+  .agency__info--polygon h1 {
     margin-top: -15rem;
   }
   .tourDescription {
@@ -523,6 +491,5 @@
 @media (max-width: 320px) {
   .bookTour__info {
     width: 120%;
-
   }
 }

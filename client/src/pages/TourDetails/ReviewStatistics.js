@@ -79,7 +79,11 @@ const ReviewStatistics = (props) => {
 
   return (
     <div className="review__container">
-      {error && <ErrorModal show onClear={() => setError(false)} />}
+      {error && (
+        <ErrorModal show onClear={() => setError(false)}>
+          {error ? error : 'Something went wrong'}
+        </ErrorModal>
+      )}
       <h1>Feedback</h1>
       <div className="review__info">
         <div className="review__info--left">
@@ -123,8 +127,8 @@ const ReviewStatistics = (props) => {
                   }}
                 >
                   &nbsp;
-                </div> 
-                 <div className='reviewStars'>{stars}</div>
+                </div>
+                <div className="reviewStars">{stars}</div>
                 <span className="review__span">
                   {review.percentage.toFixed(2)}%
                 </span>

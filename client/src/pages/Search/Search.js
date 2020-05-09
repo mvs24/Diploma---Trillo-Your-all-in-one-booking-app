@@ -43,7 +43,7 @@ const Search = (props) => {
       {loading && <LoadingSpinner asOverlay />}
       {error && (
         <ErrorModal show onClear={() => setError(false)}>
-          {error}
+          {error ? error : 'Something went wrong'}
         </ErrorModal>
       )}
       <h1 className="my__wishlist--heading">RESULTS FOUND: {tours.length}</h1>

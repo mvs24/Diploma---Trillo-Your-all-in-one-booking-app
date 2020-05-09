@@ -7,16 +7,8 @@ import Flight from '../Flights/Flight';
 import './AllFlights.css';
 import Button from '../../shared/components/Button/Button';
 import { IconContext } from 'react-icons';
-import { MdFilterList } from 'react-icons/md';
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
-import {
-  IoIosStarHalf,
-  IoMdStar,
-  IoMdStarOutline,
-  IoIosStarOutline,
-  IoIosArrowBack,
-  IoIosArrowForward,
-} from 'react-icons/io';
+import { IoIosStarHalf, IoMdStar, IoIosStarOutline } from 'react-icons/io';
 import Select from 'react-select';
 
 const options = [
@@ -35,10 +27,11 @@ const AllFlights = React.memo((props) => {
   const [error, setError] = useState();
   const [loading, setLoading] = useState();
   const [end, setEnd] = useState(5);
-  const [selectedOption, setSelectedOption] = useState({value: "", label: "Sort By"});
+  const [selectedOption, setSelectedOption] = useState({
+    value: '',
+    label: 'Sort By',
+  });
   const [openRatings, setOpenRatings] = useState();
-  const [checkedIn, setCheckedIn] = useState([]);
-  const [radioValue, setRadioValue] = useState();
   const [finishedFlights, setFinishedFlights] = useState();
   const [selectedRating, setSelectedRating] = useState();
   const [myFlights, setMyFlights] = useState([]);
@@ -70,7 +63,9 @@ const AllFlights = React.memo((props) => {
       setLoading(true);
       let res;
       res = await axios.get('/api/v1/flights?sort=-ratingsAverage');
-      const finishedRes = await axios.get(`/api/v1/flights/finishedFlights?sort=-ratingsAverage`);
+      const finishedRes = await axios.get(
+        `/api/v1/flights/finishedFlights?sort=-ratingsAverage`
+      );
       setFinishedFlights(finishedRes.data.data);
       setLoading();
       setFlights(res.data.data);
@@ -139,7 +134,14 @@ const AllFlights = React.memo((props) => {
   if (loading) return <LoadingSpinner asOverlay />;
   if (!flights) return <LoadingSpinner asOverlay />;
   if (flights && flights.length === 0)
-    return <h1>No flights found at this moment...</h1>;
+    return (
+      <div style={{ margin: '0 auto', textAlign: 'center' }}>
+        <h1 className="noFlightHeading">No flights found at this moment...</h1>
+        <Button type="blue" clicked={() => props.history.goBack()}>
+          Go Back
+        </Button>
+      </div>
+    );
 
   let firstStars = [];
   for (let i = 0; i < 5; i++) {
@@ -214,11 +216,13 @@ const AllFlights = React.memo((props) => {
 
   let zeroStars = [];
   for (let i = 0; i < 5; i++) {
-   zeroStars.push( <IconContext.Provider
-          value={{ className: 'blue__review tour__info--icon full star' }}
-        >
-          <IoIosStarOutline />
-        </IconContext.Provider>)
+    zeroStars.push(
+      <IconContext.Provider
+        value={{ className: 'blue__review tour__info--icon full star' }}
+      >
+        <IoIosStarOutline />
+      </IconContext.Provider>
+    );
   }
 
   if (!finishedFlights) return <LoadingSpinner asOverlay />;
@@ -354,7 +358,7 @@ const AllFlights = React.memo((props) => {
       <div className="all__flights__item">
         {error && (
           <ErrorModal show onClear={() => setError()}>
-            {error}
+            {error ? error : 'Something went wrong'}
           </ErrorModal>
         )}
         {allFlights.map((flight) => (

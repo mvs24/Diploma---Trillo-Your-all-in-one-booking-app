@@ -3,12 +3,12 @@ const mongoose = require('mongoose');
 const wishlistTourSchema = new mongoose.Schema({
   tour: {
     type: mongoose.Schema.ObjectId,
-    ref: 'Tour'
+    ref: 'Tour',
   },
   user: {
     type: mongoose.Schema.ObjectId,
-    ref: 'User'
-  }
+    ref: 'User',
+  },
 });
 
 const WishlistTour = mongoose.model('WishlistTour', wishlistTourSchema);

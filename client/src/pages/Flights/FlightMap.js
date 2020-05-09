@@ -13,27 +13,32 @@ const Map = (props) => {
   const locIds = [];
 
   if (props.toLocation) {
-     locIds.push({
-    id: props.fromLocation.description, showPopup: true,coordinates: props.fromLocation.coordinates,
-        description: props.fromLocation.description,
-    address: props.fromLocation.address,
-    typeLocation: 'from'
-  })
-      locIds.push({
-    id: props.toLocation.description, showPopup: true, coordinates: props.toLocation.coordinates,
-        description: props.toLocation.description,
-    address: props.toLocation.address,
-       typeLocation: 'to'
-  })
+    locIds.push({
+      id: props.fromLocation.description,
+      showPopup: true,
+      coordinates: props.fromLocation.coordinates,
+      description: props.fromLocation.description,
+      address: props.fromLocation.address,
+      typeLocation: 'from',
+    });
+    locIds.push({
+      id: props.toLocation.description,
+      showPopup: true,
+      coordinates: props.toLocation.coordinates,
+      description: props.toLocation.description,
+      address: props.toLocation.address,
+      typeLocation: 'to',
+    });
   } else {
-     locIds.push({
-    id: props.fromLocation.description, showPopup: true, coordinates: props.fromLocation.coordinates,
-    description: props.fromLocation.description,
-    address: props.fromLocation.address,
-       typeLocation: 'from'
-    })
+    locIds.push({
+      id: props.fromLocation.description,
+      showPopup: true,
+      coordinates: props.fromLocation.coordinates,
+      description: props.fromLocation.description,
+      address: props.fromLocation.address,
+      typeLocation: 'from',
+    });
   }
-
 
   useEffect(() => {
     setViewport((prevState) => {
@@ -53,16 +58,15 @@ const Map = (props) => {
           key={loc.coordinates}
           latitude={parseFloat(loc.coordinates[1])}
           longitude={parseFloat(loc.coordinates[0])}
-        > 
-          <img
-            className="marker"
-            src={Pin}
-          />
+        >
+          <img className="marker" src={Pin} />
           <div className="popup">
-              <span className="description">
-               {loc.typeLocation === 'from' ? 'From: ' +loc.description : "To: " + loc.description}
-              </span>
-            </div>
+            <span className="description">
+              {loc.typeLocation === 'from'
+                ? 'From: ' + loc.description
+                : 'To: ' + loc.description}
+            </span>
+          </div>
         </Marker>
       );
     });
@@ -70,13 +74,11 @@ const Map = (props) => {
 
   return (
     <ReactMapGL
-      mapboxApiAccessToken={
-        'pk.eyJ1IjoibWFyaXVzMjQ5OCIsImEiOiJjazhodWprNW8wM2w0M2RxemRva2tybjhpIn0.h8tRVAkZqkvhSSnD3uEPUw'
-      }
+      mapboxApiAccessToken={process.env.REACT_APP_MAP_API_KEY}
       {...viewport}
       onViewportChange={setViewport}
     >
-     {loadDayMarkers()}
+      {loadDayMarkers()}
     </ReactMapGL>
   );
 };

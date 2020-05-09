@@ -50,9 +50,7 @@ exports.getCheckoutSession = asyncWrapper(async (req, res, next) => {
 
   if (!req.body.numPersons)
     return next(new AppError('Please specify number of persons', 400));
-   
 
-   
   const name = flight.returnDate
     ? `Depart: ${moment(flight.depart, 'YYYY-MM-DD')}  - Return: ${moment(
         flight.returnDate,
@@ -62,12 +60,12 @@ exports.getCheckoutSession = asyncWrapper(async (req, res, next) => {
 
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
-    success_url: `http://localhost:3000/success/flights/${flight._id}/users/${
-      req.user.id
-    }/price/${flight.pricePerPerson * req.body.numPersons}/persons/${
-      req.body.numPersons
-    }`, //succes url for the frontend!!!!
-    cancel_url: `http://localhost:3000/categories/flights/`,
+    success_url: `${req.protocol}://${req.get('host')}/success/flights/${
+      flight._id
+    }/users/${req.user.id}/price/${
+      flight.pricePerPerson * req.body.numPersons
+    }/persons/${req.body.numPersons}`, //succes url for the frontend!!!!
+    cancel_url: `${req.protocol}://${req.get('host')}/categories/flights/`,
     customer_email: req.user.email,
     client_reference_id: req.params.flightId,
     line_items: [

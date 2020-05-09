@@ -8,11 +8,7 @@ const router = express.Router();
 
 router
   .route('/:tourId')
-  .post(
-    authController.protect,
-    setTourUserId,
-    cartTourController.addToCart
-  )
+  .post(authController.protect, setTourUserId, cartTourController.addToCart)
   .delete(authController.protect, cartTourController.removeFromCart);
 
 router

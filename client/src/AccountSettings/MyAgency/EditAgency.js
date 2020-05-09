@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+
 import ErrorModal from '../../shared/components/UI/ErrorModal';
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
 import Input from '../../shared/components/Input/Input';
@@ -11,7 +12,7 @@ import './EditAgency.css';
 
 const EditAgency = (props) => {
   const { agency } = props;
-  console.log(agency);
+
   const [agencyData, setAgencyData] = useState({
     name: {
       configOptions: {
@@ -179,14 +180,14 @@ const EditAgency = (props) => {
     }
   };
 
-  let agencyImg = `http://localhost:5000/${agency.image}`;
+  let agencyImg = `${process.env.REACT_APP_BACKEND_ASSET}/${agency.image}`;
 
   return (
     <div className="edit__agency--container">
       {loading && <LoadingSpinner asOverlay />}
       {error && (
         <ErrorModal show onClear={() => setError()}>
-          {error}
+          {error ? error : 'Something went wrong'}
         </ErrorModal>
       )}
       <h1>Edit Agency</h1>

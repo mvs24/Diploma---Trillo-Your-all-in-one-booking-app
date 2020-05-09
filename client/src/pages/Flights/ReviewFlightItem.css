@@ -1,35 +1,35 @@
 .arrow__blue {
-	color: #5643fa;
-} 
+  color: #5643fa;
+}
 
 @media (max-width: 410px) {
-	.flight__review__item {
-		padding: 1rem;
-		margin-right: 2rem;
-		width: 80%;
-	}
-	.flight__links__container {
-		font-size: 1.4rem;
-	}
+  .flight__review__item {
+    padding: 1rem;
+    margin-right: 2rem;
+    width: 80%;
+  }
+  .flight__links__container {
+    font-size: 1.4rem;
+  }
 }
 @media (max-width: 350px) {
-	.flight__review__item {
-		padding: 1rem;
-		margin-right: 2rem;
-		width: 60%;
-	}
+  .flight__review__item {
+    padding: 1rem;
+    margin-right: 2rem;
+    width: 60%;
+  }
 }
 @media (max-width: 310px) {
-	.flight__review__item {
-		padding: 1rem;
-		margin-right: 2rem;
-		width: 50%;
-	}
+  .flight__review__item {
+    padding: 1rem;
+    margin-right: 2rem;
+    width: 50%;
+  }
 }
 @media (max-width: 250px) {
-	.flight__review__item {
-		padding: 1rem;
-		margin-right: 15rem;
-		width: 40%;
-	}
+  .flight__review__item {
+    padding: 1rem;
+    margin-right: 15rem;
+    width: 40%;
+  }
 }

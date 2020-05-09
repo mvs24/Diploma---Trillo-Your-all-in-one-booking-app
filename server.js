@@ -12,7 +12,7 @@ dotenv.config({ path: './config.env' });
 const app = require('./app');
 
 mongoose
-  .connect('mongodb://localhost:27017/diploma', {
+  .connect(process.env.DATABASE_LOCAL, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,

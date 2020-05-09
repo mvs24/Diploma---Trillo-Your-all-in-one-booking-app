@@ -1,20 +1,19 @@
 .footer--home {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3rem;
 }
 .copyright--home {
-	display: flex;
-	align-items: center;
-	
+  display: flex;
+  align-items: center;
 }
 .about__us--home {
-	display: flex;
-	align-items: center;
-	font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  font-size: 1.4rem;
 }
 .about__us--home > * {
-	margin: 0 2rem;
-	cursor: pointer;
+  margin: 0 2rem;
+  cursor: pointer;
 }

@@ -23,9 +23,8 @@
     font-size: 1.4rem;
     width: 130%;
   }
-  .single__review{
+  .single__review {
     display: grid;
-
   }
   .reviewStars {
     display: flex;

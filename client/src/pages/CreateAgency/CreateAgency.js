@@ -2,10 +2,6 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import ErrorModal from '../../shared/components/UI/ErrorModal';
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
-import { IconContext } from 'react-icons';
-import { MdCreateNewFolder } from 'react-icons/md';
-import { GiDetour } from 'react-icons/gi';
-import { FaDollarSign } from 'react-icons/fa';
 import Button from '../../shared/components/Button/Button';
 import Input from '../../shared/components/Input/Input';
 import './CreateAgency.css';
@@ -39,13 +35,14 @@ const MakeAnImpact = (props) => {
       validRequirements: {
         required: true,
         minlength: 2,
-        maxlength: 30
+        maxlength: 30,
       },
     },
     description: {
       configOptions: {
         type: 'text',
-        placeholder: 'Write a description for your agency (Min: 20 characters, Max: 100 characters)',
+        placeholder:
+          'Write a description for your agency (Min: 20 characters, Max: 100 characters)',
       },
       value: '',
       valid: false,
@@ -53,7 +50,7 @@ const MakeAnImpact = (props) => {
       validRequirements: {
         required: true,
         minlength: 20,
-        maxlength: 100
+        maxlength: 100,
       },
     },
   });
@@ -117,7 +114,7 @@ const MakeAnImpact = (props) => {
       formData.set('category', selectedOption.value);
       formData.append('image', image.value);
       setLoading(true);
-      const agency = await axios.post(`/api/v1/agencies`, formData);
+      await axios.post(`/api/v1/agencies`, formData);
       props.agencyCreated();
       setLoading(false);
       props.history.push('/my-agency');
@@ -176,7 +173,7 @@ const MakeAnImpact = (props) => {
       {loading && <LoadingSpinner asOverlay />}
       {error && (
         <ErrorModal show onClear={() => setError()}>
-          {error}
+          {error ? error : 'Something went wrong'}
         </ErrorModal>
       )}
       <div className="first">

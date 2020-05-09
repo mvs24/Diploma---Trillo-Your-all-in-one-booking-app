@@ -3,12 +3,12 @@ const mongoose = require('mongoose');
 const cartTourSchema = new mongoose.Schema({
   tour: {
     type: mongoose.Schema.ObjectId,
-    ref: 'Tour'
+    ref: 'Tour',
   },
   user: {
     type: mongoose.Schema.ObjectId,
-    ref: 'User'
-  }
+    ref: 'User',
+  },
 });
 
 const CartTour = mongoose.model('CartTour', cartTourSchema);

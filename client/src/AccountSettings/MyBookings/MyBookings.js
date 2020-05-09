@@ -48,6 +48,11 @@ const MyBookings = (props) => {
 
   return (
     <>
+      {error && (
+        <ErrorModal show onClear={() => setError()}>
+          {error ? error : 'Something went wrong'}
+        </ErrorModal>
+      )}
       <h1 className="my__wishlist--heading">
         MY BOOKINGS ({myBookings.length})
       </h1>

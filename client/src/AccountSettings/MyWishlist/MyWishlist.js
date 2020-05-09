@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
+
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
 import WishlistItem from './WishlistItem';
 import Button from '../../shared/components/Button/Button';
@@ -19,11 +20,11 @@ const MyWishlist = (props) => {
   if (wishlistData.length === 0)
     return (
       <div className="wish__data__heading">
-        <h1 className='noFlightHeading'> No Tour found in your wishlist!</h1>
+        <h1 className="noFlightHeading"> No Tour found in your wishlist!</h1>
       </div>
     );
 
-  const showMoreHandler = () => { 
+  const showMoreHandler = () => {
     setEnd((prev) => prev + 6);
   };
 
@@ -54,7 +55,7 @@ const MyWishlist = (props) => {
 const mapStateToProps = (state) => ({
   wishlist: state.user.wishlist,
   isAuthenticated: state.user.isAuthenticated,
-  loading: state.user.loading
+  loading: state.user.loading,
 });
 
 export default connect(mapStateToProps)(MyWishlist);

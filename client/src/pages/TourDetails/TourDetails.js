@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import './TourDetails.css';
 import axios from 'axios';
-import moment from 'moment'
+import moment from 'moment';
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
 import ErrorModal from '../../shared/components/UI/ErrorModal';
 import Modal from '../../shared/components/UI/Modal';
@@ -36,8 +36,8 @@ const TourDetails = React.memo((props) => {
   const [controlled, setControlled] = useState();
   const [owner, setOwner] = useState();
   const [openDiscountModal, setOpenDiscountModal] = useState();
-  const [openNotificationPopup,setOpenNotificationPopup] = useState()
-   const [messageDiscount, setMessageDiscount] = useState({
+  const [openNotificationPopup, setOpenNotificationPopup] = useState();
+  const [messageDiscount, setMessageDiscount] = useState({
     configOptions: {
       type: 'text',
       placeholder:
@@ -74,7 +74,7 @@ const TourDetails = React.memo((props) => {
         setLoading(false);
         setMyBookings(res.data.data);
       } catch (err) {
-        setLoading(false)
+        setLoading(false);
         setError(err.response.data.message);
       }
     };
@@ -104,7 +104,7 @@ const TourDetails = React.memo((props) => {
         setLoading(false);
         setTour(res.data.data);
         setOwner(agencyRes.data.data.user);
-      } catch (err) { 
+      } catch (err) {
         setLoading(false);
         setError(err.response.data.message);
       }
@@ -113,7 +113,7 @@ const TourDetails = React.memo((props) => {
     getTour();
   }, [isAuthenticated]);
 
-  let innerWidth = window.innerWidth;
+  let innerWidth;
   window.addEventListener('resize', () => {
     innerWidth = window.innerWidth;
     if (window.innerWidth < 1013 && window.innerWidth > 736) {
@@ -161,13 +161,11 @@ const TourDetails = React.memo((props) => {
         setAdding(false);
         setAdded(true);
       } catch (err) {
-
         setAdding();
         setError(err.response.data.message);
       }
     } else {
       setError('You are not logged in! Please log in!');
-
     }
   };
 
@@ -189,18 +187,30 @@ const TourDetails = React.memo((props) => {
       setProcessBooking(true);
     } catch (err) {
       setProcessBooking();
-      setError(err.response.data.message ? err.response.data.message : "Something went wrong! Be sure you are logged in first!");
+      setError(
+        err.response.data.message
+          ? err.response.data.message
+          : 'Something went wrong! Be sure you are logged in first!'
+      );
     }
   };
 
-  if (loading) return <LoadingSpinner asOverlay/>
+  if (loading) return <LoadingSpinner asOverlay />;
 
-  if (error) return <ErrorModal show onClear={() => {setError(false)}}>
-          {error}
-        </ErrorModal> 
+  if (error)
+    return (
+      <ErrorModal
+        show
+        onClear={() => {
+          setError(false);
+        }}
+      >
+        {error ? error : 'Something went wrong'}
+      </ErrorModal>
+    );
 
   if (!tour) {
-    return <LoadingSpinner asOverlay/>
+    return <LoadingSpinner asOverlay />;
   }
 
   let addContent = <span>ADD TO CART</span>;
@@ -264,7 +274,7 @@ const TourDetails = React.memo((props) => {
     setPriceDiscountInputValid(isFormValid);
   };
 
-    const priceDiscountMessageHandler = (e) => {
+  const priceDiscountMessageHandler = (e) => {
     const updatedData = { ...messageDiscount };
 
     updatedData.value = e.target.value;
@@ -285,7 +295,7 @@ const TourDetails = React.memo((props) => {
 
       let msg = 'We just made a price discount! Enjoy it!! ';
       if (messageDiscount.value !== '') {
-        msg = messageDiscount.value
+        msg = messageDiscount.value;
       }
 
       const res = await axios.post(`/api/v1/tours/${tourId}/price-discount`, {
@@ -294,12 +304,12 @@ const TourDetails = React.memo((props) => {
       });
 
       setLoading(false);
-      setOpenNotificationPopup(true)
+      setOpenNotificationPopup(true);
       setOpenDiscountModal();
       setProcessingDiscount();
     } catch (err) {
-      setLoading()
-      setProcessingDiscount()
+      setLoading();
+      setProcessingDiscount();
       setError(err.response.data.message);
     }
   };
@@ -322,42 +332,39 @@ const TourDetails = React.memo((props) => {
     );
   }
 
-  const formatDescription = description => {
-    let descriptionArray = []
-    let sub = 0
-    for (let i = 0; i<description.length;i = i+10) {
-      sub += 10
-      descriptionArray.push(description.substr(sub, [i]))
-    }
-     console.log(descriptionArray)
-    return descriptionArray.join(`\n`)
- 
-   
-  }
+  let filteredDates = tour.startDates.filter((el) => new Date(el) > Date.now());
 
-let filteredDates = tour.startDates.filter(el => new Date(el) > Date.now())
-
- const compare = (a, b) => {
+  const compare = (a, b) => {
     if (new Date(a.createdAt).getTime() < new Date(b.createdAt).getTime())
       return -1;
     else return 1;
   };
 
-const newDates = filteredDates.sort(compare)
+  const newDates = filteredDates.sort(compare);
 
   return (
     <div className="tour__container">
       {error && (
         <ErrorModal show onClear={() => setError(false)}>
-          {error}
-        </ErrorModal> 
+          {error ? error : 'Something went wrong'}
+        </ErrorModal>
       )}
-      {openNotificationPopup && <Modal header='Notification Sent' show onCancel={() => setOpenNotificationPopup()}>
-          <h1 className='modal__heading'>Notification sent to the selected people.</h1>
-        <Button type='success' clicked={() => setOpenNotificationPopup()}>OK</Button>
-        </Modal>}
+      {openNotificationPopup && (
+        <Modal
+          header="Notification Sent"
+          show
+          onCancel={() => setOpenNotificationPopup()}
+        >
+          <h1 className="modal__heading">
+            Notification sent to the selected people.
+          </h1>
+          <Button type="success" clicked={() => setOpenNotificationPopup()}>
+            OK
+          </Button>
+        </Modal>
+      )}
       <div className="tour__bcg">
-        <img src={`http://localhost:5000/${tour.imageCover}`} />
+        <img src={`${process.env.REACT_APP_BACKEND_ASSET}/${tour.imageCover}`} />
       </div>
       <h4 className="heading">
         <span className="heading-span ">{tour.name}</span>
@@ -387,13 +394,19 @@ const newDates = filteredDates.sort(compare)
 
           <ul>
             <li>
-               <IconContext.Provider
+              <IconContext.Provider
                 value={{ className: 'icon__green tour__info--icon' }}
               >
                 <MdDateRange />
               </IconContext.Provider>
               <p className="second">Next Date</p>
-             {finishedTours.includes(tour._id) ? <p className="data">Finished</p> : <p className="data">{moment(newDates[0]).format("MMM Do YYYY") }</p> } 
+              {finishedTours.includes(tour._id) ? (
+                <p className="data">Finished</p>
+              ) : (
+                <p className="data">
+                  {moment(newDates[0]).format('MMM Do YYYY')}
+                </p>
+              )}
             </li>
 
             <li>
@@ -427,7 +440,7 @@ const newDates = filteredDates.sort(compare)
         </div>
         <div className="tour__about tour__about-1">
           <h1>ABOUT THE {tour.name}</h1>
-          <p className='tourDescription'>{tour.description}</p>
+          <p className="tourDescription">{tour.description}</p>
         </div>
       </section>
 
@@ -435,7 +448,7 @@ const newDates = filteredDates.sort(compare)
         <div className="images">
           {tour.images.map((img) => (
             <div key={img} className="image__container">
-              <img src={`http://localhost:5000/${img}`} />
+              <img src={`${process.env.REACT_APP_BACKEND_ASSET}/${img}`} />
             </div>
           ))}
         </div>
@@ -471,7 +484,7 @@ const newDates = filteredDates.sort(compare)
             {tour.images.map((img) => (
               <img
                 className="bookTour__image"
-                src={`http://localhost:5000/${img}`}
+                src={`${process.env.REACT_APP_BACKEND_ASSET}/${img}`}
               />
             ))}
           </div>
@@ -515,7 +528,11 @@ const newDates = filteredDates.sort(compare)
               {!isBooked && bookProcessing}
             </div>
           ) : (
-            <Button className='makeAPriceDiscount__btn' clicked={() => setOpenDiscountModal(true)} type="success">
+            <Button
+              className="makeAPriceDiscount__btn"
+              clicked={() => setOpenDiscountModal(true)}
+              type="success"
+            >
               MAKE A PRICE DISCOUNT
             </Button>
           )}
@@ -535,13 +552,13 @@ const newDates = filteredDates.sort(compare)
                     onChange={(e) => inputHandler(e)}
                   />
                   <Textarea
-            className="flight__text__discount"
-            value={messageDiscount.value}
-            valid={messageDiscount.valid}
-            touched={messageDiscount.touched}
-            configOptions={messageDiscount.configOptions}
-            onChange={(e) => priceDiscountMessageHandler(e)}
-          />
+                    className="flight__text__discount"
+                    value={messageDiscount.value}
+                    valid={messageDiscount.valid}
+                    touched={messageDiscount.touched}
+                    configOptions={messageDiscount.configOptions}
+                    onChange={(e) => priceDiscountMessageHandler(e)}
+                  />
                   <Button
                     clicked={submitPriceDiscountHandler}
                     disabled={!priceDiscountInputValid}

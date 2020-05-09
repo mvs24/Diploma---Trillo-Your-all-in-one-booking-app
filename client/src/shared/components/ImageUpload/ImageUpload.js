@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 
 import Button from '../Button/Button';
 import './ImageUpload.css';
-import InlineButton from '../InlineButton/InlineButton'
+import InlineButton from '../InlineButton/InlineButton';
 
 const ImageUpload = (props) => {
   const [file, setFile] = useState();
@@ -52,12 +52,19 @@ const ImageUpload = (props) => {
         onChange={pickedHandler}
       />
       <div className={`image-upload  ${props.center && 'center'}`}>
-       {props.inline ? <InlineButton disabled={props.disabled} className='inline__btn--img' clicked={pickImageHandler}>
-        {props.title ? props.title : 'Choose a new photo'}
-       </InlineButton> : <Button type="success" clicked={pickImageHandler}>
-          {props.title ? props.title : 'Choose a new photo'}
-        </Button>
-      }
+        {props.inline ? (
+          <InlineButton
+            disabled={props.disabled}
+            className="inline__btn--img"
+            clicked={pickImageHandler}
+          >
+            {props.title ? props.title : 'Choose a new photo'}
+          </InlineButton>
+        ) : (
+          <Button type="success" clicked={pickImageHandler}>
+            {props.title ? props.title : 'Choose a new photo'}
+          </Button>
+        )}
       </div>
       {!isValid && <p>{props.errorText}</p>}
     </div>

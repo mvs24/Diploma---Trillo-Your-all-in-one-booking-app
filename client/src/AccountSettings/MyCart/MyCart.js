@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
+
 import CartItem from './CartItem';
 import './MyCart.css';
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
@@ -7,7 +8,7 @@ import { getToursInCart } from '../../store/actions/userActions';
 import Button from '../../shared/components/Button/Button';
 
 const MyCart = (props) => {
-  const { cartTour, wishlist, isAuthenticated } = props;
+  const { cartTour, isAuthenticated } = props;
   const start = 0;
   const [end, setEnd] = useState(6);
   if (!isAuthenticated) return <LoadingSpinner asOverlay />;

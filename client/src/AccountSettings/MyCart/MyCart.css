@@ -1,8 +1,8 @@
 .my__cartContainer {
-	width: 100%;
-	padding: 3rem;
+  width: 100%;
+  padding: 3rem;
 }
 .cart__container {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(30rem, 32rem));
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(30rem, 32rem));
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import moment from 'moment'
+import moment from 'moment';
 import { useHistory } from 'react-router-dom';
 import Button from '../../shared/components/Button/Button';
 import { IconContext } from 'react-icons';
@@ -85,7 +85,6 @@ const TourItem = React.memo((props) => {
     shouldTour,
     pageChanged,
     isTourLiked,
-    removed,
     removeTour,
     shouldUpdate2,
   } = props;
@@ -195,16 +194,6 @@ const TourItem = React.memo((props) => {
     history.push(`/tours/${tour.id}`);
   };
 
-  const fullStars = (allStars) => {
-    let full = 0;
-
-    allStars.forEach((st) => {
-      if (st.props.children.type.displayName === 'IoMdStar') full++;
-    });
-
-    return full;
-  };
-
   const emptyStars = (allStars) => {
     let empties = 0;
 
@@ -236,8 +225,6 @@ const TourItem = React.memo((props) => {
     if (e.target.classList[e.target.classList.length - 1].startsWith('star-')) {
       const review =
         e.target.classList[e.target.classList.length - 1].split('-')[1] * 1 + 1;
-
-      let updatedSts = [...stars];
 
       if (emptyStars(stars) === 5) {
         setStars((prevState) => {
@@ -511,15 +498,14 @@ const TourItem = React.memo((props) => {
     }
   };
 
-let filteredDates = tour.startDates.filter(el => new Date(el) > Date.now())
-
+  let filteredDates = tour.startDates.filter((el) => new Date(el) > Date.now());
 
   return (
     <>
       {loading && <LoadingSpinner asOverlay />}
       {error && (
         <ErrorModal show onCancel={() => setError(false)}>
-          {error}
+          {error ? error : 'Something went wrong'}
         </ErrorModal>
       )}
       {openReviewModal && (
@@ -565,7 +551,7 @@ let filteredDates = tour.startDates.filter(el => new Date(el) > Date.now())
       )}
       <div className="tour">
         <img
-          src={`http://localhost:5000/${tour.imageCover}`}
+          src={`${process.env.REACT_APP_BACKEND_ASSET}/${tour.imageCover}`}
           alt="Tour"
           className="tour__img"
         />
@@ -589,7 +575,11 @@ let filteredDates = tour.startDates.filter(el => new Date(el) > Date.now())
           <IconContext.Provider value={{ className: ' icon__green' }}>
             <MdDateRange />
           </IconContext.Provider>
-         {props.finished ? <p>Finished</p> :  <p>{moment(filteredDates[0]).format("MMM Do YYYY") }</p>}
+          {props.finished ? (
+            <p>Finished</p>
+          ) : (
+            <p>{moment(filteredDates[0]).format('MMM Do YYYY')}</p>
+          )}
         </div>
         <div className="tour__location">
           <IconContext.Provider value={{ className: ' icon__green' }}>
@@ -618,7 +608,11 @@ let filteredDates = tour.startDates.filter(el => new Date(el) > Date.now())
             Finished
           </Button>
         ) : (
-          <Button className='detailsButton' clicked={detailsHandler} type="success">
+          <Button
+            className="detailsButton"
+            clicked={detailsHandler}
+            type="success"
+          >
             Details
           </Button>
         )}

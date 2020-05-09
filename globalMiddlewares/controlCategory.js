@@ -2,7 +2,7 @@ const Agency = require('../models/agencyModel');
 const asyncWrapper = require('../utils/asyncWrapper');
 const AppError = require('../utils/appError');
 
-module.exports = category =>
+module.exports = (category) =>
   asyncWrapper(async (req, res, next) => {
     const agency = await Agency.findById(req.body.agency);
 

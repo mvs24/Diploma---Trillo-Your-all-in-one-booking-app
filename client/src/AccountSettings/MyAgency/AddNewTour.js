@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import Select from 'react-select';
 import axios from 'axios';
+
 import Textarea from '../../shared/components/Input/Textarea';
 import Input from '../../shared/components/Input/Input';
 import Button from '../../shared/components/Button/Button';
 import ErrorModal from '../../shared/components/UI/ErrorModal';
 import Modal from '../../shared/components/UI/Modal';
-import './AddNewTour.css';
-import PlaceInput from './PlaceInput';
 import ImageUpload from '../../shared/components/ImageUpload/ImageUpload';
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
 import InlineButton from '../../shared/components/InlineButton/InlineButton';
+import './AddNewTour.css';
 
 const options = [
   { value: 'easy', label: 'EASY' },
@@ -23,7 +23,6 @@ const AddNewTour = (props) => {
   const [loading, setLoading] = useState();
   const [difficulty, setDifficulty] = useState();
   const [openStartDatesModal, setOpenStartDatesModal] = useState();
-  const [startDatesValid, setStartDatesValid] = useState();
   const [nrLocationsInput, setNrLocationsInput] = useState({
     configOptions: {
       type: 'number',
@@ -169,7 +168,6 @@ const AddNewTour = (props) => {
     value: null,
     isValid: false,
   });
-  const [imagesValid, setImagesValid] = useState();
   const [firstUrl, setFirstUrl] = useState();
   const [secondUrl, setSecondUrl] = useState();
   const [thirdUrl, setThirdUrl] = useState();
@@ -281,10 +279,6 @@ const AddNewTour = (props) => {
 
   const handleChange = (selectedOption) => {
     setDifficulty(selectedOption);
-  };
-
-  const handleError = (err) => {
-    console.log(err);
   };
 
   const confirmStartDates = (e) => {
@@ -682,7 +676,7 @@ const AddNewTour = (props) => {
               setError(null);
             }}
           >
-            {error}
+            {error ? error : 'Something went wrong'}
           </ErrorModal>
         )}
         {openStartLocationModal && (

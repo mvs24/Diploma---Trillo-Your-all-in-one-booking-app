@@ -61,19 +61,16 @@
 }
 .selectTickets {
   font-size: 1.6rem;
-} 
+}
 
 .requestedFlights__container {
   padding: 2rem;
 }
 
 @media (max-width: 550px) {
- 
   .agency__info--1 {
     display: grid;
-    grid-template-columns: repeat(auto-fit,minmax(20rem, max-content) );
+    grid-template-columns: repeat(auto-fit, minmax(20rem, max-content));
     grid-column: 1 / -1;
   }
-
- 
 }

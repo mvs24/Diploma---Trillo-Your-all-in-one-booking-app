@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
+import axios from 'axios';
+
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
 import ErrorModal from '../../shared/components/UI/ErrorModal';
-import axios from 'axios';
 import Flight from '../../pages/Flights/Flight';
-import './MyFlights.css';
 import Button from '../../shared/components/Button/Button';
+import './MyFlights.css';
 
 const MyBookings = (props) => {
   const [myFlights, setMyFlights] = useState();
@@ -54,7 +55,11 @@ const MyBookings = (props) => {
   return (
     <>
       <div className="my__flights">
-        {error && <ErrorModal>{error}</ErrorModal>}
+        {error && (
+          <ErrorModal show onClear={() => setError()}>
+            {error ? error : 'Something went wrong'}
+          </ErrorModal>
+        )}
         <h1 className="my__wishlist--heading">
           BOOKED FLIGHTS ({myFlights.length})
         </h1>

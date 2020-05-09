@@ -1,18 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+
 import ErrorModal from '../../shared/components/UI/ErrorModal';
 import LoadingSpinner from '../../shared/components/UI/LoadingSpinner';
 import Agency from '../../components/Agency/Agency';
 import TourItem from '../../components/TourItem/TourItem';
-import './MyAgency.css';
 import EditAgency from './EditAgency';
 import AddNewTour from './AddNewTour';
 import Flight from '../../pages/Flights/Flight';
 import AddNewFlight from './AddNewFlight';
 import FinishedTours from './FinishedTours';
 import FinishedFlights from './FinishedFlights';
-import Empty from '../../assets/empty.jpg';
 import Button from '../../shared/components/Button/Button';
+import './MyAgency.css';
 
 const MyAgency = (props) => {
   const [myAgency, setMyAgency] = useState();
@@ -20,10 +20,9 @@ const MyAgency = (props) => {
   const [error, setError] = useState();
   const [myTours, setMyTours] = useState();
   const [myFlights, setMyFlights] = useState();
-  const [finishedTours, setFinishedTours] = useState();
   const [display, setDisplay] = useState('agency');
   const [shouldUpdate, setShouldUpdate] = useState();
-  const flightsRef = useRef()
+  const flightsRef = useRef();
   const tours = useRef();
   const editAgency = useRef();
   const agency = useRef();
@@ -54,9 +53,12 @@ const MyAgency = (props) => {
         setMyAgency(res.data.data);
         setLoading(false);
       } catch (err) {
-
         setLoading(false);
-        setError(err.response.data.message ? err.response.data.message : "Something went wrong");
+        setError(
+          err.response.data.message
+            ? err.response.data.message
+            : 'Something went wrong'
+        );
       }
     };
 
@@ -79,23 +81,24 @@ const MyAgency = (props) => {
     );
   if (!myAgency) return <LoadingSpinner asOverlay />;
 
-  const toursHandler = (e) => {
+  const removeBorders = () => {
     const links = Array.from(document.querySelectorAll('.border'));
     links.forEach((link) => link.classList.remove('border'));
+  };
+
+  const toursHandler = (e) => {
+    removeBorders();
     tours.current.classList.add('border');
     setDisplay('tours');
   };
 
   const agencyHandler = (e) => {
     if (myAgency.category === 'tours') {
-      const links = Array.from(document.querySelectorAll('.border'));
-      links.forEach((link) => link.classList.remove('border'));
-
+      removeBorders();
       e.target.classList.add('border');
       setDisplay('agency');
     } else {
-      const links = Array.from(document.querySelectorAll('.border'));
-      links.forEach((link) => link.classList.remove('border'));
+      removeBorders();
 
       e.target.classList.add('border');
       setDisplay('agency');
@@ -104,15 +107,12 @@ const MyAgency = (props) => {
 
   const editAgencyHandler = (e) => {
     if (myAgency.category === 'tours') {
-      const links = Array.from(document.querySelectorAll('.border'));
-      links.forEach((link) => link.classList.remove('border'));
+      removeBorders();
 
       e.target.classList.add('border');
       setDisplay('edit');
     } else {
-      const links = Array.from(document.querySelectorAll('.border'));
-      links.forEach((link) => link.classList.remove('border'));
-
+      removeBorders();
       e.target.classList.add('border');
       setDisplay('edit');
     }
@@ -120,14 +120,12 @@ const MyAgency = (props) => {
 
   const addNewTourHandler = (e) => {
     if (myAgency.category === 'tours') {
-      const links = Array.from(document.querySelectorAll('.border'));
-      links.forEach((link) => link.classList.remove('border'));
+      removeBorders();
 
       addTour.current.classList.add('border');
       setDisplay('addNewTour');
     } else {
-      const links = Array.from(document.querySelectorAll('.border'));
-      links.forEach((link) => link.classList.remove('border'));
+      removeBorders();
     }
   };
 
@@ -136,41 +134,43 @@ const MyAgency = (props) => {
   };
 
   const flightsHandler = (e) => {
-    const links = Array.from(document.querySelectorAll('.border'));
-    links.forEach((link) => link.classList.remove('border'));
+    removeBorders();
     e.target.classList.add('border');
     setDisplay('flights');
   };
 
   const addNewFlightHandler = (e) => {
-    const links = Array.from(document.querySelectorAll('.border'));
-    links.forEach((link) => link.classList.remove('border'));
+    removeBorders();
     e.target.classList.add('border');
     setDisplay('addNewFlight');
   };
 
   const finishedToursHandler = (e) => {
-    const links = Array.from(document.querySelectorAll('.border'));
-    links.forEach((link) => link.classList.remove('border'));
+    removeBorders();
     e.target.classList.add('border');
     setDisplay('finishedTours');
   };
 
   const finishedFlightsHandler = (e) => {
-    const links = Array.from(document.querySelectorAll('.border'));
-    links.forEach((link) => link.classList.remove('border'));
+    removeBorders();
     e.target.classList.add('border');
     setDisplay('finishedFlights');
   };
 
   return (
     <div className="myAgency__container">
+      {loading && <LoadingSpinner asOverlay />}
+
       <div className="myAgency__links">
         <h1 className="myAgency__heading" onClick={agencyHandler} ref={agency}>
           My Agency
         </h1>
         {myAgency.category === 'flights' && (
-          <h1 ref={flightsRef} onClick={flightsHandler} className="myAgency__heading">
+          <h1
+            ref={flightsRef}
+            onClick={flightsHandler}
+            className="myAgency__heading"
+          >
             Future Flights ({myFlights.length})
           </h1>
         )}
@@ -179,7 +179,7 @@ const MyAgency = (props) => {
             Finished Flights
           </h1>
         )}
-        {myAgency.category === 'tours' && ( 
+        {myAgency.category === 'tours' && (
           <h1 onClick={toursHandler} className="myAgency__heading" ref={tours}>
             Future Tours ({myTours.length})
           </h1>
@@ -213,23 +213,30 @@ const MyAgency = (props) => {
       </div>
       {myAgency.category === 'flights' && display === 'flights' && (
         <>
-         {myFlights.length === 0 ? <div className="my__agencyFlights"> <h1 className='finishedToursHeading1'>Future Flights ({myFlights.length})</h1></div>  :
-          ( <div className="my__agencyFlights">
-            {myFlights.slice(start, endFlight).map((flight) => (
-              <Flight updateAgency={updateAgency} owner flight={flight} />
-            ))}
-            <div className="showMoreFlightsHandler__btn---1">
+          {myFlights.length === 0 ? (
+            <div className="my__agencyFlights">
               {' '}
-              <Button
-                type="pink"
-                disabled={endFlight >= myFlights.length}
-                clicked={showMoreFlightsHandler}
-              >
-                Show More
-              </Button>
+              <h1 className="finishedToursHeading1">
+                Future Flights ({myFlights.length})
+              </h1>
             </div>
-          </div>)
-          }
+          ) : (
+            <div className="my__agencyFlights">
+              {myFlights.slice(start, endFlight).map((flight) => (
+                <Flight updateAgency={updateAgency} owner flight={flight} />
+              ))}
+              <div className="showMoreFlightsHandler__btn---1">
+                {' '}
+                <Button
+                  type="pink"
+                  disabled={endFlight >= myFlights.length}
+                  clicked={showMoreFlightsHandler}
+                >
+                  Show More
+                </Button>
+              </div>
+            </div>
+          )}
         </>
       )}
       {display === 'agency' && myAgency.category === 'tours' && (
@@ -239,32 +246,38 @@ const MyAgency = (props) => {
         <Agency flight changeBcg agency={myAgency} />
       )}
       {myAgency.category === 'tours' && display === 'tours' && (
-       
         <>
-         <div className='my__tours__1'>
-        <h1 className='finishedToursHeading1'>Future Tours ({myTours.length})</h1>
-        <div className='finishedToursGrid'>
-          {myTours.slice(start, end).map(tour => {
-            return <TourItem tour={tour} />
-          })} 
-        </div>
-        <div className='showMoreFinishedToursBtn'>
-        <Button
-              type="pink"
-              disabled={end >= myTours.length}
-              clicked={showMoreHandler}
-            >
-              Show More
-            </Button>
-        </div>
-      </div>
-  </>
+          <div className="my__tours__1">
+            <h1 className="finishedToursHeading1">
+              Future Tours ({myTours.length})
+            </h1>
+            <div className="finishedToursGrid">
+              {myTours.slice(start, end).map((tour) => {
+                return <TourItem tour={tour} />;
+              })}
+            </div>
+            <div className="showMoreFinishedToursBtn">
+              <Button
+                type="pink"
+                disabled={end >= myTours.length}
+                clicked={showMoreHandler}
+              >
+                Show More
+              </Button>
+            </div>
+          </div>
+        </>
       )}
       {display === 'edit' && (
         <EditAgency updateAgency={updateAgency} agency={myAgency} />
       )}
       {myAgency.category === 'flights' && display === 'addNewFlight' && (
-        <AddNewFlight setDisplay={setDisplay} flightsRef={flightsRef}  updateAgency={updateAgency} agency={myAgency} />
+        <AddNewFlight
+          setDisplay={setDisplay}
+          flightsRef={flightsRef}
+          updateAgency={updateAgency}
+          agency={myAgency}
+        />
       )}
       {myAgency.category === 'flights' && display === 'finishedFlights' && (
         <FinishedFlights agency={myAgency} />

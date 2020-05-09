@@ -1,7 +1,7 @@
 const asyncWrapper = require('../utils/asyncWrapper');
 const AppError = require('../utils/appError');
 
-const controlCreator = Model =>
+const controlCreator = (Model) =>
   asyncWrapper(async (req, res, next) => {
     const doc = await Model.findById(req.params.id);
 

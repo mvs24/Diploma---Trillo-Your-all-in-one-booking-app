@@ -5,7 +5,7 @@ const AppError = require('../utils/appError');
 module.exports = asyncWrapper(async (req, res, next) => {
   const bookingFlight = await BookingFlight.findOne({
     user: req.body.user,
-    flight: req.body.flight
+    flight: req.body.flight,
   });
 
   if (!bookingFlight)

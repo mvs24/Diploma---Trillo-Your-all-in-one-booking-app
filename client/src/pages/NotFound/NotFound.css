@@ -58,13 +58,14 @@
 }
 
 @media (max-width: 600px) {
- .content--- h1, .content--- h2 {
-  font-size: 2rem;
-  margin: 2rem;
+  .content--- h1,
+  .content--- h2 {
+    font-size: 2rem;
+    margin: 2rem;
   }
 }
 @media (max-width: 250px) {
- .img--- {
-  display: none;
+  .img--- {
+    display: none;
   }
 }

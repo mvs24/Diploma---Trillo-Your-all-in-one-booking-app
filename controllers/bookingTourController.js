@@ -23,10 +23,12 @@ exports.getCheckoutSession = asyncWrapper(async (req, res, next) => {
 
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
-    success_url: `http://localhost:3000/success/tours/${tour._id}/users/${req.user.id}/price/${tour.price}`, //succes url for the frontend!!!!
-    cancel_url: `http://localhost:3000/tours/${tour._id}`,
-    // success_url: `${req.protocol}://${req.get('host')}/`, //succes url for the frontend!!!!
-    // cancel_url: `${req.protocol}://${req.get('host')}/tours/${tour.slug}`, // control for the frontend!!!!
+    // success_url: `http://localhost:3000/success/tours/${tour._id}/users/${req.user.id}/price/${tour.price}`,
+    success_url: `${req.protocol}://${req.get('host')}/success/tours/${
+      tour._id
+    }/users/${req.user.id}/price/${tour.price}`,
+    // cancel_url: `http://localhost:3000/tours/${tour._id}`,
+    cancel_url: `${req.protocol}://${req.get('host')}/tours/${tour._id}`,
     customer_email: req.user.email,
     client_reference_id: req.params.tourId,
     line_items: [
@@ -66,11 +68,10 @@ exports.controlNumberGroupSize = asyncWrapper(async (req, res, next) => {
   const tour = await Tour.findOne({ _id: req.params.tourId });
   if (tour.numBought >= tour.maxGroupSize) {
     return res.status(400).json({
-      status: "fail",
-      message: "This tour has reached maximum number of persons..."
-    })
+      status: 'fail',
+      message: 'This tour has reached maximum number of persons...',
+    });
   }
 
   next();
 });
- 

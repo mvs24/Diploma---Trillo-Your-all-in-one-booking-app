@@ -859,13 +859,13 @@ const Header = React.memo((props) => {
             {props.error}
           </ErrorModal>
         )}
-        // <img
+        {/* // <img
         //   style={{ cursor: 'pointer' }}
         //   onClick={() => props.history.push('/')}
         //   className="logo"
         //   src={Logo}
         //   alt="Logo"
-        // />
+        // /> */}
         <h2
           style={{ cursor: 'pointer' }}
           onClick={() => props.history.push('/')}

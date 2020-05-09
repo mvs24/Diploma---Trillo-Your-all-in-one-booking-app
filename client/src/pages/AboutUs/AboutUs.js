@@ -19,13 +19,13 @@ export default (props) => {
       </div>
       <div className="center__about">
         <div className="aboutLogo">
-          // <img
+          {/* // <img
           //   onClick={() => history.push('/')}
           //   style={{ cursor: 'pointer' }}
           //   className="logo"
           //   src={logo}
           //   alt="Logo"
-          // />
+          // /> */}
           <h2 onClick={() => history.push('/')} className="heading__trillo">
             Trillo
           </h2>

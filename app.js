@@ -49,7 +49,7 @@ app.use(bodyParser.json());
 // Data Sanitization against NoSQL Query Injection
 app.use(mongoSanitize());
 //  Data Sanitization against XSS (Bad HTML Code!!!)
-app.use(xss()); 
+app.use(xss());
 //***************//////////
 
 app.use(
@@ -65,7 +65,7 @@ app.use(
   express.static(path.join('public', 'img', 'agencies'))
 );
 
-app.use(express.static(path.join('client/build')))
+// app.use(express.static(path.join('client/build')))
 
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/agencies', agencyRouter);
@@ -80,12 +80,10 @@ app.use('/api/v1/cart/tours', cartTourRouter);
 app.use('/api/v1/flights', flightRouter);
 
 if (process.NODE_ENV === 'production') {
-  app.use(express.static('client/build'))
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
-
-})
-
+  app.use(express.static('client/build'));
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
 }
 
 // app.all('*', (req, res, next) =>

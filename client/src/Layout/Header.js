@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import Logo from '../assets/logo.png';
+// import Logo from '../assets/logo.png';
 import './Header.css';
 import { IconContext } from 'react-icons';
 import {
@@ -859,13 +859,13 @@ const Header = React.memo((props) => {
             {props.error}
           </ErrorModal>
         )}
-        <img
-          style={{ cursor: 'pointer' }}
-          onClick={() => props.history.push('/')}
-          className="logo"
-          src={Logo}
-          alt="Logo"
-        />
+        // <img
+        //   style={{ cursor: 'pointer' }}
+        //   onClick={() => props.history.push('/')}
+        //   className="logo"
+        //   src={Logo}
+        //   alt="Logo"
+        // />
         <h2
           style={{ cursor: 'pointer' }}
           onClick={() => props.history.push('/')}

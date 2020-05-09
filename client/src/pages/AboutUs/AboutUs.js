@@ -10,6 +10,7 @@ export default (props) => {
   return (
     <div className="about__container">
       <div className="aboutImg__container">
+        // <img src={Nature} />
         <h4 className="heading--about">
           <span className="heading-span--about ">
             Improving Lives Through Nature
@@ -18,7 +19,13 @@ export default (props) => {
       </div>
       <div className="center__about">
         <div className="aboutLogo">
-          
+          // <img
+          //   onClick={() => history.push('/')}
+          //   style={{ cursor: 'pointer' }}
+          //   className="logo"
+          //   src={Logo}
+          //   alt="Logo"
+          // />
           <h2 onClick={() => history.push('/')} className="heading__trillo">
             Trillo
           </h2>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ReactMapGL, { Marker } from 'react-map-gl';
-import Pin from '../../assets/pin.png';
+// import Pin from '../../assets/pin.png';
 
 const Map = (props) => {
   const [viewport, setViewport] = useState({
@@ -59,7 +59,7 @@ const Map = (props) => {
           latitude={parseFloat(loc.coordinates[1])}
           longitude={parseFloat(loc.coordinates[0])}
         >
-          <img className="marker" src={Pin} />
+          {/* <img className="marker" src={Pin} /> */}
           <div className="popup">
             <span className="description">
               {loc.typeLocation === 'from'

@@ -1,20 +1,20 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import './HomeFooter.css';
-import Logo from '../../assets/logo.png';
+// import Logo from '../../assets/logo.png';
 
 export default (props) => {
   const history = useHistory();
   return (
     <footer className="footer--home">
       <div className="copyright--home">
-        <img
+        {/* <img
           style={{ cursor: 'pointer' }}
           onClick={() => history.push('/')}
           className="logo"
           src={Logo}
           alt="Logo"
-        />
+        /> */}
         <h2
           style={{ cursor: 'pointer' }}
           onClick={() => history.push('/')}

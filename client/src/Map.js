@@ -64,7 +64,7 @@
 
 import React, { useState, useEffect } from 'react';
 import ReactMapGL, { Marker } from 'react-map-gl';
-import Pin from './assets/pin.png';
+// import Pin from './assets/pin.png';
 import './Map.css';
 
 const Map = (props) => {
@@ -101,7 +101,7 @@ const Map = (props) => {
           latitude={parseFloat(loc.coordinates[1])}
           longitude={parseFloat(loc.coordinates[0])}
         >
-          <img
+          {/* <img
             onClick={() => {
               setPopup((prevPopup) => {
                 let updatedPopup = [...prevPopup];
@@ -117,7 +117,7 @@ const Map = (props) => {
             }}
             className="marker"
             src={Pin}
-          />
+          /> */}
           {popup.find((el) => el.id === loc._id).showPopup && (
             <div className="popup">
               <span className="description">

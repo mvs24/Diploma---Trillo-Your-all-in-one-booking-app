@@ -79,6 +79,10 @@ app.use('/api/v1/wishlist/flights', wishlistFlightRouter);
 app.use('/api/v1/cart/tours', cartTourRouter);
 app.use('/api/v1/flights', flightRouter);
 
+app.use((req, res, next) => {
+ res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+})
+
 // if (process.NODE_ENV === 'production') {
 //   app.use(express.static('client/build'));
 //   app.get('*', (req, res) => {

@@ -5,7 +5,7 @@ const BookingFlight = require('../models/bookingFlightModel');
 const Flight = require('../models/flightModel');
 const factory = require('./factoryHandler');
 const asyncWrapper = require('../utils/asyncWrapper');
-const AppError = require('../utils/AppError');
+const AppError = require('../utils/appError');
 
 const getBookings = (type) =>
   asyncWrapper(async (req, res, next) => {

@@ -15,7 +15,7 @@ const Home = React.memo((props) => {
   return (
     <div className="home">
       <div className="bcg">
-        {/* <img src={TourImg} alt="img" className="img__bcg" /> */}
+        <img src={TourImg} alt="img" className="img__bcg" />
         <div className="bcg__container">
           <h1> Explore your ideas</h1>
           <Button clicked={discoverDreamTour} type="success">

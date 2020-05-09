@@ -15,8 +15,7 @@ import Map from '../../Map';
 import ReviewStatistics from './ReviewStatistics';
 import Reviews from './Reviews';
 import AgencyInfo from './AgencyInfo';
-// import Logo from '../../assets/logo.png';
-// import logo from '../../assets/logo.png';
+import Logo from './logo.png';
 import Button from '../../shared/components/Button/Button';
 import { addToCart } from '../../store/actions/userActions';
 import { loadStripe } from '@stripe/stripe-js';
@@ -483,7 +482,7 @@ const TourDetails = React.memo((props) => {
       <div className="bookTour__container">
         <div className="bookTour__info">
           <div className="bookTour__images">
-            {/* <img className="bookTour__image" src={logo} /> */}
+            <img className="bookTour__image" src={Logo} />
             {tour.images.map((img) => (
               <img
                 className="bookTour__image"

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ReactMapGL, { Marker } from 'react-map-gl';
-// import Pin from '../../assets/pin.png';
+import Pin from './pin.png';
 import './MapTours.css';
 import Button from '../../shared/components/Button/Button';
 
@@ -35,7 +35,7 @@ const MapTours = (props) => {
           latitude={parseFloat(tour.startLocation.coordinates[1])}
           longitude={parseFloat(tour.startLocation.coordinates[0])}
         >
-          {/* <img className="marker" src={Pin} /> */}
+          <img className="marker" src={Pin} />
           <div className="popup">
             <span className="description">{tour.name}</span>
           </div>

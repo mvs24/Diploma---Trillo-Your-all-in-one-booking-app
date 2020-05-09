@@ -1,7 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import Button from '../../shared/components/Button/Button';
-// import TourImg from '../../assets/tour-1-1.jpg';
+import TourImg from './tour-1-1.jpg';
 import './Home.css';
 import Tours from '../../components/Tours/Tours';
 

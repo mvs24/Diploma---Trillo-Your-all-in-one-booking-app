@@ -2,7 +2,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 // import Nature from '../../assets/tour-3-6.jpg';
 import './AboutUs.css';
-// import logo from '../../assets/logo.png';
+import logo from './logo.png';
 
 export default (props) => {
   const history = useHistory();
@@ -19,13 +19,13 @@ export default (props) => {
       </div>
       <div className="center__about">
         <div className="aboutLogo">
-          {/* // <img
-          //   onClick={() => history.push('/')}
-          //   style={{ cursor: 'pointer' }}
-          //   className="logo"
-          //   src={logo}
-          //   alt="Logo"
-          // /> */}
+          <img
+            onClick={() => history.push('/')}
+            style={{ cursor: 'pointer' }}
+            className="logo"
+            src={logo}
+            alt="Logo"
+          />
           <h2 onClick={() => history.push('/')} className="heading__trillo">
             Trillo
           </h2>

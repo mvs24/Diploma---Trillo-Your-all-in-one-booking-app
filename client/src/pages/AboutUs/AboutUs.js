@@ -2,7 +2,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 // import Nature from '../../assets/tour-3-6.jpg';
 import './AboutUs.css';
-// import Logo from '../../assets/logo.png';
+// import logo from '../../assets/logo.png';
 
 export default (props) => {
   const history = useHistory();
@@ -23,7 +23,7 @@ export default (props) => {
           //   onClick={() => history.push('/')}
           //   style={{ cursor: 'pointer' }}
           //   className="logo"
-          //   src={Logo}
+          //   src={logo}
           //   alt="Logo"
           // />
           <h2 onClick={() => history.push('/')} className="heading__trillo">

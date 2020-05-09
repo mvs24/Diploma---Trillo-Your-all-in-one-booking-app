@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-// import Nature from '../../assets/tour-3-6.jpg';
+import Nature from './tour-3-6.jpg';
 import './AboutUs.css';
 import logo from './logo.png';
 
@@ -10,7 +10,7 @@ export default (props) => {
   return (
     <div className="about__container">
       <div className="aboutImg__container">
-        {/* // <img src={Nature} /> */}
+        <img src={Nature} />
         <h4 className="heading--about">
           <span className="heading-span--about ">
             Improving Lives Through Nature

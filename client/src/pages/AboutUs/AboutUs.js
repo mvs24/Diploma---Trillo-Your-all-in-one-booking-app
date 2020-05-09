@@ -10,7 +10,7 @@ export default (props) => {
   return (
     <div className="about__container">
       <div className="aboutImg__container">
-        // <img src={Nature} />
+        {/* // <img src={Nature} /> */}
         <h4 className="heading--about">
           <span className="heading-span--about ">
             Improving Lives Through Nature

@@ -1,11 +1,15 @@
 const path = require('path');
 const express = require('express');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const compression = require('compression');
+
+
 
 const userRouter = require('./routes/userRoutes');
 const agencyRouter = require('./routes/agencyRoutes');
@@ -22,7 +26,29 @@ const bookingFlightRouter = require('./routes/bookingFlightRoutes');
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 
+
+process.on('uncaughtException', (err) => {
+  console.log(err.name, err);
+  console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
+  process.exit(1);
+});
+
+dotenv.config({ path: './config.env' });
+
 const app = express();
+
+mongoose
+  .connect(process.env.DATABASE_PRODUCTION, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log('DB connection successful!');
+  });
+
+const port = process.env.PORT || 5000;
 
 //*****************
 //gzip & security
@@ -89,4 +115,18 @@ app.use((req, res, next) => {
 
 app.use(globalErrorHandler);
 
-module.exports = app;
+
+const server = app.listen(port, () => {
+  console.log(`App running on port ${port}...`);
+});
+
+process.on('unhandledRejection', (err) => {
+  console.log('UNHANDLED REJECTION! 💥 Shutting down...');
+  console.log(err.name, err.message);
+  server.close(() => {
+    process.exit(1);
+  });
+});
+
+
+// module.exports = app;

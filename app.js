@@ -52,20 +52,20 @@ app.use(mongoSanitize());
 app.use(xss());
 //***************//////////
 
-// app.use(
-//   '/public/img/tours',
-//   express.static(path.join('public', 'img', 'tours'))
-// );
-// app.use(
-//   '/public/img/users',
-//   express.static(path.join('public', 'img', 'users'))
-// );
-// app.use(
-//   '/public/img/agencies',
-//   express.static(path.join('public', 'img', 'agencies'))
-// );
+app.use(
+  '/public/img/tours',
+  express.static(path.join('public', 'img', 'tours'))
+);
+app.use(
+  '/public/img/users',
+  express.static(path.join('public', 'img', 'users'))
+);
+app.use(
+  '/public/img/agencies',
+  express.static(path.join('public', 'img', 'agencies'))
+);
 
-app.use(express.static(path.join('client/build')));
+// app.use(express.static(path.join('client/build')));
 
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/agencies', agencyRouter);
@@ -79,12 +79,12 @@ app.use('/api/v1/wishlist/flights', wishlistFlightRouter);
 app.use('/api/v1/cart/tours', cartTourRouter);
 app.use('/api/v1/flights', flightRouter);
 
-if (process.NODE_ENV === 'production') {
-  app.use(express.static('client/build'));
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-  });
-}
+// if (process.NODE_ENV === 'production') {
+//   app.use(express.static('client/build'));
+//   app.get('*', (req, res) => {
+//     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+//   });
+// }
 
 // app.all('*', (req, res, next) =>
 //   next(new AppError('This route is not yet defined', 404))

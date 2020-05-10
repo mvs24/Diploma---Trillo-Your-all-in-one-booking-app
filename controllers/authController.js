@@ -16,7 +16,7 @@ const signToken = (id) => {
 exports.signup = asyncWrapper(async (req, res, next) => {
   const { name, lastname, password, passwordConfirm, email, photo } = req.body;
 
-  if (!photo) req.body.photo = 'https://mariusfirstbucket.s3.eu-west-3.amazonaws.com/pexels-photo-814499-1589107552822.jpg';
+  if (!photo) req.body.photo = 'https://mariusfirstbucket.s3.eu-west-3.amazonaws.com/default-1589114972180.jpg';
   const user = await User.create({
     name,
     lastname,

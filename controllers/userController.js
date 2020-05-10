@@ -33,11 +33,16 @@ exports.deleteUser = asyncWrapper(async (req, res, next) => {
   });
 });
 
-exports.updateMe = asyncWrapper(async (req, res, next) => {
+exports.updateMe = async (req, res, next) => {
   // upload()
   const { id } = req.user;
 
+  return res.status(200).json({
+    file: req.file
+  })
+
   if (req.file) {
+    console.log(req.file)
     // console.log(req.file)
     req.body.photo = req.file.location;
   }
@@ -51,8 +56,9 @@ exports.updateMe = asyncWrapper(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     data: updatedUser,
+    file, req.file
   });
-});
+}
 
 exports.getUnReadNotifications = asyncWrapper(async (req, res, next) => {
   const { id } = req.user;

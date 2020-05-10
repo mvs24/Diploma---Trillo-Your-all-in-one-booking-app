@@ -38,8 +38,6 @@ exports.updateMe = async (req, res, next) => {
   const { id } = req.user;
 
   if (req.file) {
-    console.log(req.file)
-    // console.log(req.file)
     req.body.photo = req.file.location;
   }
   const updatedUser = await User.findByIdAndUpdate(id, req.body, {

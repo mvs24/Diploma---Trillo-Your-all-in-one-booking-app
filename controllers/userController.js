@@ -37,10 +37,6 @@ exports.updateMe = async (req, res, next) => {
   // upload()
   const { id } = req.user;
 
-  return res.status(200).json({
-    file: req.file
-  })
-
   if (req.file) {
     console.log(req.file)
     // console.log(req.file)

@@ -90,7 +90,7 @@ const MapTours = (props) => {
         </div>
       )}
       <ReactMapGL
-        mapboxApiAccessToken={process.env.REACT_APP_MAP_API_KEY}
+        mapboxApiAccessToken={'pk.eyJ1IjoibWFyaXVzMjQ5OCIsImEiOiJjazhodWprNW8wM2w0M2RxemRva2tybjhpIn0.h8tRVAkZqkvhSSnD3uEPUw'}
         {...viewport}
         onViewportChange={setViewport}
       >

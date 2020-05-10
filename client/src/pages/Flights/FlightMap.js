@@ -8,7 +8,7 @@ const Map = (props) => {
     height: 500,
     latitude: 37.7577,
     longitude: -122.4376,
-    zoom: 8,
+    zoom: 4,
   });
   const locIds = [];
 
@@ -74,7 +74,9 @@ const Map = (props) => {
 
   return (
     <ReactMapGL
-      mapboxApiAccessToken={process.env.REACT_APP_MAP_API_KEY}
+      mapboxApiAccessToken={
+        'pk.eyJ1IjoibWFyaXVzMjQ5OCIsImEiOiJjazhodWprNW8wM2w0M2RxemRva2tybjhpIn0.h8tRVAkZqkvhSSnD3uEPUw'
+      }
       {...viewport}
       onViewportChange={setViewport}
     >

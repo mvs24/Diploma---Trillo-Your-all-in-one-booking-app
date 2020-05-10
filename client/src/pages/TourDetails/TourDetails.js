@@ -169,7 +169,9 @@ const TourDetails = React.memo((props) => {
     }
   };
 
-  const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_API);
+  const stripePromise = loadStripe(
+    'pk_test_zUIsJ0pP0ioBysHoQcStX9cC00X97vuB7d'
+  );
 
   const bookTour = async () => {
     try {

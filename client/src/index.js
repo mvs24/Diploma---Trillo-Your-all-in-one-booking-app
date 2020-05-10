@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Favicon from 'react-favicon';
 import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
@@ -19,6 +20,7 @@ const store = createStore(rootReducer, compose(applyMiddleware(thunk)));
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
+    	<Favicon url="https://mariusfirstbucket.s3.eu-west-3.amazonaws.com/logo-1589122880629.png" />
       <App />
     </Provider>
   </React.StrictMode>,

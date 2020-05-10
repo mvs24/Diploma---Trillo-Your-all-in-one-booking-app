@@ -135,7 +135,7 @@ const Flight = React.memo((props) => {
 
   if (!agency) return <LoadingSpinner asOverlay />;
 
-  const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_API);
+  const stripePromise = loadStripe('pk_test_zUIsJ0pP0ioBysHoQcStX9cC00X97vuB7d');
 
   const bookFlight = async () => {
     const nrTickes = selectedOption.value;

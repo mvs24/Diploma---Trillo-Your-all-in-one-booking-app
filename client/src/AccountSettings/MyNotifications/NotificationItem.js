@@ -64,7 +64,7 @@ const MyNotifications = (props) => {
       {notification.read === false ? (
         <div className="center__not__item">
           <div className="not__read">&nbsp;</div>
-          <img src={`${process.env.REACT_APP_BACKEND_ASSET}/${agency.image}`} />
+          <img src={`${agency.image}`} />
           <p>{notification.message}</p>
           <p>
             <strong>
@@ -74,7 +74,7 @@ const MyNotifications = (props) => {
         </div>
       ) : (
         <div className="center__not__item">
-          <img src={`${process.env.REACT_APP_BACKEND_ASSET}/${agency.image}`} />
+          <img src={`${agency.image}`} />
           <p>{notification.message}</p>
           <p>
             <strong>

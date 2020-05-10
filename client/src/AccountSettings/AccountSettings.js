@@ -436,10 +436,7 @@ const AccountSettings = (props) => {
             {previewUrl ? (
               <img className="user__photo--image" src={previewUrl} />
             ) : (
-              <img
-                className="user__photo--image"
-                src={`${process.env.REACT_APP_BACKEND_ASSET}/${user.photo}`}
-              />
+              <img className="user__photo--image" src={user.photo} />
             )}
             <ImageUpload onInput={inputImageHandler} />
           </div>

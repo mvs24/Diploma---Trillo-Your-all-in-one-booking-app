@@ -7,10 +7,9 @@ const reviewTourRouter = require('../routes/reviewTourRoutes');
 const setAgencyUserId = require('../globalMiddlewares/setAgencyUserId');
 const controlTourCreator = require('../globalMiddlewares/controlTourCreator');
 const filterBody = require('../globalMiddlewares/filterBody');
-// const fileUpload = require('../globalMiddlewares/file-upload-tours');
+const fileUpload = require('../globalMiddlewares/file-upload-tours');
 const controlCategory = require('../globalMiddlewares/controlCategory');
-const sharp = require('sharp');
-const uniqid = require('uniqid');
+const multipleUpload = require('../globalMiddlewares/multipleUpload');
 
 const router = express.Router({ mergeParams: true });
 
@@ -23,8 +22,7 @@ router.route('/:tourId/review-stats').get(tourController.getReviewStats);
 router
   .route('/')
   .post(
-    // fileUpload.single('imageCover'),
-    tourController.uploadImageCover,
+    fileUpload.single('imageCover'),
     authController.protect,
     authController.restrictTo('agencyCreator', 'user'),
     setAgencyUserId,
@@ -45,7 +43,7 @@ router
     tourController.deleteTour
   )
   .patch(
-    tourController.uploadImages,
+    multipleUpload.array('image', 3),
     authController.protect,
     authController.restrictTo('admin', 'agencyCreator', 'user'),
     filterBody(['user', 'agency', 'ratingsAverage', 'ratingsQuantity']),
@@ -54,13 +52,13 @@ router
       if (req.files) {
         await Promise.all(
           req.files.map(async (file, i) => {
-            const filename = `public/img/tours/tour-${uniqid()}-${i + 1}.jpeg`;
+            const filename = file.location;
 
-            await sharp(file.buffer)
-              .resize(2000, 1333)
-              .toFormat('jpeg')
-              .jpeg({ quality: 90 })
-              .toFile(`${filename}`);
+            // await sharp(file.buffer)
+            //   .resize(2000, 1333)
+            //   .toFormat('jpeg')
+            //   .jpeg({ quality: 90 })
+            //   .toFile(`${filename}`);
 
             images.push(filename);
           })
@@ -70,6 +68,30 @@ router
 
       next();
     },
+    // async (req, res, next) => {
+    //   let images = [];
+    //   console.log(req.file)
+    //   if (req.files) {
+    //     console.log(req.files)
+    //     // await Promise.all(
+    //     //   req.files.map(async (file, i) => {
+    //     //     console.log(file)
+    //     //     const filename = file.location;
+
+    //     //     // await sharp(file.buffer)
+    //     //     //   .resize(2000, 1333)
+    //     //     //   .toFormat('jpeg')
+    //     //     //   .jpeg({ quality: 90 })
+    //     //     //   .toFile(`${filename}`);
+
+    //     //     images.push(filename);
+    //     //   })
+    //     // );
+    //     // req.body.images = [...images];
+    //   }
+
+    //   next();
+    // },
     async (req, res, next) => {
       const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
         new: true,

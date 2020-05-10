@@ -333,9 +333,7 @@ const FlightDetails = React.memo((props) => {
           <div className="info__container">
             <div className="agency__info--1">
               <h2>Agency: {agency.name}</h2>
-              <img
-                src={`${process.env.REACT_APP_BACKEND_ASSET}/${agency.image}`}
-              />
+              <img src={`${agency.image}`} />
               <Button
                 type="success"
                 clicked={() =>

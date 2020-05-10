@@ -102,11 +102,7 @@ const UserContent = (props) => {
         </div>
 
         <div onClick={myProfileHandler} className="user__profile">
-          <img
-            src={`${process.env.REACT_APP_BACKEND_ASSET}/${props.userData.photo}`}
-            alt="user"
-          />
-
+          <img src={`${props.userData.photo}`} alt="user" />
           <h4>
             {formatName(props.userData.name)}{' '}
             {formatName(props.userData.lastname)}

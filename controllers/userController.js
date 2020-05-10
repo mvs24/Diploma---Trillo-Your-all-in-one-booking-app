@@ -34,10 +34,12 @@ exports.deleteUser = asyncWrapper(async (req, res, next) => {
 });
 
 exports.updateMe = asyncWrapper(async (req, res, next) => {
+  // upload()
   const { id } = req.user;
 
   if (req.file) {
-    req.body.photo = req.file.path;
+    // console.log(req.file)
+    req.body.photo = req.file.location;
   }
   const updatedUser = await User.findByIdAndUpdate(id, req.body, {
     new: true,
@@ -140,6 +142,9 @@ exports.contactMe = asyncWrapper(async (req, res, next) => {
       message: 'Email sent',
     });
   } catch (err) {
-    console.log(err);
+    return res.status(400).json({
+      status: 'fail',
+      message: 'Something went wrong sending email...',
+    });
   }
 });

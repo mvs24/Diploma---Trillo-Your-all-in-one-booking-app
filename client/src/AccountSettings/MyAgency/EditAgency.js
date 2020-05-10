@@ -180,7 +180,7 @@ const EditAgency = (props) => {
     }
   };
 
-  let agencyImg = `${process.env.REACT_APP_BACKEND_ASSET}/${agency.image}`;
+  let agencyImg = `${agency.image}`;
 
   return (
     <div className="edit__agency--container">

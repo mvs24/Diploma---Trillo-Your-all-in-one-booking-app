@@ -589,10 +589,7 @@ const Flight = React.memo((props) => {
             VISIT FLIGHT
           </Button>
         )}
-        <img
-          className="flight__img"
-          src={`${process.env.REACT_APP_BACKEND_ASSET}/${agency.image}`}
-        />
+        <img className="flight__img" src={`${agency.image}`} />
 
         {!props.finished && props.owner ? (
           <Button clicked={() => setOpenPriceDiscountModal(true)} type="pink">

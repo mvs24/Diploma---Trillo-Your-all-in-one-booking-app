@@ -783,10 +783,7 @@ const Header = React.memo((props) => {
                   <div className="flexLink">
                     <div className="user__profile">
                       {' '}
-                      <img
-                        src={`${process.env.REACT_APP_BACKEND_ASSET}/${props.userData.photo}`}
-                        alt="user"
-                      />
+                      <img src={props.userData.photo} />
                     </div>
                     <span>
                       {props.userData.name} {props.userData.lastname}

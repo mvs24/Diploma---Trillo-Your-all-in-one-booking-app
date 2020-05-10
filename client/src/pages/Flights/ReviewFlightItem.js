@@ -75,7 +75,7 @@ const ReviewItem = (props) => {
           </button>
         ) : null}
         <div className="user__info--2">
-          <img src={`${process.env.REACT_APP_BACKEND_ASSET}/${user.photo}`} alt="user photo" />
+          <img src={`${user.photo}`} alt="user photo" />
           <h3 className="username">
             {user.name} {user.lastname}
           </h3>

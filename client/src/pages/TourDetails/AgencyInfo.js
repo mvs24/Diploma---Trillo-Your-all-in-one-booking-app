@@ -46,10 +46,7 @@ const AgencyInfo = (props) => {
         </h1>
         <ul>
           <li>
-            <img
-              className="agency__image"
-              src={`${process.env.REACT_APP_BACKEND_ASSET}/${agency.image}`}
-            />
+            <img className="agency__image" src={`${agency.image}`} />
           </li>
           <li>
             <IconContext.Provider

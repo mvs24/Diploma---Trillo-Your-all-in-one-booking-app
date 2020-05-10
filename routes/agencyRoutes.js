@@ -27,7 +27,7 @@ router
     setUser,
     (req, res, next) => {
       if (req.file) {
-        req.body.image = req.file.path;
+        req.body.image = req.file.location;
       }
       next();
     },
@@ -44,7 +44,7 @@ router
     controlCreator(Agency),
     (req, res, next) => {
       if (req.file) {
-        req.body.image = req.file.path;
+        req.body.image = req.file.location;
       }
       next();
     },

@@ -146,7 +146,8 @@
   width: 100%;
   text-align: center;
 }
-
+.threeImagesContainer {
+}
 .tour__about p {
   font-size: 1.4rem;
   line-height: 1.7;
@@ -165,7 +166,10 @@
   object-fit: cover;
 }
 .images {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 33%);
+  grid-template-rows: 330px;
+  /*display: flex;*/
   width: 100%;
 }
 
@@ -375,6 +379,9 @@
 
     margin-bottom: 5rem;
   }
+  .images {
+    grid-template-rows: 270px;
+  }
 
   .agency__info {
     display: flex;
@@ -419,6 +426,9 @@
     margin-left: 1rem;
     font-size: 1.2rem;
   }
+  .images {
+    grid-template-rows: 240px;
+  }
 }
 
 @media (max-width: 575px) {
@@ -428,7 +438,7 @@
 
   .quick__facts-1 {
     padding: 20rem;
-    padding-right: 25rem;
+    padding-right: 20rem;
   }
   .quick__facts-1 h1 {
     width: 200%;
@@ -440,6 +450,9 @@
   .review__container h1 {
     margin-left: 5rem;
   }
+  .images {
+    grid-template-rows: 200px;
+  }
 
   .review__info {
     display: flex;
@@ -447,9 +460,6 @@
     align-items: center;
   }
 
-  .quick__facts-1 {
-    margin-left: 5rem;
-  }
   .bookTour__info {
     display: flex;
     flex-direction: column;
@@ -491,5 +501,11 @@
 @media (max-width: 320px) {
   .bookTour__info {
     width: 120%;
+  }
+}
+
+@media (max-width: 330px) {
+  .images {
+    grid-template-rows: 150px;
   }
 }

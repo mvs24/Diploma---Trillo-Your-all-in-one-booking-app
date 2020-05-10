@@ -364,9 +364,7 @@ const TourDetails = React.memo((props) => {
         </Modal>
       )}
       <div className="tour__bcg">
-        <img
-          src={`${process.env.REACT_APP_BACKEND_ASSET}/${tour.imageCover}`}
-        />
+        <img src={`${tour.imageCover}`} />
       </div>
       <h4 className="heading">
         <span className="heading-span ">{tour.name}</span>
@@ -449,8 +447,8 @@ const TourDetails = React.memo((props) => {
       <div className="images__container">
         <div className="images">
           {tour.images.map((img) => (
-            <div key={img} className="image__container">
-              <img src={`${process.env.REACT_APP_BACKEND_ASSET}/${img}`} />
+            <div key={img} className="image__container threeImagesContainer">
+              <img src={`${img}`} />
             </div>
           ))}
         </div>
@@ -484,10 +482,7 @@ const TourDetails = React.memo((props) => {
           <div className="bookTour__images">
             <img className="bookTour__image" src={Logo} />
             {tour.images.map((img) => (
-              <img
-                className="bookTour__image"
-                src={`${process.env.REACT_APP_BACKEND_ASSET}/${img}`}
-              />
+              <img className="bookTour__image" src={`${img}`} />
             ))}
           </div>
 

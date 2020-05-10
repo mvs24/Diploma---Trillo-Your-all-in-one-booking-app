@@ -550,11 +550,7 @@ const TourItem = React.memo((props) => {
         </ErrorModal>
       )}
       <div className="tour">
-        <img
-          src={`${process.env.REACT_APP_BACKEND_ASSET}/${tour.imageCover}`}
-          alt="Tour"
-          className="tour__img"
-        />
+        <img src={`${tour.imageCover}`} alt="Tour" className="tour__img" />
         {props.wishlistTourItem ? null : (
           <IconContext.Provider value={{ className: 'tour__like' }}>
             {isLiked ? (

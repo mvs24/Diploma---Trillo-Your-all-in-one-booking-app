@@ -8,6 +8,7 @@
 }
 .tour img {
   width: 100%;
+  height: 200px;
   grid-column: 1 / -1;
   grid-row: 1 / 2;
 }
@@ -120,4 +121,15 @@
 }
 .detailsButton {
   z-index: 2;
+}
+
+@media (max-width: 500px) {
+  .tour img {
+    height: 170px;
+  }
+}
+@media (max-width: 400px) {
+  .tour img {
+    height: 160px;
+  }
 }

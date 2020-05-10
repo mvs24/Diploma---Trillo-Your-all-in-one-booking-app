@@ -3,7 +3,7 @@ import React from 'react';
 export default (props) => {
   const { agency, flight } = props;
   if (!agency) return null;
-  let image = `${process.env.REACT_APP_BACKEND_ASSET}/${agency.image}`;
+  let image = `${agency.image}`;
 
   return (
     <div
@@ -14,7 +14,7 @@ export default (props) => {
       <div className="agency__name">
         <h1>AGENCY: {agency.name.toUpperCase()}</h1>
         <span>
-          <img src={image} />
+          <img src={image} /> 
         </span>
         <h1>CATEGORY: {agency.category.toUpperCase()}</h1>
       </div>

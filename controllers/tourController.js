@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+// const Jimp = require('jimp');
 const Tour = require('../models/tourModel');
 const factory = require('./factoryHandler');
 const ApiFeatures = require('../utils/apiFeatures');
@@ -7,8 +8,8 @@ const Agency = require('../models/agencyModel');
 const AppError = require('../utils/appError');
 const User = require('../models/userModel');
 const multer = require('multer');
-const sharp = require('sharp');
-const uniqid = require('uniqid');
+// const sharp = require('sharp');
+// const uniqid = require('uniqid');
 
 const getToursBy = (sortBy) =>
   asyncWrapper(async (req, res, next) => {
@@ -99,8 +100,8 @@ const upload = multer({
   fileFilter: multerFilter,
 });
 
-exports.uploadImageCover = upload.single('imageCover');
-exports.uploadImages = upload.array('image', 3);
+// exports.uploadImageCover = upload.single('imageCover');
+// exports.uploadImages = upload.array('image', 3);
 
 exports.createTour = asyncWrapper(async (req, res, next) => {
   req.body.startDates = JSON.parse(req.body.startDates);
@@ -125,12 +126,38 @@ exports.createTour = asyncWrapper(async (req, res, next) => {
   }
 
   if (req.file) {
-    req.body.imageCover = `public/img/tours/tour-${uniqid()}-cover.jpeg`;
-    await sharp(req.file.buffer)
-      .resize(2000, 1333)
-      .toFormat('jpeg')
-      .jpeg({ quality: 90 })
-      .toFile(`${req.body.imageCover}`);
+    // console.log(req.file)
+    req.body.imageCover = req.file.location;
+
+    //   Jimp.read(req.file.location)
+    // .then(lenna => {
+    //   return lenna
+    //     .resize(2000, 1333) // resize
+    //     .quality(90) // set JPEG quality
+    //     .greyscale() // set greyscale
+    //     .write(req.body.imageCover); // save
+    // })
+    // .catch(err => {
+    //   console.error(err);
+    // });
+    // sharp(base64_encode(req.file.location))
+    // .resize(2000, 1333)
+    // .toFile(req.body.imageCover, (err, info) => { if (err) console.log(err) });
+
+    //  Jimp.read('https://mariusfirstbucket.s3.amazonaws.com/pexels-photo-3512848-1589106569016.jpg', (err, lenna) => {
+    //   if (err) console.log(err)
+    //   lenna
+    //     .resize(2000, 1333) // resize
+    //     .write(req.body.imageCover); // save
+    // });
+
+    // console.log(base64_encode(req.body.imageCover))
+
+    // await sharp(base64_encode(req.body.imageCover))
+    //   .resize(2000, 1333)
+    // .toFormat('jpeg')
+    // .jpeg({ quality: 90 })
+    //   .toFile(`${req.body.imageCover}`);
   }
 
   const doc = await Tour.create(req.body);

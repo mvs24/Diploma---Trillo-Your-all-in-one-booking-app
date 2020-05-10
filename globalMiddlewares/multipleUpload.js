@@ -6,14 +6,16 @@ const path = require('path');
 const s3 = new aws.S3({
   accessKeyId: process.env.ACCESS_KEY_ID,
   secretAccessKey: process.env.SECRET_ACCESS_KEY_ID,
-  Bucket: 'mariusfirstbucket',
 });
 
-const upload = multer({
+const uploadS3 = multer({
   storage: multerS3({
     s3,
-    bucket: 'mariusfirstbucket',
     acl: 'public-read',
+    bucket: 'mariusfirstbucket',
+    metadata: (req, file, callBack) => {
+      callBack(null, { fieldName: file.fieldname });
+    },
     key: function (req, file, cb) {
       cb(
         null,
@@ -23,10 +25,27 @@ const upload = multer({
           path.extname(file.originalname)
       );
     },
-    fileFilter: function (req, file, cb) {
-      checkFileType(file, cb);
-    },
   }),
+  fileFilter: function (req, file, cb) {
+    checkFileType(file, cb);
+  },
+  // shouldTransform: function(req, file, cb) {
+  //   cb(null, /^image/i.test(file.mimetype));
+  // },
+  //    transforms: [
+  //   {
+  //     id: 'original',
+  //     transform: function(req, file, cb) {
+  //       //Perform desired transformations
+  //       cb(
+  //         null,
+  //         sharp()
+  //           .resize(300, 300)
+  //           .max()
+  //       );
+  //     }
+  //   }
+  // ]
 });
 
 function checkFileType(file, cb) {
@@ -43,29 +62,4 @@ function checkFileType(file, cb) {
   }
 }
 
-///////////////////////////////////////DEVELOPMENT///////////////
-// const MIME_TYPE_MAP = {
-//   'image/png': 'png',
-//   'image/jpeg': 'jpeg',
-//   'image/jpg': 'jpg',
-// };
-
-// const fileUpload = multer({
-//   limits: 500000,
-//   storage: multer.diskStorage({
-//     destination: (req, file, cb) => {
-//       cb(null, 'public/img/users');
-//     },
-//     filename: (req, file, cb) => {
-//       const ext = MIME_TYPE_MAP[file.mimetype];
-//       cb(null, uniqid() + '.' + ext);
-//     },
-//   }),
-//   fileFilter: (req, file, cb) => {
-//     const isValid = !!MIME_TYPE_MAP[file.mimetype];
-//     let error = isValid ? null : new Error('Invalid mime type!');
-//     cb(error, isValid);
-//   },
-// });
-
-module.exports = upload;
+module.exports = uploadS3;

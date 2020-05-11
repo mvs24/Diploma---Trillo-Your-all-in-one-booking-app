@@ -53,3 +53,11 @@
     row-gap: 2rem;
   }
 }
+
+@media (max-width: 540px) {
+  .topToursContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}

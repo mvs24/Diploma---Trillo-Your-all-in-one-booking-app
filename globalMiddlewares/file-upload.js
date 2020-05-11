@@ -39,7 +39,10 @@ function checkFileType(file, cb) {
   if (mimetype && extname) {
     return cb(null, true);
   } else {
-    cb('Error: Images Only!');
+     return res.status(400).json({
+      status: "fail",
+      message: "Something went wrong with images..."
+    })
   }
 }
 

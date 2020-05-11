@@ -39,11 +39,7 @@ const MakeAnImpact = (props) => {
 
   return (
     <div className="makeAnImpact__container">
-      {error && (
-        <ErrorModal show onClear={() => setError(false)}>
-          {error ? error : 'Something went wrong'}
-        </ErrorModal>
-      )}
+     
       <div className="create__container">
         <div className="icon__heading">
           <IconContext.Provider value={{ className: 'icon create__icon' }}>

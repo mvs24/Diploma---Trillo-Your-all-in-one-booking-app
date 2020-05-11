@@ -150,7 +150,7 @@
 }
 .tour__about p {
   font-size: 1.4rem;
-  line-height: 1.7;
+  line-height: 1.7; 
   letter-spacing: 1.2px;
   width: 100%;
   text-align: center;
@@ -167,7 +167,7 @@
 }
 .images {
   display: grid;
-  grid-template-columns: repeat(3, 33%);
+  grid-template-columns: repeat(3, calc(100% / 3));
   grid-template-rows: 330px;
   /*display: flex;*/
   width: 100%;
@@ -256,7 +256,7 @@
   margin-left: 4rem;
 }
 .tourDescription {
-  width: 50%;
+  max-width: 200px;
 }
 .bookTour__info--1 h1 {
   font-size: 3rem;
@@ -466,6 +466,9 @@
     align-items: center;
     justify-content: center;
   }
+  .reviewStars{
+    display: flex;
+  }
 }
 
 @media (max-width: 430px) {
@@ -495,6 +498,13 @@
   }
   .tourDescription {
     width: 110%;
+  }
+  .images {
+    grid-template-rows: 140px;
+  }
+  .tourDescription {
+    margin-bottom: 7rem;
+
   }
 }
 

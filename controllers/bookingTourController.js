@@ -53,6 +53,13 @@ exports.getCheckoutSession = asyncWrapper(async (req, res, next) => {
   });
 });
 
+// exports.webhookCheckout = (req, res, next) => {
+//   const signature = req.headers['stripe-signature']
+
+//   const event = stripe.webhooks.constructEvent(req.body, signature)
+
+// }
+
 exports.getBookingsForTour = async (req, res, next) => {
   await getBookings({ tour: req.params.tourId }, res, next);
 };

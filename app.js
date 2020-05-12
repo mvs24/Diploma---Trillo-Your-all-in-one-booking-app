@@ -18,6 +18,7 @@ const wishlistFlightRouter = require('./routes/wishlistFlightRoutes');
 const cartTourRouter = require('./routes/cartTourRoutes');
 const flightRouter = require('./routes/flightRoutes');
 const bookingFlightRouter = require('./routes/bookingFlightRoutes');
+const bookingTourController = require('./controllers/bookingTourController')
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -44,6 +45,10 @@ app.use(
     ],
   })
 );
+
+// app.post('/webhook-checkout',
+//  bodyParser.raw({type: "application/json"}),
+//  bookingTourController.webhookCheckout)
 // Parse req.body
 app.use(bodyParser.json());
 // Data Sanitization against NoSQL Query Injection

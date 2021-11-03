@@ -40,7 +40,7 @@
     "slugify": "^1.4.0",
     "stripe": "^8.33.0",
     "uniqid": "^5.2.0",
-    "validator": "^12.2.0",
+    "validator": "^13.7.0",
     "xss-clean": "^0.1.1"
   }
 }
